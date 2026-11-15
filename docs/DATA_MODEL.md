@@ -169,7 +169,7 @@ and scene colours, and rear part styling. The code keeps only geometry
 
 ## Translations
 
-`data/i18n/en.json`, `tr.json` and `zh.json` hold the interface strings
+`data/i18n/en.json`, `tr.json`, `zh.json`, `ru.json` and `es.json` hold the interface strings
 (`ui`, with `{name}` placeholders) and the descriptive text of the data
 (`content`, keyed by component, network, connection, procedure and other ids;
 spec labels keyed by their English label). The `content` part of `en.json` is

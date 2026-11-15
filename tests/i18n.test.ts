@@ -4,6 +4,8 @@ import { topology } from '../src/data';
 import en from '../data/i18n/en.json';
 import tr from '../data/i18n/tr.json';
 import zh from '../data/i18n/zh.json';
+import ru from '../data/i18n/ru.json';
+import es from '../data/i18n/es.json';
 import { createI18n, format } from '../src/i18n';
 import { initialLang, langFromNavigator } from '../src/i18n/lang';
 // @ts-expect-error plain JS module shared with the generator script
@@ -32,6 +34,8 @@ describe('data/i18n', () => {
   for (const [lang, file] of [
     ['tr', tr],
     ['zh', zh],
+    ['ru', ru],
+    ['es', es],
   ] as const) {
     for (const part of ['ui', 'content'] as const) {
       it(`${lang}.json ${part} has exactly the keys of en.json, the same placeholders and no empty string`, () => {
@@ -114,6 +118,9 @@ describe('i18n helpers', () => {
     expect(initialLang(undefined, null, 'zh-Hans-CN')).toBe('zh');
     expect(initialLang(undefined, null, 'tr')).toBe('tr');
     expect(initialLang(undefined, null, 'de-DE')).toBe('en');
+    expect(initialLang(undefined, null, 'ru-RU')).toBe('ru');
+    expect(initialLang(undefined, null, 'es-419')).toBe('es');
+    expect(langFromNavigator('es')).toBe('es');
     expect(langFromNavigator(undefined)).toBe('en');
   });
 });

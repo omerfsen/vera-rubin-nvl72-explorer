@@ -177,3 +177,21 @@ test.describe('themes', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('Russian and Spanish', () => {
+  for (const [lang, label, notice] of [
+    ['ru', 'RU', 'Этот текст переведён'],
+    ['es', 'ES', 'Este texto está traducido'],
+  ] as const) {
+    test(`opens in ${lang} from a shared link`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on('pageerror', (e) => errors.push(e.message));
+      await page.goto(`/?lang=${lang}&select=compute-tray.7`);
+      await rackReady(page);
+      await expect(page.locator('html')).toHaveAttribute('lang', lang);
+      await expect(page.getByRole('button', { name: label, exact: true })).toHaveAttribute('aria-pressed', 'true');
+      await expect(page.getByText(notice)).toBeVisible();
+      expect(errors).toEqual([]);
+    });
+  }
+});

@@ -1,8 +1,8 @@
 // Languages the explorer is translated into, and how the first one is picked.
 // No store or React here, so the URL code and the store can both use it.
 
-export type Lang = 'en' | 'tr' | 'zh';
-export const LANGS: readonly Lang[] = ['en', 'tr', 'zh'];
+export type Lang = 'en' | 'tr' | 'zh' | 'ru' | 'es';
+export const LANGS: readonly Lang[] = ['en', 'tr', 'zh', 'ru', 'es'];
 export const DEFAULT_LANG: Lang = 'en';
 export const LANG_STORAGE_KEY = 'nvl72-explorer.lang';
 
@@ -10,11 +10,13 @@ export function isLang(value: unknown): value is Lang {
   return typeof value === 'string' && (LANGS as readonly string[]).includes(value);
 }
 
-/** "tr-TR" -> "tr", "zh-Hans-CN" -> "zh"; anything else is English. */
+/** "tr-TR" -> "tr", "zh-Hans-CN" -> "zh", "ru-RU" -> "ru", "es-419" -> "es"; anything else is English. */
 export function langFromNavigator(language: string | undefined | null): Lang {
   const tag = (language ?? '').toLowerCase();
   if (tag.startsWith('tr')) return 'tr';
   if (tag.startsWith('zh')) return 'zh';
+  if (tag.startsWith('ru')) return 'ru';
+  if (tag.startsWith('es')) return 'es';
   return DEFAULT_LANG;
 }
 
