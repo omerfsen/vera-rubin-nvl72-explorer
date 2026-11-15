@@ -8,3 +8,5 @@ coverage/
 .DS_Store
 .vite/
 graphify-out
+playwright-report/
+test-results/

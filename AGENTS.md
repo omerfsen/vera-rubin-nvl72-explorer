@@ -47,6 +47,7 @@ npm run data:refs   # rebuild components[].references
 npm test            # schema, integrity and drift checks
 npm run typecheck
 npm run build
+npm run e2e         # real browser tests; locally: PW_CHROMIUM_PATH=/usr/bin/chromium npm run e2e
 ```
 
 `tests/references.test.ts` fails if `references` is out of date. Tray layouts
