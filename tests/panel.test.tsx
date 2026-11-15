@@ -86,3 +86,12 @@ describe('side panel accessibility and wording', () => {
     expect(screen.queryByText('assumed')).toBeNull();
   });
 });
+
+describe('focus on page load', () => {
+  it('does not move focus when the panel first renders', () => {
+    useExplorer.setState({ selected: 'compute-tray.4' });
+    (document.activeElement as HTMLElement | null)?.blur();
+    render(<SidePanel />);
+    expect(document.activeElement).toBe(document.body);
+  });
+});

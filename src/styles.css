@@ -108,7 +108,8 @@ button { font: inherit; color: inherit; }
 .toggle[aria-expanded='true'] { border-color: var(--accent); }
 
 .breadcrumb { padding: 6px 16px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-.breadcrumb ol { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.breadcrumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.breadcrumb li { display: flex; align-items: center; }
 .breadcrumb li + li::before { content: '›'; margin-right: 4px; color: var(--muted); }
 .breadcrumb button {
   background: none;

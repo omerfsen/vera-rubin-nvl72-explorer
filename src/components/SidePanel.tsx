@@ -92,11 +92,17 @@ export function SidePanel() {
   const isNumberedUnit = last?.index !== undefined && segments.length === 1 && model.isRackUnitType(component.id);
   const height = model.isRackUnitType(component.id) ? model.topology.rackLayout.heightsRU?.[component.id] : undefined;
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const firstRender = useRef(true);
 
   // After a selection made from a control that then disappears (a breadcrumb
   // step, a part button, a search result), focus would fall to <body>.
   // Move it to the new heading instead so keyboard users stay in place.
   useEffect(() => {
+    // Leave focus alone on page load; only follow navigation the user makes.
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
     const active = document.activeElement;
     if (!active || active === document.body || !active.isConnected) headingRef.current?.focus({ preventScroll: true });
   }, [selected]);
