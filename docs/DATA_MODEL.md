@@ -87,6 +87,31 @@ Tests require every part inside the tray to be placed or listed in
 `notPlaced`, every instance number to be within its count, and every slot to
 resolve to a selectable path.
 
+## Rear of the rack
+
+`rearLayout.parts` places the rear parts behind the units: each has a
+`component`, a horizontal position `x` and width `w` (fractions of the rack
+width), and a vertical span `from`/`to`, given as rack unit keys
+(`compute-tray.1`) or `top`/`bottom`. The rear view draws a connection from
+every rack unit to every rear part that a type-level `connection` joins them
+by, for example each compute tray to the cable cartridge (NVLink), to both
+manifolds (coolant) and to the bus bar (power). The placement is schematic and
+marked `assumed`.
+
+`trayLayouts` also cover the switch tray and the power shelf. A layout can set
+`heightRU` (the power shelf is 3); stacked parts such as PSU rows use `y` as
+their bottom elevation.
+
+## Network overlay
+
+The overlay reads the `network` connections: every component with a
+connection to a network is "on" it, and every rack unit type that contains
+such a component lights up in the rack view. A connection with
+`alternative: true` is a conflicting reading kept for the record (the
+BlueField-4 left port's figure says storagenet, its table dgxnet); it is drawn
+in the conflict colour and never counted as fact. The active network goes in
+the URL as `net=`.
+
 ## Selection paths and URLs
 
 A selection is a path of component ids below the rack, each with an optional
@@ -97,7 +122,8 @@ instance number:
 - `compute-tray.7/rubin-gpu.2`: GPU 2 in compute tray 7
 
 The path goes in the URL as `?select=...` and the list pane as `list=1`. The
-view goes in as `?view=...` (`tray` while a compute tray is open) and is left
+view goes in as `?view=...` (`rear` for the back of the rack, `tray` while a
+tray or shelf is open) and is left
 out when it is the default (`rack`). `view=tray` without a selection inside a
 numbered compute tray falls back to the rack.
 Invalid paths fall back to the rack. Other query parameters are left exactly

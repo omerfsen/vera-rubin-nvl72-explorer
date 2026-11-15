@@ -7,9 +7,13 @@ import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
 import { isPartSelected, partColor } from './colors';
 import {
+  CONFLICT_COLOR,
+  DIM_COLOR,
   HOVER_COLOR,
+  NETWORK_COLORS,
   LINK_COLORS,
   SELECTED_COLOR,
+  TYPE_COLORS,
   TRAY_DEPTH,
   TRAY_HEIGHT,
   TRAY_WIDTH,
@@ -26,21 +30,29 @@ interface Placed {
 }
 
 /** All slots of one component inside the open tray, as one InstancedMesh. */
-function PartInstances({ trayKey, items }: { trayKey: string; items: Placed[] }) {
+function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: Placed[]; heightRU: number }) {
   const ref = useRef<InstancedMesh>(null);
   const invalidate = useThree((s) => s.invalidate);
   const selected = useExplorer((s) => s.selected);
   const hovered = useExplorer((s) => s.hovered);
   const select = useExplorer((s) => s.select);
   const setHovered = useExplorer((s) => s.setHovered);
+  const network = useExplorer((s) => s.network);
   const base = useMemo(() => new Color(partColor(items[0]!.slot.component)), [items]);
+  // With the network overlay on, parts on the network take its colour (or the
+  // conflict colour), and everything else is dimmed.
+  const overlay = useMemo(() => {
+    if (!network) return null;
+    const m = model.networkMembers(network).members.get(items[0]!.slot.component);
+    return m ? (m.alternative ? CONFLICT_COLOR : (NETWORK_COLORS[network] ?? '#ffffff')) : DIM_COLOR;
+  }, [network, items]);
 
   useLayoutEffect(() => {
     const mesh = ref.current;
     if (!mesh) return;
     const color = new Color();
     items.forEach((it, i) => {
-      const box = slotBox(it.slot);
+      const box = slotBox(it.slot, heightRU);
       const lift = isPartSelected(it.path, selected) && it.slot.face === 'top' ? 0.03 : 0;
       scratch.position.set(box.position[0], box.position[1] + lift, box.position[2]);
       scratch.scale.set(...box.size);
@@ -48,6 +60,7 @@ function PartInstances({ trayKey, items }: { trayKey: string; items: Placed[] })
       mesh.setMatrixAt(i, scratch.matrix);
       if (isPartSelected(it.path, selected)) color.set(SELECTED_COLOR);
       else if (it.path === hovered) color.set(HOVER_COLOR);
+      else if (overlay) color.set(overlay);
       else color.copy(base);
       mesh.setColorAt(i, color);
     });
@@ -55,7 +68,7 @@ function PartInstances({ trayKey, items }: { trayKey: string; items: Placed[] })
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     mesh.computeBoundingSphere();
     invalidate();
-  }, [items, selected, hovered, base, invalidate, trayKey]);
+  }, [items, selected, hovered, base, invalidate, trayKey, heightRU, overlay]);
 
   useEffect(
     () => () => {
@@ -95,14 +108,17 @@ function PartInstances({ trayKey, items }: { trayKey: string; items: Placed[] })
 }
 
 /** Base plate, side and rear walls, and the front panel of the open tray. */
-function TrayShell() {
+function TrayShell({ heightRU, frontColor }: { heightRU: number; frontColor: string }) {
   const wall = 0.012;
+  const TRAY_HEIGHT_RU = TRAY_HEIGHT * heightRU;
+  const frontHeight = heightRU > 1 ? TRAY_HEIGHT * 0.12 : TRAY_HEIGHT_RU;
   const parts: { position: [number, number, number]; size: [number, number, number]; color: string }[] = [
     { position: [0, 0, 0], size: [TRAY_WIDTH, 0.01, TRAY_DEPTH], color: '#23282f' },
-    { position: [-TRAY_WIDTH / 2, TRAY_HEIGHT / 2, 0], size: [wall, TRAY_HEIGHT, TRAY_DEPTH], color: '#3a4049' },
-    { position: [TRAY_WIDTH / 2, TRAY_HEIGHT / 2, 0], size: [wall, TRAY_HEIGHT, TRAY_DEPTH], color: '#3a4049' },
-    { position: [0, TRAY_HEIGHT / 2, -TRAY_DEPTH / 2], size: [TRAY_WIDTH, TRAY_HEIGHT, wall], color: '#3a4049' },
-    { position: [0, TRAY_HEIGHT / 2, TRAY_DEPTH / 2], size: [TRAY_WIDTH, TRAY_HEIGHT, wall], color: '#8b7d5c' },
+    { position: [-TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: '#3a4049' },
+    { position: [TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: '#3a4049' },
+    { position: [0, TRAY_HEIGHT_RU / 2, -TRAY_DEPTH / 2], size: [TRAY_WIDTH, TRAY_HEIGHT_RU, wall], color: '#3a4049' },
+    // The front of a tall shelf is mostly its parts (PSUs), so only a low lip is drawn there.
+    { position: [0, frontHeight / 2, TRAY_DEPTH / 2], size: [TRAY_WIDTH, frontHeight, wall], color: frontColor },
   ];
   return (
     <group>
@@ -120,13 +136,14 @@ type Vec = [number, number, number];
 
 /** Where a link attaches: the top centre of a part, or a named point on the tray floor. */
 function endPosition(layout: TrayLayout, end: LinkEnd): Vec | null {
+  const heightRU = layout.heightRU ?? 1;
   if (end.point !== undefined) {
     const p = layout.points?.find((pt) => pt.id === end.point);
     return p ? [p.x * TRAY_WIDTH, 0.03, p.z * TRAY_DEPTH] : null;
   }
   const slot = layout.slots.find((s) => s.component === end.component && s.index === end.index);
   if (!slot) return null;
-  const box = slotBox(slot);
+  const box = slotBox(slot, heightRU);
   return [box.position[0], box.position[1] + box.size[1] / 2 + 0.005, box.position[2]];
 }
 
@@ -138,6 +155,7 @@ function endPosition(layout: TrayLayout, end: LinkEnd): Vec | null {
 function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout }) {
   const trayId = trayKey.split('.')[0]!;
   const selected = useExplorer((s) => s.selected);
+  const network = useExplorer((s) => s.network);
   const invalidate = useThree((s) => s.invalidate);
   const within = selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
   const active = useMemo(() => new Set(within ? model.linksAt(trayId, within) : []), [trayId, within]);
@@ -151,7 +169,7 @@ function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout })
         const lift = 0.06 + Math.hypot(a[0] - b[0], a[2] - b[2]) * 0.12;
         const mid: Vec = [(a[0] + b[0]) / 2, Math.max(a[1], b[1]) + lift, (a[2] + b[2]) / 2];
         const on = active.has(link);
-        const dim = within !== null && !on;
+        const dim = (within !== null && !on) || network !== '';
         return (
           <QuadraticBezierLine
             key={i}
@@ -181,12 +199,12 @@ export function partLabel(item: Placed): string {
   return item.slot.index === undefined ? name : `${name} ${item.slot.index}`;
 }
 
-function Labels({ placed }: { placed: Placed[] }) {
+function Labels({ placed, heightRU }: { placed: Placed[]; heightRU: number }) {
   const connected = useThree((s) => s.events.connected);
   const hovered = useExplorer((s) => s.hovered);
   if (!connected) return null;
   const hoveredItem = placed.find((p) => p.path === hovered);
-  const box = hoveredItem ? slotBox(hoveredItem.slot) : null;
+  const box = hoveredItem ? slotBox(hoveredItem.slot, heightRU) : null;
   return (
     <>
       <Html position={[0, 0.02, TRAY_DEPTH / 2 + 0.12]} center className="tray-label" style={{ pointerEvents: 'none' }}>
@@ -209,8 +227,11 @@ function Labels({ placed }: { placed: Placed[] }) {
   );
 }
 
-/** The open interior of one compute tray, generated from its tray layout. */
-export function ComputeTrayScene({ trayKey }: { trayKey: string }) {
+/**
+ * The open interior of a tray or shelf (compute tray, switch tray, power
+ * shelf), generated from its tray layout in the data file.
+ */
+export function TrayScene({ trayKey }: { trayKey: string }) {
   const trayId = trayKey.split('.')[0]!;
   const layout = model.trayLayout(trayId);
   const groups = useMemo(() => {
@@ -224,19 +245,22 @@ export function ComputeTrayScene({ trayKey }: { trayKey: string }) {
   }, [layout, trayKey, trayId]);
   const placed = useMemo(() => groups.flatMap(([, items]) => items), [groups]);
   const layers = useExplorer((s) => s.layers);
+  const heightRU = layout?.heightRU ?? 1;
   const invalidate = useThree((s) => s.invalidate);
   useEffect(() => invalidate(), [layers, invalidate]);
   if (!layout) return null;
   return (
     <group>
       <group visible={layers.structure}>
-        <TrayShell />
+        <TrayShell heightRU={heightRU} frontColor={TYPE_COLORS[model.getComponent(trayId)?.type ?? 'rack'] ?? '#8b7d5c'} />
       </group>
       {/* Unmounted rather than hidden: three.js still hit-tests invisible meshes. */}
       {layers.parts &&
-        groups.map(([component, items]) => <PartInstances key={component} trayKey={trayKey} items={items} />)}
+        groups.map(([component, items]) => (
+          <PartInstances key={component} trayKey={trayKey} items={items} heightRU={heightRU} />
+        ))}
       {layers.links && <TrayLinks trayKey={trayKey} layout={layout} />}
-      <Labels placed={placed} />
+      <Labels placed={placed} heightRU={heightRU} />
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
         <meshStandardMaterial color="#14181d" />

@@ -118,6 +118,9 @@
       "additionalProperties": {
         "$ref": "#/$defs/trayLayout"
       }
+    },
+    "rearLayout": {
+      "$ref": "#/$defs/rearLayout"
     }
   },
   "$defs": {
@@ -592,6 +595,24 @@
               ]
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "alternative": {
+                "const": true
+              }
+            },
+            "required": [
+              "alternative"
+            ]
+          },
+          "then": {
+            "required": [
+              "note",
+              "network"
+            ]
+          }
         }
       ],
       "type": "object",
@@ -628,6 +649,10 @@
         },
         "description": {
           "type": "string"
+        },
+        "alternative": {
+          "type": "boolean",
+          "description": "A conflicting reading from another part of the guide; kept for the record and shown as a conflict, not as fact."
         }
       }
     },
@@ -680,7 +705,7 @@
           "type": "number",
           "minimum": 0,
           "maximum": 1,
-          "description": "Front-panel parts only: bottom (0) to top (1) of the tray."
+          "description": "Bottom (0) to top (1) of the tray. Front parts: centre height. Top parts: if set, bottom elevation, and h is then a fraction of the tray height (for stacked parts such as PSUs)."
         },
         "w": {
           "type": "number",
@@ -758,6 +783,11 @@
             "$ref": "#/$defs/trayLink"
           },
           "description": "Instance-level connections inside the tray: the 'veins' layer."
+        },
+        "heightRU": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Height of the tray in rack units; 1 if omitted."
         }
       }
     },
@@ -847,6 +877,66 @@
           "type": "number",
           "minimum": -0.5,
           "maximum": 0.5
+        }
+      }
+    },
+    "rearPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component",
+        "x",
+        "w",
+        "from",
+        "to"
+      ],
+      "properties": {
+        "component": {
+          "$ref": "#/$defs/id"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "x": {
+          "type": "number",
+          "minimum": -0.5,
+          "maximum": 0.5
+        },
+        "w": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "from": {
+          "type": "string",
+          "pattern": "^(top|bottom|[a-z0-9-]+\\.[1-9][0-9]*)$"
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^(top|bottom|[a-z0-9-]+\\.[1-9][0-9]*)$"
+        }
+      }
+    },
+    "rearLayout": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "parts",
+        "assumed"
+      ],
+      "properties": {
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/rearPart"
+          }
         }
       }
     }

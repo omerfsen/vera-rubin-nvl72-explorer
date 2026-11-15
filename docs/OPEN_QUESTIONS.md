@@ -141,7 +141,8 @@ Labelled in the guide's figures:
   BMC, HMC, TPM and front IO panel) as one part; the TPM; the bus bar
   connector and water connections are listed as specs only. SOCAMM, the
   Power Distribution Board and the Internal Manifold are in the data since M2.
-- Switch tray (Fig. 7): SWB w/ PDB, SSD, power connector.
+- Switch tray (Fig. 7): the BMC and CPU ERoT have no position in any figure,
+  so they are not drawn. SWB w/ PDB and the SSD are in the data since M3.
 - Rear (Fig. 2): rear bezel, FD83 connectors for liquid cooling hoses,
   manifold, cable cartridge and bus bar supports.
 

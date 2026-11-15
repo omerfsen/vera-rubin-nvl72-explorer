@@ -216,8 +216,30 @@ export function createModel(topology: Topology) {
     return end.index === undefined ? name : `${name} ${end.index}`;
   }
 
+  // ---- network overlay ------------------------------------------------
+
+  /**
+   * What sits on a network: the components with a connection to it (ports,
+   * or a whole unit such as a power shelf), whether that reading is a
+   * conflicting alternative, and the rack unit types that contain any of them.
+   */
+  function networkMembers(networkId: string) {
+    const members = new Map<string, { alternative: boolean }>();
+    for (const c of topology.connections) {
+      if (c.network !== networkId) continue;
+      const prev = members.get(c.from);
+      members.set(c.from, { alternative: (prev?.alternative ?? true) && c.alternative === true });
+    }
+    const unitTypes = new Set<string>();
+    for (const id of members.keys()) {
+      for (const cid of [...ancestorsOf(id), id]) if (rackUnitCounts.has(cid)) unitTypes.add(cid);
+    }
+    return { members, unitTypes };
+  }
+
   return {
     topology,
+    networkMembers,
     trayLayout,
     linkEndPath,
     linksAt,

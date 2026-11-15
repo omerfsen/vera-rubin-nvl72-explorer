@@ -53,7 +53,7 @@ describe('references inside the data file', () => {
 
   it('lists the network on every component that has a connection to it', () => {
     for (const x of topology.connections) {
-      if (x.network) expect(model.getComponent(x.from)?.networks, x.id).toContain(x.network);
+      if (x.network && !x.alternative) expect(model.getComponent(x.from)?.networks, x.id).toContain(x.network);
     }
   });
 

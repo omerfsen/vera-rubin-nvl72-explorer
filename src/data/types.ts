@@ -104,6 +104,8 @@ export interface Connection extends Provenance {
   network?: string;
   kind: ConnectionKind;
   description: string;
+  /** A conflicting reading kept for the record, shown as a conflict rather than fact. */
+  alternative?: boolean;
 }
 
 /**
@@ -145,11 +147,27 @@ export interface TrayPoint {
 }
 
 export interface TrayLayout extends Provenance {
+  /** Height of the tray in rack units; 1 if omitted. */
+  heightRU?: number;
   sources?: Source[];
   notPlaced?: { component: string; reason: string }[];
   slots: TraySlot[];
   points?: TrayPoint[];
   links?: TrayLink[];
+}
+
+/** A rear part drawn behind the units, spanning from one unit (or the top) to another (or the bottom). */
+export interface RearPart {
+  component: string;
+  index?: number;
+  x: number;
+  w: number;
+  from: string;
+  to: string;
+}
+
+export interface RearLayout extends Provenance {
+  parts: RearPart[];
 }
 
 export interface Topology {
@@ -165,5 +183,6 @@ export interface Topology {
   components: Component[];
   rackLayout: RackLayout;
   trayLayouts?: Record<string, TrayLayout>;
+  rearLayout?: RearLayout;
   connections: Connection[];
 }

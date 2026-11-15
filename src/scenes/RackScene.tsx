@@ -4,10 +4,13 @@ import { Html } from '@react-three/drei';
 import { Color, InstancedMesh, Matrix4, Object3D } from 'three';
 import { model } from '../data';
 import { useExplorer } from '../state/store';
+import { RearScene } from './RearScene';
 import {
   FRAME_POST,
   FRAME_WIDTH,
+  DIM_COLOR,
   HOVER_COLOR,
+  NETWORK_COLORS,
   RU,
   SELECTED_COLOR,
   TYPE_COLORS,
@@ -52,6 +55,8 @@ function UnitInstances({ componentId }: { componentId: string }) {
   const select = useExplorer((s) => s.select);
   const setHovered = useExplorer((s) => s.setHovered);
   const openTray = useExplorer((s) => s.openTray);
+  const network = useExplorer((s) => s.network);
+  const onNetwork = useMemo(() => (network ? model.networkMembers(network).unitTypes.has(componentId) : null), [network, componentId]);
   const selectedKey = selectedUnitKey(selected);
   const type = model.getComponent(componentId)?.type;
   const base = useMemo(() => new Color(TYPE_COLORS[type ?? 'rack'] ?? '#666666'), [type]);
@@ -65,6 +70,8 @@ function UnitInstances({ componentId }: { componentId: string }) {
       placeBox(mesh, i, box, u.key === selectedKey ? SLIDE_OUT : 0);
       if (u.key === selectedKey) color.set(SELECTED_COLOR);
       else if (u.key === hovered) color.set(HOVER_COLOR);
+      else if (onNetwork === true) color.set(NETWORK_COLORS[network] ?? '#ffffff');
+      else if (onNetwork === false) color.set(DIM_COLOR);
       else color.copy(base);
       mesh.setColorAt(i, color);
     });
@@ -72,7 +79,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     mesh.computeBoundingSphere();
     invalidate();
-  }, [units, selectedKey, hovered, base, invalidate]);
+  }, [units, selectedKey, hovered, base, invalidate, onNetwork, network]);
 
   useEffect(
     () => () => {
@@ -243,17 +250,17 @@ export function rackCameraDistance(fovDeg: number): number {
   return ((height / 2) * 1.2) / Math.tan(((fovDeg / 2) * Math.PI) / 180) + UNIT_DEPTH / 2;
 }
 
-/** The whole rack: frame, units, handles, group labels and floor. */
-export function RackScene() {
+/** The whole rack: frame, units, handles, rear parts, group labels and floor. */
+export function RackScene({ rear }: { rear: boolean }) {
   const height = frameHeight(model.totalRU);
+  const layers = useExplorer((s) => s.layers);
   return (
     <group>
-      <RackFrame />
-      {unitTypes.map((id) => (
-        <UnitInstances key={id} componentId={id} />
-      ))}
-      <Handles />
-      <GroupLabels />
+      {layers.structure && <RackFrame />}
+      {layers.parts && unitTypes.map((id) => <UnitInstances key={id} componentId={id} />)}
+      {layers.parts && <Handles />}
+      <RearScene />
+      {!rear && <GroupLabels />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
         <meshStandardMaterial color="#14181d" />

@@ -6,16 +6,19 @@ import { model } from '../data';
 import { useExplorer } from '../state/store';
 import { trayKeyOf } from '../state/url';
 import { RackScene, rackCameraDistance } from './RackScene';
-import { ComputeTrayScene } from './ComputeTrayScene';
+import { TrayScene } from './TrayScene';
 
 const FOV = 38;
 const RACK_DISTANCE = rackCameraDistance(FOV);
 
 /** Where the camera sits and looks for each view. */
 type Vec = [number, number, number];
-const CAMERAS: Record<'rack' | 'tray', { position: Vec; target: Vec; maxDistance: number }> = {
+const CAMERAS: Record<'rack' | 'rear' | 'tray' | 'shelf', { position: Vec; target: Vec; maxDistance: number }> = {
   rack: { position: [RACK_DISTANCE * 0.23, 0.3, RACK_DISTANCE], target: [0, 0, 0], maxDistance: RACK_DISTANCE * 2 },
+  rear: { position: [-RACK_DISTANCE * 0.7, 0.45, -RACK_DISTANCE * 0.75], target: [0, 0, -0.2], maxDistance: RACK_DISTANCE * 2 },
   tray: { position: [0, 1.75, 2.2], target: [0, 0, 0.3], maxDistance: 5 },
+  // A shelf several units tall (the power shelf) is seen from the front, like NVIDIA's Fig. 8.
+  shelf: { position: [0.5, 0.75, 2.6], target: [0, 0.15, 0.2], maxDistance: 5 },
 };
 
 /** The parts of drei's OrbitControls this file uses. */
@@ -26,7 +29,7 @@ interface Controls {
 }
 
 /** Moves the camera when the view changes; free orbiting in between. */
-function CameraRig({ view }: { view: 'rack' | 'tray' }) {
+function CameraRig({ view }: { view: 'rack' | 'rear' | 'tray' | 'shelf' }) {
   const camera = useThree((s) => s.camera);
   const controls = useThree((s) => s.controls) as unknown as Controls | null;
   const invalidate = useThree((s) => s.invalidate);
@@ -50,7 +53,8 @@ export default function Scene() {
   const selected = useExplorer((s) => s.selected);
   const trayKey = view === 'tray' ? trayKeyOf(selected, model) : null;
   const [contextLost, setContextLost] = useState(false);
-  const effectiveView = trayKey ? 'tray' : 'rack';
+  const tall = trayKey ? (model.trayLayout(trayKey.split('.')[0]!)?.heightRU ?? 1) > 1 : false;
+  const effectiveView = trayKey ? (tall ? 'shelf' : 'tray') : view === 'rear' ? 'rear' : 'rack';
   return (
     <>
       <Canvas
@@ -78,7 +82,7 @@ export default function Scene() {
         <hemisphereLight args={['#dfe7f2', '#1a1d22', 0.9]} />
         <directionalLight position={[2.5, 3, 4]} intensity={1.6} />
         <directionalLight position={[-3, 1, -2]} intensity={0.4} />
-        {trayKey ? <ComputeTrayScene key={trayKey} trayKey={trayKey} /> : <RackScene />}
+        {trayKey ? <TrayScene key={trayKey} trayKey={trayKey} /> : <RackScene rear={view === 'rear'} />}
         <OrbitControls makeDefault enablePan={false} enableDamping={false} minDistance={0.8} maxPolarAngle={Math.PI * 0.85} />
         <CameraRig view={effectiveView} />
       </Canvas>

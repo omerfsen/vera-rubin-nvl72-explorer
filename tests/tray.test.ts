@@ -81,8 +81,9 @@ describe('tray view state', () => {
   it('opens only for a numbered unit that has a layout', () => {
     expect(trayKeyOf('compute-tray.7/rubin-gpu.2', model)).toBe('compute-tray.7');
     expect(trayKeyOf('compute-tray/rubin-gpu', model)).toBeNull();
-    expect(trayKeyOf('switch-tray.3', model)).toBeNull();
-    st().select('switch-tray.3');
+    expect(trayKeyOf('tor-switch.1', model)).toBeNull();
+    expect(trayKeyOf('switch-tray.3', model)).toBe('switch-tray.3');
+    st().select('tor-switch.2');
     st().openTray();
     expect(st().view).toBe('rack');
     st().select('compute-tray.7');
@@ -110,7 +111,7 @@ describe('tray view state', () => {
     st().openTray();
     st().select('compute-tray.9/vera-cpu.1');
     expect(st().view).toBe('tray');
-    st().select('power-shelf.2');
+    st().select('tor-switch.1');
     expect(st().view).toBe('rack');
   });
 
@@ -128,7 +129,7 @@ describe('tray view in the URL', () => {
     const search = writeUrlState('', { view: 'tray', select: 'compute-tray.7/rubin-gpu.2', list: false });
     expect(search).toBe('?view=tray&select=compute-tray.7/rubin-gpu.2');
     expect(readUrlState(search, model).view).toBe('tray');
-    expect(readUrlState('?view=tray&select=power-shelf.2', model).view).toBe('rack');
+    expect(readUrlState('?view=tray&select=tor-switch.2', model).view).toBe('rack');
     expect(readUrlState('?view=tray', model).view).toBe('rack');
   });
 });
