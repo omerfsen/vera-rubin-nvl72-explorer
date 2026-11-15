@@ -19,5 +19,7 @@ describe('site credits', () => {
     expect(screen.getByText(/Made by Omer Sen/)).toBeTruthy();
     expect((screen.getByRole('link', { name: 'Source on GitHub' }) as HTMLAnchorElement).href).toBe(site.repository);
     expect(screen.queryAllByRole('link', { name: 'LinkedIn' }).length).toBe(site.author.linkedin ? 1 : 0);
+    expect((screen.getByRole('link', { name: 'LinkedIn' }) as HTMLAnchorElement).href).toBe('https://www.linkedin.com/in/omerfsen/');
+    expect((screen.getByRole('link', { name: 'omerfsen@gmail.com' }) as HTMLAnchorElement).href).toBe('mailto:omerfsen@gmail.com');
   });
 });

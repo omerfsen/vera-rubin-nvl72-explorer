@@ -3,26 +3,57 @@
   "title": "Explorer site settings",
   "type": "object",
   "additionalProperties": false,
-  "required": ["title", "tagline", "trademarks", "author", "repository"],
+  "required": [
+    "title",
+    "tagline",
+    "trademarks",
+    "author",
+    "repository"
+  ],
   "properties": {
-    "$schema": { "type": "string" },
-    "title": { "type": "string", "minLength": 1 },
-    "tagline": { "type": "string" },
-    "trademarks": { "type": "string" },
+    "$schema": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tagline": {
+      "type": "string"
+    },
+    "trademarks": {
+      "type": "string"
+    },
     "author": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
-        "github": { "type": "string", "pattern": "^https://github\\.com/" },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "github": {
+          "type": "string",
+          "pattern": "^https://github\\.com/"
+        },
         "linkedin": {
           "description": "Full profile URL, or empty to leave the link out.",
           "type": "string",
           "pattern": "^($|https://(www\\.)?linkedin\\.com/in/[^/]+/?$)"
+        },
+        "email": {
+          "description": "Contact address shown on the page, or empty to leave it out.",
+          "type": "string",
+          "pattern": "^($|[^@\\s]+@[^@\\s]+\\.[^@\\s]+)$"
         }
       }
     },
-    "repository": { "type": "string", "pattern": "^https://github\\.com/" }
+    "repository": {
+      "type": "string",
+      "pattern": "^https://github\\.com/"
+    }
   }
 }
