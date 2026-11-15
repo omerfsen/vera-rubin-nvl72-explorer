@@ -45,7 +45,7 @@ button { font: inherit; color: inherit; }
 
 .app {
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto auto auto 1fr auto;
   height: 100%;
   padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 }
@@ -322,7 +322,8 @@ button { font: inherit; color: inherit; }
   .legend-tray { max-height: 45%; }
 }
 
-.stage-actions { flex-direction: column; align-items: flex-start; max-width: 60%; }
+.stage-actions { flex-direction: column; align-items: flex-start; max-width: 60%; z-index: 30; }
+.stage-actions button { background: var(--surface-2); }
 .layer-toggles { display: flex; flex-wrap: wrap; gap: 4px; }
 .layer-toggles button { padding: 4px 10px; min-height: 28px; border-color: var(--border); }
 .layer-toggles button[aria-pressed='true'] { border-color: var(--accent); background: #12303f; }
@@ -346,3 +347,29 @@ button { font: inherit; color: inherit; }
   cursor: pointer;
   font: inherit;
 }
+
+/* ---- network overlay ---- */
+.network-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.network-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  min-height: 28px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+.network-bar button[aria-pressed='true'] { border-color: var(--net); background: color-mix(in srgb, var(--net) 22%, var(--surface)); }
+.net-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--net); }
+.network-info { border: 2px solid; border-radius: var(--radius); padding: 10px 12px; margin-bottom: 14px; }
+.network-info h3 { color: var(--text); text-transform: none; letter-spacing: 0; font-size: 0.95rem; }

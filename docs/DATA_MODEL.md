@@ -102,6 +102,16 @@ marked `assumed`.
 `heightRU` (the power shelf is 3); stacked parts such as PSU rows use `y` as
 their bottom elevation.
 
+## Network overlay
+
+The overlay reads the `network` connections: every component with a
+connection to a network is "on" it, and every rack unit type that contains
+such a component lights up in the rack view. A connection with
+`alternative: true` is a conflicting reading kept for the record (the
+BlueField-4 left port's figure says storagenet, its table dgxnet); it is drawn
+in the conflict colour and never counted as fact. The active network goes in
+the URL as `net=`.
+
 ## Selection paths and URLs
 
 A selection is a path of component ids below the rack, each with an optional

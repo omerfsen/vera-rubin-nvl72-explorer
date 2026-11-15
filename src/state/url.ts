@@ -9,12 +9,14 @@ export interface UrlState {
   select: string;
   /** The 2D list pane is open. */
   list: boolean;
+  /** Network highlighted by the overlay, or "" for none. */
+  net?: string;
 }
 
 export const DEFAULT_URL_STATE: UrlState = { view: 'rack', select: '', list: false };
 
 /** The query keys this app owns. Everything else in the query is left alone. */
-const OWN_KEYS = new Set(['view', 'select', 'list']);
+const OWN_KEYS = new Set(['view', 'select', 'list', 'net']);
 
 /**
  * The rack unit whose interior can be opened for this selection, e.g.
@@ -38,6 +40,7 @@ export function readUrlState(search: string, model: Model): UrlState {
     view: view === 'tray' && trayKeyOf(select, model) === null ? 'rack' : view,
     select,
     list: params.get('list') === '1',
+    net: model.getNetwork(params.get('net') ?? '') ? (params.get('net') as string) : '',
   };
 }
 
@@ -62,5 +65,6 @@ export function writeUrlState(search: string, state: UrlState): string {
   if (state.view !== DEFAULT_URL_STATE.view) kept.push(`view=${encodeURIComponent(state.view)}`);
   if (state.select !== '') kept.push(`select=${encodeURIComponent(state.select).replace(/%2F/g, '/')}`);
   if (state.list) kept.push('list=1');
+  if (state.net) kept.push(`net=${encodeURIComponent(state.net)}`);
   return kept.length === 0 ? '' : `?${kept.join('&')}`;
 }

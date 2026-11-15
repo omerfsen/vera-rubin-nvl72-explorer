@@ -104,6 +104,8 @@ export interface Connection extends Provenance {
   network?: string;
   kind: ConnectionKind;
   description: string;
+  /** A conflicting reading kept for the record, shown as a conflict rather than fact. */
+  alternative?: boolean;
 }
 
 /**
