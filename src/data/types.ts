@@ -125,10 +125,31 @@ export interface TraySlot {
   h: number;
 }
 
+export type TrayLinkKind = 'pcie' | 'c2c' | 'clink' | 'nvlink' | 'coolant' | 'power';
+
+/** One end of a link: a part instance, or a named point on the tray. */
+export type LinkEnd = { component: string; index?: number; point?: undefined } | { point: string; component?: undefined; index?: undefined };
+
+/** An instance-level connection inside a tray: the "veins" layer. */
+export interface TrayLink extends Provenance {
+  kind: TrayLinkKind;
+  from: LinkEnd;
+  to: LinkEnd;
+}
+
+export interface TrayPoint {
+  id: string;
+  label: string;
+  x: number;
+  z: number;
+}
+
 export interface TrayLayout extends Provenance {
   sources?: Source[];
   notPlaced?: { component: string; reason: string }[];
   slots: TraySlot[];
+  points?: TrayPoint[];
+  links?: TrayLink[];
 }
 
 export interface Topology {

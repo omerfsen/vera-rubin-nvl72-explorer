@@ -6,7 +6,7 @@ import { Search } from './components/Search';
 import { SidePanel } from './components/SidePanel';
 import { hasWebGL } from './lib/webgl';
 import { model } from './data';
-import { TYPE_COLORS } from './scenes/geometry';
+import { LINK_COLORS, LINK_NAMES, TYPE_COLORS } from './scenes/geometry';
 import { trayLegend } from './scenes/colors';
 import { trayKeyOf } from './state/url';
 import { syncUrl, useExplorer } from './state/store';
@@ -62,18 +62,54 @@ function Legend({ trayId }: { trayId: string | null }) {
   );
 }
 
-/** "Open tray" in the rack view, "Back to rack" inside a tray. */
+const LAYERS = [
+  { key: 'structure', label: 'Structure', hint: 'the bones: tray shell' },
+  { key: 'parts', label: 'Parts', hint: 'the muscles: chips, cards, drives, ports' },
+  { key: 'links', label: 'Connections', hint: 'the veins: PCIe, C2C, Clink, NVLink, coolant, power' },
+] as const;
+
+/** "Open tray" in the rack view; "Back to rack" and the layer toggles inside a tray. */
 function StageActions({ trayKey, view }: { trayKey: string | null; view: string }) {
   const openTray = useExplorer((s) => s.openTray);
   const closeTray = useExplorer((s) => s.closeTray);
+  const layers = useExplorer((s) => s.layers);
+  const toggleLayer = useExplorer((s) => s.toggleLayer);
   if (!trayKey) return null;
   const name = model.segmentLabel(model.parsePath(trayKey)![0]!);
+  const trayId = trayKey.split('.')[0]!;
+  const kinds = [...new Set((model.trayLayout(trayId)?.links ?? []).map((l) => l.kind))];
   return (
     <div className="stage-actions">
       {view === 'tray' ? (
-        <button type="button" onClick={closeTray}>
-          ← Back to rack
-        </button>
+        <>
+          <button type="button" onClick={closeTray}>
+            ← Back to rack
+          </button>
+          <div className="layer-toggles" role="group" aria-label="Layers">
+            {LAYERS.map((l) => (
+              <button
+                key={l.key}
+                type="button"
+                aria-pressed={layers[l.key]}
+                title={`Show or hide ${l.hint}`}
+                onClick={() => toggleLayer(l.key)}
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
+          {layers.links && (
+            <ul className="link-legend" aria-label="Connection types">
+              {kinds.map((k) => (
+                <li key={k}>
+                  <span className="line-swatch" style={{ background: LINK_COLORS[k] }} aria-hidden="true" />
+                  {LINK_NAMES[k] ?? k}
+                </li>
+              ))}
+              <li className="muted">Dashed: assumed, see the panel</li>
+            </ul>
+          )}
+        </>
       ) : (
         <button type="button" onClick={openTray}>
           Open {name}

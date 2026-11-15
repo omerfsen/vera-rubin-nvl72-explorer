@@ -76,6 +76,13 @@ placed without an `index`. Parts that cannot be placed are listed in
 `notPlaced` with a reason. The whole layout carries `assumed: true`: positions
 follow the arrangement in NVIDIA's figures but are not measurements.
 
+`links` are instance-level connections inside the tray, each with a `kind`
+(`pcie`, `c2c`, `clink`, `nvlink`, `coolant`, `power`), `from` and `to` ends
+(`{ component, index }` for a part, `{ point }` for a named spot in `points`,
+such as the rear NVLink connectors), and their own provenance. Links read from
+the block diagram are sourced to it; inferred links carry `assumed: true` and a
+note, and are drawn dashed.
+
 Tests require every part inside the tray to be placed or listed in
 `notPlaced`, every instance number to be within its count, and every slot to
 resolve to a selectable path.

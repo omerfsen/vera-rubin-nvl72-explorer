@@ -90,3 +90,22 @@ export function slotBox(slot: { face: 'top' | 'front'; x: number; z: number; y?:
     size: [slot.w * TRAY_WIDTH, height, slot.d * TRAY_DEPTH],
   };
 }
+
+/** Colour per link kind in the tray's connections layer. */
+export const LINK_COLORS: Record<string, string> = {
+  pcie: '#b58cf0',
+  c2c: '#5fd3c4',
+  clink: '#f0a35f',
+  nvlink: '#e8e86a',
+  coolant: '#4aa8ff',
+  power: '#ff6b6b',
+};
+
+export const LINK_NAMES: Record<string, string> = {
+  pcie: 'PCIe',
+  c2c: 'C2C (CPU to GPU)',
+  clink: 'Clink (CPU to CPU)',
+  nvlink: 'NVLink (to the cable cartridge)',
+  coolant: 'Coolant',
+  power: 'Power',
+};

@@ -5,6 +5,7 @@ import { SHOW_OFFICIAL_FIGURES, officialFigureUrl } from '../config/flags';
 import { useExplorer } from '../state/store';
 import { ROOT_ID } from '../data/model';
 import { trayKeyOf } from '../state/url';
+import { LINK_COLORS, LINK_NAMES } from '../scenes/geometry';
 
 function SourceLink({ source }: { source: Source }) {
   return (
@@ -100,6 +101,7 @@ export function SidePanel() {
   const within = trayKey && selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
   const slot = trayId && within ? model.slotFor(trayId, within) : undefined;
   const notPlaced = layout?.notPlaced?.find((n) => n.component === component.id);
+  const trayLinks = trayId && within ? model.linksAt(trayId, within) : [];
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
@@ -232,6 +234,38 @@ export function SidePanel() {
               ))}
             </tbody>
           </table>
+        </section>
+      )}
+
+      {trayLinks.length > 0 && trayId && within && (
+        <section>
+          <h3>Inside the tray, connected to</h3>
+          <ul className="plain">
+            {trayLinks.map((l, i) => {
+              const fromHere = model.linkEndPath(trayId, l.from)?.replace(/\.\d+$/, '') === within.replace(/\.\d+$/, '');
+              const other = fromHere ? l.to : l.from;
+              const otherPath = model.linkEndPath(trayId, other);
+              return (
+                <li key={i}>
+                  <span className="conn-kind" style={{ borderColor: LINK_COLORS[l.kind] }}>
+                    {LINK_NAMES[l.kind] ?? l.kind}
+                  </span>{' '}
+                  {otherPath ? (
+                    <button type="button" className="link-button" onClick={() => select(`${trayKey}/${otherPath}`)}>
+                      {model.linkEndLabel(trayId, other)}
+                    </button>
+                  ) : (
+                    model.linkEndLabel(trayId, other)
+                  )}{' '}
+                  {l.assumed && <Assumed note={l.note} />}
+                  {l.note && <div className="note">{l.note}</div>}
+                  <div className="spec-source">
+                    Source: <SourceLink source={l.source} />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
 

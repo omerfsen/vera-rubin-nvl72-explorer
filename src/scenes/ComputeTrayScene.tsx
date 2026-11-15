@@ -1,13 +1,14 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useThree, type ThreeEvent } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
+import { Html, QuadraticBezierLine } from '@react-three/drei';
 import { Color, InstancedMesh, Object3D } from 'three';
 import { model } from '../data';
-import type { TraySlot } from '../data/types';
+import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
 import { isPartSelected, partColor } from './colors';
 import {
   HOVER_COLOR,
+  LINK_COLORS,
   SELECTED_COLOR,
   TRAY_DEPTH,
   TRAY_HEIGHT,
@@ -115,6 +116,63 @@ function TrayShell() {
   );
 }
 
+type Vec = [number, number, number];
+
+/** Where a link attaches: the top centre of a part, or a named point on the tray floor. */
+function endPosition(layout: TrayLayout, end: LinkEnd): Vec | null {
+  if (end.point !== undefined) {
+    const p = layout.points?.find((pt) => pt.id === end.point);
+    return p ? [p.x * TRAY_WIDTH, 0.03, p.z * TRAY_DEPTH] : null;
+  }
+  const slot = layout.slots.find((s) => s.component === end.component && s.index === end.index);
+  if (!slot) return null;
+  const box = slotBox(slot);
+  return [box.position[0], box.position[1] + box.size[1] / 2 + 0.005, box.position[2]];
+}
+
+/**
+ * The connections layer: one curve per link, coloured by kind. Links of the
+ * selected part are drawn bright and thick; the rest fade while something
+ * inside the tray is selected.
+ */
+function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout }) {
+  const trayId = trayKey.split('.')[0]!;
+  const selected = useExplorer((s) => s.selected);
+  const invalidate = useThree((s) => s.invalidate);
+  const within = selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
+  const active = useMemo(() => new Set(within ? model.linksAt(trayId, within) : []), [trayId, within]);
+  useEffect(() => invalidate(), [active, invalidate]);
+  return (
+    <group>
+      {(layout.links ?? []).map((link, i) => {
+        const a = endPosition(layout, link.from);
+        const b = endPosition(layout, link.to);
+        if (!a || !b) return null;
+        const lift = 0.06 + Math.hypot(a[0] - b[0], a[2] - b[2]) * 0.12;
+        const mid: Vec = [(a[0] + b[0]) / 2, Math.max(a[1], b[1]) + lift, (a[2] + b[2]) / 2];
+        const on = active.has(link);
+        const dim = within !== null && !on;
+        return (
+          <QuadraticBezierLine
+            key={i}
+            start={a}
+            end={b}
+            mid={mid}
+            color={LINK_COLORS[link.kind] ?? '#ffffff'}
+            lineWidth={on ? 4 : 2}
+            dashed={link.assumed === true}
+            dashSize={0.03}
+            gapSize={0.02}
+            transparent
+            opacity={dim ? 0.2 : 0.95}
+            raycast={() => null}
+          />
+        );
+      })}
+    </group>
+  );
+}
+
 /** Name shown for a part instance: NVIDIA's label when the layout has one. */
 export function partLabel(item: Placed): string {
   const c = model.getComponent(item.slot.component);
@@ -165,13 +223,19 @@ export function ComputeTrayScene({ trayKey }: { trayKey: string }) {
     return [...byComponent.entries()];
   }, [layout, trayKey, trayId]);
   const placed = useMemo(() => groups.flatMap(([, items]) => items), [groups]);
+  const layers = useExplorer((s) => s.layers);
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => invalidate(), [layers, invalidate]);
   if (!layout) return null;
   return (
     <group>
-      <TrayShell />
-      {groups.map(([component, items]) => (
-        <PartInstances key={component} trayKey={trayKey} items={items} />
-      ))}
+      <group visible={layers.structure}>
+        <TrayShell />
+      </group>
+      {/* Unmounted rather than hidden: three.js still hit-tests invisible meshes. */}
+      {layers.parts &&
+        groups.map(([component, items]) => <PartInstances key={component} trayKey={trayKey} items={items} />)}
+      {layers.links && <TrayLinks trayKey={trayKey} layout={layout} />}
       <Labels placed={placed} />
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />

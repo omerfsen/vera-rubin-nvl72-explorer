@@ -321,3 +321,28 @@ button { font: inherit; color: inherit; }
   .stage-actions { top: auto; bottom: 8px; left: 8px; }
   .legend-tray { max-height: 45%; }
 }
+
+.stage-actions { flex-direction: column; align-items: flex-start; max-width: 60%; }
+.layer-toggles { display: flex; flex-wrap: wrap; gap: 4px; }
+.layer-toggles button { padding: 4px 10px; min-height: 28px; border-color: var(--border); }
+.layer-toggles button[aria-pressed='true'] { border-color: var(--accent); background: #12303f; }
+.link-legend {
+  list-style: none;
+  margin: 0;
+  padding: 6px 8px;
+  font-size: 0.78rem;
+  background: rgb(22 26 32 / 0.85);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.link-legend li { display: flex; align-items: center; gap: 6px; }
+.line-swatch { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
+.link-button {
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}

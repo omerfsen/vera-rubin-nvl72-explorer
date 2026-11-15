@@ -9,6 +9,9 @@ interface ExplorerState {
   /** Rack unit key under the pointer, e.g. "compute-tray.3". */
   hovered: string | null;
   listOpen: boolean;
+  /** Tray view layers: structure (bones), parts (muscles), connections (veins). */
+  layers: { structure: boolean; parts: boolean; links: boolean };
+  toggleLayer: (layer: 'structure' | 'parts' | 'links') => void;
   select: (path: string) => void;
   setHovered: (key: string | null) => void;
   setListOpen: (open: boolean) => void;
@@ -32,6 +35,8 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   selected: initial.select,
   hovered: null,
   listOpen: initial.list,
+  layers: { structure: true, parts: true, links: true },
+  toggleLayer: (layer) => set({ layers: { ...get().layers, [layer]: !get().layers[layer] } }),
   select: (path) => {
     const segments = model.parsePath(path);
     const selected = segments === null ? '' : model.formatPath(segments);

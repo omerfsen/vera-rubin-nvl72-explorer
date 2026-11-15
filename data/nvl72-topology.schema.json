@@ -744,6 +744,109 @@
           "items": {
             "$ref": "#/$defs/traySlot"
           }
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trayPoint"
+          },
+          "description": "Named spots on the tray, e.g. rear connectors, for links that end there."
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trayLink"
+          },
+          "description": "Instance-level connections inside the tray: the 'veins' layer."
+        }
+      }
+    },
+    "linkEnd": {
+      "type": "object",
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "component"
+          ]
+        },
+        {
+          "required": [
+            "point"
+          ]
+        }
+      ],
+      "properties": {
+        "component": {
+          "$ref": "#/$defs/id"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "point": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "trayLink": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "from",
+        "to"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "pcie",
+            "c2c",
+            "clink",
+            "nvlink",
+            "coolant",
+            "power"
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/linkEnd"
+        },
+        "to": {
+          "$ref": "#/$defs/linkEnd"
+        }
+      }
+    },
+    "trayPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "x",
+        "z"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "x": {
+          "type": "number",
+          "minimum": -0.5,
+          "maximum": 0.5
+        },
+        "z": {
+          "type": "number",
+          "minimum": -0.5,
+          "maximum": 0.5
         }
       }
     }

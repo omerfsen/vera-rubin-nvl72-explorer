@@ -105,6 +105,12 @@ VITE_SHOW_OFFICIAL_FIGURES=true npm run build
   SOCAMM, ConnectX-9, BlueField-4, drives, BMC/HMC, ports and more. The
   interior layout is schematic (marked *assumed*): it follows the arrangement
   in NVIDIA's top and front views but is not traced from them or to scale.
+- Inside a tray, three layers can be switched on and off, like an anatomy
+  chart: **Structure** (the bones: tray shell), **Parts** (the muscles) and
+  **Connections** (the veins: PCIe, C2C, Clink, NVLink, coolant and power,
+  from NVIDIA's block diagram and PCIe tables). Selecting a part highlights its
+  own connections. Dashed lines are inferred and marked *assumed* in the
+  panel.
 - With the 3D view focused, Up/Down step through the rack (or through the
   parts of an open tray) and Enter opens a compute tray. `Esc` goes up one
   level and closes an open tray.

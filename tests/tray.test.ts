@@ -132,3 +132,53 @@ describe('tray view in the URL', () => {
     expect(readUrlState('?view=tray', model).view).toBe('rack');
   });
 });
+
+describe('connections inside the compute tray', () => {
+  const links = layout.links ?? [];
+  const points = new Set((layout.points ?? []).map((p) => p.id));
+
+  it('ends every link on a drawn part or a named point', () => {
+    for (const l of links) {
+      for (const end of [l.from, l.to]) {
+        if (end.point !== undefined) expect(points, end.point).toContain(end.point);
+        else expect(layout.slots.some((s) => s.component === end.component && s.index === end.index), JSON.stringify(end)).toBe(true);
+      }
+    }
+  });
+
+  it('wires GPU0/1 to CPU0 and GPU2/3 to CPU1 over C2C, and the CPUs together over Clink', () => {
+    const c2c = links.filter((l) => l.kind === 'c2c').map((l) => `${l.from.index}->${l.to.index}`);
+    expect(c2c).toEqual(['1->1', '2->1', '3->2', '4->2']);
+    expect(links.filter((l) => l.kind === 'clink')).toHaveLength(1);
+    expect(links.filter((l) => l.kind === 'c2c' || l.kind === 'clink').every((l) => !l.assumed)).toBe(true);
+  });
+
+  it('gives every GPU an NVLink path to the cable cartridge connectors', () => {
+    const nv = links.filter((l) => l.kind === 'nvlink');
+    expect(nv.map((l) => l.from.index)).toEqual([1, 2, 3, 4]);
+    expect(nv.every((l) => l.to.point === 'nvlink-connectors')).toBe(true);
+  });
+
+  it('marks inferred links as assumed with a note', () => {
+    for (const l of links) if (l.assumed) expect(l.note, l.kind).toBeTruthy();
+    const cx = links.filter((l) => l.kind === 'pcie' && l.from.component === 'connectx-9');
+    expect(cx.length).toBe(2);
+    expect(cx.every((l) => l.assumed)).toBe(true);
+  });
+
+  it('finds the links of one instance and of a general selection', () => {
+    const gpu1 = model.linksAt('compute-tray', 'rubin-gpu.1').map((l) => l.kind).sort();
+    expect(gpu1).toEqual(['c2c', 'coolant', 'nvlink']);
+    expect(model.linksAt('compute-tray', 'rubin-gpu').filter((l) => l.kind === 'c2c')).toHaveLength(4);
+    expect(model.linkEndLabel('compute-tray', { component: 'vera-cpu', index: 1 })).toBe('CPU0 (HPM_L)');
+    expect(model.linkEndLabel('compute-tray', { point: 'nvlink-connectors' })).toMatch(/cable cartridge/);
+  });
+});
+
+describe('tray layers', () => {
+  it('toggles structure, parts and connections independently', () => {
+    useExplorer.setState({ layers: { structure: true, parts: true, links: true } });
+    useExplorer.getState().toggleLayer('parts');
+    expect(useExplorer.getState().layers).toEqual({ structure: true, parts: false, links: true });
+  });
+});

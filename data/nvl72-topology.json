@@ -2432,6 +2432,482 @@
           "h": 0.32,
           "y": 0.4
         }
+      ],
+      "points": [
+        {
+          "id": "nvlink-connectors",
+          "label": "NVLink connectors to the cable cartridge",
+          "x": 0.0,
+          "z": -0.5
+        },
+        {
+          "id": "cold-water-inlet",
+          "label": "Cold water inlet",
+          "x": 0.42,
+          "z": -0.5
+        },
+        {
+          "id": "hot-water-outlet",
+          "label": "Hot water outlet",
+          "x": -0.42,
+          "z": -0.5
+        },
+        {
+          "id": "bus-bar-connector",
+          "label": "Bus bar connector",
+          "x": 0.2,
+          "z": -0.5
+        }
+      ],
+      "links": [
+        {
+          "kind": "clink",
+          "from": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "c2c",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "c2c",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 2
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "c2c",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 3
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "c2c",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 4
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "bluefield-4",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "bluefield-4",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-boot-drive",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Fig. 4 draws the boot drive on CPU 1. Its PCIe bus (000a:a1) is in the same domain as GPU2 and GPU3 (2.4)."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "connectx-9",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 draws four ConnectX-9 pairs, two on CPU 0 and two on CPU 1, through PCIe switches. Which front bay holds which pair is not stated; this app links the left bay to CPU 0 and the right bay to CPU 1."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "connectx-9",
+            "index": 2
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 draws four ConnectX-9 pairs, two on CPU 0 and two on CPU 1, through PCIe switches. Which front bay holds which pair is not stated; this app links the left bay to CPU 0 and the right bay to CPU 1."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-cache-drive",
+            "index": 1
+          },
+          "to": {
+            "component": "connectx-9",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
+            "figure": "network-port-labels-1-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-cache-drive",
+            "index": 2
+          },
+          "to": {
+            "component": "connectx-9",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
+            "figure": "network-port-labels-1-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-cache-drive",
+            "index": 3
+          },
+          "to": {
+            "component": "connectx-9",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
+            "figure": "network-port-labels-1-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-cache-drive",
+            "index": 4
+          },
+          "to": {
+            "component": "connectx-9",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
+            "figure": "network-port-labels-1-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 1
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 2
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 3
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 4
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "rubin-gpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "rubin-gpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "rubin-gpu",
+            "index": 3
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "rubin-gpu",
+            "index": 4
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "point": "cold-water-inlet"
+          },
+          "to": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 5 labels the cold water inlet and hot water outlet at the rear of the tray; the piping to the manifold is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "point": "hot-water-outlet"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 5 labels the cold water inlet and hot water outlet at the rear of the tray; the piping to the manifold is not shown."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "point": "bus-bar-connector"
+          },
+          "to": {
+            "component": "power-distribution-board",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 5 labels a bus bar connector at the rear and a Power Distribution Board; that one feeds the other is read from their names, not stated."
+        }
       ]
     }
   }
