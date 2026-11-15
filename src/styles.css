@@ -427,3 +427,6 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
   font-weight: 600;
   text-transform: uppercase;
 }
+
+.credits { white-space: normal; }
+.footer .credits { margin-left: 4px; }

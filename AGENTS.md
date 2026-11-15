@@ -29,6 +29,7 @@ Read `README.md` for what it does and `docs/DATA_MODEL.md` for the data.
 | `data/nvl72-topology.json` | All facts: components, networks, rack/tray/rear layouts, connections, Table 2.4, service procedures, open questions, per-component document references |
 | `data/nvl72-topology.schema.json` | JSON Schema for it (draft 2020-12) |
 | `data/display.json` | Colours, link names and rear styling only; no facts |
+| `data/site.json` | Page title, tagline, trademark line and the author links |
 | `src/data/` | Types and the model (paths, instances, totals, network members) |
 | `src/scenes/` | 3D scenes: rack front and rear, tray interiors, shared rods and colours |
 | `src/components/` | Side panel, search, breadcrumb, network bar, sources page, procedures |

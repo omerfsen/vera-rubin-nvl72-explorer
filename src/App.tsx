@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Breadcrumb } from './components/Breadcrumb';
 import { NetworkBar } from './components/NetworkBar';
+import { Credits } from './components/Credits';
+import site from '../data/site.json';
 import { SourcesPage } from './components/SourcesPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RackList } from './components/RackList';
@@ -184,8 +186,8 @@ export default function App() {
     <div className={embed ? 'app embed' : 'app'}>
       <header className="topbar">
         <div className="brand">
-          <h1>Vera Rubin NVL72 Explorer</h1>
-          <p className="tagline">Every fact linked to NVIDIA's own documentation · unofficial, not affiliated with NVIDIA</p>
+          <h1>{site.title}</h1>
+          <p className="tagline">{site.tagline}</p>
         </div>
         <Search />
         <button type="button" className="toggle" aria-pressed={page === 'sources'} onClick={() => setPage(page === 'sources' ? '' : 'sources')}>
@@ -279,8 +281,7 @@ export default function App() {
       <footer className="footer">
         Data: {model.topology.meta.document.title} ({model.topology.meta.document.date}) and{' '}
         {model.topology.meta.serviceManual?.title} ({model.topology.meta.serviceManual?.date}). Unofficial; not affiliated
-        with or endorsed by NVIDIA. NVIDIA, DGX, Vera, Rubin, NVLink, NVSwitch, ConnectX and BlueField are trademarks
-        of NVIDIA Corporation. 3D geometry is original and illustrative.
+        with or endorsed by NVIDIA. {site.trademarks} 3D geometry is original and illustrative. <Credits />
       </footer>
     </div>
   );

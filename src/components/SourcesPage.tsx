@@ -1,6 +1,7 @@
 import { model } from '../data';
 import type { Source } from '../data/types';
 import { useExplorer } from '../state/store';
+import { Credits } from './Credits';
 
 interface Item {
   where: string;
@@ -143,6 +144,10 @@ export function SourcesPage() {
           </li>
         ))}
       </ul>
+      <h3>About</h3>
+      <p>
+        <Credits />. Licensed under Apache 2.0.
+      </p>
       <h3>The data</h3>
       <p>
         Everything the explorer shows comes from one JSON file, checked against a JSON Schema. Download both to reuse

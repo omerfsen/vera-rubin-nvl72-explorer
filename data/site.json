@@ -1,0 +1,12 @@
+{
+  "$schema": "./site.schema.json",
+  "title": "Vera Rubin NVL72 Explorer",
+  "tagline": "Every fact linked to NVIDIA's own documentation · unofficial, not affiliated with NVIDIA",
+  "trademarks": "NVIDIA, DGX, Vera, Rubin, NVLink, NVSwitch, ConnectX and BlueField are trademarks of NVIDIA Corporation.",
+  "author": {
+    "name": "Omer Sen",
+    "github": "https://github.com/omerfsen",
+    "linkedin": ""
+  },
+  "repository": "https://github.com/omerfsen/vera-rubin-nvl72-explorer"
+}
