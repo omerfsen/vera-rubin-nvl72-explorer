@@ -1,0 +1,46 @@
+name: Watch NVIDIA documents
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    # Kill switch: set DOC_WATCH_ENABLED to "false" to stop the weekly check.
+    if: ${{ vars.DOC_WATCH_ENABLED != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - name: Compare with the fingerprints
+        id: check
+        run: |
+          set +e
+          node scripts/check-docs.mjs > report.md
+          code=$?
+          cat report.md
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          [ "$code" -ne 2 ]
+      - name: Open an issue when a document changed
+        if: steps.check.outputs.code == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          title="NVIDIA documentation changed"
+          open=$(gh issue list -R "$REPO" --state open --search "\"$title\" in:title" --json number --jq 'length')
+          if [ "$open" = "0" ]; then
+            gh issue create -R "$REPO" --title "$title" --body-file report.md
+          else
+            echo "An open issue already tracks this."
+          fi
