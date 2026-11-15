@@ -1,0 +1,1329 @@
+{
+  "ui": {
+    "language": {
+      "self": "ES",
+      "label": "Idioma",
+      "translated": "Este texto está traducido de la documentación en inglés de NVIDIA. El texto en inglés es el que prevalece."
+    },
+    "theme": {
+      "label": "Tema de color",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "site": {
+      "title": "Explorador Vera Rubin NVL72",
+      "tagline": "Cada dato enlazado a la propia documentación de NVIDIA · no oficial, sin relación con NVIDIA",
+      "trademarks": "NVIDIA, DGX, Vera, Rubin, NVLink, NVSwitch, ConnectX y BlueField son marcas comerciales de NVIDIA Corporation.",
+      "footer": "Datos: {userGuide} ({userGuideDate}) y {serviceManual} ({serviceManualDate}). No oficial; sin relación con NVIDIA ni respaldado por ella. {trademarks} La geometría 3D es original e ilustrativa."
+    },
+    "credits": {
+      "madeBy": "Hecho por {name}",
+      "source": "Código fuente en GitHub",
+      "github": "GitHub",
+      "linkedin": "LinkedIn"
+    },
+    "top": {
+      "sources": "Fuentes",
+      "listView": "Vista de lista",
+      "hideList": "Ocultar lista"
+    },
+    "search": {
+      "placeholder": "Buscar piezas, p. ej. gpu, bluefield, bandeja 7",
+      "label": "Buscar piezas",
+      "in": "en {parent}",
+      "rackUnit": "unidad del rack"
+    },
+    "breadcrumb": {
+      "label": "Ruta de navegación",
+      "rack": "Rack"
+    },
+    "networkBar": {
+      "label": "Resaltar una red",
+      "networks": "Redes:"
+    },
+    "layout": {
+      "listPane": "Rack como lista",
+      "details": "Detalles",
+      "noWebgl": "WebGL no está disponible en este navegador, así que el rack se muestra como lista.",
+      "sceneFailed": "No se pudo iniciar la vista 3D. Use la vista de lista.",
+      "loading": "Cargando la vista 3D…",
+      "stage": "Vista del rack. Use las flechas arriba y abajo para recorrer las unidades."
+    },
+    "hint": {
+      "trayLong": "Haga clic en una pieza · arrastre para girar · rueda o pellizco para el zoom · ↑ ↓ para avanzar · Esc para volver",
+      "trayShort": "Toque una pieza · arrastre para girar · pellizque para el zoom",
+      "rearLong": "Parte trasera: haga clic en una bandeja para ver cómo su NVLink llega a todas las demás a través del cartucho · haga clic en cualquier pieza o conector trasero",
+      "rearShort": "Toque una pieza trasera · arrastre para girar",
+      "rackLong": "Haga clic en una unidad y otra vez para abrirla · arrastre para girar · ↑ ↓ para avanzar · Intro para abrir · Esc para volver",
+      "rackShort": "Toque una unidad y otra vez para abrirla · arrastre para girar"
+    },
+    "stage": {
+      "side": "Lado del rack",
+      "front": "Frontal",
+      "rear": "Trasera",
+      "open": "Abrir {name}",
+      "backToRack": "← Volver al rack",
+      "layers": "Capas",
+      "showOrHide": "Mostrar u ocultar {hint}",
+      "connectionTypes": "Tipos de conexión",
+      "dashed": "Discontinua: supuesto, ver el panel"
+    },
+    "layers": {
+      "structure": "Estructura",
+      "structureHint": "los huesos: bastidor del rack o carcasa de la bandeja",
+      "parts": "Piezas",
+      "partsHint": "los músculos: unidades, piezas traseras, chips, tarjetas, unidades de almacenamiento, puertos",
+      "links": "Conexiones",
+      "linksHint": "las venas: PCIe, C2C, Clink, NVLink, refrigerante, energía"
+    },
+    "legend": {
+      "label": "Leyenda",
+      "on": "En {name}",
+      "conflict": "Conflicto: la figura y la tabla no coinciden",
+      "notOn": "No está en esta red",
+      "rear": "{name} (trasera)",
+      "port": "Puerto {type}",
+      "otherPort": "Otro puerto (tipo no indicado)"
+    },
+    "scene": {
+      "trayOpened": "Vista 3D de {name} abierta. Use las flechas para recorrer sus piezas.",
+      "rack": "Vista 3D del rack. Use la vista de lista o las flechas para seleccionar unidades.",
+      "contextLost": "La vista 3D perdió su contexto gráfico. Se recupera sola; la vista de lista sigue funcionando.",
+      "front": "Frontal",
+      "rear": "Trasera",
+      "group": "{count} × {name}",
+      "nvlinkFanout": "NVLink: {unit} a las {count} {peers}"
+    },
+    "unitPlural": {
+      "compute-tray": "bandejas de cómputo",
+      "switch-tray": "bandejas de conmutación NVLink 6",
+      "power-shelf": "estantes de alimentación",
+      "tor-switch": "conmutadores Ethernet de parte superior del rack"
+    },
+    "list": {
+      "label": "Unidades del rack, de arriba abajo",
+      "front": "Frontal, de arriba abajo",
+      "group": "{count} × {name}",
+      "unit": "{name} {index}",
+      "height": "{height} RU",
+      "rear": "Trasera",
+      "only3d": "La vista trasera y el interior de las bandejas solo se dibujan en la vista 3D."
+    },
+    "panel": {
+      "selected": "Seleccionado: {title}",
+      "assumed": "supuesto",
+      "openToSee": "Abrir {title} para ver sus piezas",
+      "whatItIs": "Qué es",
+      "whatItDoes": "Qué hace",
+      "howMany": "Cuántos",
+      "position": "Posición",
+      "nvidiaLabel": "Etiqueta de NVIDIA: {label}",
+      "notDrawnReason": "No dibujado: {reason}",
+      "notDrawn": "No se dibuja por separado en la vista 3D.",
+      "networks": "Redes",
+      "noNetworks": "No está en ninguna de las siete redes del rack.",
+      "throughPart": " (a través de una pieza interna)",
+      "dashedChips": "Etiquetas discontinuas: se llega a través de una pieza interna.",
+      "whatNetworksDo": "Para qué sirven estas redes",
+      "networkItem": "{number}. {name}",
+      "specs": "Especificaciones",
+      "insideTray": "Dentro de la bandeja, conectado a",
+      "connections": "Conexiones",
+      "partsInside": "Piezas internas",
+      "countNotStated": "cantidad no indicada",
+      "times": "× {count}",
+      "note": "Nota",
+      "source": "Fuente",
+      "sourceLabel": "Fuente:",
+      "figureAlt": "Figura oficial de {name}, de la NVIDIA DGX VR NVL72 User Guide",
+      "figureCaption": "Figura enlazada desde docs.nvidia.com. © NVIDIA Corporation.",
+      "documents": "En los documentos de NVIDIA",
+      "web": "web",
+      "pdfPage": "PDF p. {page}",
+      "figure": "figura",
+      "openQuestion": "Pregunta abierta en los documentos de NVIDIA",
+      "openQuestions": "Preguntas abiertas en los documentos de NVIDIA"
+    },
+    "docs": {
+      "user-guide": "User Guide",
+      "service-manual": "Service Manual"
+    },
+    "badge": {
+      "conflict": "conflicto",
+      "gap": "laguna"
+    },
+    "count": {
+      "notStated": "La guía no indica cuántos hay.",
+      "perParent": "{count} por {parent}",
+      "oneRack": "Un rack: {gpus} GPU en un único dominio NVLink.",
+      "perRack": "{total} por rack (calculado)",
+      "thisIs": "Este es el número {index}.",
+      "fromZero": "NVIDIA los numera desde 0 (GPU0 a GPU3, CPU0 y CPU1 en la fig. 4); los enlaces de esta aplicación cuentan desde 1."
+    },
+    "per": {
+      "rack": "rack",
+      "compute-tray": "bandeja de cómputo",
+      "switch-tray": "bandeja de conmutación",
+      "power-shelf": "estante de alimentación",
+      "tor-switch": "conmutador de parte superior del rack"
+    },
+    "host": {
+      "title": "En el host",
+      "label": "Etiqueta",
+      "bus": "Bus PCIe",
+      "interface": "Interfaz",
+      "rdma": "RDMA",
+      "na": "n/d",
+      "allInstances": " · se muestran todas las instancias"
+    },
+    "network": {
+      "aria": "Red {name}",
+      "title": "Red {number}: {name}",
+      "noPort": "Según la documentación de NVIDIA, ningún puerto de este rack está en {name}.",
+      "onThe": " en {parent}",
+      "perRack": "{total} por rack",
+      "conflict": "Conflicto: la figura de la guía pone este puerto en {name}, su tabla no. Ver el punto 3 de OPEN_QUESTIONS.",
+      "off": "Desactivar la superposición"
+    },
+    "ops": {
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "software": "Software",
+      "partOf": " (parte de {name})",
+      "commands": "Comandos ({count})",
+      "safety": "Seguridad"
+    },
+    "procedure": {
+      "operations": "Operaciones",
+      "service": "Procedimiento de servicio",
+      "walkThrough": "Paso a paso: {title} ({count} pasos)",
+      "aria": "Procedimiento de servicio: {title}",
+      "heading": "{title} · paso {step} de {total}",
+      "previous": "← Anterior",
+      "next": "Siguiente →",
+      "close": "Cerrar",
+      "exampleService": "Se muestra en una unidad de ejemplo. Siga el procedimiento completo y las notas de seguridad del manual de servicio de NVIDIA.",
+      "exampleOperation": "Se muestra en una unidad de ejemplo. Siga el procedimiento completo y las notas de seguridad de la guía de usuario de NVIDIA."
+    },
+    "share": {
+      "title": "Compartir",
+      "copyLink": "Copiar el enlace a esta vista",
+      "copyEmbed": "Copiar el código para insertar",
+      "linkCopied": "Enlace copiado.",
+      "embedCopied": "Código para insertar copiado."
+    },
+    "sources": {
+      "back": "← Volver al rack",
+      "title": "Fuentes y preguntas abiertas",
+      "intro": "Cada dato de este explorador enlaza a la sección de la documentación de NVIDIA de la que procede. Lo que los documentos no indican se marca como {assumed} con un motivo, y los lugares donde las figuras y las tablas de NVIDIA no coinciden se conservan como conflictos en lugar de resolverse.",
+      "documents": "Documentos",
+      "citations": "({count} citas)",
+      "conflicts": "Conflictos en los documentos de NVIDIA ({count})",
+      "gaps": "Lagunas: lo que los documentos no dicen ({count})",
+      "sameList": "La misma lista, con citas de cada documento, está en {file}.",
+      "conflictingOne": "{count} lectura contradictoria también se conserva en los datos y se dibuja con el color de conflicto en la superposición de red.",
+      "conflictingMany": "{count} lecturas contradictorias también se conservan en los datos y se dibujan con el color de conflicto en la superposición de red.",
+      "assumed": "Supuestos ({count})",
+      "about": "Acerca de",
+      "license": "Con licencia Apache 2.0.",
+      "data": "Los datos",
+      "dataText": "Todo lo que muestra el explorador procede de un único archivo JSON, validado con un JSON Schema. Descargue ambos para reutilizarlos: {json} · {schema}. Tomado de los documentos el {date}.",
+      "schema": "esquema",
+      "translations": "Los textos de la interfaz y las traducciones están en {files}.",
+      "specWhere": "{name}: {label}",
+      "heightOf": "Altura de {name}",
+      "trayNumbering": "Numeración de las bandejas",
+      "layoutOf": "Disposición de {name}",
+      "linkIn": "Enlace {kind} en {name}",
+      "rearLayout": "Disposición trasera"
+    },
+    "types": {
+      "rack": "rack",
+      "compute-tray": "bandeja de cómputo",
+      "switch-tray": "bandeja de conmutación",
+      "power-shelf": "estante de alimentación",
+      "tor-switch": "conmutador tor",
+      "cpu": "cpu",
+      "gpu": "gpu",
+      "nic": "nic",
+      "dpu": "dpu",
+      "drive": "unidad de almacenamiento",
+      "switch-asic": "asic de conmutación",
+      "psu": "fuente de alimentación",
+      "bmc": "bmc",
+      "controller": "controlador",
+      "port": "puerto",
+      "cable-cartridge": "cartucho de cables",
+      "manifold": "colector",
+      "bus-bar": "barra colectora",
+      "battery": "batería",
+      "memory": "memoria",
+      "board": "placa",
+      "connector": "conector",
+      "structure": "estructura"
+    },
+    "links": {
+      "pcie": "PCIe",
+      "c2c": "C2C (CPU a GPU)",
+      "clink": "Clink (CPU a CPU)",
+      "nvlink": "NVLink (al cartucho de cables)",
+      "coolant": "Refrigerante",
+      "cooling": "Refrigerante",
+      "power": "Energía",
+      "ac": "Cables de alimentación de CA (al panel de alimentación remoto)"
+    },
+    "connectionKinds": {
+      "network": "red",
+      "not-connected": "no conectado",
+      "nvlink": "nvlink",
+      "power": "energía",
+      "cooling": "refrigeración"
+    }
+  },
+  "content": {
+    "components": {
+      "rack": {
+        "name": "Rack DGX Vera Rubin NVL72",
+        "description": "Un sistema a escala de rack cuyas GPU están conectadas por NVLink a través del backplane del cartucho pasivo de cables de cobre NVLink. Contiene bandejas de cómputo, bandejas de conmutación NVLink, conmutadores de gestión de parte superior del rack, estantes de alimentación, una barra colectora y colectores de refrigeración líquida.",
+        "function": "Forma un único dominio NVLink de 72 GPU. NVLink es la red de escalado vertical dentro del rack, InfiniBand la de escalado horizontal entre racks, y Ethernet transporta el tráfico de almacenamiento, de gestión y externo."
+      },
+      "compute-tray": {
+        "name": "Bandeja de cómputo",
+        "description": "Una carcasa que aloja las placas de cómputo y las placas accesorias periféricas y ejecuta una imagen de SO. Una bandeja tiene dos placas de cómputo.",
+        "function": "Un nodo de cómputo con 2 CPU Vera y 4 GPU Rubin que ejecuta una imagen de SO. Sus GPU llegan a las GPU de las demás bandejas por NVLink a través de conectores en la parte trasera de la bandeja y de las bandejas de conmutación NVLink.",
+        "specNotes": {
+          "OSFP ports (computenet)": "La fig. 1 marca ocho jaulas OSFP con la red 5 (computenet)."
+        }
+      },
+      "vera-cpu": {
+        "name": "Vera CPU",
+        "description": "NVIDIA Vera CPU. Parte del nodo de cómputo.",
+        "function": "Parte del nodo de cómputo, que la guía describe como 2 CPU Vera y 4 GPU Rubin por bandeja."
+      },
+      "rubin-gpu": {
+        "name": "Rubin GPU",
+        "description": "NVIDIA Rubin GPU. Parte del nodo de cómputo.",
+        "function": "Acelerador. Las 72 GPU del rack forman un único dominio NVLink a través de las bandejas de conmutación NVLink."
+      },
+      "connectx-9": {
+        "name": "Tarjeta de E/S ConnectX-9",
+        "description": "Tarjeta de E/S NVIDIA ConnectX-9.",
+        "function": "Interconexión de clúster InfiniBand y agrupación de varios racks (computenet).",
+        "note": "La guía se contradice en la cantidad. La tabla de configuración de 1.2 indica 2 tarjetas de E/S ConnectX-9. La fig. 4 (diagrama de bloques) dibuja 8 tarjetas ConnectX-9, la fig. 6 (vista frontal) muestra 2 x módulos CX9 en cada una de las dos secciones Bay B, y las figuras de 2.2 muestran 8 jaulas OSFP. Esta aplicación mantiene el 2 de la tabla. Ver docs/OPEN_QUESTIONS.md.",
+        "specNotes": {
+          "PCIe port labels": "Ocho etiquetas, una por jaula OSFP. Las figuras de 2.2 y 2.4 imprimen las dos últimas como C7/C3_1 y C7/C3_2; la tabla imprime C7/C7_1 y C7/C7_2."
+        }
+      },
+      "bluefield-4": {
+        "name": "BlueField-4 DPU",
+        "description": "NVIDIA BlueField-4 DPU.",
+        "function": "Red Ethernet de almacenamiento y de gestión del sistema. Su puerto QSFP izquierdo está en dgxnet, el derecho en storagenet y su puerto RJ45 en ipminet.",
+        "specNotes": {
+          "PCIe labels": "La fig. 2 (2.2) y la fig. 4 (2.4) imprimen BF_0 y BF_1. La tabla 2.4 imprime BF_0 en ambos buses 0005:41:00.x y 000d:41:00.x, con nombres de interfaz y RDMA repetidos. Ver docs/OPEN_QUESTIONS.md."
+        }
+      },
+      "host-bmc": {
+        "name": "Host BMC",
+        "description": "Controlador de gestión de placa (BMC) de la bandeja de cómputo, con un puerto RJ45.",
+        "function": "Gestión fuera de banda del hardware de la bandeja, junto con el HMC. Conectado a los conmutadores de parte superior del rack.",
+        "note": "Cantidad deducida de la redacción en singular de la guía ('Host BMC with RJ45') y del único SMM de la fig. 5."
+      },
+      "hmc": {
+        "name": "Host Management Controller (HMC)",
+        "description": "Microcontrolador Host Management Controller.",
+        "function": "Proporciona gestión fuera de banda del hardware de la bandeja de cómputo junto con el BMC.",
+        "note": "El texto no da la cantidad. La fig. 5 muestra una placa portadora SMM 'w/ BMC+HMC+TPM'."
+      },
+      "e1s-cache-drive": {
+        "name": "Unidad de caché E1.S NVMe",
+        "description": "Unidad E1.S NVMe para el almacenamiento local en caché de datos.",
+        "function": "Las unidades de caché forman un volumen RAID 0. En la primera lectura de un conjunto de datos desde el almacenamiento compartido, el software puede guardar aquí una copia (cachefilesd, si está configurado); las lecturas siguientes salen de la caché local. También puede acelerar los puntos de control."
+      },
+      "e1s-boot-drive": {
+        "name": "Unidad de arranque E1.S NVMe",
+        "description": "Unidad E1.S NVMe que contiene el sistema operativo.",
+        "function": "Arranca el SO de la bandeja de cómputo."
+      },
+      "ct-port-cx9-osfp": {
+        "name": "Puerto OSFP ConnectX-9",
+        "description": "Puerto OSFP de una tarjeta de E/S ConnectX-9.",
+        "function": "Conecta la bandeja a computenet (InfiniBand).",
+        "note": "Ocho por bandeja de cómputo (la fig. 1 marca ocho jaulas con 5, computenet). Pertenecen a las tarjetas ConnectX-9, pero la guía no dice cuántos puertos tiene cada tarjeta, así que se listan bajo la bandeja."
+      },
+      "ct-port-bf4-left": {
+        "name": "Puerto izquierdo BlueField-4",
+        "description": "Puerto QSFP izquierdo de la BlueField-4 DPU.",
+        "function": "Conecta la bandeja a dgxnet (Ethernet).",
+        "note": "La guía se contradice. La tabla 2.3 pone este puerto en dgxnet (3). La fig. 1 de 2.2 marca ambos puertos QSFP con 6 (storagenet) y no muestra ningún puerto marcado 3. Esta aplicación sigue la tabla. Ver docs/OPEN_QUESTIONS.md.",
+        "specNotes": {
+          "Network in Fig. 1": "Contradice la tabla 2.3 (dgxnet)."
+        }
+      },
+      "ct-port-bf4-right": {
+        "name": "Puerto derecho BlueField-4",
+        "description": "Puerto QSFP derecho de la BlueField-4 DPU.",
+        "function": "Conecta la bandeja a storagenet (Ethernet)."
+      },
+      "ct-port-bf4-rj45": {
+        "name": "Puerto RJ-45 BlueField-4",
+        "description": "Puerto RJ-45 de la BlueField-4 DPU.",
+        "function": "Se conecta a ipminet (Ethernet)."
+      },
+      "ct-port-bmc-1gbe": {
+        "name": "Puerto BMC de 1 GbE",
+        "description": "Puerto RJ45 de 1 GbE del host BMC.",
+        "function": "Conecta el BMC a ipminet (Ethernet)."
+      },
+      "ct-port-lan-1gbe": {
+        "name": "Puerto LAN de 1 GbE",
+        "description": "Puerto LAN RJ45 de 1 GbE de la bandeja de cómputo.",
+        "function": "No conectado en esta configuración.",
+        "note": "Aparece en la tabla 2.3, pero las figuras de la vista frontal muestran solo dos puertos RJ45 (el de la BlueField-4 y el del SMM), así que su posición es desconocida."
+      },
+      "compute-tray-battery": {
+        "name": "Batería de la bandeja de cómputo",
+        "description": "Batería del módulo Bay-C de la bandeja de cómputo.",
+        "function": "Ni la guía ni el manual dicen qué alimenta.",
+        "note": "Cantidad deducida de la redacción en singular del manual ('the battery')."
+      },
+      "socamm": {
+        "name": "Módulo de memoria SOCAMM",
+        "description": "Módulo de memoria SOCAMM, mostrado alrededor de las CPU en la vista superior.",
+        "function": "La guía los etiqueta pero no los describe.",
+        "note": "Cantidad tomada de la etiqueta '16x SOCAMM' de la fig. 5; el texto no menciona SOCAMM."
+      },
+      "internal-manifold": {
+        "name": "Colector interno",
+        "description": "Colector de refrigerante dentro de la bandeja de cómputo, entre la zona de CPU y GPU y los compartimentos frontales.",
+        "function": "Parte de la refrigeración líquida de la bandeja. La sección 1.2 dice que el líquido 'runs up and down the rack through the inner manifold, then through the cold plates'; puede que sea este colector.",
+        "note": "La fig. 5 etiqueta un 'Internal Manifold'. Ver docs/OPEN_QUESTIONS.md, punto 12."
+      },
+      "power-distribution-board": {
+        "name": "Placa de distribución de energía",
+        "description": "Placa de distribución de energía dentro de la bandeja de cómputo.",
+        "function": "La guía la etiqueta pero no la describe. La bandeja toma la energía por el conector de la barra colectora en su parte trasera.",
+        "note": "Cantidad tomada de la única etiqueta de la fig. 5."
+      },
+      "ct-nvlink-connectors": {
+        "name": "Conectores NVLink (bandeja de cómputo)",
+        "description": "Conectores en la parte trasera de la bandeja de cómputo que se enchufan a los cartuchos de cables NVLink.",
+        "function": "Llevan los NVLink de la bandeja a los cartuchos de cables y, a través de ellos, a las bandejas de conmutación NVLink.",
+        "note": "La guía no da el número de conectores."
+      },
+      "ct-cold-water-inlet": {
+        "name": "Entrada de agua fría (bandeja de cómputo)",
+        "description": "Entrada de agua fría en la parte trasera de la bandeja de cómputo.",
+        "function": "Lleva refrigerante a la bandeja."
+      },
+      "ct-hot-water-outlet": {
+        "name": "Salida de agua caliente (bandeja de cómputo)",
+        "description": "Salida de agua caliente en la parte trasera de la bandeja de cómputo.",
+        "function": "Saca el refrigerante de la bandeja."
+      },
+      "ct-bus-bar-connector": {
+        "name": "Conector de la barra colectora (bandeja de cómputo)",
+        "description": "Conector de la barra colectora en la parte trasera de la bandeja de cómputo.",
+        "function": "Toma la alimentación de 54 V DC de la bandeja desde la barra colectora del rack."
+      },
+      "switch-tray": {
+        "name": "Bandeja de conmutación NVLink 6",
+        "description": "Una bandeja de 1 RU con ASIC NVSwitch. Las nueve bandejas de conmutación dan conectividad NVLink a todas las GPU del único dominio L1 de 72 GPU.",
+        "function": "Conmuta el tráfico NVLink entre las GPU de todas las bandejas de cómputo. Conectada a las bandejas de cómputo a través de los cartuchos de cables traseros.",
+        "specNotes": {
+          "NVSwitch ASICs": "La fig. 4 (diagrama de bloques de la bandeja de cómputo) dibuja dos iconos NVLink Switch por bandeja de conmutación. Ver docs/OPEN_QUESTIONS.md.",
+          "Serial console": "La tabla 2.5 indica el puerto RS232 RJ45 como no conectado. Ver docs/OPEN_QUESTIONS.md."
+        }
+      },
+      "nvswitch-asic": {
+        "name": "NVSwitch ASIC",
+        "description": "ASIC NVSwitch con 72 puertos NVLink 6.",
+        "function": "Conmuta el tráfico NVLink. Los chips NVSwitch actúan como conmutadores sin bloqueo entre servidores y hacen cómputo en red (SHARP) para acelerar las operaciones colectivas."
+      },
+      "switch-bmc": {
+        "name": "BMC de la bandeja de conmutación",
+        "description": "Controlador de gestión de placa (BMC) de la bandeja de conmutación.",
+        "function": "Atestación y recuperación. Conectado a los conmutadores de parte superior del rack.",
+        "note": "Cantidad deducida de la redacción en singular de la guía ('BMC for attestation and recovery')."
+      },
+      "cpu-erot": {
+        "name": "CPU ERoT",
+        "description": "CPU ERoT de la bandeja de conmutación.",
+        "function": "Seguridad.",
+        "note": "Cantidad deducida de la redacción en singular de la guía. La guía no desarrolla 'ERoT'."
+      },
+      "st-port-rs232": {
+        "name": "RS232 para el BMC",
+        "description": "Puerto RJ45, el primero por la izquierda.",
+        "function": "No conectado en esta configuración."
+      },
+      "st-port-bmc-eth": {
+        "name": "Puerto Ethernet del BMC",
+        "description": "Puerto RJ45, el segundo por la izquierda.",
+        "function": "Conecta el BMC de la bandeja de conmutación a ipminet (Ethernet).",
+        "specNotes": {
+          "Label in Fig. 2": "En la figura aparece impreso 'BCM'."
+        }
+      },
+      "st-port-switch-mgmt": {
+        "name": "Ethernet para la gestión del conmutador",
+        "description": "Puertos RJ45, el tercero y el cuarto por la izquierda.",
+        "function": "Gestión del conmutador en ipminet (Ethernet)."
+      },
+      "st-port-leakage": {
+        "name": "Conector de fugas",
+        "description": "Puerto RJ45, el quinto por la izquierda.",
+        "function": "No conectado en esta configuración."
+      },
+      "switch-tray-battery": {
+        "name": "Batería de la bandeja de conmutación",
+        "description": "Batería de la bandeja de conmutación NVLink, en un soporte bajo una tapa superior.",
+        "function": "Ni la guía ni el manual dicen qué alimenta.",
+        "note": "Cantidad deducida de la redacción en singular del manual ('the battery')."
+      },
+      "switch-tray-ssd": {
+        "name": "SSD de la bandeja de conmutación",
+        "description": "SSD de la bandeja de conmutación NVLink.",
+        "function": "La guía lo etiqueta pero no lo describe. La bandeja de conmutación ejecuta NVOS (sección 4.4).",
+        "note": "Cantidad tomada de la única etiqueta 'SSD' de la fig. 7."
+      },
+      "switch-board": {
+        "name": "Placa de conmutación con distribución de energía (SWB w/ PDB)",
+        "description": "La placa principal de la bandeja de conmutación, etiquetada 'SWB w/ PDB' en la fig. 7.",
+        "function": "Lleva los chips NVSwitch. La guía no la describe más.",
+        "note": "La fig. 7 la etiqueta 'SWB w/ PDB' y no desarrolla las abreviaturas; «placa de conmutación con placa de distribución de energía» es la lectura de esta aplicación."
+      },
+      "st-nvlink-connectors": {
+        "name": "Conectores NVLink (bandeja de conmutación)",
+        "description": "Conectores en la parte trasera de la bandeja de conmutación que se enchufan a los cartuchos de cables NVLink.",
+        "function": "Llevan los puertos NVSwitch a los cartuchos de cables y, a través de ellos, a las bandejas de cómputo.",
+        "note": "La guía no da el número de conectores."
+      },
+      "st-cold-water-inlet": {
+        "name": "Entrada de agua fría (bandeja de conmutación)",
+        "description": "Entrada de agua fría en la parte trasera de la bandeja de conmutación.",
+        "function": "Lleva refrigerante a la bandeja."
+      },
+      "st-hot-water-outlet": {
+        "name": "Salida de agua caliente (bandeja de conmutación)",
+        "description": "Salida de agua caliente en la parte trasera de la bandeja de conmutación.",
+        "function": "Saca el refrigerante de la bandeja."
+      },
+      "st-power-connector": {
+        "name": "Conector de alimentación (bandeja de conmutación)",
+        "description": "Conector de alimentación en la parte trasera de la bandeja de conmutación.",
+        "function": "Lleva la energía a la bandeja.",
+        "note": "La fig. 7 lo etiqueta; no se indica que se conecte a la barra colectora."
+      },
+      "power-shelf": {
+        "name": "Estante de alimentación",
+        "description": "Un estante de 3 RU alimentado por cables de CA desde un panel de alimentación remoto.",
+        "function": "Convierte la corriente alterna en 54 V DC, que la barra colectora distribuye a los componentes del rack."
+      },
+      "psu": {
+        "name": "Fuente de alimentación (PSU)",
+        "description": "Fuente de alimentación refrigerada por aire.",
+        "function": "Seis por estante. El estante convierte la corriente alterna en una salida de 54 V DC para la barra colectora.",
+        "specNotes": {
+          "Redundancy": "El manual dice que cualquier PSU puede reemplazarse 'as long as at least six power supplies are fully active and healthy'."
+        }
+      },
+      "power-shelf-mgmt-module": {
+        "name": "Módulo de gestión del estante de alimentación",
+        "description": "Módulo de gestión en la parte frontal del estante de alimentación, con un puerto RJ45 para un cable de red de gestión.",
+        "function": "Gestiona el estante de alimentación. Las fuentes de alimentación siguen funcionando mientras se reemplaza.",
+        "note": "Cantidad deducida de la fig. 8 y de la figura del estante de alimentación del manual de servicio, que muestran un módulo por estante. La guía no dice a qué red va el cable de gestión."
+      },
+      "ps-mgmt-rj45": {
+        "name": "Puerto RJ45 del módulo de gestión",
+        "description": "Puerto RJ45 del módulo de gestión del estante de alimentación, para su cable de red de gestión.",
+        "function": "Da conexión de red a la interfaz de gestión fuera de banda del estante de alimentación.",
+        "note": "El manual de servicio nombra el cable de red de gestión; que esté en ipminet se deduce de la sección 2.2, que pone las interfaces fuera de banda de los estantes de alimentación en ipminet."
+      },
+      "ac-power-whip": {
+        "name": "Cable de alimentación de CA",
+        "description": "Cable de CA que alimenta el estante desde un panel de alimentación remoto.",
+        "function": "Alimenta el estante: dos cables de 100 A a 415-480 V AC por estante."
+      },
+      "ps-dc-output": {
+        "name": "Salida de 54 V DC (estante de alimentación)",
+        "description": "Salida de 54 V DC del estante de alimentación hacia la barra colectora.",
+        "function": "Lleva los 54 V DC convertidos por el estante a la barra colectora, que los distribuye a los componentes del rack.",
+        "note": "La guía dice que la salida de 54 V DC del estante se distribuye por la barra colectora, pero no describe el conector."
+      },
+      "tor-switch": {
+        "name": "Conmutador Ethernet de parte superior del rack",
+        "description": "Conmutador Ethernet de parte superior del rack (ToR) para la gestión.",
+        "function": "Conecta todos los BMC de las bandejas de cómputo (incluidos los BMC de BlueField-4) y las bandejas de conmutación a la red de gestión.",
+        "specNotes": {
+          "Front panel in Fig. 9": "Contado en la fig. 9; el texto de la guía no da el número de puertos ni nombra el tipo de las jaulas grandes ni de los tres puertos de la derecha.",
+          "Connects": "Redacción de la sección 1.5. Su lista de puertos conectados solo nombra los puertos BMC fuera de banda y BMC de BlueField-4 de las bandejas de cómputo; no se indica cuántos enlaces da eso por conmutador ToR."
+        }
+      },
+      "tor-rj45-port": {
+        "name": "Puerto RJ45 del ToR",
+        "description": "Puerto RJ45 en el frente del conmutador de parte superior del rack.",
+        "function": "Conecta los BMC del rack a la red de gestión.",
+        "note": "Cantidad tomada de la fig. 9. No se indica qué BMC usa cada puerto."
+      },
+      "tor-uplink-cage": {
+        "name": "Jaula de puerto grande del ToR",
+        "description": "Una de las cuatro jaulas de puerto grandes a la derecha de los bloques RJ45 en la fig. 9.",
+        "function": "No se describe en la guía.",
+        "note": "Cantidad tomada de la fig. 9; la guía no nombra el tipo de jaula ni su uso."
+      },
+      "tor-side-port": {
+        "name": "Puerto del ToR en el extremo derecho",
+        "description": "Uno de los tres puertos del panel estrecho en el extremo derecho del conmutador en la fig. 9.",
+        "function": "No se describe en la guía.",
+        "note": "Cantidad tomada de la fig. 9; sus tipos no se indican."
+      },
+      "nvlink-cable-cartridge": {
+        "name": "Cartucho pasivo de cables de cobre NVLink",
+        "description": "Cartuchos pasivos de cables de cobre en la parte trasera del rack, que forman el backplane NVLink.",
+        "function": "Los conectores de la parte trasera de las bandejas de cómputo y de conmutación se enchufan a los cartuchos, que interconectan las bandejas de cómputo y las bandejas de conmutación NVLink.",
+        "note": "La guía no indica el número de cartuchos."
+      },
+      "liquid-cooling-manifold": {
+        "name": "Colector de refrigeración líquida",
+        "description": "Colectores de refrigeración líquida en la parte trasera del rack. Desde atrás se accede a sus entradas y salidas; la fig. 2 también etiqueta conectores FD83 para las mangueras de refrigeración líquida.",
+        "function": "Llevan el refrigerante a las bandejas refrigeradas por líquido. La sección 1.2 dice que el líquido 'runs up and down the rack through the inner manifold, then through the cold plates'.",
+        "note": "El texto no da la cantidad; en la fig. 2 la etiqueta 'Liquid cooling manifolds' señala dos colectores. La fig. 5 también etiqueta un 'Internal Manifold' dentro de la bandeja de cómputo, así que el 'inner manifold' de 1.2 puede referirse a esa pieza."
+      },
+      "bus-bar": {
+        "name": "Barra colectora refrigerada por líquido",
+        "description": "Estructura de barra colectora refrigerada por líquido en la parte trasera del rack.",
+        "function": "Distribuye la salida de 54 V DC de los estantes de alimentación a los componentes del rack."
+      },
+      "fd83-connector": {
+        "name": "Conector de manguera de refrigeración líquida FD83",
+        "description": "Conectores de manguera en los colectores de refrigeración líquida, etiquetados 'FD83 connectors for liquid cooling hoses' en la fig. 2.",
+        "function": "La fig. 2 los etiqueta 'FD83 connectors for liquid cooling hoses'; no se indica adónde van esas mangueras.",
+        "note": "La fig. 2 los muestra en los extremos de los colectores; la guía no da la cantidad. Esta aplicación dibuja uno en cada extremo de cada colector."
+      },
+      "rear-supports": {
+        "name": "Soportes de colectores, cartuchos de cables y barra colectora",
+        "description": "La estructura que sujeta los colectores, los cartuchos de cables y la barra colectora en la parte trasera, etiquetada en la fig. 2.",
+        "function": "Soporte mecánico de las piezas traseras.",
+        "note": "Forma y cantidad no indicadas; se dibujan como travesaños."
+      },
+      "rear-bezel": {
+        "name": "Bisel trasero",
+        "description": "La cubierta de la parte trasera del rack, etiquetada 'Rear Bezel' en la fig. 2.",
+        "function": "Cubre la parte trasera del rack.",
+        "note": "Se dibuja como un panel translúcido en la capa Estructura."
+      },
+      "seismic-bracing": {
+        "name": "Arriostramiento sísmico",
+        "description": "Arriostramiento bajo el rack, etiquetado en la fig. 1 y la fig. 2.",
+        "function": "Etiquetado 'Seismic bracing' en la fig. 1 y la fig. 2; la guía no lo describe más.",
+        "note": "Se dibuja como un bastidor de base bajo el rack."
+      }
+    },
+    "specLabels": {
+      "AC input": "Entrada de CA",
+      "After replacement": "Tras el reemplazo",
+      "Compute boards": "Placas de cómputo",
+      "Compute trays": "Bandejas de cómputo",
+      "Connects": "Conecta",
+      "Cooling": "Refrigeración",
+      "Current": "Corriente",
+      "Customer-replaceable unit (CRU)": "Unidad reemplazable por el cliente (CRU)",
+      "DC output": "Salida de CC",
+      "Fault": "Fallo",
+      "Front": "Frontal",
+      "Front bays": "Compartimentos frontales",
+      "Front panel in Fig. 9": "Panel frontal en la fig. 9",
+      "GPUs in the NVLink domain": "GPU en el dominio NVLink",
+      "Height": "Altura",
+      "Identity": "Identificación",
+      "In-network computing": "Cómputo en red",
+      "LEDs": "LED",
+      "Label in Fig. 2": "Etiqueta en la fig. 2",
+      "Label in Fig. 7": "Etiqueta en la fig. 7",
+      "Labels in Fig. 2": "Etiquetas en la fig. 2",
+      "Links": "Enlaces",
+      "Location": "Ubicación",
+      "Management": "Gestión",
+      "NVLink": "NVLink",
+      "NVLink 6 ports": "Puertos NVLink 6",
+      "NVLink 6 ports per ASIC": "Puertos NVLink 6 por ASIC",
+      "NVLink 6 switch trays": "bandejas de conmutación NVLink 6",
+      "NVLink domain size": "Tamaño del dominio NVLink",
+      "NVSwitch ASICs": "ASIC NVSwitch",
+      "Network": "Red",
+      "Network in Fig. 1": "Red en la fig. 1",
+      "Numbering": "Numeración",
+      "OSFP ports (computenet)": "Puertos OSFP (computenet)",
+      "Other parts in Fig. 7": "Otras piezas en la fig. 7",
+      "Out-of-band management": "Gestión fuera de banda",
+      "PCIe addresses (BDF)": "Direcciones PCIe (BDF)",
+      "PCIe label": "Etiqueta PCIe",
+      "PCIe labels": "Etiquetas PCIe",
+      "PCIe links": "Enlaces PCIe",
+      "PCIe port labels": "Etiquetas de puertos PCIe",
+      "PSUs": "Fuentes de alimentación",
+      "Placement": "Colocación",
+      "Port type": "Tipo de puerto",
+      "Ports": "Puertos",
+      "Position": "Posición",
+      "Power input": "Entrada de alimentación",
+      "Power shelves": "Estantes de alimentación",
+      "RAID level": "Nivel RAID",
+      "Rating": "Potencia nominal",
+      "Rear connections": "Conexiones traseras",
+      "Redundancy": "Redundancia",
+      "Removal": "Extracción",
+      "Replacement": "Reemplazo",
+      "Rubin GPUs": "GPU Rubin",
+      "Serial console": "Consola serie",
+      "Shown in": "Se muestra en",
+      "Speed": "Velocidad",
+      "Top-of-rack management switches": "Conmutadores de gestión de parte superior del rack",
+      "Vera CPUs": "CPU Vera",
+      "Voltage": "Tensión"
+    },
+    "networks": {
+      "externalnet": {
+        "description": "Comunicación externa del nodo principal con la red corporativa o con internet, si está permitido.",
+        "note": "La guía no nombra la red física de esta red. El capítulo 2 dice que Ethernet transporta el almacenamiento, la gestión y la conectividad externa, pero no lo asocia a esta red por su nombre."
+      },
+      "internalnet": {
+        "description": "Capacidades de aprovisionamiento y gestión del sistema para los nodos del plano de control.",
+        "note": "La guía no nombra la red física de esta red. El capítulo 2 dice que Ethernet transporta el almacenamiento, la gestión y la conectividad externa, pero no lo asocia a esta red por su nombre."
+      },
+      "dgxnet": {
+        "description": "Se usa para aprovisionar y gestionar las bandejas de cómputo."
+      },
+      "ipminet": {
+        "description": "Da a Base Command Manager y al nodo principal acceso a las interfaces fuera de banda/BMC de cada componente del rack: bandejas de cómputo, bandejas de conmutación NVLink, estantes de alimentación, conmutadores de parte superior del rack y nodos del plano de control."
+      },
+      "computenet": {
+        "description": "Comunicación RDMA entre racks (tráfico este/oeste)."
+      },
+      "storagenet": {
+        "description": "Da a cada nodo acceso al almacenamiento.",
+        "note": "El puerto storagenet de la bandeja de cómputo es Ethernet (2.3). La sección 3.2 añade que al almacenamiento compartido se accede por Ethernet convergente de forma predeterminada, aunque también puede usarse InfiniBand."
+      },
+      "failovernet": {
+        "description": "Solo la usan los nodos principales en una configuración redundante de conmutación por error.",
+        "note": "La guía no nombra la red física de esta red."
+      }
+    },
+    "connections": {
+      "cx9-computenet": {
+        "description": "Puerto OSFP ConnectX-9 a computenet (InfiniBand)."
+      },
+      "bf4-left-dgxnet": {
+        "description": "Puerto QSFP izquierdo de BlueField-4 a dgxnet (Ethernet).",
+        "note": "La fig. 1 de 2.2 marca en cambio este puerto con 6 (storagenet). Ver docs/OPEN_QUESTIONS.md."
+      },
+      "bf4-right-storagenet": {
+        "description": "Puerto QSFP derecho de BlueField-4 a storagenet (Ethernet)."
+      },
+      "bf4-rj45-ipminet": {
+        "description": "Puerto RJ-45 de BlueField-4 a ipminet (Ethernet)."
+      },
+      "ct-bmc-ipminet": {
+        "description": "Puerto BMC de 1 GbE a ipminet (Ethernet)."
+      },
+      "ct-lan-nc": {
+        "description": "Puerto LAN de 1 GbE: no conectado."
+      },
+      "st-rs232-nc": {
+        "description": "RS232 para el BMC: no conectado."
+      },
+      "st-bmc-ipminet": {
+        "description": "Puerto Ethernet del BMC a ipminet (Ethernet)."
+      },
+      "st-mgmt-ipminet": {
+        "description": "Ethernet para la gestión del conmutador a ipminet (Ethernet)."
+      },
+      "st-leak-nc": {
+        "description": "Conector de fugas: no conectado."
+      },
+      "ct-bmc-tor": {
+        "description": "BMC de gestión fuera de banda de la bandeja de cómputo a los conmutadores de parte superior del rack."
+      },
+      "bf4-bmc-tor": {
+        "description": "BMC de BlueField-4 a los conmutadores de parte superior del rack."
+      },
+      "st-bmc-tor": {
+        "description": "Los conmutadores de parte superior del rack conectan las bandejas de conmutación a la red de gestión.",
+        "note": "La sección 1.5 dice que los conmutadores ToR conectan 'the switch trays'; su lista de puertos no nombra qué puertos de la bandeja de conmutación, así que esta aplicación enlaza la bandeja y no su BMC."
+      },
+      "ps-ipminet": {
+        "description": "ipminet llega a las interfaces fuera de banda de los estantes de alimentación."
+      },
+      "tor-ipminet": {
+        "description": "ipminet llega a las interfaces fuera de banda de los conmutadores de parte superior del rack."
+      },
+      "ct-nvlink": {
+        "description": "Los conectores NVLink de la parte trasera de la bandeja de cómputo se enchufan a los cartuchos de cables."
+      },
+      "st-nvlink": {
+        "description": "Los conectores NVLink de la parte trasera de la bandeja de conmutación se enchufan a los cartuchos de cables."
+      },
+      "ps-busbar": {
+        "description": "Los estantes de alimentación entregan 54 V DC a la barra colectora."
+      },
+      "manifold-ct": {
+        "description": "El refrigerante sube y baja por el rack a través del colector interno y luego por las placas frías de las bandejas de cómputo.",
+        "note": "El 'inner manifold' de la sección 1.2 puede ser el colector interno de la bandeja (fig. 5) y no los colectores traseros; ver la pregunta abierta sobre el colector interno."
+      },
+      "manifold-st": {
+        "description": "La bandeja de conmutación se refrigera por líquido: placas frías sobre los conmutadores NVLink, con una salida de agua caliente y una entrada de agua fría en la parte trasera.",
+        "note": "La fig. 7 muestra las conexiones de agua de la bandeja; la guía no dice con palabras que se conecten a estos colectores."
+      },
+      "busbar-ct": {
+        "description": "La barra colectora distribuye los 54 V DC a los componentes del rack; la bandeja de cómputo los toma por el conector de la barra colectora de su parte trasera."
+      },
+      "busbar-st": {
+        "description": "La barra colectora distribuye los 54 V DC a los componentes del rack; la bandeja de conmutación tiene un conector de alimentación en su parte trasera.",
+        "note": "La sección 1.4 dice que la salida de 54 V DC se 'distributed through the bus bar to the rack components', y la 1.1 que los estantes de alimentación alimentan 'all trays and switches'. La fig. 7 etiqueta el conector de alimentación trasero de la bandeja de conmutación."
+      },
+      "bf4-left-storagenet-fig1": {
+        "description": "La fig. 1 marca el puerto QSFP izquierdo de BlueField-4 con 6 (storagenet), mientras que la tabla 2.3 dice dgxnet.",
+        "note": "Una lectura alternativa que contradice la tabla 2.3. Ver docs/OPEN_QUESTIONS.md, punto 3."
+      },
+      "ps-mgmt-ipminet": {
+        "description": "RJ45 del módulo de gestión del estante de alimentación a ipminet (Ethernet).",
+        "note": "La sección 2.2 pone las interfaces fuera de banda de los estantes de alimentación en ipminet; el puerto en sí solo se nombra en el manual de servicio."
+      },
+      "cx9-card-computenet": {
+        "description": "Tarjetas de E/S ConnectX-9 a computenet (InfiniBand), a través de sus puertos OSFP."
+      }
+    },
+    "pcieNotes": {
+      "Printed C7/C3_1 in the 2.2 and 2.4 figures.": "Impreso C7/C3_1 en las figuras de 2.2 y 2.4.",
+      "Printed C7/C3_2 in the 2.2 and 2.4 figures.": "Impreso C7/C3_2 en las figuras de 2.2 y 2.4.",
+      "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1.": "ADDR1 es el puerto QSFP izquierdo (2.2, fig. 2). Las figuras imprimen la segunda entrada de esta fila como BF_1.",
+      "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2.": "ADDR2 es el puerto QSFP derecho (2.2, fig. 2). La tabla repite aquí los nombres de interfaz y RDMA de ADDR1; ver docs/OPEN_QUESTIONS.md, punto 2."
+    },
+    "procedures": {
+      "psu": {
+        "title": "Reemplazar una fuente de alimentación (PSU)",
+        "steps": [
+          "Localice la PSU averiada por su LED ámbar.",
+          "Compruebe primero la redundancia: las PSU tienen redundancia N+N, y una PSU puede reemplazarse siempre que al menos seis fuentes de alimentación estén plenamente activas y en buen estado.",
+          "Desembale la PSU nueva. Empuje la pestaña de liberación de la PSU averiada hacia la izquierda y tire del asa para expulsarla; luego sáquela del todo.",
+          "Inserte la PSU nueva hasta que encaje; debe oírse un clic.",
+          "Confirme que los LED se encienden y verifique con el administrador del sistema que el fallo ha desaparecido. Avísele de que el reemplazo está hecho por si hace falta actualizar el firmware, y devuelva la PSU antigua a NVIDIA Enterprise Support."
+        ]
+      },
+      "pmm": {
+        "title": "Reemplazar un módulo de gestión del estante de alimentación",
+        "steps": [
+          "Localice el módulo de gestión averiado por su LED ámbar.",
+          "Desembale el módulo nuevo y anote la dirección MAC de la lengüeta del estante de alimentación; debe coincidir con la dirección MAC del módulo nuevo.",
+          "Las fuentes de alimentación siguen funcionando durante el reemplazo. Desconecte el cable de red de gestión.",
+          "Empuje hacia dentro el panel sobre el módulo y presione el mecanismo de liberación. Saque el módulo del todo e inserte el nuevo hasta oír un clic.",
+          "Actualice el firmware del módulo si hace falta y confirme con el administrador del sistema que está en marcha."
+        ]
+      },
+      "cache-drive": {
+        "title": "Reemplazar una unidad de caché E1.S",
+        "steps": [
+          "Identifique cada unidad de caché que vaya a reemplazar y anote su dirección PCIe de bus, dispositivo y función (BDF). Las cuatro unidades de caché están en Bay B.",
+          "Pida al administrador del sistema que apague la bandeja de cómputo.",
+          "Presione la pestaña más pequeña, la de la izquierda, hacia el bisel; la pestaña grande se abre y la unidad sale un poco. Saque la unidad.",
+          "Inserte la unidad nueva y presione la pestaña grande hasta que encaje en la pequeña.",
+          "Encienda e inicie sesión. 'sudo nvme list' debe mostrar una unidad de arranque y cuatro unidades de caché.",
+          "Si el volumen de caché estaba bloqueado, desbloquéelo con 'sudo nv-disk-encrypt disable'. Vuelva a crear el volumen de caché y /raid con 'configure_raid_array.py -c -f' y compruébelo con 'sudo nvsm show volumes'."
+        ]
+      },
+      "compute-battery": {
+        "title": "Reemplazar la batería de la bandeja de cómputo",
+        "steps": [
+          "El administrador del sistema apaga todas las bandejas de cómputo y la bandeja que se va a reparar. Déjela enfriar cinco minutos.",
+          "Libere los pestillos de la bandeja, sáquela hasta donde permita el riel y, con una segunda persona, desbloquéela de los rieles y colóquela sobre una superficie plana.",
+          "Compruebe la presión del circuito de refrigeración de la bandeja con el manómetro del kit: continúe con 1 PSI o más; por debajo de 1 PSI, contacte antes con NVIDIA Enterprise Support.",
+          "Quite la tapa de la bandeja y el módulo Bay-C. Quite la cubierta superior del conjunto de la batería, reemplace la batería y vuelva a colocar la cubierta.",
+          "Vuelva a montar el módulo Bay-C y la tapa, y vuelva a colocar la bandeja con una segunda persona. Haga funcionar la CDU durante 20 minutos para eliminar las burbujas del circuito de refrigeración.",
+          "El administrador del sistema ejecuta la secuencia de encendido, confirma que la bandeja arranca, actualiza su firmware para que coincida con el resto del sistema y comprueba el estado del sistema."
+        ]
+      },
+      "switch-battery": {
+        "title": "Reemplazar la batería de la bandeja de conmutación NVLink",
+        "steps": [
+          "El administrador del sistema apaga todas las bandejas de cómputo y después la bandeja de conmutación. Déjela enfriar cinco minutos.",
+          "Libere los pestillos de la bandeja, sáquela sobre sus rieles y, con una segunda persona, colóquela sobre una superficie plana. Compruebe la presión del circuito de refrigeración: 1 PSI o más para continuar.",
+          "Quite los tornillos Torx T6 y levante la tapa.",
+          "Quite la cubierta superior de la batería, deslice la batería fuera de su soporte, coloque la nueva y vuelva a poner la cubierta.",
+          "Vuelva a colocar la tapa y los tornillos, reinstale la bandeja con una segunda persona y haga funcionar la CDU durante 20 minutos para eliminar las burbujas.",
+          "El administrador del sistema ejecuta la secuencia de encendido, confirma que la bandeja arranca, actualiza su firmware y comprueba el estado del sistema."
+        ]
+      },
+      "bring-up": {
+        "title": "Poner el rack en línea",
+        "steps": [
+          "Antes de empezar: los estantes de alimentación tienen tensión, los conmutadores de parte superior del rack están activos y los servicios NMX-M están disponibles. Compruébelo en Base Command Manager.",
+          "Encienda primero las bandejas de conmutación NVLink desde Base Command Manager. Cada una arranca con la configuración específica del rack, de modo que la red NVLink está activa antes de que ninguna GPU la necesite.",
+          "Después encienda las bandejas de cómputo. Mientras arrancan, Base Command Manager comprueba que están instaladas las últimas actualizaciones del SO y la configuración.",
+          "Una bandeja de cómputo que arranca busca actualizaciones del SO por la red: las instala antes de arrancar o, si no hay ninguna, arranca rápido desde el almacenamiento local.",
+          "Las bandejas de cómputo se conectan después a las bandejas de conmutación, al almacenamiento y a las demás bandejas de cómputo. Las operaciones de energía se orquestan con NVIDIA Mission Control."
+        ]
+      },
+      "cold-reboot": {
+        "title": "Reinicio en frío del rack",
+        "steps": [
+          "Úselo tras la primera instalación de software, tras actualizar el firmware, antes de un diagnóstico completo del rack y tras reemplazar una bandeja de cómputo, una bandeja de conmutación, un enlace troncal o un cartucho de cables. NVIDIA recomienda hacerlo con Mission Control. Necesita las direcciones IP de todos los BMC, hosts y estantes de alimentación.",
+          "Corte la alimentación de CA de todos los estantes de alimentación (pueden apagarse en paralelo) y espere de tres a cinco minutos a que se descarguen los condensadores de las PSU. Omita este paso en el primer encendido.",
+          "Haga ping a todas las direcciones de BMC y de SO de las bandejas de cómputo y de conmutación para asegurarse de que ninguna responde.",
+          "Encienda la alimentación de CA de todos los estantes de alimentación en paralelo. Espere dos minutos a que arranquen los BMC de las bandejas de cómputo y de conmutación y haga ping a todas las direcciones de BMC hasta que respondan.",
+          "Deje que las bandejas de conmutación arranquen en NVOS y espere dos minutos más.",
+          "Aprovisione las bandejas de conmutación. Para el diagnóstico L11, inicie sesión en cada bandeja de conmutación y compruebe su estado. Para una carga de trabajo de varios nodos, repita el aprovisionamiento del clúster y luego configure e inicie los servicios NMX-C y ejecute las comprobaciones de estado.",
+          "Encienda todos los nodos de cómputo desde los BMC de las bandejas de cómputo. Espere cinco minutos, haga ping a los nodos de cómputo y ejecute la verificación posterior al reinicio."
+        ]
+      },
+      "warm-reboot": {
+        "title": "Reinicio en caliente del rack",
+        "steps": [
+          "Apague todas las bandejas de cómputo a través de sus BMC (IPMI, Redfish u otra API compatible).",
+          "Detenga el servicio NMX-C en el nodo de conmutación que lo ejecuta.",
+          "Inicie NMX-C en el nodo de conmutación elegido. El clúster ya debe estar habilitado.",
+          "Compruebe que nmx-controller y nmx-telemetry se ejecutan con estado ok.",
+          "Vuelva a encender las bandejas de cómputo a través de sus BMC.",
+          "Ejecute la verificación posterior al reinicio en las bandejas de cómputo."
+        ]
+      },
+      "post-reboot": {
+        "title": "Verificar tras un reinicio",
+        "steps": [
+          "Compruebe que nvidia-persistenced se ejecuta y está en buen estado. Hágalo tras un reinicio de GPU, un reinicio de una bandeja de cómputo o un reinicio en frío o en caliente del rack.",
+          "Compruebe que el servicio nvidia-imex está activo y en ejecución.",
+          "Compruebe que todos los NVLink están activos.",
+          "Compruebe el estado de la red física: cada GPU muestra state Completed y status Success.",
+          "Compruebe la topología peer-to-peer: cada GPU muestra OK. Si alguna no, reinicie esa GPU y vuelva a empezar desde la primera comprobación."
+        ]
+      },
+      "health-check": {
+        "title": "Comprobar el estado del sistema con NVSM",
+        "steps": [
+          "Abra una conexión SSH con el rack.",
+          "Ejecute la comprobación básica del sistema.",
+          "Compruebe que cada comprobación del resumen está en Healthy y que el estado general del sistema es Healthy."
+        ]
+      }
+    },
+    "openQuestions": {
+      "connectx-9-count": {
+        "title": "Número de tarjetas ConnectX-9 por bandeja de cómputo",
+        "summary": "La tabla de configuración indica 2 tarjetas; el diagrama de bloques dibuja 8, la vista frontal muestra 2 x módulos CX9 en cada Bay B y las figuras de puertos muestran 8 jaulas OSFP. Los datos mantienen 2."
+      },
+      "bluefield-pcie": {
+        "title": "Entradas PCIe de BlueField-4",
+        "summary": "La tabla 2.4 imprime BF_0 en dos buses con nombres de interfaz y RDMA repetidos; las figuras imprimen BF_0 y BF_1, y el diagrama de bloques muestra una BlueField-4 enlazada a ambas CPU."
+      },
+      "bluefield-left-port": {
+        "title": "Puerto QSFP izquierdo de BlueField-4: ¿dgxnet o storagenet?",
+        "summary": "La tabla 2.3 dice dgxnet; la figura de ubicación de puertos marca ambos puertos QSFP con 6 (storagenet). Los datos siguen la tabla y conservan la lectura de la figura como conflicto."
+      },
+      "compute-rj45-count": {
+        "title": "Puertos RJ45 de la bandeja de cómputo",
+        "summary": "La tabla 2.3 lista tres puertos RJ45; las figuras muestran dos. El puerto LAN de 1 GbE no tiene posición conocida."
+      },
+      "nvswitch-count": {
+        "title": "Chips NVSwitch por bandeja de conmutación",
+        "summary": "El texto y la fig. 7 dicen 4; el diagrama de bloques dibuja 2 por bandeja de conmutación. Los datos mantienen 4."
+      },
+      "switch-console": {
+        "title": "Consola serie de la bandeja de conmutación",
+        "summary": "La sección 1.6 indica una consola serie RJ45 a 115200 baudios; la tabla 2.5 indica el puerto RS232 RJ45 como no conectado."
+      },
+      "rack-positions": {
+        "title": "Posiciones en el rack",
+        "summary": "La fig. 1 da el orden de las unidades pero no las posiciones en RU ni la altura del rack; las unidades se apilan sin huecos."
+      },
+      "tor-height": {
+        "title": "Altura de los conmutadores de parte superior del rack",
+        "summary": "No se indica; se dibujan de 1 RU."
+      },
+      "tray-numbering": {
+        "title": "Numeración de las bandejas",
+        "summary": "El manual de servicio numera los estantes de alimentación del 1 al 4 desde abajo; las bandejas de cómputo y de conmutación no se numeran por posición en ningún sitio."
+      },
+      "unstated-counts": {
+        "title": "Cantidades que los documentos no dan",
+        "summary": "El HMC, los cartuchos de cables NVLink, los colectores de refrigeración líquida y los conectores FD83 no tienen cantidad indicada."
+      },
+      "network-fabrics": {
+        "title": "Red física de externalnet, internalnet y failovernet",
+        "summary": "La guía describe estas redes pero no nombra su red física."
+      },
+      "inner-manifold": {
+        "title": "Qué colector es el 'inner manifold'",
+        "summary": "El colector interno de la sección 1.2 puede ser el colector interno de la bandeja (fig. 5) o los colectores traseros del rack."
+      },
+      "tor-cabling": {
+        "title": "Cableado de los BMC a los conmutadores ToR",
+        "summary": "La sección 1.5 conecta todos los BMC a los conmutadores ToR, pero no se indica el reparto entre los dos conmutadores ni los puertos usados."
+      }
+    },
+    "software": {
+      "mission-control": {
+        "description": "Orquestación consciente de la carga con observabilidad de toda la pila: gestión de trabajos y de perfiles de energía, planificación según la topología, puntos de control rápidos y recuperación autónoma de trabajos, comprobaciones de estado y detección de fugas mediante integración con la gestión del edificio. Las operaciones de energía y las actualizaciones de firmware se orquestan con ella.",
+        "note": "Software a nivel de clúster; la guía no dice en qué nodo se ejecuta."
+      },
+      "base-command-manager": {
+        "description": "Gestiona todos los componentes del sistema: enciende y apaga las bandejas, gestiona las imágenes del sistema operativo con las que arrancan las bandejas de cómputo y accede a las interfaces fuera de banda por ipminet.",
+        "note": "Sección 2.2: ipminet da a Base Command Manager y al nodo principal acceso a las interfaces fuera de banda/BMC del rack. No se indica dónde está el nodo principal."
+      },
+      "cuda": {
+        "description": "La plataforma CUDA: más de 150 bibliotecas y las herramientas para optimizar y depurar aplicaciones aceleradas por GPU, que usan la red NVLink para repartir el trabajo entre todas las GPU del rack."
+      },
+      "imex": {
+        "description": "Mapea la memoria de las GPU por NVLink entre GPU a través de los límites del SO en un dominio NVLink, mediante exportación e importación de memoria. Se inicia en todos los nodos del dominio al arrancar el sistema o al lanzar un trabajo CUDA; se comunica entre nodos por la red de nodos de cómputo.",
+        "note": "La guía dice que se ejecuta exclusivamente en los nodos de cómputo."
+      },
+      "nvos": {
+        "description": "El sistema operativo de la bandeja de conmutación NVLink, con gestión por CLI y OpenAPI (Swagger). Incluye NVLink Subnet Manager, Fabric Manager, NMX-Controller, NMX-Telemetry y el firmware de NVSwitch."
+      },
+      "nmx-controller": {
+        "description": "Aplicación de clúster para la red definida por software de la red física; en los racks DGX VR sus servicios son el subnet manager y Fabric Manager."
+      },
+      "fabric-manager": {
+        "description": "Configura el enrutamiento entre los puertos NVSwitch y el del lado de las GPU, se coordina con el controlador de GPU para inicializarlas y vigila la red física en busca de errores de NVLink y NVSwitch."
+      },
+      "nvlsm": {
+        "description": "Descubre la topología NVLink, asigna LID a los puertos NVLink de GPU y NVSwitch, programa las tablas de reenvío de los conmutadores y las claves de partición, y vigila los cambios en la red NVLink."
+      },
+      "nmx-telemetry": {
+        "description": "Recoge y agrega la telemetría de todos los conmutadores NVLink de un dominio NVLink."
+      },
+      "doca": {
+        "description": "Marco para aplicaciones y servicios que descargan, aceleran y aíslan cargas de trabajo del centro de datos en BlueField. DOCA-Host incluye los controladores y herramientas de host para los dispositivos BlueField y ConnectX del rack."
+      },
+      "nccl": {
+        "description": "Bibliotecas de comunicación entre GPU por PCIe, NVLink, NVLink Multi-node, InfiniBand y RoCE: las operaciones colectivas de NCCL conscientes de la topología, el espacio de direcciones global particionado de NVSHMEM y la mensajería y el acceso remoto a memoria de UCX."
+      },
+      "dcgm": {
+        "description": "Gestiona y supervisa las GPU y los NVSwitch del centro de datos: supervisión activa del estado, diagnóstico, alertas y políticas de energía y de reloj."
+      },
+      "mft": {
+        "description": "Gestión del firmware de los ASIC de red: crear una imagen de firmware estándar o personalizada, consultar la información del firmware y grabar una imagen. Se entrega con la versión de software de DGX VR.",
+        "note": "La guía dice 'network ASIC'; se interpreta que abarca la ConnectX-9 y la BlueField-4."
+      },
+      "nvsm": {
+        "description": "Diagnóstico y gestión: determina el estado del sistema, identifica problemas de componentes y alertas, y ejecuta pruebas de estrés. 'sudo nvsm show health' da el resumen general del estado."
+      },
+      "nvdebug": {
+        "description": "Reúne los registros de eventos del BMC, las versiones de firmware, el inventario de hardware y los datos de estado del sistema en un único archivo para el soporte de NVIDIA."
+      }
+    },
+    "safety": {
+      "battery": {
+        "title": "Baterías",
+        "text": "Peligro de explosión si la batería se reemplaza de forma incorrecta: use solo la batería que recomiende el fabricante. No la recargue, desmonte ni perfore, y deséchela según la normativa local."
+      },
+      "esd": {
+        "title": "Descarga electrostática",
+        "text": "La ESD puede dañar unidades, placas y otras piezas. Trabaje en un puesto con protección ESD o lleve una muñequera antiestática, y sujete las placas solo por los bordes."
+      },
+      "psu": {
+        "title": "Fuentes de alimentación",
+        "text": "Una fuente de alimentación no tiene piezas que pueda reparar el usuario y contiene tensión, corriente y energía peligrosas: no la abra. Al reemplazar una fuente de alimentación de conexión en caliente, desenchufe el cable de alimentación de esa fuente antes de retirarla."
+      },
+      "standby": {
+        "title": "Alimentación en espera",
+        "text": "El botón de encendido no corta por completo la alimentación de CA: la alimentación en espera está activa siempre que el sistema esté enchufado."
+      },
+      "rack-mount": {
+        "title": "Trabajo en el rack",
+        "text": "El rack debe estar anclado para que no pueda volcar cuando se extiende un equipo. Extienda solo un equipo del rack a la vez."
+      },
+      "lifting": {
+        "title": "Movimiento y elevación",
+        "text": "Siga la normativa local de seguridad y salud laboral y use medios mecánicos u otra ayuda adecuada al mover y levantar equipos."
+      },
+      "hot": {
+        "title": "Piezas calientes",
+        "text": "Si el sistema ha estado funcionando, los procesadores y disipadores pueden estar calientes. Deje que el sistema se enfríe antes de abrir las cubiertas."
+      },
+      "covers": {
+        "title": "Cubiertas y flujo de aire",
+        "text": "Use el sistema solo con las cubiertas puestas, tras comprobar que no quedan herramientas ni piezas sueltas dentro."
+      }
+    },
+    "commands": {
+      "virtual-a-c-cycle": {
+        "group": "Control de energía",
+        "title": "Ciclo de CA virtual (Virtual A/C Cycle)",
+        "purpose": "Simula una caída de alimentación (como desenchufar y volver a enchufar el cable) sin desconectar físicamente la alimentación."
+      },
+      "graceful-shutdown": {
+        "group": "Control de energía",
+        "title": "Apagado ordenado (Graceful Shutdown)",
+        "purpose": "Inicia un apagado limpio del sistema host, que permite al sistema operativo terminar correctamente todos los servicios y procesos."
+      },
+      "force-power-off": {
+        "group": "Control de energía",
+        "title": "Apagado forzado (Force Power Off)",
+        "purpose": "Corta de inmediato la alimentación del host sin esperar a que se apague el SO."
+      },
+      "power-on-host": {
+        "group": "Control de energía",
+        "title": "Encender el host (Power On Host)",
+        "purpose": "Enciende el host."
+      },
+      "power-cycle-host": {
+        "group": "Control de energía",
+        "title": "Ciclo de energía del host (Power Cycle Host)",
+        "purpose": "Realiza un ciclo de energía completo (apagado y nuevo encendido)."
+      },
+      "set-power-restore-policy-always-off": {
+        "group": "Control de energía",
+        "title": "Política de restauración de energía: siempre apagado (Set Power Restore Policy: Always Off)",
+        "purpose": "Tras una pérdida de alimentación, el sistema seguirá apagado cuando vuelva la alimentación."
+      },
+      "set-power-restore-policy-last-state": {
+        "group": "Control de energía",
+        "title": "Política de restauración de energía: último estado (Set Power Restore Policy: Last State)",
+        "purpose": "Tras una pérdida de alimentación, el sistema volverá a su estado anterior (encendido o apagado) cuando vuelva la alimentación."
+      },
+      "set-power-restore-policy-always-on": {
+        "group": "Control de energía",
+        "title": "Política de restauración de energía: siempre encendido (Set Power Restore Policy: Always On)",
+        "purpose": "Tras una pérdida de alimentación, el sistema se encenderá automáticamente cuando vuelva la alimentación."
+      },
+      "hmc-graceful-restart": {
+        "group": "Reinicios de HMC y BMC",
+        "title": "Reinicio ordenado del HMC (HMC Graceful Restart)",
+        "purpose": "Realiza un reinicio controlado del HMC, que le permite detener los servicios limpiamente antes de reiniciar. Es el método preferido en la mayoría de los escenarios de mantenimiento."
+      },
+      "hmc-force-restart": {
+        "group": "Reinicios de HMC y BMC",
+        "title": "Reinicio forzado del HMC (HMC Force Restart)",
+        "purpose": "Reinicia de inmediato el HMC sin esperar a que los servicios se detengan ordenadamente.",
+        "note": "Advertencia: no se recomienda salvo en emergencias, ya que puede provocar un reinicio del host o pérdida de datos."
+      },
+      "bmc-reset": {
+        "group": "Reinicios de HMC y BMC",
+        "title": "Reinicio del BMC (BMC Reset)",
+        "purpose": "Realiza un reinicio forzado del BMC. Se suele usar tras actualizar el firmware o si el BMC deja de responder."
+      },
+      "firmware-bundle-update": {
+        "group": "Firmware e imágenes",
+        "title": "Actualización del paquete de firmware (Firmware Bundle Update)",
+        "purpose": "Carga y aplica un paquete de firmware al sistema. Ponga en FILENAME la ruta del paquete de firmware. El siguiente comando envía el archivo de actualización al BMC con una carga multipart form."
+      },
+      "get-firmware-versions-with-expand": {
+        "group": "Firmware e imágenes",
+        "title": "Obtener las versiones de firmware (con expand) (Get Firmware Versions (with expand))",
+        "purpose": "Obtiene información detallada de las versiones de firmware de todos los componentes, usando la consulta $expand con $levels=1 para incluir los datos de inventario anidados. Los signos de dólar van escapados (\\$) para que el shell no los trate como variables."
+      },
+      "check-bmc-firmware-signing-type": {
+        "group": "Firmware e imágenes",
+        "title": "Comprobar el tipo de firma del firmware del BMC (Check BMC Firmware Signing Type)",
+        "purpose": "Comprueba el tipo de firma de la imagen de firmware del BMC, lo que ayuda a confirmar la autenticidad y la seguridad del firmware instalado.",
+        "note": "Sustituya <active image slot> por el ID de la ranura activa. Para encontrarlo, lea la propiedad ActiveSlotId de /redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0."
+      },
+      "check-hmc-firmware-signing-type": {
+        "group": "Firmware e imágenes",
+        "title": "Comprobar el tipo de firma del firmware del HMC (Check HMC Firmware Signing Type)",
+        "purpose": "Comprueba el tipo de firma de la imagen de firmware del HMC.",
+        "note": "Sustituya <active image slot> por el ID de la ranura activa. Para encontrarlo, lea la propiedad ActiveSlotId de /redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0."
+      },
+      "enabling-global-write-protect": {
+        "group": "Protección contra escritura",
+        "title": "Activar la protección global contra escritura (Enabling Global Write Protect)",
+        "purpose": "Activa la protección por hardware contra escritura del sistema."
+      },
+      "disabling-global-write-protect": {
+        "group": "Protección contra escritura",
+        "title": "Desactivar la protección global contra escritura (Disabling Global Write Protect)",
+        "purpose": "Desactiva la protección por hardware contra escritura del sistema."
+      },
+      "reading-global-write-protect": {
+        "group": "Protección contra escritura",
+        "title": "Leer la protección global contra escritura (Reading Global Write Protect)",
+        "purpose": "Lee el estado actual de la protección por hardware contra escritura.",
+        "note": "Se recomienda activar la protección contra escritura tras actualizar el firmware o cambiar la configuración, para evitar modificaciones accidentales o no autorizadas."
+      },
+      "creating-a-new-account": {
+        "group": "Cuentas",
+        "title": "Crear una cuenta nueva (Creating a New Account)",
+        "purpose": "Crea una cuenta de usuario nueva con el nombre de usuario, la contraseña y el rol indicados.",
+        "note": "Puede poner RoleId en Administrator, Operator o ReadOnly según el nivel de acceso que necesite el usuario."
+      },
+      "updating-password-for-an-existing-account": {
+        "group": "Cuentas",
+        "title": "Cambiar la contraseña de una cuenta existente (Updating Password for an Existing Account)",
+        "purpose": "Actualiza la contraseña de una cuenta existente, como el usuario root.",
+        "note": "Sustituya CURRENT_PASSWORD por la contraseña actual de la cuenta y NEW_PASSWORD por la nueva contraseña deseada."
+      },
+      "clear-hmc-event-log": {
+        "group": "Registros de eventos",
+        "title": "Borrar el registro de eventos del HMC (Clear HMC Event Log)",
+        "purpose": "Borra todas las entradas del registro de eventos del HMC. Use este comando tras revisar o archivar el registro para mantenerlo claro y liberar espacio."
+      },
+      "clear-bmc-event-log": {
+        "group": "Registros de eventos",
+        "title": "Borrar el registro de eventos del BMC (Clear BMC Event Log)",
+        "purpose": "Elimina todas las entradas del registro de eventos del BMC. Es útil para reiniciar el registro tras resolver problemas o antes de empezar nuevos pasos de diagnóstico."
+      },
+      "reset-bmc-to-factory-defaults": {
+        "group": "Valores de fábrica",
+        "title": "Restablecer el BMC a los valores de fábrica (Reset BMC to Factory Defaults)",
+        "purpose": "Devuelve el BMC a su configuración de fábrica original. Se perderán todas las configuraciones y ajustes del usuario. Úselo si el BMC no responde o necesita borrar todos los ajustes."
+      },
+      "reset-hmc-to-factory-defaults": {
+        "group": "Valores de fábrica",
+        "title": "Restablecer el HMC a los valores de fábrica (Reset HMC to Factory Defaults)",
+        "purpose": "Restablece el Host Management Controller (HMC) a su configuración de fábrica. Esto eliminará todos los ajustes personalizados y los datos de usuario del HMC."
+      },
+      "clear-the-emmc-this-will-clear-the-journal": {
+        "group": "Valores de fábrica",
+        "title": "Borrar la eMMC (esto borrará el journal) (Clear the eMMC (This Will Clear the Journal))",
+        "purpose": "Borra de forma segura el almacenamiento eMMC, incluido el journal del sistema. Use esta operación con cuidado, ya que eliminará de forma permanente todos los datos guardados en la eMMC."
+      },
+      "reset-sbios-to-defaults": {
+        "group": "Valores de fábrica",
+        "title": "Restablecer la SBIOS a los valores predeterminados (Reset SBIOS to Defaults)",
+        "purpose": "Devuelve los ajustes de la BIOS del sistema (SBIOS) a sus valores de fábrica. Puede ayudar a resolver problemas de configuración o a preparar el sistema para una implantación nueva."
+      },
+      "ipmi-host-sol-access": {
+        "group": "Acceso a la consola",
+        "title": "IPMI: acceso SOL al host (IPMI - Host SOL Access)",
+        "purpose": "Establece una sesión Serial Over LAN (SOL) con el host mediante IPMI. Permite trabajar con la consola del sistema de forma remota, incluso si el SO no está en marcha."
+      },
+      "ssh-host-sol-access": {
+        "group": "Acceso a la consola",
+        "title": "SSH: acceso SOL al host (SSH - Host SOL Access)",
+        "purpose": "Da acceso SSH a la interfaz SOL del host. Es una alternativa a IPMI SOL para el acceso remoto a la consola."
+      },
+      "disable-ipmi": {
+        "group": "Controles de red",
+        "title": "Desactivar IPMI (Disable IPMI)",
+        "purpose": "Desactiva el protocolo IPMI en el BMC. Se recomienda para mejorar la seguridad si no se necesita la gestión remota por IPMI."
+      },
+      "capturing-debug-logs-with-nvdebug": {
+        "group": "Registros de depuración",
+        "title": "Capturar registros de depuración con NVDEBUG (Capturing Debug Logs with NVDEBUG)",
+        "purpose": "Al diagnosticar problemas complejos o al trabajar con el soporte de NVIDIA, a menudo hay que reunir registros de depuración detallados de la bandeja de cómputo. El método preferido para capturar y empaquetar estos registros es la herramienta NVDEBUG, que reúne todos los registros pertinentes del sistema, del firmware y de eventos en un único archivo para su análisis.",
+        "note": "Pasos de 6.4.1.11.1: 1. Acceda al BMC o al sistema host donde esté disponible NVDEBUG. Asegúrese de tener los permisos necesarios para ejecutar herramientas de diagnóstico. 2. Ejecute la herramienta NVDEBUG según la documentación de su sistema; sustituya /path/to/save/debug-logs.tar.gz por la ubicación de salida deseada. 3. Envíe el archivo de registros a su contacto de soporte o súbalo según indique el soporte de NVIDIA. NVDEBUG reúne automáticamente un conjunto completo de registros, incluidos los registros de eventos del BMC, las versiones de firmware, el inventario de hardware y los datos de estado del sistema. Es el método recomendado para una recogida de registros eficiente y completa."
+      }
+    },
+    "commandNotes": {
+      "usage": "Defina primero la dirección del BMC (export bmcip=\"192.168.1.100\") o sustituya ${bmcip} a mano. Los ejemplos usan credenciales de ejemplo; sustitúyalas por las credenciales de su BMC.",
+      "factoryReset": "Tras restablecer el BMC a los valores de fábrica, el usuario y la contraseña predeterminados son admin/admin, y se le pide cambiarlos en el primer inicio de sesión. Cambie las credenciales predeterminadas de inmediato."
+    },
+    "nvlinkFabric": {
+      "description": "Cada bandeja de cómputo tiene NVLink con cada bandeja de conmutación NVLink, a través de los cartuchos de cables traseros: cada GPU tiene NVLink con las nueve bandejas de conmutación, y las nueve bandejas de conmutación conectan las 72 GPU en un único dominio NVLink."
+    },
+    "rackLayout": {
+      "note": "Orden de los grupos según la fig. 1. La guía no da posiciones en RU, así que las unidades se apilan sin huecos. La fig. 1 también muestra paneles ciegos bajo los estantes de alimentación inferiores y el arriostramiento sísmico bajo el rack.",
+      "numbering": "NVIDIA no numera estas unidades por su posición en el rack (el diagrama de bloques numera las bandejas de conmutación del 1 al 9 sin decir dónde está cada una). Esta aplicación las numera desde la parte superior del rack hacia abajo.",
+      "overrides": {
+        "power-shelf": "La figura del estante de alimentación del manual de servicio numera los estantes del 1 al 4 desde la parte inferior del rack hacia arriba."
+      },
+      "heights": {
+        "tor-switch": "La guía no indica la altura de los conmutadores de parte superior del rack. Se dibujan de 1 RU."
+      }
+    },
+    "trayLayouts": {
+      "compute-tray": {
+        "note": "Una disposición esquemática, no a escala y no calcada de las figuras de NVIDIA. Mitad trasera: GPU y CPU en HPM_L (izquierda) y HPM_R (derecha) como en la fig. 4 de 2.4, SOCAMM alrededor de las CPU (fig. 5). Mitad frontal: Bay B a izquierda y derecha con los módulos ConnectX-9 y las unidades de caché, Bay C en el centro con la BlueField-4 y el SMM (fig. 6). El puerto BMC de 1 GbE se dibuja en el RJ45 del SMM, algo que la tabla 2.3 no confirma. La fig. 5 (frente a la derecha) muestra la salida de agua caliente en la parte superior de la imagen, que es el lado derecho visto de frente, la entrada de agua fría a la izquierda y el conector de la barra colectora en el centro del borde trasero. La fig. 5 y la fig. 7 no etiquetan los conectores NVLink; esta aplicación los dibuja junto al conector de alimentación.",
+        "notPlaced": {
+          "ct-port-lan-1gbe": "Aparece en la tabla 2.3, pero ninguna figura muestra dónde está (docs/OPEN_QUESTIONS.md, punto 4).",
+          "ct-nvlink-connectors": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja.",
+          "ct-cold-water-inlet": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja.",
+          "ct-hot-water-outlet": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja.",
+          "ct-bus-bar-connector": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja."
+        },
+        "points": {
+          "nvlink-connectors": "Conectores NVLink al cartucho de cables",
+          "cold-water-inlet": "Entrada de agua fría",
+          "hot-water-outlet": "Salida de agua caliente",
+          "bus-bar-connector": "Conector de la barra colectora"
+        },
+        "links": {
+          "7": "La fig. 4 dibuja la unidad de arranque en la CPU 1. Su bus PCIe (000a:a1) está en el mismo dominio que GPU2 y GPU3 (2.4).",
+          "8": "La fig. 4 dibuja cuatro pares ConnectX-9, dos en la CPU 0 y dos en la CPU 1, a través de conmutadores PCIe. No se indica qué compartimento frontal tiene cada par; esta aplicación enlaza el compartimento izquierdo con la CPU 0 y el derecho con la CPU 1.",
+          "9": "La fig. 4 dibuja cuatro pares ConnectX-9, dos en la CPU 0 y dos en la CPU 1, a través de conmutadores PCIe. No se indica qué compartimento frontal tiene cada par; esta aplicación enlaza el compartimento izquierdo con la CPU 0 y el derecho con la CPU 1.",
+          "10": "La fig. 4 pone una unidad E1.S en cada grupo de conmutador PCIe de ConnectX-9. La tabla 2.4 pone las unidades de Bay_B_L en los mismos dominios PCIe que C1/C3 (0001, 0004) y las de Bay_B_R con C5/C7 (000c, 0009). El emparejamiento unidad-tarjeta de esta aplicación sigue esos dominios.",
+          "11": "La fig. 4 pone una unidad E1.S en cada grupo de conmutador PCIe de ConnectX-9. La tabla 2.4 pone las unidades de Bay_B_L en los mismos dominios PCIe que C1/C3 (0001, 0004) y las de Bay_B_R con C5/C7 (000c, 0009). El emparejamiento unidad-tarjeta de esta aplicación sigue esos dominios.",
+          "12": "La fig. 4 pone una unidad E1.S en cada grupo de conmutador PCIe de ConnectX-9. La tabla 2.4 pone las unidades de Bay_B_L en los mismos dominios PCIe que C1/C3 (0001, 0004) y las de Bay_B_R con C5/C7 (000c, 0009). El emparejamiento unidad-tarjeta de esta aplicación sigue esos dominios.",
+          "13": "La fig. 4 pone una unidad E1.S en cada grupo de conmutador PCIe de ConnectX-9. La tabla 2.4 pone las unidades de Bay_B_L en los mismos dominios PCIe que C1/C3 (0001, 0004) y las de Bay_B_R con C5/C7 (000c, 0009). El emparejamiento unidad-tarjeta de esta aplicación sigue esos dominios.",
+          "14": "Cada GPU tiene NVLink con las nueve bandejas de conmutación NVLink a través del cartucho de cables.",
+          "15": "Cada GPU tiene NVLink con las nueve bandejas de conmutación NVLink a través del cartucho de cables.",
+          "16": "Cada GPU tiene NVLink con las nueve bandejas de conmutación NVLink a través del cartucho de cables.",
+          "17": "Cada GPU tiene NVLink con las nueve bandejas de conmutación NVLink a través del cartucho de cables.",
+          "18": "Sección 1.2: el líquido pasa 'through the inner manifold, then through the cold plates' en las CPU y GPU. Si ese colector interno es el colector interno de la bandeja (fig. 5) es una pregunta abierta, y las tuberías no se muestran.",
+          "19": "Sección 1.2: el líquido pasa 'through the inner manifold, then through the cold plates' en las CPU y GPU. Si ese colector interno es el colector interno de la bandeja (fig. 5) es una pregunta abierta, y las tuberías no se muestran.",
+          "20": "Sección 1.2: el líquido pasa 'through the inner manifold, then through the cold plates' en las CPU y GPU. Si ese colector interno es el colector interno de la bandeja (fig. 5) es una pregunta abierta, y las tuberías no se muestran.",
+          "21": "Sección 1.2: el líquido pasa 'through the inner manifold, then through the cold plates' en las CPU y GPU. Si ese colector interno es el colector interno de la bandeja (fig. 5) es una pregunta abierta, y las tuberías no se muestran.",
+          "22": "Sección 1.2: el líquido pasa 'through the inner manifold, then through the cold plates' en las CPU y GPU. Si ese colector interno es el colector interno de la bandeja (fig. 5) es una pregunta abierta, y las tuberías no se muestran.",
+          "23": "Sección 1.2: el líquido pasa 'through the inner manifold, then through the cold plates' en las CPU y GPU. Si ese colector interno es el colector interno de la bandeja (fig. 5) es una pregunta abierta, y las tuberías no se muestran.",
+          "24": "La fig. 5 etiqueta la entrada de agua fría y la salida de agua caliente en la parte trasera de la bandeja; la tubería hasta el colector no se muestra.",
+          "25": "La fig. 5 etiqueta la entrada de agua fría y la salida de agua caliente en la parte trasera de la bandeja; la tubería hasta el colector no se muestra.",
+          "26": "La fig. 5 etiqueta un conector de barra colectora en la parte trasera y una placa de distribución de energía; que uno alimente a la otra se deduce de sus nombres, no se indica."
+        }
+      },
+      "switch-tray": {
+        "note": "Una disposición esquemática, no a escala y no calcada de las figuras de NVIDIA. Mitad trasera: cuatro chips NVSwitch en la placa de conmutación, con los conectores de agua y de alimentación en la parte trasera (fig. 7). Frente: batería y SSD, y los cinco puertos RJ45 de izquierda a derecha como en la tabla 2.5. La fig. 7 (frente a la derecha) muestra la salida de agua caliente a la derecha vista de frente, la entrada de agua fría a la izquierda y el conector de alimentación en el centro del borde trasero. La fig. 5 y la fig. 7 no etiquetan los conectores NVLink; esta aplicación los dibuja junto al conector de alimentación. La batería y el SSD se dibujan a la izquierda, como en la fig. 7.",
+        "notPlaced": {
+          "switch-bmc": "La fig. 7 no muestra dónde está el BMC.",
+          "cpu-erot": "La fig. 7 no muestra dónde está la CPU ERoT.",
+          "st-nvlink-connectors": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja.",
+          "st-cold-water-inlet": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja.",
+          "st-hot-water-outlet": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja.",
+          "st-power-connector": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja."
+        },
+        "points": {
+          "nvlink-connectors": "Conectores NVLink al cartucho de cables",
+          "power-connector": "Conector de alimentación",
+          "cold-water-inlet": "Entrada de agua fría",
+          "hot-water-outlet": "Salida de agua caliente"
+        },
+        "links": {
+          "0": "Los conectores NVLink de la parte trasera de la bandeja se enchufan a los cartuchos de cables (2.1); el recorrido dentro de la bandeja no se muestra.",
+          "1": "Los conectores NVLink de la parte trasera de la bandeja se enchufan a los cartuchos de cables (2.1); el recorrido dentro de la bandeja no se muestra.",
+          "2": "Los conectores NVLink de la parte trasera de la bandeja se enchufan a los cartuchos de cables (2.1); el recorrido dentro de la bandeja no se muestra.",
+          "3": "Los conectores NVLink de la parte trasera de la bandeja se enchufan a los cartuchos de cables (2.1); el recorrido dentro de la bandeja no se muestra.",
+          "4": "La fig. 7 muestra placas frías en los cuatro conmutadores NVLink conectadas a la entrada de agua fría y a la salida de agua caliente; el orden exacto del circuito no se muestra.",
+          "5": "La fig. 7 muestra placas frías en los cuatro conmutadores NVLink conectadas a la entrada de agua fría y a la salida de agua caliente; el orden exacto del circuito no se muestra.",
+          "6": "La fig. 7 muestra placas frías en los cuatro conmutadores NVLink conectadas a la entrada de agua fría y a la salida de agua caliente; el orden exacto del circuito no se muestra.",
+          "7": "La fig. 7 muestra placas frías en los cuatro conmutadores NVLink conectadas a la entrada de agua fría y a la salida de agua caliente; el orden exacto del circuito no se muestra.",
+          "8": "La fig. 7 muestra placas frías en los cuatro conmutadores NVLink conectadas a la entrada de agua fría y a la salida de agua caliente; el orden exacto del circuito no se muestra.",
+          "9": "La fig. 7 muestra placas frías en los cuatro conmutadores NVLink conectadas a la entrada de agua fría y a la salida de agua caliente; el orden exacto del circuito no se muestra.",
+          "10": "La fig. 7 muestra placas frías en los cuatro conmutadores NVLink conectadas a la entrada de agua fría y a la salida de agua caliente; el orden exacto del circuito no se muestra.",
+          "11": "La fig. 7 muestra placas frías en los cuatro conmutadores NVLink conectadas a la entrada de agua fría y a la salida de agua caliente; el orden exacto del circuito no se muestra.",
+          "12": "La fig. 7 etiqueta un conector de alimentación en la parte trasera y la 'SWB w/ PDB'; que uno alimente a la otra se deduce de sus nombres."
+        }
+      },
+      "power-shelf": {
+        "note": "Una disposición esquemática, no a escala y no calcada de las figuras de NVIDIA. Seis PSU en tres filas de dos, numeradas del 1 al 6 de izquierda a derecha y de arriba abajo como en el manual de servicio; el módulo de gestión a la izquierda (fig. 8). La entrada de CA y la salida de CC a la barra colectora están en la parte trasera.",
+        "notPlaced": {
+          "ac-power-whip": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja.",
+          "ps-dc-output": "En la cara trasera de la unidad: se dibuja en la vista trasera del rack y, aquí, como extremo de conexión en el borde trasero de la bandeja."
+        },
+        "points": {
+          "ac-whip-1": "Cable de alimentación de CA 1 (100 A, 415-480 V AC)",
+          "ac-whip-2": "Cable de alimentación de CA 2 (100 A, 415-480 V AC)",
+          "bus-bar-output": "Salida de 54 V DC a la barra colectora"
+        },
+        "links": {
+          "0": "Dos cables de 100 A alimentan cada estante (1.4); no se indica cómo se reparten entre las seis PSU.",
+          "1": "El estante convierte la CA en una salida de 54 V DC a la barra colectora (1.4); el cableado de cada PSU no se muestra.",
+          "2": "Dos cables de 100 A alimentan cada estante (1.4); no se indica cómo se reparten entre las seis PSU.",
+          "3": "El estante convierte la CA en una salida de 54 V DC a la barra colectora (1.4); el cableado de cada PSU no se muestra.",
+          "4": "Dos cables de 100 A alimentan cada estante (1.4); no se indica cómo se reparten entre las seis PSU.",
+          "5": "El estante convierte la CA en una salida de 54 V DC a la barra colectora (1.4); el cableado de cada PSU no se muestra.",
+          "6": "Dos cables de 100 A alimentan cada estante (1.4); no se indica cómo se reparten entre las seis PSU.",
+          "7": "El estante convierte la CA en una salida de 54 V DC a la barra colectora (1.4); el cableado de cada PSU no se muestra.",
+          "8": "Dos cables de 100 A alimentan cada estante (1.4); no se indica cómo se reparten entre las seis PSU.",
+          "9": "El estante convierte la CA en una salida de 54 V DC a la barra colectora (1.4); el cableado de cada PSU no se muestra.",
+          "10": "Dos cables de 100 A alimentan cada estante (1.4); no se indica cómo se reparten entre las seis PSU.",
+          "11": "El estante convierte la CA en una salida de 54 V DC a la barra colectora (1.4); el cableado de cada PSU no se muestra."
+        }
+      },
+      "tor-switch": {
+        "note": "Panel frontal dispuesto como en la fig. 9: tres bloques de 16 puertos RJ45, cuatro jaulas grandes y tres puertos en el extremo derecho. La guía no describe el interior del conmutador, así que no se dibuja nada dentro."
+      }
+    },
+    "rearLayout": {
+      "note": "Colocación esquemática detrás de las unidades, no a escala. La fig. 2 es una vista despiezada: muestra los cartuchos de cables, dos colectores de refrigeración líquida con conectores de manguera FD83, la barra colectora de alimentación, sus soportes, el bisel trasero y el arriostramiento sísmico, pero sin posiciones, extensiones ni cantidades. Esta aplicación centra los conectores de alimentación y la barra colectora, ya que la fig. 5 y la fig. 7 ponen el conector de alimentación de las bandejas en el centro del borde trasero, y pone las salidas de agua caliente en el colector de la derecha visto de frente. No se indica qué colector es de impulsión y cuál de retorno."
+    }
+  }
+}

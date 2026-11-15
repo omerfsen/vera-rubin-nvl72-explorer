@@ -56,8 +56,8 @@ npm run e2e         # real browser tests; locally: PW_CHROMIUM_PATH=/usr/bin/chr
 ```
 
 `tests/references.test.ts` fails if `references` is out of date. `tests/i18n.test.ts` fails if `en.json` is out of date, or if
-`tr.json` or `zh.json` lacks a key, has an extra one, or changes a `{placeholder}`;
-add the Turkish and Chinese text for any new string. Do not put user-visible
+another language file (`tr`, `zh`, `ru`, `es`) lacks a key, has an extra one, or changes a
+`{placeholder}`; add the Turkish, Chinese, Russian and Spanish text for any new string. Do not put user-visible
 English in `src/`: add a `ui` key and read it with `useI18n().t()`. Tray layouts
 must place every part inside the tray or list it in `notPlaced` with a reason;
 `tests/m3.test.ts` checks this for every layout.

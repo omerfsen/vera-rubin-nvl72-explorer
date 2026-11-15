@@ -212,7 +212,11 @@ button { font: inherit; color: inherit; }
   pointer-events: none;
 }
 .legend li { display: flex; align-items: center; gap: 6px; }
-.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
+/* Leave the left side to the stage buttons, whose labels run longer in some languages. */
+.legend { max-width: 36%; }
+.stage-actions { max-width: 58%; }
+.stage-actions .layer-toggles, .stage-actions > div { flex-wrap: wrap; }
+.swatch { display: inline-block; flex-shrink: 0; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
 
 .group-label { pointer-events: none; }
 .group-label span {

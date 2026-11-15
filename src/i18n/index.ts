@@ -3,6 +3,8 @@
 import en from '../../data/i18n/en.json';
 import tr from '../../data/i18n/tr.json';
 import zh from '../../data/i18n/zh.json';
+import ru from '../../data/i18n/ru.json';
+import es from '../../data/i18n/es.json';
 import { model } from '../data';
 import type { PathSegment } from '../data/model';
 import type { Component, LinkEnd } from '../data/types';
@@ -12,7 +14,7 @@ import { DEFAULT_LANG, type Lang } from './lang';
 export { LANGS, isLang, type Lang } from './lang';
 
 type Tree = { [key: string]: unknown };
-const FILES: Record<Lang, Tree> = { en, tr, zh } as unknown as Record<Lang, Tree>;
+const FILES: Record<Lang, Tree> = { en, tr, zh, ru, es } as unknown as Record<Lang, Tree>;
 
 function lookup(tree: unknown, path: readonly (string | number)[]): unknown {
   let node = tree;
