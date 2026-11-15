@@ -1579,6 +1579,22 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
             "section": "Service Manual 2.2 Identify the Failed Power Supply (power shelf figure)"
           }
+        },
+        {
+          "label": "Front LEDs",
+          "value": "Power LED and fault LED; a failed PSU shows an amber LED",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+            "section": "Service Manual 2.2 Identify the Failed Power Supply"
+          }
+        },
+        {
+          "label": "Removal",
+          "value": "Push the release tab to the left and pull the handle; a new PSU clicks when it locks",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#replace-the-power-supply",
+            "section": "Service Manual 2.3 Replace the Power Supply"
+          }
         }
       ],
       "source": {
@@ -1594,7 +1610,9 @@
       "parent": "power-shelf",
       "description": "Management module at the front of the power shelf, with an RJ45 port for a network management cable.",
       "function": "Manages the power shelf. The power supplies keep running while it is replaced.",
-      "networks": [],
+      "networks": [
+        "ipminet"
+      ],
       "specs": [
         {
           "label": "Customer-replaceable unit (CRU)",
@@ -1619,6 +1637,30 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#dgxvr-sm-pmm-identify",
             "section": "Service Manual 3.2 Identify the Failed Power Shelf Management Module"
           }
+        },
+        {
+          "label": "Front",
+          "value": "RJ45 port for the network management cable and a status LED",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+            "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+          }
+        },
+        {
+          "label": "Fault",
+          "value": "A failed module shows an amber LED",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#dgxvr-sm-pmm-identify",
+            "section": "Service Manual 3.2 Identify the Failed Power Shelf Management Module"
+          }
+        },
+        {
+          "label": "Removal",
+          "value": "Unplug the network cable, push the panel above the module in, press the release down and pull the module out; the PSUs keep running",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+            "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+          }
         }
       ],
       "source": {
@@ -1633,6 +1675,29 @@
         }
       ],
       "note": "Count read from Fig. 8 and the service manual's power shelf figure, which show one module per shelf. The guide does not say which network the management cable goes to."
+    },
+    {
+      "id": "ps-mgmt-rj45",
+      "type": "port",
+      "name": "Management module RJ45 port",
+      "count": 1,
+      "parent": "power-shelf-mgmt-module",
+      "description": "RJ45 port on the power shelf management module, for its network management cable.",
+      "function": "Gives the power shelf's out-of-band management interface its network connection.",
+      "networks": [
+        "ipminet"
+      ],
+      "specs": [
+        {
+          "label": "Port type",
+          "value": "RJ45"
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+        "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+      },
+      "note": "The service manual names the network management cable; that it is on ipminet is read from section 2.2, which puts the power shelves' out-of-band interfaces on ipminet."
     },
     {
       "id": "ac-power-whip",
@@ -1692,12 +1757,102 @@
       "networks": [
         "ipminet"
       ],
-      "specs": [],
+      "specs": [
+        {
+          "label": "Front panel in Fig. 9",
+          "value": "48 RJ45 ports in three blocks of 16, four larger port cages, and three ports at the right end",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+            "section": "1.5 Top-of-Rack Ethernet Switches, Fig. 9",
+            "figure": "hardware-tor-ethernet-VRNVL72.png"
+          },
+          "note": "Counted from Fig. 9; the guide's text gives no port count and does not name the type of the larger cages or the three ports at the right."
+        },
+        {
+          "label": "Connects",
+          "value": "Every BMC in the compute trays (host BMCs and BlueField-4 BMCs) and in the switch trays",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+            "section": "1.5 Top-of-Rack Ethernet Switches"
+          }
+        },
+        {
+          "label": "BMC links in this rack",
+          "value": "45: 18 host BMCs, 18 BlueField-4 BMCs, 9 switch tray BMCs",
+          "note": "Computed from the counts in the data; the guide does not say how they split across the two ToR switches."
+        }
+      ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
         "section": "1.5 Top-of-Rack Ethernet Switches, Fig. 9",
         "figure": "hardware-tor-ethernet-VRNVL72.png"
       }
+    },
+    {
+      "id": "tor-rj45-port",
+      "type": "port",
+      "name": "ToR RJ45 port",
+      "count": 48,
+      "parent": "tor-switch",
+      "description": "RJ45 port on the front of the top-of-rack switch.",
+      "function": "Connects BMCs in the rack to the management network.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Port type",
+          "value": "RJ45"
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+        "section": "1.5 Top-of-Rack Ethernet Switches, Fig. 9",
+        "figure": "hardware-tor-ethernet-VRNVL72.png"
+      },
+      "note": "Count read from Fig. 9. Which BMC uses which port is not stated."
+    },
+    {
+      "id": "tor-uplink-cage",
+      "type": "port",
+      "name": "ToR larger port cage",
+      "count": 4,
+      "parent": "tor-switch",
+      "description": "One of the four larger port cages to the right of the RJ45 blocks in Fig. 9.",
+      "function": "Not described in the guide.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Port type",
+          "value": "Not stated"
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+        "section": "1.5 Top-of-Rack Ethernet Switches, Fig. 9",
+        "figure": "hardware-tor-ethernet-VRNVL72.png"
+      },
+      "note": "Count read from Fig. 9; the guide does not name the cage type or its use."
+    },
+    {
+      "id": "tor-side-port",
+      "type": "port",
+      "name": "ToR port at the right end",
+      "count": 3,
+      "parent": "tor-switch",
+      "description": "One of the three ports in the narrow panel at the right end of the switch in Fig. 9.",
+      "function": "Not described in the guide.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Port type",
+          "value": "Not stated"
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+        "section": "1.5 Top-of-Rack Ethernet Switches, Fig. 9",
+        "figure": "hardware-tor-ethernet-VRNVL72.png"
+      },
+      "note": "Count read from Fig. 9; their types are not stated."
     },
     {
       "id": "nvlink-cable-cartridge",
@@ -2226,6 +2381,19 @@
         "figure": "network-port-numbers-VRNVL72.png"
       },
       "note": "An alternative reading that conflicts with Table 2.3. See docs/OPEN_QUESTIONS.md item 3."
+    },
+    {
+      "id": "ps-mgmt-ipminet",
+      "from": "ps-mgmt-rj45",
+      "network": "ipminet",
+      "kind": "network",
+      "description": "Power shelf management module RJ45 to ipminet (Ethernet).",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+        "section": "2.2 Network Overview"
+      },
+      "assumed": true,
+      "note": "Section 2.2 puts the power shelves' out-of-band interfaces on ipminet; the port itself is named only in the service manual."
     }
   ],
   "trayLayouts": {
@@ -3705,7 +3873,13 @@
           "w": 0.05,
           "d": 0.38,
           "h": 0.9,
-          "y": 0.05
+          "y": 0.05,
+          "indicators": [
+            {
+              "color": "green",
+              "label": "Status"
+            }
+          ]
         },
         {
           "component": "psu",
@@ -3717,7 +3891,17 @@
           "w": 0.43,
           "d": 0.88,
           "h": 0.28,
-          "y": 0.68
+          "y": 0.68,
+          "indicators": [
+            {
+              "color": "green",
+              "label": "Power"
+            },
+            {
+              "color": "amber",
+              "label": "Fault"
+            }
+          ]
         },
         {
           "component": "psu",
@@ -3729,7 +3913,17 @@
           "w": 0.43,
           "d": 0.88,
           "h": 0.28,
-          "y": 0.68
+          "y": 0.68,
+          "indicators": [
+            {
+              "color": "green",
+              "label": "Power"
+            },
+            {
+              "color": "amber",
+              "label": "Fault"
+            }
+          ]
         },
         {
           "component": "psu",
@@ -3741,7 +3935,17 @@
           "w": 0.43,
           "d": 0.88,
           "h": 0.28,
-          "y": 0.36
+          "y": 0.36,
+          "indicators": [
+            {
+              "color": "green",
+              "label": "Power"
+            },
+            {
+              "color": "amber",
+              "label": "Fault"
+            }
+          ]
         },
         {
           "component": "psu",
@@ -3753,7 +3957,17 @@
           "w": 0.43,
           "d": 0.88,
           "h": 0.28,
-          "y": 0.36
+          "y": 0.36,
+          "indicators": [
+            {
+              "color": "green",
+              "label": "Power"
+            },
+            {
+              "color": "amber",
+              "label": "Fault"
+            }
+          ]
         },
         {
           "component": "psu",
@@ -3765,7 +3979,17 @@
           "w": 0.43,
           "d": 0.88,
           "h": 0.28,
-          "y": 0.04
+          "y": 0.04,
+          "indicators": [
+            {
+              "color": "green",
+              "label": "Power"
+            },
+            {
+              "color": "amber",
+              "label": "Fault"
+            }
+          ]
         },
         {
           "component": "psu",
@@ -3777,7 +4001,28 @@
           "w": 0.43,
           "d": 0.88,
           "h": 0.28,
-          "y": 0.04
+          "y": 0.04,
+          "indicators": [
+            {
+              "color": "green",
+              "label": "Power"
+            },
+            {
+              "color": "amber",
+              "label": "Fault"
+            }
+          ]
+        },
+        {
+          "component": "ps-mgmt-rj45",
+          "index": 1,
+          "face": "front",
+          "x": -0.465,
+          "z": 0.5,
+          "w": 0.04,
+          "d": 0.03,
+          "h": 0.12,
+          "y": 0.2
         }
       ],
       "links": [
@@ -3982,6 +4227,623 @@
         {
           "component": "ps-dc-output",
           "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        }
+      ]
+    },
+    "tor-switch": {
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+        "section": "1.5 Top-of-Rack Ethernet Switches, Fig. 9",
+        "figure": "hardware-tor-ethernet-VRNVL72.png"
+      },
+      "assumed": true,
+      "heightRU": 1,
+      "note": "Front panel arranged as in Fig. 9: three blocks of 16 RJ45 ports, four larger cages and three ports at the right end. The guide does not describe the inside of the switch, so nothing inside is drawn.",
+      "slots": [
+        {
+          "component": "tor-rj45-port",
+          "index": 1,
+          "face": "front",
+          "x": -0.48,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 2,
+          "face": "front",
+          "x": -0.48,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 3,
+          "face": "front",
+          "x": -0.446,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 4,
+          "face": "front",
+          "x": -0.446,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 5,
+          "face": "front",
+          "x": -0.412,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 6,
+          "face": "front",
+          "x": -0.412,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 7,
+          "face": "front",
+          "x": -0.378,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 8,
+          "face": "front",
+          "x": -0.378,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 9,
+          "face": "front",
+          "x": -0.344,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 10,
+          "face": "front",
+          "x": -0.344,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 11,
+          "face": "front",
+          "x": -0.31,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 12,
+          "face": "front",
+          "x": -0.31,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 13,
+          "face": "front",
+          "x": -0.276,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 14,
+          "face": "front",
+          "x": -0.276,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 15,
+          "face": "front",
+          "x": -0.242,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 16,
+          "face": "front",
+          "x": -0.242,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 17,
+          "face": "front",
+          "x": -0.18,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 18,
+          "face": "front",
+          "x": -0.18,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 19,
+          "face": "front",
+          "x": -0.146,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 20,
+          "face": "front",
+          "x": -0.146,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 21,
+          "face": "front",
+          "x": -0.112,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 22,
+          "face": "front",
+          "x": -0.112,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 23,
+          "face": "front",
+          "x": -0.078,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 24,
+          "face": "front",
+          "x": -0.078,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 25,
+          "face": "front",
+          "x": -0.044,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 26,
+          "face": "front",
+          "x": -0.044,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 27,
+          "face": "front",
+          "x": -0.01,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 28,
+          "face": "front",
+          "x": -0.01,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 29,
+          "face": "front",
+          "x": 0.024,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 30,
+          "face": "front",
+          "x": 0.024,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 31,
+          "face": "front",
+          "x": 0.058,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 32,
+          "face": "front",
+          "x": 0.058,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 33,
+          "face": "front",
+          "x": 0.12,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 34,
+          "face": "front",
+          "x": 0.12,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 35,
+          "face": "front",
+          "x": 0.154,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 36,
+          "face": "front",
+          "x": 0.154,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 37,
+          "face": "front",
+          "x": 0.188,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 38,
+          "face": "front",
+          "x": 0.188,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 39,
+          "face": "front",
+          "x": 0.222,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 40,
+          "face": "front",
+          "x": 0.222,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 41,
+          "face": "front",
+          "x": 0.256,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 42,
+          "face": "front",
+          "x": 0.256,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 43,
+          "face": "front",
+          "x": 0.29,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 44,
+          "face": "front",
+          "x": 0.29,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 45,
+          "face": "front",
+          "x": 0.324,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 46,
+          "face": "front",
+          "x": 0.324,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 47,
+          "face": "front",
+          "x": 0.358,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-rj45-port",
+          "index": 48,
+          "face": "front",
+          "x": 0.358,
+          "z": 0.5,
+          "w": 0.028,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-uplink-cage",
+          "index": 1,
+          "face": "front",
+          "x": 0.35,
+          "z": 0.5,
+          "w": 0.036,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-uplink-cage",
+          "index": 2,
+          "face": "front",
+          "x": 0.39,
+          "z": 0.5,
+          "w": 0.036,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.68
+        },
+        {
+          "component": "tor-uplink-cage",
+          "index": 3,
+          "face": "front",
+          "x": 0.35,
+          "z": 0.5,
+          "w": 0.036,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-uplink-cage",
+          "index": 4,
+          "face": "front",
+          "x": 0.39,
+          "z": 0.5,
+          "w": 0.036,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.32
+        },
+        {
+          "component": "tor-side-port",
+          "index": 1,
+          "face": "front",
+          "x": 0.455,
+          "z": 0.5,
+          "w": 0.03,
+          "d": 0.03,
+          "h": 0.2,
+          "y": 0.78
+        },
+        {
+          "component": "tor-side-port",
+          "index": 2,
+          "face": "front",
+          "x": 0.455,
+          "z": 0.5,
+          "w": 0.03,
+          "d": 0.03,
+          "h": 0.2,
+          "y": 0.5
+        },
+        {
+          "component": "tor-side-port",
+          "index": 3,
+          "face": "front",
+          "x": 0.455,
+          "z": 0.5,
+          "w": 0.03,
+          "d": 0.03,
+          "h": 0.2,
+          "y": 0.22
         }
       ]
     }

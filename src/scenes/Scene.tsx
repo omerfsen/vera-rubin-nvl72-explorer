@@ -53,7 +53,9 @@ export default function Scene() {
   const selected = useExplorer((s) => s.selected);
   const trayKey = view === 'tray' ? trayKeyOf(selected, model) : null;
   const [contextLost, setContextLost] = useState(false);
-  const tall = trayKey ? (model.trayLayout(trayKey.split('.')[0]!)?.heightRU ?? 1) > 1 : false;
+  const layout = trayKey ? model.trayLayout(trayKey.split('.')[0]!) : undefined;
+  // Tall shelves (PSU rows) and units that are only a front panel (the ToR switch) are seen from the front.
+  const tall = layout ? (layout.heightRU ?? 1) > 1 || layout.slots.every((s) => s.face === 'front') : false;
   const effectiveView = trayKey ? (tall ? 'shelf' : 'tray') : view === 'rear' ? 'rear' : 'rack';
   return (
     <>

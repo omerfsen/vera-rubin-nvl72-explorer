@@ -121,6 +121,8 @@ export interface TraySlot {
   index?: number;
   label?: string;
   face: 'top' | 'front';
+  /** Status LEDs drawn on the part's front face. */
+  indicators?: { color: 'green' | 'amber'; label: string }[];
   x: number;
   z: number;
   y?: number;

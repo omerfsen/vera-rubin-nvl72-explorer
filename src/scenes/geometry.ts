@@ -151,3 +151,8 @@ export const NETWORK_COLORS: Record<string, string> = {
 export const CONFLICT_COLOR = '#ff8c00';
 /** Everything not on the highlighted network. */
 export const DIM_COLOR = '#434a55';
+
+/** How far a selected unit slides out of the rack, in metres. */
+export const SLIDE_OUT = 0.12;
+/** Status LED colours. */
+export const LED_COLORS: Record<string, string> = { green: '#3ddc84', amber: '#ffb000' };
