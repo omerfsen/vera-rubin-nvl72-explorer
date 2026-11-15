@@ -30,6 +30,7 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE_PATH: /vera-rubin-nvl72-explorer/
+      - run: npm run mcp:e2e
       - name: Check that no image files are committed or bundled
         run: |
           pattern='\.(png|jpe?g|webp|gif|svg|ico|avif|bmp|tiff?)$'

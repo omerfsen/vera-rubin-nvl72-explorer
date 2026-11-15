@@ -18,17 +18,23 @@
     "data:refs": "node scripts/references.mjs",
     "e2e": "playwright test",
     "docs:check": "node scripts/check-docs.mjs",
-    "i18n:en": "node scripts/i18n-content.mjs"
+    "i18n:en": "node scripts/i18n-content.mjs",
+    "mcp:build": "vite build --config mcp/vite.config.ts",
+    "mcp:docs": "MCP_DOCS_WRITE=1 vitest run tests/mcp-docs.test.ts",
+    "mcp:e2e": "npm run mcp:build && node scripts/mcp-wire.mjs"
   },
   "dependencies": {
+    "@modelcontextprotocol/server": "2.4.0",
     "@react-three/drei": "10.7.9",
     "@react-three/fiber": "9.8.2",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "three": "0.187.0",
+    "zod": "4.6.7",
     "zustand": "5.0.16"
   },
   "devDependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
     "@playwright/test": "1.64.1",
     "@testing-library/react": "16.3.3",
     "@types/node": "26.6.6",
