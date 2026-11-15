@@ -10,6 +10,7 @@ import {
   FRAME_WIDTH,
   DIM_COLOR,
   HOVER_COLOR,
+  SCENE_COLORS,
   SLIDE_OUT,
   NETWORK_COLORS,
   RU,
@@ -156,7 +157,7 @@ function Handles() {
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, boxes.length * 2]} raycast={() => null}>
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="#c9ced6" metalness={0.6} roughness={0.35} />
+      <meshStandardMaterial color={SCENE_COLORS.handles} metalness={0.6} roughness={0.35} />
     </instancedMesh>
   );
 }
@@ -200,7 +201,7 @@ function RackFrame() {
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, parts.length]} raycast={() => null}>
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="#1c2026" metalness={0.4} roughness={0.7} />
+      <meshStandardMaterial color={SCENE_COLORS.rackFrame} metalness={0.4} roughness={0.7} />
     </instancedMesh>
   );
 }
@@ -264,7 +265,7 @@ export function RackScene({ rear }: { rear: boolean }) {
       {!rear && <GroupLabels />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
-        <meshStandardMaterial color="#14181d" />
+        <meshStandardMaterial color={SCENE_COLORS.floor} />
       </mesh>
     </group>
   );

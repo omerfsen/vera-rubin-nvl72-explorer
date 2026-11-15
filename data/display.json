@@ -1,0 +1,115 @@
+{
+  "$schema": "./display.schema.json",
+  "description": "How the explorer draws the data: colours and names only, no facts. Facts live in nvl72-topology.json.",
+  "colors": {
+    "selected": "#38bdf8",
+    "hover": "#d6c89a",
+    "dim": "#434a55",
+    "conflict": "#ff8c00",
+    "unitTypes": {
+      "compute-tray": "#8b7d5c",
+      "switch-tray": "#5f7f8f",
+      "power-shelf": "#5a5f69",
+      "tor-switch": "#7a6a8f"
+    },
+    "partTypes": {
+      "gpu": "#3fa796",
+      "switch-asic": "#e0a030",
+      "psu": "#9aa3ad",
+      "cpu": "#4f7cc9",
+      "memory": "#c9b458",
+      "nic": "#d08a3a",
+      "dpu": "#8a6fd1",
+      "drive": "#8796a6",
+      "manifold": "#3aa0c4",
+      "board": "#5d8a52",
+      "bmc": "#b05f8a",
+      "controller": "#9c6aa8",
+      "battery": "#c4573f"
+    },
+    "portTypes": {
+      "OSFP": "#d8c48a",
+      "QSFP": "#8fb2e6",
+      "RJ45": "#6fbf5c"
+    },
+    "rearTypes": {
+      "cable-cartridge": "#6b5a3a",
+      "manifold": "#2f6f9a",
+      "bus-bar": "#a8743c",
+      "connector": "#7fb8d8",
+      "structure": "#3a3f47"
+    },
+    "networks": {
+      "externalnet": "#9e9e9e",
+      "internalnet": "#c0a0ff",
+      "dgxnet": "#ffb347",
+      "ipminet": "#4dd0e1",
+      "computenet": "#ff5c8a",
+      "storagenet": "#7bd389",
+      "failovernet": "#d4d46a"
+    },
+    "leds": {
+      "green": "#3ddc84",
+      "amber": "#ffb000"
+    },
+    "scene": {
+      "background": "#0e1115",
+      "skyLight": "#dfe7f2",
+      "groundLight": "#1a1d22",
+      "floor": "#14181d",
+      "rackFrame": "#1c2026",
+      "handles": "#c9ced6",
+      "trayBase": "#23282f",
+      "trayWall": "#3a4049",
+      "rearBezel": "#1b1f25"
+    }
+  },
+  "links": {
+    "pcie": {
+      "name": "PCIe",
+      "color": "#b58cf0"
+    },
+    "c2c": {
+      "name": "C2C (CPU to GPU)",
+      "color": "#5fd3c4"
+    },
+    "clink": {
+      "name": "Clink (CPU to CPU)",
+      "color": "#f0a35f"
+    },
+    "nvlink": {
+      "name": "NVLink (to the cable cartridge)",
+      "color": "#e8e86a"
+    },
+    "coolant": {
+      "name": "Coolant",
+      "color": "#4aa8ff"
+    },
+    "cooling": {
+      "name": "Coolant",
+      "color": "#4aa8ff"
+    },
+    "power": {
+      "name": "Power",
+      "color": "#ff6b6b"
+    },
+    "ac": {
+      "name": "AC power whips (to the remote power panel)",
+      "color": "#ff9f43"
+    }
+  },
+  "rear": {
+    "depthByType": {
+      "cable-cartridge": 0.1,
+      "connector": 0.07,
+      "structure": 0.03,
+      "default": 0.05
+    },
+    "seeThrough": {
+      "rear-bezel": 0.18
+    },
+    "underRack": [
+      "seismic-bracing"
+    ]
+  }
+}

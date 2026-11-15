@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Explorer display settings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "description",
+    "colors",
+    "links",
+    "rear"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "colors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected",
+        "hover",
+        "dim",
+        "conflict",
+        "unitTypes",
+        "partTypes",
+        "portTypes",
+        "rearTypes",
+        "networks",
+        "leds",
+        "scene"
+      ],
+      "properties": {
+        "selected": {
+          "type": "string",
+          "pattern": "^#[0-9a-f]{6}$"
+        },
+        "hover": {
+          "type": "string",
+          "pattern": "^#[0-9a-f]{6}$"
+        },
+        "dim": {
+          "type": "string",
+          "pattern": "^#[0-9a-f]{6}$"
+        },
+        "conflict": {
+          "type": "string",
+          "pattern": "^#[0-9a-f]{6}$"
+        },
+        "unitTypes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^#[0-9a-f]{6}$"
+          }
+        },
+        "partTypes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^#[0-9a-f]{6}$"
+          }
+        },
+        "portTypes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^#[0-9a-f]{6}$"
+          }
+        },
+        "rearTypes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^#[0-9a-f]{6}$"
+          }
+        },
+        "networks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^#[0-9a-f]{6}$"
+          }
+        },
+        "leds": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^#[0-9a-f]{6}$"
+          }
+        },
+        "scene": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "background",
+            "skyLight",
+            "groundLight",
+            "floor",
+            "rackFrame",
+            "handles",
+            "trayBase",
+            "trayWall",
+            "rearBezel"
+          ],
+          "properties": {
+            "background": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "skyLight": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "groundLight": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "floor": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "rackFrame": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "handles": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "trayBase": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "trayWall": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "rearBezel": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            }
+          }
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "color"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-f]{6}$"
+          }
+        }
+      }
+    },
+    "rear": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "depthByType",
+        "seeThrough",
+        "underRack"
+      ],
+      "properties": {
+        "depthByType": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "seeThrough": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "underRack": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

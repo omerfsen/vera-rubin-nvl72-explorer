@@ -7,6 +7,7 @@ import { useExplorer } from '../state/store';
 import { trayKeyOf } from '../state/url';
 import { RackScene, rackCameraDistance } from './RackScene';
 import { TrayScene } from './TrayScene';
+import { SCENE_COLORS } from './geometry';
 
 const FOV = 38;
 const RACK_DISTANCE = rackCameraDistance(FOV);
@@ -80,8 +81,8 @@ export default function Scene() {
           });
         }}
       >
-        <color attach="background" args={['#0e1115']} />
-        <hemisphereLight args={['#dfe7f2', '#1a1d22', 0.9]} />
+        <color attach="background" args={[SCENE_COLORS.background]} />
+        <hemisphereLight args={[SCENE_COLORS.skyLight, SCENE_COLORS.groundLight, 0.9]} />
         <directionalLight position={[2.5, 3, 4]} intensity={1.6} />
         <directionalLight position={[-3, 1, -2]} intensity={0.4} />
         {trayKey ? <TrayScene key={trayKey} trayKey={trayKey} /> : <RackScene rear={view === 'rear'} />}

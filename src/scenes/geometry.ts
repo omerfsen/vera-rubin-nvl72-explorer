@@ -1,3 +1,4 @@
+import display from '../../data/display.json';
 import type { RackUnit } from '../data/model';
 import type { ComponentType } from '../data/types';
 
@@ -34,15 +35,10 @@ export function frameHeight(totalRU: number): number {
 }
 
 /** Base colour per unit type; also used by the legend and the 2D list. */
-export const TYPE_COLORS: Partial<Record<ComponentType, string>> = {
-  'compute-tray': '#8b7d5c',
-  'switch-tray': '#5f7f8f',
-  'power-shelf': '#5a5f69',
-  'tor-switch': '#7a6a8f',
-};
+export const TYPE_COLORS: Partial<Record<ComponentType, string>> = display.colors.unitTypes as Partial<Record<ComponentType, string>>;
 
-export const HOVER_COLOR = '#d6c89a';
-export const SELECTED_COLOR = '#38bdf8';
+export const HOVER_COLOR = display.colors.hover;
+export const SELECTED_COLOR = display.colors.selected;
 
 // ---- tray interior ------------------------------------------------------
 // The open tray is drawn larger than in the rack so its parts are easy to
@@ -52,27 +48,9 @@ export const TRAY_DEPTH = 1.9;
 export const TRAY_HEIGHT = 0.11;
 
 /** Colour per part type inside a tray. Ports are coloured by connector type. */
-export const PART_COLORS: Partial<Record<ComponentType, string>> = {
-  gpu: '#3fa796',
-  'switch-asic': '#e0a030',
-  psu: '#9aa3ad',
-  cpu: '#4f7cc9',
-  memory: '#c9b458',
-  nic: '#d08a3a',
-  dpu: '#8a6fd1',
-  drive: '#8796a6',
-  manifold: '#3aa0c4',
-  board: '#5d8a52',
-  bmc: '#b05f8a',
-  controller: '#9c6aa8',
-  battery: '#c4573f',
-};
+export const PART_COLORS: Partial<Record<ComponentType, string>> = display.colors.partTypes as Partial<Record<ComponentType, string>>;
 
-export const PORT_COLORS: Record<string, string> = {
-  OSFP: '#d8c48a',
-  QSFP: '#8fb2e6',
-  RJ45: '#6fbf5c',
-};
+export const PORT_COLORS: Record<string, string> = display.colors.portTypes;
 
 /** Placement of one tray slot in scene units: centre and size. */
 export function slotBox(
@@ -106,53 +84,26 @@ export function slotBox(
 }
 
 /** Colour per link kind in the tray's connections layer. */
-export const LINK_COLORS: Record<string, string> = {
-  pcie: '#b58cf0',
-  c2c: '#5fd3c4',
-  clink: '#f0a35f',
-  nvlink: '#e8e86a',
-  coolant: '#4aa8ff',
-  cooling: '#4aa8ff',
-  power: '#ff6b6b',
-  ac: '#ff9f43',
-};
+export const LINK_COLORS: Record<string, string> = Object.fromEntries(Object.entries(display.links).map(([k, v]) => [k, v.color]));
 
-export const LINK_NAMES: Record<string, string> = {
-  cooling: 'Coolant',
-  pcie: 'PCIe',
-  c2c: 'C2C (CPU to GPU)',
-  clink: 'Clink (CPU to CPU)',
-  nvlink: 'NVLink (to the cable cartridge)',
-  coolant: 'Coolant',
-  power: 'Power',
-  ac: 'AC power whips (to the remote power panel)',
-};
+export const LINK_NAMES: Record<string, string> = Object.fromEntries(Object.entries(display.links).map(([k, v]) => [k, v.name]));
 
 /** Colour per rear part type. */
-export const REAR_COLORS: Record<string, string> = {
-  'cable-cartridge': '#6b5a3a',
-  manifold: '#2f6f9a',
-  'bus-bar': '#a8743c',
-  connector: '#7fb8d8',
-  structure: '#3a3f47',
-};
+export const REAR_COLORS: Record<string, string> = display.colors.rearTypes;
 
 /** Overlay colour per network (numbered 1 to 7 as in the guide). */
-export const NETWORK_COLORS: Record<string, string> = {
-  externalnet: '#9e9e9e',
-  internalnet: '#c0a0ff',
-  dgxnet: '#ffb347',
-  ipminet: '#4dd0e1',
-  computenet: '#ff5c8a',
-  storagenet: '#7bd389',
-  failovernet: '#d4d46a',
-};
+export const NETWORK_COLORS: Record<string, string> = display.colors.networks;
 /** Ports where the guide's table and figure disagree about this network. */
-export const CONFLICT_COLOR = '#ff8c00';
+export const CONFLICT_COLOR = display.colors.conflict;
 /** Everything not on the highlighted network. */
-export const DIM_COLOR = '#434a55';
+export const DIM_COLOR = display.colors.dim;
 
 /** How far a selected unit slides out of the rack, in metres. */
 export const SLIDE_OUT = 0.12;
 /** Status LED colours. */
-export const LED_COLORS: Record<string, string> = { green: '#3ddc84', amber: '#ffb000' };
+export const LED_COLORS: Record<string, string> = display.colors.leds;
+
+/** Rear part styling from data/display.json. */
+export const REAR_STYLE = display.rear;
+/** Scene colours (background, frame, floor, tray shell) from data/display.json. */
+export const SCENE_COLORS = display.colors.scene;

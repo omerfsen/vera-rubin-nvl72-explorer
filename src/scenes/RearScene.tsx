@@ -6,7 +6,14 @@ import { Rods } from './Rods';
 import { model } from '../data';
 import type { RearPart } from '../data/types';
 import { useExplorer } from '../state/store';
-import { FRAME_WIDTH, HOVER_COLOR, LINK_COLORS, REAR_COLORS, RU, SELECTED_COLOR, UNIT_DEPTH, UNIT_WIDTH } from './geometry';
+import { FRAME_WIDTH, HOVER_COLOR, LINK_COLORS, REAR_COLORS, REAR_STYLE, RU, SCENE_COLORS, SELECTED_COLOR, UNIT_DEPTH, UNIT_WIDTH } from './geometry';
+
+/** Parts drawn see-through (the rear bezel) and under the rack (seismic bracing), from data/display.json. */
+const SEE_THROUGH = REAR_STYLE.seeThrough as Record<string, number>;
+const UNDER_RACK = new Set<string>(REAR_STYLE.underRack);
+const DEPTH = REAR_STYLE.depthByType as Record<string, number>;
+/** The NVLink fabric from the data: which unit types it joins, through which rear part. */
+const FABRIC = model.topology.nvlinkFabric;
 
 const DRAG_THRESHOLD = 6;
 /** Rear parts stand well behind the units so the connections between them are visible. */
@@ -37,15 +44,12 @@ function partY(part: RearPart): [number, number] {
 
 /** Depth and z position per rear part type. */
 function partDepth(part: RearPart): { depth: number; z: number } {
-  const type = model.getComponent(part.component)?.type;
-  if (type === 'cable-cartridge') return { depth: 0.1, z: REAR_Z - 0.05 };
-  if (type === 'connector') return { depth: 0.07, z: REAR_Z - 0.025 };
-  if (type === 'structure') {
-    if (part.component === 'rear-bezel') return { depth: 0.01, z: REAR_Z - 0.2 };
-    if (part.component === 'seismic-bracing') return { depth: UNIT_DEPTH + 0.5, z: -0.2 };
-    return { depth: 0.03, z: REAR_Z - 0.13 };
-  }
-  return { depth: 0.05, z: REAR_Z - 0.025 };
+  const type = model.getComponent(part.component)?.type ?? '';
+  if (part.component in SEE_THROUGH) return { depth: 0.01, z: REAR_Z - 0.2 };
+  if (UNDER_RACK.has(part.component)) return { depth: UNIT_DEPTH + 0.5, z: -0.2 };
+  const depth = DEPTH[type] ?? DEPTH.default ?? 0.05;
+  // Structure sits behind the cartridges; everything else in the rear plane.
+  return { depth, z: type === 'structure' ? REAR_Z - 0.13 : REAR_Z - depth / 2 };
 }
 
 export interface RearBox {
@@ -214,9 +218,10 @@ export function rearSegments(boxes: RearBox[]): RearSegment[] {
  */
 export function fabricSegments(unitKey: string, boxes: RearBox[]): RearSegment[] {
   const unit = model.rackUnitByKey.get(unitKey);
-  const cartridge = boxes.find((b) => b.part.component === 'nvlink-cable-cartridge');
+  const cartridge = FABRIC ? boxes.find((b) => b.part.component === FABRIC.through) : undefined;
   if (!unit || !cartridge) return [];
-  const peerType = unit.componentId === 'compute-tray' ? 'switch-tray' : unit.componentId === 'switch-tray' ? 'compute-tray' : null;
+  const [a, b] = FABRIC?.endpoints ?? [];
+  const peerType = unit.componentId === a ? b : unit.componentId === b ? a : null;
   if (!peerType) return [];
   const top = (model.totalRU * RU) / 2;
   const yOf = (u: { topRU: number; heightRU: number }) => top - (u.topRU + u.heightRU / 2) * RU;
@@ -275,9 +280,14 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
     labels.push({ text, position: [box.position[0], box.position[1] + Math.min(box.size[1] / 2, 0.15) + 0.04, box.position[2] - box.size[2] / 2] });
   }
   const unit = model.rackUnitByKey.get(selected.split('/')[0] ?? '');
-  const cart = boxes.find((b) => b.part.component === 'nvlink-cable-cartridge');
-  if (unit && cart && (unit.componentId === 'compute-tray' || unit.componentId === 'switch-tray')) {
-    const peers = unit.componentId === 'compute-tray' ? 'all 9 NVLink switch trays' : 'all 18 compute trays';
+  const cart = FABRIC ? boxes.find((b) => b.part.component === FABRIC.through) : undefined;
+  const peerType = unit && FABRIC ? FABRIC.endpoints.find((e) => e !== unit.componentId && FABRIC.endpoints.includes(unit.componentId)) : undefined;
+  if (unit && cart && peerType) {
+    const peer = model.getComponent(peerType);
+    const name = peer?.name ?? peerType;
+    // "Compute tray" reads as a common noun; keep product names ("NVLink 6 ...") as they are.
+    const noun = /^[A-Z][a-z]/.test(name) ? name.charAt(0).toLowerCase() + name.slice(1) : name;
+    const peers = `all ${peer?.count ?? ''} ${noun}s`;
     const top = (model.totalRU * RU) / 2;
     labels.push({
       text: `NVLink: ${model.segmentLabel({ id: unit.componentId, index: unit.index })} to ${peers}`,
@@ -302,10 +312,10 @@ export function RearScene({ showLabels }: { showLabels: boolean }) {
   const segments = useMemo(() => rearSegments(boxes), [boxes]);
   const connectors = useMemo(unitConnectorBoxes, []);
   const solid = useMemo(
-    () => boxes.filter((b) => b.part.component !== 'rear-bezel' && (b.layer === 'parts' ? layers.parts : layers.structure)),
+    () => boxes.filter((b) => !(b.part.component in SEE_THROUGH) && (b.layer === 'parts' ? layers.parts : layers.structure)),
     [boxes, layers],
   );
-  const bezel = useMemo(() => (layers.structure ? boxes.filter((b) => b.part.component === 'rear-bezel') : []), [boxes, layers]);
+  const bezel = useMemo(() => (layers.structure ? boxes.filter((b) => b.part.component in SEE_THROUGH) : []), [boxes, layers]);
   const colorOfPart = useMemo(
     () => (i: number) => REAR_COLORS[model.getComponent(solid[i]!.part.component)?.type ?? ''] ?? '#666666',
     [solid],
@@ -317,7 +327,7 @@ export function RearScene({ showLabels }: { showLabels: boolean }) {
       {bezel.map((b) => (
         <mesh key={b.path} position={b.position} raycast={() => null}>
           <boxGeometry args={b.size} />
-          <meshStandardMaterial color="#1b1f25" transparent opacity={0.18} depthWrite={false} />
+          <meshStandardMaterial color={SCENE_COLORS.rearBezel} transparent opacity={REAR_STYLE.seeThrough[b.part.component as keyof typeof REAR_STYLE.seeThrough] ?? 0.2} depthWrite={false} />
         </mesh>
       ))}
       {layers.parts && <ClickableBoxes items={connectors} colorOf={colorOfConnector} />}

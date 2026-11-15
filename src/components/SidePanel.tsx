@@ -47,6 +47,61 @@ function SpecRow({ spec, component }: { spec: Spec; component: Component }) {
 }
 
 /** The other end of a connection, unless the description already names it. */
+const DOC_NAMES: Record<string, string> = { 'user-guide': 'User Guide', 'service-manual': 'Service Manual' };
+
+/** Every section of NVIDIA's documents about this part, with the HTML section, the PDF page and figure links. */
+function Documents({ component }: { component: Component }) {
+  if (component.references.length === 0) return null;
+  return (
+    <section>
+      <h3>In NVIDIA's documents</h3>
+      <ul className="plain doc-list">
+        {component.references.map((r) => (
+          <li key={`${r.document}|${r.section}`}>
+            <span className="muted">{DOC_NAMES[r.document]}</span> {r.section}:{' '}
+            <a href={r.html} target="_blank" rel="noopener noreferrer">
+              web
+            </a>
+            {r.pdf && (
+              <>
+                {' · '}
+                <a href={r.pdf} target="_blank" rel="noopener noreferrer">
+                  PDF p. {r.pdf.split('#page=')[1]}
+                </a>
+              </>
+            )}
+            {(r.figures ?? []).map((f) => (
+              <span key={f}>
+                {' · '}
+                <a href={f} target="_blank" rel="noopener noreferrer">
+                  figure
+                </a>
+              </span>
+            ))}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** Open questions in NVIDIA's documents that involve this part. */
+function OpenQuestions({ component }: { component: Component }) {
+  const qs = (model.topology.openQuestions ?? []).filter((q) => q.components.includes(component.id));
+  if (qs.length === 0) return null;
+  return (
+    <section className="open-questions">
+      <h3>Open question{qs.length > 1 ? 's' : ''} in NVIDIA's documents</h3>
+      {qs.map((q) => (
+        <p key={q.id}>
+          <span className={q.kind === 'conflict' ? 'assumed' : 'gap-badge'}>{q.kind}</span> <strong>{q.title}.</strong>{' '}
+          {q.summary}
+        </p>
+      ))}
+    </section>
+  );
+}
+
 function connectionText(c: Connection, selfId: string): string {
   const other = c.from === selfId ? c.to : c.from;
   const parts: string[] = [];
@@ -75,7 +130,8 @@ function countText(c: Component, index: number | undefined): string[] {
   } else if (parent) {
     lines.push(`${c.count} per ${perLabel(parent)}`);
   } else {
-    lines.push('One rack: 72 GPUs in a single NVLink domain.');
+    const gpus = c.specs.find((s) => s.label === 'GPUs in the NVLink domain')?.value;
+    lines.push(gpus ? `One rack: ${gpus} GPUs in a single NVLink domain.` : `${c.count}`);
   }
   const total = model.totalPerRack(c.id);
   if (total !== null && parent && parent.id !== ROOT_ID) lines.push(`${total} per rack (computed)`);
@@ -143,6 +199,8 @@ export function SidePanel() {
           </button>
         </p>
       )}
+
+      <OpenQuestions component={component} />
 
       <section>
         <h3>What it is</h3>
@@ -343,22 +401,6 @@ export function SidePanel() {
         <p>
           <SourceLink source={component.source} />
         </p>
-        {component.textSources && component.textSources.length > 0 && (
-          <p className="small">
-            Also from:{' '}
-            {component.textSources.map((s, i) => (
-              <span key={`${s.url}|${s.section}`}>
-                {i > 0 && ' · '}
-                <SourceLink source={s} />
-              </span>
-            ))}
-          </p>
-        )}
-        <p className="muted small">
-          {component.source.url.includes('dgxvr-service-manual')
-            ? `${model.topology.meta.serviceManual?.title}, ${model.topology.meta.serviceManual?.date}.`
-            : `${model.topology.meta.document.title}, ${model.topology.meta.document.date}.`}
-        </p>
         {SHOW_OFFICIAL_FIGURES && component.source.figure && (
           <figure className="official-figure">
             <img
@@ -371,6 +413,7 @@ export function SidePanel() {
           </figure>
         )}
       </section>
+      <Documents component={component} />
       <Share />
     </article>
   );

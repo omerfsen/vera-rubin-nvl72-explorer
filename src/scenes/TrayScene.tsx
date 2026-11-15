@@ -13,6 +13,7 @@ import {
   LED_COLORS,
   NETWORK_COLORS,
   LINK_COLORS,
+  SCENE_COLORS,
   SELECTED_COLOR,
   TYPE_COLORS,
   TRAY_DEPTH,
@@ -114,10 +115,10 @@ function TrayShell({ heightRU, frontColor }: { heightRU: number; frontColor: str
   const TRAY_HEIGHT_RU = TRAY_HEIGHT * heightRU;
   const frontHeight = heightRU > 1 ? TRAY_HEIGHT * 0.12 : TRAY_HEIGHT_RU;
   const parts: { position: [number, number, number]; size: [number, number, number]; color: string }[] = [
-    { position: [0, 0, 0], size: [TRAY_WIDTH, 0.01, TRAY_DEPTH], color: '#23282f' },
-    { position: [-TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: '#3a4049' },
-    { position: [TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: '#3a4049' },
-    { position: [0, TRAY_HEIGHT_RU / 2, -TRAY_DEPTH / 2], size: [TRAY_WIDTH, TRAY_HEIGHT_RU, wall], color: '#3a4049' },
+    { position: [0, 0, 0], size: [TRAY_WIDTH, 0.01, TRAY_DEPTH], color: SCENE_COLORS.trayBase },
+    { position: [-TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: SCENE_COLORS.trayWall },
+    { position: [TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: SCENE_COLORS.trayWall },
+    { position: [0, TRAY_HEIGHT_RU / 2, -TRAY_DEPTH / 2], size: [TRAY_WIDTH, TRAY_HEIGHT_RU, wall], color: SCENE_COLORS.trayWall },
     // The front of a tall shelf is mostly its parts (PSUs), so only a low lip is drawn there.
     { position: [0, frontHeight / 2, TRAY_DEPTH / 2], size: [TRAY_WIDTH, frontHeight, wall], color: frontColor },
   ];
@@ -292,7 +293,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
       <Labels placed={placed} heightRU={heightRU} />
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
-        <meshStandardMaterial color="#14181d" />
+        <meshStandardMaterial color={SCENE_COLORS.floor} />
       </mesh>
     </group>
   );
