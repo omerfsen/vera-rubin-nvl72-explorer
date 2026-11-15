@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Breadcrumb } from './components/Breadcrumb';
 import { NetworkBar } from './components/NetworkBar';
+import { SourcesPage } from './components/SourcesPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RackList } from './components/RackList';
 import { Search } from './components/Search';
@@ -169,6 +170,9 @@ export default function App() {
   const setListOpen = useExplorer((s) => s.setListOpen);
   const selected = useExplorer((s) => s.selected);
   const view = useExplorer((s) => s.view);
+  const page = useExplorer((s) => s.page);
+  const setPage = useExplorer((s) => s.setPage);
+  const embed = useExplorer((s) => s.embed);
   const trayKey = trayKeyOf(selected, model);
   const inTray = view === 'tray' && trayKey !== null;
   useKeyboard();
@@ -177,13 +181,16 @@ export default function App() {
   const showList = !webgl || listOpen;
 
   return (
-    <div className="app">
+    <div className={embed ? 'app embed' : 'app'}>
       <header className="topbar">
         <div className="brand">
           <h1>Vera Rubin NVL72 Explorer</h1>
-          <p className="tagline">Unofficial learning tool · not affiliated with NVIDIA</p>
+          <p className="tagline">Every fact linked to NVIDIA's own documentation · unofficial, not affiliated with NVIDIA</p>
         </div>
         <Search />
+        <button type="button" className="toggle" aria-pressed={page === 'sources'} onClick={() => setPage(page === 'sources' ? '' : 'sources')}>
+          Sources
+        </button>
         {webgl && (
           <button
             type="button"
@@ -200,6 +207,11 @@ export default function App() {
       <Breadcrumb />
       <NetworkBar />
 
+      {page === 'sources' ? (
+        <main className="layout-page">
+          <SourcesPage />
+        </main>
+      ) : (
       <main className={!webgl ? 'layout list-only' : showList ? 'layout with-list' : 'layout'}>
         {showList && (
           <aside className="list-pane" id="list-pane" aria-label="Rack as a list">
@@ -262,6 +274,7 @@ export default function App() {
           <SidePanel />
         </section>
       </main>
+      )}
 
       <footer className="footer">
         Data: {model.topology.meta.document.title} ({model.topology.meta.document.date}) and{' '}

@@ -6,6 +6,9 @@ import { useExplorer } from '../state/store';
 import { ROOT_ID } from '../data/model';
 import { trayKeyOf } from '../state/url';
 import { NetworkInfo } from './NetworkInfo';
+import { HostView } from './HostView';
+import { ProcedureBox, ProcedureStart } from './Procedure';
+import { Share } from './Share';
 import { LINK_COLORS, LINK_NAMES } from '../scenes/geometry';
 
 function SourceLink({ source }: { source: Source }) {
@@ -124,6 +127,7 @@ export function SidePanel() {
       <p className="sr-only" aria-live="polite">
         Selected: {title}
       </p>
+      <ProcedureBox />
       <NetworkInfo />
       <header className="panel-header">
         <p className="kind">{component.type.replace(/-/g, ' ')}</p>
@@ -249,6 +253,10 @@ export function SidePanel() {
         </section>
       )}
 
+      <HostView component={component} index={last?.index} />
+
+      <ProcedureStart component={component} />
+
       {trayLinks.length > 0 && trayId && within && (
         <section>
           <h3>Inside the tray, connected to</h3>
@@ -363,6 +371,7 @@ export function SidePanel() {
           </figure>
         )}
       </section>
+      <Share />
     </article>
   );
 }
