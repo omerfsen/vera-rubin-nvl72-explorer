@@ -9,6 +9,7 @@ import { NetworkInfo } from './NetworkInfo';
 import { HostView } from './HostView';
 import { ProcedureBox, ProcedureStart } from './Procedure';
 import { Share } from './Share';
+import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
 import { LINK_COLORS, LINK_NAMES } from '../scenes/geometry';
 
 function SourceLink({ source }: { source: Source }) {
@@ -314,6 +315,12 @@ export function SidePanel() {
       <HostView component={component} index={last?.index} />
 
       <ProcedureStart component={component} />
+
+      <SoftwareSection component={component} />
+
+      <CommandsSection component={component} />
+
+      <SafetySection component={component} />
 
       {trayLinks.length > 0 && trayId && within && (
         <section>

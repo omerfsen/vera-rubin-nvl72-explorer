@@ -230,6 +230,44 @@
           }
         }
       }
+    },
+    "software": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/software"
+      }
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/command"
+      }
+    },
+    "commandNotes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "usage",
+        "factoryReset",
+        "source"
+      ],
+      "properties": {
+        "usage": {
+          "type": "string"
+        },
+        "factoryReset": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      }
+    },
+    "safety": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/safety"
+      }
     }
   },
   "$defs": {
@@ -250,7 +288,7 @@
           "description": "A page of the DGX VR NVL72 User Guide or Service Manual, with the section anchor, or one of their PDFs.",
           "type": "string",
           "format": "uri",
-          "pattern": "^https://docs\\.nvidia\\.com/dgx/(dgxvr-user-guide/((hardware|networking|storage)\\.html(#[a-z0-9-]+)?|dgxvr-user-guide\\.pdf)|dgxvr-service-manual/((index|introduction|psu-replacement|pmm-replacement|cache-replacement|compute-battery-replacement|switch-battery-replacement)\\.html(#[a-z0-9-]+)?|dgxvr-service-manual\\.pdf))$"
+          "pattern": "^https://docs\\.nvidia\\.com/dgx/(dgxvr-user-guide/((hardware|networking|storage|software|safety|control-config|compute-tray-redfish-commands|rack-reboot-sequence|health-check)\\.html(#[a-z0-9-]+)?|dgxvr-user-guide\\.pdf)|dgxvr-service-manual/((index|introduction|psu-replacement|pmm-replacement|cache-replacement|compute-battery-replacement|switch-battery-replacement)\\.html(#[a-z0-9-]+)?|dgxvr-service-manual\\.pdf))$"
         },
         "section": {
           "type": "string",
@@ -1213,7 +1251,8 @@
         "id",
         "title",
         "component",
-        "steps"
+        "steps",
+        "kind"
       ],
       "properties": {
         "id": {
@@ -1247,9 +1286,19 @@
               "target": {
                 "type": "string",
                 "description": "Selection path to highlight for this step, on an example unit."
+              },
+              "command": {
+                "type": "string",
+                "description": "A command shown with the step, verbatim from the guide."
               }
             }
           }
+        },
+        "kind": {
+          "enum": [
+            "service",
+            "operation"
+          ]
         }
       }
     },
@@ -1300,6 +1349,127 @@
               "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-2-VRNVL72.png"
             ]
           }
+        }
+      }
+    },
+    "software": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "description",
+        "runsOn",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "runsOn": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "partOf": {
+          "$ref": "#/$defs/id"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "note": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "group",
+        "purpose",
+        "command",
+        "appliesTo",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string"
+        },
+        "group": {
+          "type": "string"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string",
+          "description": "Verbatim from the guide."
+        },
+        "appliesTo": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "text",
+        "components",
+        "procedures",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "procedures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "source": {
+          "$ref": "#/$defs/source"
         }
       }
     }

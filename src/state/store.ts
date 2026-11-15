@@ -65,7 +65,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     set({ step: n });
     // Show the part the step is about, opening its unit when it has an interior.
     const target = proc.steps[n]!.target;
-    if (target) {
+    if (target !== undefined) {
       get().select(target);
       if (target.includes('/') && trayKeyOf(target, model)) set({ view: 'tray' });
     }
@@ -141,6 +141,9 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     set({ selected: units[next]!.key });
   },
 }));
+
+// A shared link that opens a walkthrough step also shows the part that step is about.
+if (initial.proc) useExplorer.getState().goToStep(initial.step ?? 0);
 
 /** Keep the address bar in step with the store. */
 export function syncUrl(): () => void {

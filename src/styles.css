@@ -430,3 +430,32 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 
 .credits { white-space: normal; }
 .footer .credits { margin-left: 4px; }
+
+.command { position: relative; margin: 6px 0; }
+.command pre {
+  margin: 0;
+  padding: 8px 10px;
+  padding-right: 64px;
+  background: #0a0d10;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+.copy-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  cursor: pointer;
+}
+.command-group { margin: 6px 0; }
+.command-group summary { cursor: pointer; color: var(--accent); font-size: 0.9rem; }
+.command-item { margin: 8px 0 12px; font-size: 0.86rem; }
+.safety { border-left: 3px solid #e5484d; padding-left: 10px; }
+.proc-start { margin-bottom: 6px; }

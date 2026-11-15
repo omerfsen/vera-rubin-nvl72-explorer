@@ -217,6 +217,8 @@ export interface PcieDevice extends Provenance {
 export interface ProcedureStep {
   text: string;
   source: Source;
+  /** A command shown with the step, verbatim from the guide. */
+  command?: string;
   /** Selection path to highlight for this step, on an example unit. */
   target?: string;
 }
@@ -224,9 +226,42 @@ export interface ProcedureStep {
 /** A customer-replaceable unit procedure from the service manual. */
 export interface Procedure {
   id: string;
+  /** service: a customer-replaceable unit (service manual); operation: running the rack (user guide). */
+  kind: 'service' | 'operation';
   title: string;
   component: string;
   steps: ProcedureStep[];
+}
+
+export interface Software {
+  id: string;
+  name: string;
+  description: string;
+  runsOn: string[];
+  partOf?: string;
+  source: Source;
+  note?: string;
+}
+
+/** A BMC command from the guide, verbatim. */
+export interface Command {
+  id: string;
+  title: string;
+  group: string;
+  purpose: string;
+  command: string;
+  appliesTo: string[];
+  source: Source;
+  note?: string;
+}
+
+export interface SafetyNote {
+  id: string;
+  title: string;
+  text: string;
+  components: string[];
+  procedures: string[];
+  source: Source;
 }
 
 export interface Topology {
@@ -244,6 +279,10 @@ export interface Topology {
   trayLayouts?: Record<string, TrayLayout>;
   rearLayout?: RearLayout;
   pcieDevices?: PcieDevice[];
+  software?: Software[];
+  commands?: Command[];
+  commandNotes?: { usage: string; factoryReset: string; source: Source };
+  safety?: SafetyNote[];
   procedures?: Procedure[];
   /** Which two unit types the NVLink fabric joins, and through which rear part. */
   nvlinkFabric?: Provenance & { endpoints: [string, string]; through: string; description: string; textSources?: Source[] };

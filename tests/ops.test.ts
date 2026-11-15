@@ -32,10 +32,10 @@ describe('service procedures', () => {
   const procs = topology.procedures ?? [];
 
   it('covers all five customer-replaceable units from the service manual', () => {
-    expect(procs.map((p) => p.component).sort()).toEqual(
+    expect(procs.filter((p) => p.kind === 'service').map((p) => p.component).sort()).toEqual(
       ['compute-tray-battery', 'e1s-cache-drive', 'power-shelf-mgmt-module', 'psu', 'switch-tray-battery'].sort(),
     );
-    for (const p of procs) {
+    for (const p of procs.filter((x) => x.kind === 'service')) {
       const cru = model.getComponent(p.component)?.specs.find((s) => s.label === 'Customer-replaceable unit (CRU)');
       expect(cru?.value, p.id).toBe('Yes');
     }
@@ -45,8 +45,34 @@ describe('service procedures', () => {
     for (const p of procs) {
       for (const step of p.steps) {
         if (step.target) expect(model.parsePath(step.target), `${p.id}: ${step.target}`).not.toBeNull();
-        expect(step.source.url, p.id).toMatch(/dgxvr-service-manual/);
+        expect(step.source.url, p.id).toMatch(p.kind === 'service' ? /dgxvr-service-manual/ : /dgxvr-user-guide/);
       }
+    }
+  });
+});
+
+describe('operations from the user guide', () => {
+  it('has the bring-up, cold and warm reboot, post-reboot and NVSM health check walkthroughs', () => {
+    const ops = (topology.procedures ?? []).filter((p) => p.kind === 'operation').map((p) => p.id);
+    expect(ops).toEqual(['bring-up', 'cold-reboot', 'warm-reboot', 'post-reboot', 'health-check']);
+  });
+
+  it('keeps every compute tray BMC command from section 6.4.1, verbatim', () => {
+    const cmds = topology.commands ?? [];
+    expect(cmds).toHaveLength(30);
+    const off = cmds.find((c) => c.id === 'force-power-off')!;
+    expect(off.command).toContain('{"ResetType": "ForceOff"}');
+    expect(off.command).toContain('/redfish/v1/Systems/System_0/Actions/ComputerSystem.Reset');
+    for (const c of cmds) expect(c.source.section, c.id).toMatch(/^6\.4\.1\.\d+/);
+  });
+
+  it('puts software on real parts and safety notes on real parts and walkthroughs', () => {
+    const ids = new Set(topology.components.map((c) => c.id));
+    const procs = new Set((topology.procedures ?? []).map((p) => p.id));
+    for (const s of topology.software ?? []) for (const id of s.runsOn) expect(ids, s.id).toContain(id);
+    for (const s of topology.safety ?? []) {
+      for (const id of s.components) expect(ids, s.id).toContain(id);
+      for (const id of s.procedures) expect(procs, s.id).toContain(id);
     }
   });
 });
