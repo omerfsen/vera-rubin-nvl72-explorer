@@ -41,9 +41,9 @@ longer holds: such a tool needs authentication, and stdio stays the default.
 | No file paths, shell, network calls or writes in any tool | `mcp/server.ts` | Code review; the only input file is bundled at build time |
 | Read and write separated; all nine tools carry `readOnlyHint: true`, `destructiveHint: false` | `mcp/server.ts` | `tests/mcp.test.ts` "lists nine read-only tools" |
 | Rate limit on tool calls, per caller (stdio: 30 then 5/s; HTTP: 30 then 1/s per IP) | `mcp/ratelimit.ts`, `createServer` | `tests/mcp.test.ts` "a tool call over the limit comes back as an error" |
-| Rate limit on HTTP requests per IP (60 then 2/s), 429 with `Retry-After` | `mcp/http.ts` | `tests/mcp.test.ts` "answers 429"; live burst in `test-results/` |
+| Rate limit on HTTP requests per IP (60 then 2/s), 429 with `Retry-After` | `mcp/http.ts` | `tests/mcp.test.ts` "answers 429"; live burst in `results/` |
 | Host allowlist (the two domains, this project's Vercel URLs, localhost) | `mcp/http.ts` | `tests/mcp.test.ts` "refuses a foreign Host or Origin" |
-| Origin must be one of the same hosts when present (non-browser clients send none) | `mcp/http.ts` via the SDK's `originValidationResponse` | Same test; live `403` in `test-results/` |
+| Origin must be one of the same hosts when present (non-browser clients send none) | `mcp/http.ts` via the SDK's `originValidationResponse` | Same test; live `403` in `results/` |
 | Body capped at 64 KiB, and at most 16 argument elements per call | `mcp/http.ts`, `maxToolInputElements` | `tests/mcp.test.ts` "refuses a body over 64 KiB" |
 | POST only; GET and DELETE answer 405 | `mcp/http.ts` | `tests/mcp.test.ts` "takes POST only"; live check |
 | SDK errors are logged on the server, not returned; tool errors name the next step | `onerror`, `fail()` | `tests/mcp.test.ts` |

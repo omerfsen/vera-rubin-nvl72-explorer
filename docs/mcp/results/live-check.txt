@@ -1,0 +1,7 @@
+connected to https://verarubin-nvl72.faruk.net/mcp: 9 tools
+GPUs per rack: 72
+search "bluefield": bluefield-4
+compute tray 7 starts 14 RU from the top
+power-cycle-host: curl -s -k -u "root:openBmc" \...
+hostile id refused
+live check passed
