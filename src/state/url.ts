@@ -1,7 +1,7 @@
 import type { Model } from '../data/model';
 
-export type View = 'rack' | 'tray';
-export const VIEWS: readonly View[] = ['rack', 'tray'];
+export type View = 'rack' | 'rear' | 'tray';
+export const VIEWS: readonly View[] = ['rack', 'rear', 'tray'];
 
 export interface UrlState {
   view: View;

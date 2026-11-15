@@ -54,6 +54,8 @@ export const TRAY_HEIGHT = 0.11;
 /** Colour per part type inside a tray. Ports are coloured by connector type. */
 export const PART_COLORS: Partial<Record<ComponentType, string>> = {
   gpu: '#3fa796',
+  'switch-asic': '#e0a030',
+  psu: '#9aa3ad',
   cpu: '#4f7cc9',
   memory: '#c9b458',
   nic: '#d08a3a',
@@ -73,15 +75,27 @@ export const PORT_COLORS: Record<string, string> = {
 };
 
 /** Placement of one tray slot in scene units: centre and size. */
-export function slotBox(slot: { face: 'top' | 'front'; x: number; z: number; y?: number; w: number; d: number; h: number }): {
+export function slotBox(
+  slot: { face: 'top' | 'front'; x: number; z: number; y?: number; w: number; d: number; h: number },
+  heightRU = 1,
+): {
   position: [number, number, number];
   size: [number, number, number];
 } {
+  const trayHeight = TRAY_HEIGHT * heightRU;
   if (slot.face === 'front') {
-    const height = slot.h * TRAY_HEIGHT;
+    const height = slot.h * trayHeight;
     return {
-      position: [slot.x * TRAY_WIDTH, (slot.y ?? 0.5) * TRAY_HEIGHT, TRAY_DEPTH / 2 + 0.012],
+      position: [slot.x * TRAY_WIDTH, (slot.y ?? 0.5) * trayHeight, TRAY_DEPTH / 2 + 0.012],
       size: [slot.w * TRAY_WIDTH, height, 0.024],
+    };
+  }
+  if (slot.y !== undefined) {
+    // A stacked part (e.g. a PSU row): y is its bottom, h a fraction of the tray height.
+    const height = slot.h * trayHeight;
+    return {
+      position: [slot.x * TRAY_WIDTH, 0.01 + slot.y * trayHeight + height / 2, slot.z * TRAY_DEPTH],
+      size: [slot.w * TRAY_WIDTH, height, slot.d * TRAY_DEPTH],
     };
   }
   const height = slot.h * TRAY_WIDTH;
@@ -98,14 +112,23 @@ export const LINK_COLORS: Record<string, string> = {
   clink: '#f0a35f',
   nvlink: '#e8e86a',
   coolant: '#4aa8ff',
+  cooling: '#4aa8ff',
   power: '#ff6b6b',
 };
 
 export const LINK_NAMES: Record<string, string> = {
+  cooling: 'Coolant',
   pcie: 'PCIe',
   c2c: 'C2C (CPU to GPU)',
   clink: 'Clink (CPU to CPU)',
   nvlink: 'NVLink (to the cable cartridge)',
   coolant: 'Coolant',
   power: 'Power',
+};
+
+/** Colour per rear part type. */
+export const REAR_COLORS: Record<string, string> = {
+  'cable-cartridge': '#6b5a3a',
+  manifold: '#2f6f9a',
+  'bus-bar': '#a8743c',
 };

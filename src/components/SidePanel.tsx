@@ -172,6 +172,16 @@ export function SidePanel() {
         )}
       </section>
 
+      {component.rearSide && model.topology.rearLayout && (
+        <section>
+          <h3>Position</h3>
+          <p className="note">
+            {model.topology.rearLayout.assumed && <Assumed note={model.topology.rearLayout.note} />}{' '}
+            {model.topology.rearLayout.note}
+          </p>
+        </section>
+      )}
+
       {within && layout && (
         <section>
           <h3>Position</h3>

@@ -25,6 +25,8 @@ interface ExplorerState {
   stepTrayPart: (delta: number) => void;
   /** Escape: up one level, and out of the tray view at its top. */
   goUp: () => void;
+  /** Look at the rack from the front or the rear. */
+  setSide: (side: 'rack' | 'rear') => void;
 }
 
 const initial =
@@ -40,10 +42,15 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   select: (path) => {
     const segments = model.parsePath(path);
     const selected = segments === null ? '' : model.formatPath(segments);
-    // The tray view only makes sense while something inside an openable unit is selected.
-    const view = get().view === 'tray' && trayKeyOf(selected, model) === null ? 'rack' : get().view;
+    // The tray view only makes sense while something inside an openable unit is
+    // selected; a rear part is only visible from the rear.
+    let view = get().view;
+    if (view === 'tray' && trayKeyOf(selected, model) === null) view = 'rack';
+    const first = segments?.[0];
+    if (first && model.getComponent(first.id)?.rearSide) view = 'rear';
     set({ selected, view });
   },
+  setSide: (side) => set({ view: side, hovered: null }),
   openTray: () => {
     const key = trayKeyOf(get().selected, model);
     if (key) set({ view: 'tray', hovered: null });

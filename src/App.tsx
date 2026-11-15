@@ -6,7 +6,7 @@ import { Search } from './components/Search';
 import { SidePanel } from './components/SidePanel';
 import { hasWebGL } from './lib/webgl';
 import { model } from './data';
-import { LINK_COLORS, LINK_NAMES, TYPE_COLORS } from './scenes/geometry';
+import { LINK_COLORS, LINK_NAMES, REAR_COLORS, TYPE_COLORS } from './scenes/geometry';
 import { trayLegend } from './scenes/colors';
 import { trayKeyOf } from './state/url';
 import { syncUrl, useExplorer } from './state/store';
@@ -49,7 +49,12 @@ function Legend({ trayId }: { trayId: string | null }) {
     : [...new Set(model.rackUnits.map((u) => u.componentId))].map((id) => {
         const c = model.getComponent(id);
         return { label: c?.name ?? id, color: TYPE_COLORS[c?.type ?? 'rack'] ?? '#666666' };
-      });
+      }).concat(
+        [...new Set((model.topology.rearLayout?.parts ?? []).map((p) => p.component))].map((id) => {
+          const c = model.getComponent(id);
+          return { label: `${c?.name ?? id} (rear)`, color: REAR_COLORS[c?.type ?? ''] ?? '#666666' };
+        }),
+      );
   return (
     <ul className={trayId ? 'legend legend-tray' : 'legend'} aria-label="Legend">
       {rows.map((r) => (
@@ -63,8 +68,8 @@ function Legend({ trayId }: { trayId: string | null }) {
 }
 
 const LAYERS = [
-  { key: 'structure', label: 'Structure', hint: 'the bones: tray shell' },
-  { key: 'parts', label: 'Parts', hint: 'the muscles: chips, cards, drives, ports' },
+  { key: 'structure', label: 'Structure', hint: 'the bones: rack frame or tray shell' },
+  { key: 'parts', label: 'Parts', hint: 'the muscles: units, rear parts, chips, cards, drives, ports' },
   { key: 'links', label: 'Connections', hint: 'the veins: PCIe, C2C, Clink, NVLink, coolant, power' },
 ] as const;
 
@@ -72,48 +77,65 @@ const LAYERS = [
 function StageActions({ trayKey, view }: { trayKey: string | null; view: string }) {
   const openTray = useExplorer((s) => s.openTray);
   const closeTray = useExplorer((s) => s.closeTray);
+  const setSide = useExplorer((s) => s.setSide);
   const layers = useExplorer((s) => s.layers);
   const toggleLayer = useExplorer((s) => s.toggleLayer);
-  if (!trayKey) return null;
-  const name = model.segmentLabel(model.parsePath(trayKey)![0]!);
-  const trayId = trayKey.split('.')[0]!;
-  const kinds = [...new Set((model.trayLayout(trayId)?.links ?? []).map((l) => l.kind))];
+  const inTray = view === 'tray' && trayKey !== null;
+  const name = trayKey ? model.segmentLabel(model.parsePath(trayKey)![0]!) : '';
+  // Link kinds shown in the legend: the tray's own links, or the rack-level connections at the rear.
+  const kinds = inTray
+    ? [...new Set((model.trayLayout(trayKey!.split('.')[0]!)?.links ?? []).map((l) => l.kind))]
+    : [
+        ...new Set(
+          model.topology.connections
+            .filter((c) => c.to && (model.getComponent(c.from)?.rearSide || model.getComponent(c.to)?.rearSide))
+            .map((c) => c.kind),
+        ),
+      ];
   return (
     <div className="stage-actions">
-      {view === 'tray' ? (
-        <>
-          <button type="button" onClick={closeTray}>
-            ← Back to rack
-          </button>
-          <div className="layer-toggles" role="group" aria-label="Layers">
-            {LAYERS.map((l) => (
-              <button
-                key={l.key}
-                type="button"
-                aria-pressed={layers[l.key]}
-                title={`Show or hide ${l.hint}`}
-                onClick={() => toggleLayer(l.key)}
-              >
-                {l.label}
-              </button>
-            ))}
-          </div>
-          {layers.links && (
-            <ul className="link-legend" aria-label="Connection types">
-              {kinds.map((k) => (
-                <li key={k}>
-                  <span className="line-swatch" style={{ background: LINK_COLORS[k] }} aria-hidden="true" />
-                  {LINK_NAMES[k] ?? k}
-                </li>
-              ))}
-              <li className="muted">Dashed: assumed, see the panel</li>
-            </ul>
-          )}
-        </>
-      ) : (
-        <button type="button" onClick={openTray}>
-          Open {name}
+      {inTray ? (
+        <button type="button" onClick={closeTray}>
+          ← Back to rack
         </button>
+      ) : (
+        <div className="layer-toggles" role="group" aria-label="Side of the rack">
+          <button type="button" aria-pressed={view !== 'rear'} onClick={() => setSide('rack')}>
+            Front
+          </button>
+          <button type="button" aria-pressed={view === 'rear'} onClick={() => setSide('rear')}>
+            Rear
+          </button>
+          {trayKey && (
+            <button type="button" className="open-button" onClick={openTray}>
+              Open {name}
+            </button>
+          )}
+        </div>
+      )}
+      <div className="layer-toggles" role="group" aria-label="Layers">
+        {LAYERS.map((l) => (
+          <button
+            key={l.key}
+            type="button"
+            aria-pressed={layers[l.key]}
+            title={`Show or hide ${l.hint}`}
+            onClick={() => toggleLayer(l.key)}
+          >
+            {l.label}
+          </button>
+        ))}
+      </div>
+      {layers.links && (inTray || view === 'rear') && (
+        <ul className="link-legend" aria-label="Connection types">
+          {kinds.map((k) => (
+            <li key={k}>
+              <span className="line-swatch" style={{ background: LINK_COLORS[k] }} aria-hidden="true" />
+              {LINK_NAMES[k] ?? k}
+            </li>
+          ))}
+          {inTray && <li className="muted">Dashed: assumed, see the panel</li>}
+        </ul>
       )}
     </div>
   );
@@ -194,10 +216,17 @@ export default function App() {
                   <span className="hint-long">Click a part · drag to rotate · scroll or pinch to zoom · ↑ ↓ to step · Esc to go back</span>
                   <span className="hint-short">Tap a part · drag to rotate · pinch to zoom</span>
                 </>
+              ) : view === 'rear' ? (
+                <>
+                  <span className="hint-long">
+                    Rear: click a cartridge, manifold or the bus bar · lines show NVLink, coolant and power to every unit
+                  </span>
+                  <span className="hint-short">Tap a rear part · drag to rotate</span>
+                </>
               ) : (
                 <>
                   <span className="hint-long">
-                    Click a unit, click again to open a compute tray · drag to rotate · ↑ ↓ to step · Enter to open · Esc to go back
+                    Click a unit, click again to open it · drag to rotate · ↑ ↓ to step · Enter to open · Esc to go back
                   </span>
                   <span className="hint-short">Tap a unit, tap again to open · drag to rotate</span>
                 </>

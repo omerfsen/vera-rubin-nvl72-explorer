@@ -1292,6 +1292,45 @@
       "note": "Count read from the manual's singular wording ('the battery')."
     },
     {
+      "id": "switch-tray-ssd",
+      "type": "drive",
+      "name": "Switch tray SSD",
+      "count": 1,
+      "parent": "switch-tray",
+      "description": "SSD in the NVLink switch tray.",
+      "function": "The guide labels it but does not describe it. The switch tray runs NVOS (section 4.4).",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+      },
+      "note": "Count from the single 'SSD' label in Fig. 7."
+    },
+    {
+      "id": "switch-board",
+      "type": "board",
+      "name": "Switch board with power distribution (SWB w/ PDB)",
+      "count": 1,
+      "parent": "switch-tray",
+      "description": "The main board of the switch tray, labelled 'SWB w/ PDB' in Fig. 7.",
+      "function": "Carries the NVSwitch chips. The guide does not describe it further.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Label in Fig. 7",
+          "value": "SWB w/ PDB"
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+      },
+      "note": "Fig. 7 labels it 'SWB w/ PDB' and does not expand the abbreviations; 'switch board with power distribution board' is this app's reading."
+    },
+    {
       "id": "power-shelf",
       "type": "power-shelf",
       "name": "Power shelf",
@@ -1899,6 +1938,32 @@
       },
       "note": "Fig. 7 shows the tray's water connections; the guide does not say in words that they connect to these manifolds.",
       "assumed": true
+    },
+    {
+      "id": "busbar-ct",
+      "from": "bus-bar",
+      "to": "compute-tray",
+      "kind": "power",
+      "description": "The bus bar distributes the 54 V DC to the rack components; the compute tray takes it through the bus bar connector at its rear.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
+      }
+    },
+    {
+      "id": "busbar-st",
+      "from": "bus-bar",
+      "to": "switch-tray",
+      "kind": "power",
+      "description": "The bus bar distributes the 54 V DC to the rack components; the switch tray has a power connector at its rear.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+      },
+      "assumed": true,
+      "note": "Fig. 7 labels the switch tray's rear power connector but does not say it connects to the bus bar."
     }
   ],
   "trayLayouts": {
@@ -2908,7 +2973,752 @@
           "assumed": true,
           "note": "Fig. 5 labels a bus bar connector at the rear and a Power Distribution Board; that one feeds the other is read from their names, not stated."
         }
+      ],
+      "heightRU": 1
+    },
+    "switch-tray": {
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+      },
+      "assumed": true,
+      "heightRU": 1,
+      "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: four NVSwitch chips on the switch board, with the water and power connectors at the rear (Fig. 7). Front: battery and SSD, and the five RJ45 ports from left to right as in Table 2.5.",
+      "sources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
+          "section": "2.5 NVLink Switch Network Ports, port table"
+        }
+      ],
+      "notPlaced": [
+        {
+          "component": "switch-bmc",
+          "reason": "Fig. 7 does not show where the BMC is."
+        },
+        {
+          "component": "cpu-erot",
+          "reason": "Fig. 7 does not show where the CPU ERoT is."
+        }
+      ],
+      "points": [
+        {
+          "id": "nvlink-connectors",
+          "label": "NVLink connectors to the cable cartridge",
+          "x": 0.2,
+          "z": -0.5
+        },
+        {
+          "id": "power-connector",
+          "label": "Power connector",
+          "x": 0.0,
+          "z": -0.5
+        },
+        {
+          "id": "cold-water-inlet",
+          "label": "Cold water inlet",
+          "x": 0.42,
+          "z": -0.5
+        },
+        {
+          "id": "hot-water-outlet",
+          "label": "Hot water outlet",
+          "x": -0.42,
+          "z": -0.5
+        }
+      ],
+      "slots": [
+        {
+          "component": "switch-board",
+          "index": 1,
+          "face": "top",
+          "x": 0.0,
+          "z": -0.22,
+          "w": 0.72,
+          "d": 0.48,
+          "h": 0.006
+        },
+        {
+          "component": "nvswitch-asic",
+          "index": 1,
+          "face": "top",
+          "x": -0.18,
+          "z": -0.34,
+          "w": 0.15,
+          "d": 0.13,
+          "h": 0.03
+        },
+        {
+          "component": "nvswitch-asic",
+          "index": 2,
+          "face": "top",
+          "x": 0.18,
+          "z": -0.34,
+          "w": 0.15,
+          "d": 0.13,
+          "h": 0.03
+        },
+        {
+          "component": "nvswitch-asic",
+          "index": 3,
+          "face": "top",
+          "x": -0.18,
+          "z": -0.1,
+          "w": 0.15,
+          "d": 0.13,
+          "h": 0.03
+        },
+        {
+          "component": "nvswitch-asic",
+          "index": 4,
+          "face": "top",
+          "x": 0.18,
+          "z": -0.1,
+          "w": 0.15,
+          "d": 0.13,
+          "h": 0.03
+        },
+        {
+          "component": "switch-tray-battery",
+          "index": 1,
+          "face": "top",
+          "x": 0.12,
+          "z": 0.3,
+          "w": 0.05,
+          "d": 0.05,
+          "h": 0.015
+        },
+        {
+          "component": "switch-tray-ssd",
+          "index": 1,
+          "face": "top",
+          "x": 0.26,
+          "z": 0.3,
+          "w": 0.07,
+          "d": 0.06,
+          "h": 0.01
+        },
+        {
+          "component": "st-port-rs232",
+          "index": 1,
+          "face": "front",
+          "x": -0.42,
+          "z": 0.5,
+          "w": 0.06,
+          "d": 0.03,
+          "h": 0.4,
+          "y": 0.45
+        },
+        {
+          "component": "st-port-bmc-eth",
+          "index": 1,
+          "face": "front",
+          "x": -0.34,
+          "z": 0.5,
+          "w": 0.06,
+          "d": 0.03,
+          "h": 0.4,
+          "y": 0.45
+        },
+        {
+          "component": "st-port-switch-mgmt",
+          "index": 1,
+          "face": "front",
+          "x": -0.26,
+          "z": 0.5,
+          "w": 0.06,
+          "d": 0.03,
+          "h": 0.4,
+          "y": 0.45
+        },
+        {
+          "component": "st-port-switch-mgmt",
+          "index": 2,
+          "face": "front",
+          "x": -0.18,
+          "z": 0.5,
+          "w": 0.06,
+          "d": 0.03,
+          "h": 0.4,
+          "y": 0.45
+        },
+        {
+          "component": "st-port-leakage",
+          "index": 1,
+          "face": "front",
+          "x": -0.1,
+          "z": 0.5,
+          "w": 0.06,
+          "d": 0.03,
+          "h": 0.4,
+          "y": 0.45
+        }
+      ],
+      "links": [
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "nvswitch-asic",
+            "index": 1
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+            "section": "2.1 NVLink Networking"
+          },
+          "assumed": true,
+          "note": "NVLink connectors at the back of the tray plug into the cable cartridges (2.1); the routing inside the tray is not shown."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "nvswitch-asic",
+            "index": 2
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+            "section": "2.1 NVLink Networking"
+          },
+          "assumed": true,
+          "note": "NVLink connectors at the back of the tray plug into the cable cartridges (2.1); the routing inside the tray is not shown."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "nvswitch-asic",
+            "index": 3
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+            "section": "2.1 NVLink Networking"
+          },
+          "assumed": true,
+          "note": "NVLink connectors at the back of the tray plug into the cable cartridges (2.1); the routing inside the tray is not shown."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "nvswitch-asic",
+            "index": 4
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+            "section": "2.1 NVLink Networking"
+          },
+          "assumed": true,
+          "note": "NVLink connectors at the back of the tray plug into the cable cartridges (2.1); the routing inside the tray is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "point": "cold-water-inlet"
+          },
+          "to": {
+            "component": "nvswitch-asic",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "note": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "nvswitch-asic",
+            "index": 1
+          },
+          "to": {
+            "point": "hot-water-outlet"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "note": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "point": "cold-water-inlet"
+          },
+          "to": {
+            "component": "nvswitch-asic",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "note": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "nvswitch-asic",
+            "index": 2
+          },
+          "to": {
+            "point": "hot-water-outlet"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "note": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "point": "cold-water-inlet"
+          },
+          "to": {
+            "component": "nvswitch-asic",
+            "index": 3
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "note": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "nvswitch-asic",
+            "index": 3
+          },
+          "to": {
+            "point": "hot-water-outlet"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "note": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "point": "cold-water-inlet"
+          },
+          "to": {
+            "component": "nvswitch-asic",
+            "index": 4
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "note": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "nvswitch-asic",
+            "index": 4
+          },
+          "to": {
+            "point": "hot-water-outlet"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "note": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "point": "power-connector"
+          },
+          "to": {
+            "component": "switch-board",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 7 labels a power connector at the rear and the 'SWB w/ PDB'; that one feeds the other is read from their names."
+        }
+      ]
+    },
+    "power-shelf": {
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+        "section": "1.4 Power Shelves, Fig. 8 (Power Shelf)",
+        "figure": "hardware-power-shelf-VRNVL72.png"
+      },
+      "assumed": true,
+      "heightRU": 3,
+      "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Six PSUs in three rows of two, numbered 1 to 6 left to right and top to bottom as in the service manual; the management module on the left (Fig. 8). AC input and the DC output to the bus bar are at the rear.",
+      "sources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+          "section": "Service Manual 2.2 Identify the Failed Power Supply (power shelf figure)"
+        }
+      ],
+      "points": [
+        {
+          "id": "ac-whip-1",
+          "label": "AC power whip 1 (100 A, 415-480 V AC)",
+          "x": -0.3,
+          "z": -0.5
+        },
+        {
+          "id": "ac-whip-2",
+          "label": "AC power whip 2 (100 A, 415-480 V AC)",
+          "x": 0.3,
+          "z": -0.5
+        },
+        {
+          "id": "bus-bar-output",
+          "label": "54 V DC output to the bus bar",
+          "x": 0.0,
+          "z": -0.5
+        }
+      ],
+      "slots": [
+        {
+          "component": "power-shelf-mgmt-module",
+          "index": 1,
+          "face": "top",
+          "x": -0.465,
+          "z": 0.3,
+          "w": 0.05,
+          "d": 0.38,
+          "h": 0.9,
+          "y": 0.05
+        },
+        {
+          "component": "psu",
+          "index": 1,
+          "label": "PSU 1",
+          "face": "top",
+          "x": -0.2,
+          "z": 0.04,
+          "w": 0.43,
+          "d": 0.88,
+          "h": 0.28,
+          "y": 0.68
+        },
+        {
+          "component": "psu",
+          "index": 2,
+          "label": "PSU 2",
+          "face": "top",
+          "x": 0.25,
+          "z": 0.04,
+          "w": 0.43,
+          "d": 0.88,
+          "h": 0.28,
+          "y": 0.68
+        },
+        {
+          "component": "psu",
+          "index": 3,
+          "label": "PSU 3",
+          "face": "top",
+          "x": -0.2,
+          "z": 0.04,
+          "w": 0.43,
+          "d": 0.88,
+          "h": 0.28,
+          "y": 0.36
+        },
+        {
+          "component": "psu",
+          "index": 4,
+          "label": "PSU 4",
+          "face": "top",
+          "x": 0.25,
+          "z": 0.04,
+          "w": 0.43,
+          "d": 0.88,
+          "h": 0.28,
+          "y": 0.36
+        },
+        {
+          "component": "psu",
+          "index": 5,
+          "label": "PSU 5",
+          "face": "top",
+          "x": -0.2,
+          "z": 0.04,
+          "w": 0.43,
+          "d": 0.88,
+          "h": 0.28,
+          "y": 0.04
+        },
+        {
+          "component": "psu",
+          "index": 6,
+          "label": "PSU 6",
+          "face": "top",
+          "x": 0.25,
+          "z": 0.04,
+          "w": 0.43,
+          "d": 0.88,
+          "h": 0.28,
+          "y": 0.04
+        }
+      ],
+      "links": [
+        {
+          "kind": "power",
+          "from": {
+            "point": "ac-whip-1"
+          },
+          "to": {
+            "component": "psu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "component": "psu",
+            "index": 1
+          },
+          "to": {
+            "point": "bus-bar-output"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "point": "ac-whip-2"
+          },
+          "to": {
+            "component": "psu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "component": "psu",
+            "index": 2
+          },
+          "to": {
+            "point": "bus-bar-output"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "point": "ac-whip-1"
+          },
+          "to": {
+            "component": "psu",
+            "index": 3
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "component": "psu",
+            "index": 3
+          },
+          "to": {
+            "point": "bus-bar-output"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "point": "ac-whip-2"
+          },
+          "to": {
+            "component": "psu",
+            "index": 4
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "component": "psu",
+            "index": 4
+          },
+          "to": {
+            "point": "bus-bar-output"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "point": "ac-whip-1"
+          },
+          "to": {
+            "component": "psu",
+            "index": 5
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "component": "psu",
+            "index": 5
+          },
+          "to": {
+            "point": "bus-bar-output"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "point": "ac-whip-2"
+          },
+          "to": {
+            "component": "psu",
+            "index": 6
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "component": "psu",
+            "index": 6
+          },
+          "to": {
+            "point": "bus-bar-output"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          },
+          "assumed": true,
+          "note": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown."
+        }
       ]
     }
+  },
+  "rearLayout": {
+    "source": {
+      "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+      "section": "1.1 Rack Configuration, Fig. 2 (Rack Rear View)",
+      "figure": "hardware-rack-rear-VRNVL72.png"
+    },
+    "assumed": true,
+    "note": "Schematic placement behind the units, not to scale. Fig. 2 shows the cable cartridges in the middle of the rear, two liquid cooling manifolds and the power bus bar; their exact positions and spans are not given.",
+    "parts": [
+      {
+        "component": "nvlink-cable-cartridge",
+        "x": 0.0,
+        "w": 0.46,
+        "from": "compute-tray.1",
+        "to": "compute-tray.18"
+      },
+      {
+        "component": "liquid-cooling-manifold",
+        "x": -0.42,
+        "w": 0.06,
+        "from": "top",
+        "to": "bottom"
+      },
+      {
+        "component": "liquid-cooling-manifold",
+        "x": 0.42,
+        "w": 0.06,
+        "from": "top",
+        "to": "bottom"
+      },
+      {
+        "component": "bus-bar",
+        "x": 0.31,
+        "w": 0.05,
+        "from": "top",
+        "to": "bottom"
+      }
+    ]
   }
 }

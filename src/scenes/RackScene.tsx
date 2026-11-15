@@ -4,6 +4,7 @@ import { Html } from '@react-three/drei';
 import { Color, InstancedMesh, Matrix4, Object3D } from 'three';
 import { model } from '../data';
 import { useExplorer } from '../state/store';
+import { RearScene } from './RearScene';
 import {
   FRAME_POST,
   FRAME_WIDTH,
@@ -243,17 +244,17 @@ export function rackCameraDistance(fovDeg: number): number {
   return ((height / 2) * 1.2) / Math.tan(((fovDeg / 2) * Math.PI) / 180) + UNIT_DEPTH / 2;
 }
 
-/** The whole rack: frame, units, handles, group labels and floor. */
-export function RackScene() {
+/** The whole rack: frame, units, handles, rear parts, group labels and floor. */
+export function RackScene({ rear }: { rear: boolean }) {
   const height = frameHeight(model.totalRU);
+  const layers = useExplorer((s) => s.layers);
   return (
     <group>
-      <RackFrame />
-      {unitTypes.map((id) => (
-        <UnitInstances key={id} componentId={id} />
-      ))}
-      <Handles />
-      <GroupLabels />
+      {layers.structure && <RackFrame />}
+      {layers.parts && unitTypes.map((id) => <UnitInstances key={id} componentId={id} />)}
+      {layers.parts && <Handles />}
+      <RearScene />
+      {!rear && <GroupLabels />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
         <meshStandardMaterial color="#14181d" />

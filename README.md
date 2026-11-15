@@ -26,7 +26,7 @@ Milestone 1 of 4:
 - [x] **M1**: rack view with clickable trays, switch trays, power shelves and
   ToR switches; side panel; breadcrumb; search; list view; URL state
 - [x] **M2**: compute tray interior, every part clickable
-- [ ] **M3**: switch tray, power shelf and rear view (cartridges, manifolds, bus bar)
+- [x] **M3**: switch tray, power shelf and rear view (cartridges, manifolds, bus bar)
 - [ ] **M4**: network overlay for the seven networks
 
 ## Source of truth
@@ -105,6 +105,11 @@ VITE_SHOW_OFFICIAL_FIGURES=true npm run build
   SOCAMM, ConnectX-9, BlueField-4, drives, BMC/HMC, ports and more. The
   interior layout is schematic (marked *assumed*): it follows the arrangement
   in NVIDIA's top and front views but is not traced from them or to scale.
+- Switch trays and power shelves open the same way. Power shelf PSUs are
+  numbered 1 to 6 as in NVIDIA's service manual.
+- **Rear** shows the back of the rack: the NVLink cable cartridges, the two
+  liquid cooling manifolds and the bus bar, with every unit's NVLink, coolant
+  and power connection to them. Selecting a unit lights up its own.
 - Inside a tray, three layers can be switched on and off, like an anatomy
   chart: **Structure** (the bones: tray shell), **Parts** (the muscles) and
   **Connections** (the veins: PCIe, C2C, Clink, NVLink, coolant and power,
