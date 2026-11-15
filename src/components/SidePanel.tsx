@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { model } from '../data';
 import type { Component, Connection, Source, Spec } from '../data/types';
 import { SHOW_OFFICIAL_FIGURES, officialFigureUrl } from '../config/flags';
@@ -39,12 +40,25 @@ function SpecRow({ spec, component }: { spec: Spec; component: Component }) {
   );
 }
 
+/** The other end of a connection, unless the description already names it. */
 function connectionText(c: Connection, selfId: string): string {
   const other = c.from === selfId ? c.to : c.from;
   const parts: string[] = [];
   if (other) parts.push(model.getComponent(other)?.name ?? other);
   if (c.network) parts.push(model.getNetwork(c.network)?.name ?? c.network);
-  return parts.join(' · ');
+  return parts.filter((p) => !c.description.includes(p)).join(' · ');
+}
+
+/** "compute tray", "power shelf": generic unit names read better lowercased; product names keep their case. */
+function perLabel(parent: Component): string {
+  const generic: Partial<Record<Component['type'], string>> = {
+    rack: 'rack',
+    'compute-tray': 'compute tray',
+    'switch-tray': 'switch tray',
+    'power-shelf': 'power shelf',
+    'tor-switch': 'top-of-rack switch',
+  };
+  return generic[parent.type] ?? parent.name;
 }
 
 function countText(c: Component, index: number | undefined): string[] {
@@ -53,9 +67,9 @@ function countText(c: Component, index: number | undefined): string[] {
   if (c.count === null) {
     lines.push('The guide does not state how many.');
   } else if (parent) {
-    lines.push(`${c.count} per ${parent.id === ROOT_ID ? 'rack' : parent.name.toLowerCase()}`);
+    lines.push(`${c.count} per ${perLabel(parent)}`);
   } else {
-    lines.push(`${c.count}`);
+    lines.push('One rack: 72 GPUs in a single NVLink domain.');
   }
   const total = model.totalPerRack(c.id);
   if (total !== null && parent && parent.id !== ROOT_ID) lines.push(`${total} per rack (computed)`);
@@ -77,12 +91,24 @@ export function SidePanel() {
   const numbering = model.topology.rackLayout.numbering;
   const isNumberedUnit = last?.index !== undefined && segments.length === 1 && model.isRackUnitType(component.id);
   const height = model.isRackUnitType(component.id) ? model.topology.rackLayout.heightsRU?.[component.id] : undefined;
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  // After a selection made from a control that then disappears (a breadcrumb
+  // step, a part button, a search result), focus would fall to <body>.
+  // Move it to the new heading instead so keyboard users stay in place.
+  useEffect(() => {
+    const active = document.activeElement;
+    if (!active || active === document.body || !active.isConnected) headingRef.current?.focus({ preventScroll: true });
+  }, [selected]);
 
   return (
-    <article className="panel-body" aria-live="polite">
+    <article className="panel-body" aria-labelledby="panel-title">
+      <p className="sr-only" aria-live="polite">
+        Selected: {title}
+      </p>
       <header className="panel-header">
         <p className="kind">{component.type.replace(/-/g, ' ')}</p>
-        <h2>
+        <h2 id="panel-title" ref={headingRef} tabIndex={-1}>
           {title} {component.assumed && <Assumed note={component.note} />}
         </h2>
       </header>
@@ -131,12 +157,31 @@ export function SidePanel() {
               <li key={n.id} className={ownNetworks.has(n.id) ? 'chip' : 'chip chip-sub'} title={n.description}>
                 <span className="chip-num">{n.number}</span> {n.name}
                 {n.fabric ? <span className="chip-fabric"> · {n.fabric}</span> : null}
+                {!ownNetworks.has(n.id) && <span className="sr-only"> (through a part inside)</span>}
               </li>
             ))}
           </ul>
         )}
         {networks.some((n) => !ownNetworks.has(n.id)) && (
-          <p className="muted small">Lighter chips: reached through a part inside it.</p>
+          <p className="muted small">Dashed chips: reached through a part inside it.</p>
+        )}
+        {networks.length > 0 && (
+          <details className="net-details">
+            <summary>What these networks do</summary>
+            <dl>
+              {networks.map((n) => (
+                <div key={n.id}>
+                  <dt>
+                    {n.number}. {n.name}
+                  </dt>
+                  <dd>
+                    {n.description}
+                    {n.note && <span className="note"> {n.note}</span>}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </details>
         )}
       </section>
 
@@ -160,7 +205,9 @@ export function SidePanel() {
             {connections.map((c) => (
               <li key={c.id}>
                 <span className="conn-kind">{c.kind}</span> {c.description}
-                <span className="muted"> ({connectionText(c, component.id)})</span>
+                {connectionText(c, component.id) && <span className="muted"> ({connectionText(c, component.id)})</span>}
+                {c.assumed && <Assumed note={c.note} />}
+                {c.note && <div className="note">{c.note}</div>}
                 <div className="spec-source">
                   Source: <SourceLink source={c.source} />
                 </div>
@@ -191,10 +238,12 @@ export function SidePanel() {
         </section>
       )}
 
-      {component.note && !component.assumed && (
+      {component.note && (
         <section>
           <h3>Note</h3>
-          <p className="note">{component.note}</p>
+          <p className="note">
+            {component.assumed && <Assumed note={component.note} />} {component.note}
+          </p>
         </section>
       )}
 

@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { model } from '../data';
 import { useExplorer } from '../state/store';
 import { search } from './search';
@@ -6,14 +6,21 @@ import { search } from './search';
 export function Search() {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
+  const [open, setOpen] = useState(false);
   const select = useExplorer((s) => s.select);
   const listId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const hits = useMemo(() => search(model, query), [query]);
+  const showList = open && hits.length > 0;
+
+  useEffect(() => {
+    if (showList) document.getElementById(`${listId}-${active}`)?.scrollIntoView({ block: 'nearest' });
+  }, [active, showList, listId]);
 
   const choose = (path: string) => {
     select(path);
     setQuery('');
+    setOpen(false);
     inputRef.current?.blur();
   };
 
@@ -28,7 +35,11 @@ export function Search() {
       e.preventDefault();
       choose(hits[active].path);
     } else if (e.key === 'Escape') {
-      setQuery('');
+      // Close the results first; the global Escape (go up a level) must not fire.
+      e.preventDefault();
+      e.stopPropagation();
+      if (showList) setOpen(false);
+      else setQuery('');
     }
   };
 
@@ -41,17 +52,21 @@ export function Search() {
         placeholder="Search parts, e.g. gpu, bluefield, tray 7"
         aria-label="Search parts"
         role="combobox"
-        aria-expanded={hits.length > 0}
+        aria-expanded={showList}
         aria-controls={listId}
-        aria-activedescendant={hits.length > 0 ? `${listId}-${active}` : undefined}
+        aria-autocomplete="list"
+        aria-activedescendant={showList ? `${listId}-${active}` : undefined}
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
           setActive(0);
+          setOpen(true);
         }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
         onKeyDown={onKeyDown}
       />
-      {hits.length > 0 && (
+      {showList && (
         <ul id={listId} role="listbox" className="search-results">
           {hits.map((h, i) => (
             <li

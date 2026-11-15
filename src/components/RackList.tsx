@@ -30,7 +30,8 @@ export function RackList() {
                 <li key={u.key}>
                   <button
                     type="button"
-                    aria-pressed={current === u.key}
+                    aria-current={current === u.key ? 'true' : undefined}
+                    ref={current === u.key ? (el) => el?.scrollIntoView({ block: 'nearest' }) : undefined}
                     className={current === u.key ? 'selected' : undefined}
                     onClick={() => select(u.key)}
                   >
@@ -52,7 +53,7 @@ export function RackList() {
           <li key={c.id}>
             <button
               type="button"
-              aria-pressed={current === c.id}
+              aria-current={current === c.id ? 'true' : undefined}
               className={current === c.id ? 'selected' : undefined}
               onClick={() => select(c.id)}
             >

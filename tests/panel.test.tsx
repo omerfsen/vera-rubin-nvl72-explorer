@@ -48,3 +48,41 @@ describe('side panel', () => {
     expect(container.querySelector('img')).toBeNull();
   });
 });
+
+describe('side panel accessibility and wording', () => {
+  it('moves focus to the new heading after a breadcrumb step removes the focused control', () => {
+    useExplorer.setState({ selected: 'compute-tray.7/rubin-gpu' });
+    render(
+      <>
+        <Breadcrumb />
+        <SidePanel />
+      </>,
+    );
+    const crumb = screen.getByRole('button', { name: 'Compute tray 7' });
+    crumb.focus();
+    fireEvent.click(crumb);
+    expect(document.activeElement?.id).toBe('panel-title');
+    expect(document.activeElement?.textContent).toContain('Compute tray 7');
+  });
+
+  it('announces only the selected title, not the whole panel', () => {
+    useExplorer.setState({ selected: 'switch-tray.2' });
+    const { container } = render(<SidePanel />);
+    const live = container.querySelectorAll('[aria-live]');
+    expect(live.length).toBe(1);
+    expect(live[0]!.textContent).toBe('Selected: NVLink 6 switch tray 2');
+  });
+
+  it('shows no empty brackets for a port that is not connected', () => {
+    useExplorer.setState({ selected: 'compute-tray/ct-port-lan-1gbe' });
+    const { container } = render(<SidePanel />);
+    expect(container.textContent).not.toContain('()');
+  });
+
+  it('cites the service manual for power shelf numbering instead of marking it assumed', () => {
+    useExplorer.setState({ selected: 'power-shelf.1' });
+    render(<SidePanel />);
+    expect(screen.getByText(/numbers the shelves 1 to 4 from the bottom/)).toBeTruthy();
+    expect(screen.queryByText('assumed')).toBeNull();
+  });
+});

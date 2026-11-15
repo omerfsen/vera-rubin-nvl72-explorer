@@ -1579,7 +1579,7 @@
         "figure": "hardware-rack-configuration-VRNVL72.png"
       },
       "assumed": true,
-      "note": "The guide does not number compute trays or switch trays by rack position (Fig. 4 numbers switch trays 1 to 9 without saying where each sits). This app numbers them from the top of the rack down (Compute tray 1 is the highest compute tray).",
+      "note": "NVIDIA does not number these units by rack position (the block diagram numbers switch trays 1 to 9 without saying where each sits). This app numbers them from the top of the rack down.",
       "overrides": {
         "power-shelf": {
           "order": "bottom-to-top",
