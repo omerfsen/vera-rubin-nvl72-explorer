@@ -10,6 +10,7 @@ import {
   CONFLICT_COLOR,
   DIM_COLOR,
   HOVER_COLOR,
+  LED_COLORS,
   NETWORK_COLORS,
   LINK_COLORS,
   SELECTED_COLOR,
@@ -133,6 +134,33 @@ function TrayShell({ heightRU, frontColor }: { heightRU: number; frontColor: str
 }
 
 type Vec = [number, number, number];
+
+/** Status LEDs on the front face of parts that have them (PSUs, the management module). */
+function Indicators({ layout }: { layout: TrayLayout }) {
+  const heightRU = layout.heightRU ?? 1;
+  const leds = layout.slots.flatMap((slot) =>
+    (slot.indicators ?? []).map((led, k) => {
+      const box = slotBox(slot, heightRU);
+      const s = Math.min(0.02, box.size[1] * 0.18);
+      const position: Vec = [
+        box.position[0] - box.size[0] / 2 + s * (1.4 + k * 2),
+        box.position[1] + box.size[1] / 2 - s * 1.4,
+        box.position[2] + box.size[2] / 2 + 0.003,
+      ];
+      return { key: `${slot.component}.${slot.index ?? 0}.${k}`, position, s, color: LED_COLORS[led.color] ?? '#ffffff' };
+    }),
+  );
+  return (
+    <group>
+      {leds.map((l) => (
+        <mesh key={l.key} position={l.position} raycast={() => null}>
+          <boxGeometry args={[l.s, l.s, 0.004]} />
+          <meshBasicMaterial color={l.color} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
 
 /** Where a link attaches: the top centre of a part, or a named point on the tray floor. */
 function endPosition(layout: TrayLayout, end: LinkEnd): Vec | null {
@@ -259,6 +287,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
         groups.map(([component, items]) => (
           <PartInstances key={component} trayKey={trayKey} items={items} heightRU={heightRU} />
         ))}
+      {layers.parts && <Indicators layout={layout} />}
       {layers.links && <TrayLinks trayKey={trayKey} layout={layout} />}
       <Labels placed={placed} heightRU={heightRU} />
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>

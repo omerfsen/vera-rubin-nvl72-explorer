@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useThree, type ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import { Color, InstancedMesh, Object3D, Quaternion, Vector3 } from 'three';
+import { Color, InstancedMesh, Object3D } from 'three';
+import { Rods } from './Rods';
 import { model } from '../data';
 import type { RearPart } from '../data/types';
 import { useExplorer } from '../state/store';
@@ -10,10 +11,8 @@ import { FRAME_WIDTH, HOVER_COLOR, LINK_COLORS, REAR_COLORS, RU, SELECTED_COLOR,
 const DRAG_THRESHOLD = 6;
 /** Rear parts stand well behind the units so the connections between them are visible. */
 const REAR_Z = -UNIT_DEPTH / 2 - 0.24;
-const ROD = 0.012;
 const BACK_FACE = -UNIT_DEPTH / 2;
 const scratch = new Object3D();
-const ALONG = new Vector3(0, 0, 1);
 
 type Vec = [number, number, number];
 
@@ -228,39 +227,6 @@ export function fabricSegments(unitKey: string, boxes: RearBox[]): RearSegment[]
     const x = cartridge.position[0] - half + ((i + 0.5) / peers.length) * half * 2;
     return { kind: 'nvlink', unitKey, rearPath: p.key, from: [x, yOf(unit), z], to: [x, yOf(p), z] };
   });
-}
-
-/** Rods between two points, in any direction, as one InstancedMesh. */
-function Rods({ list, color, opacity, thickness = ROD }: { list: RearSegment[]; color: string; opacity: number; thickness?: number }) {
-  const ref = useRef<InstancedMesh>(null);
-  const invalidate = useThree((s) => s.invalidate);
-  useLayoutEffect(() => {
-    const mesh = ref.current;
-    if (!mesh) return;
-    const dir = new Vector3();
-    const q = new Quaternion();
-    list.forEach((s, i) => {
-      dir.set(s.to[0] - s.from[0], s.to[1] - s.from[1], s.to[2] - s.from[2]);
-      const length = dir.length();
-      q.setFromUnitVectors(ALONG, dir.normalize());
-      scratch.position.set((s.from[0] + s.to[0]) / 2, (s.from[1] + s.to[1]) / 2, (s.from[2] + s.to[2]) / 2);
-      scratch.quaternion.copy(q);
-      scratch.scale.set(thickness, thickness, length);
-      scratch.updateMatrix();
-      mesh.setMatrixAt(i, scratch.matrix);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
-    mesh.computeBoundingSphere();
-    scratch.quaternion.identity();
-    invalidate();
-  }, [list, invalidate, thickness]);
-  if (list.length === 0) return null;
-  return (
-    <instancedMesh ref={ref} args={[undefined, undefined, list.length]} raycast={() => null}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial color={color} transparent opacity={opacity} />
-    </instancedMesh>
-  );
 }
 
 /** The rack's "veins" behind the units: bright for the selection, faint otherwise, plus the NVLink fan-out. */

@@ -61,10 +61,11 @@ describe('switch tray and power shelf specifics', () => {
     ]);
   });
 
-  it('opens switch trays and power shelves but not ToR switches', () => {
+  it('opens switch trays, power shelves and ToR switches, but not rear parts', () => {
     expect(trayKeyOf('switch-tray.4', model)).toBe('switch-tray.4');
     expect(trayKeyOf('power-shelf.1/psu.3', model)).toBe('power-shelf.1');
-    expect(trayKeyOf('tor-switch.1', model)).toBeNull();
+    expect(trayKeyOf('tor-switch.1', model)).toBe('tor-switch.1');
+    expect(trayKeyOf('bus-bar', model)).toBeNull();
   });
 });
 
@@ -132,5 +133,20 @@ describe('rear of the rack', () => {
       useExplorer.getState().setSide('rack');
       expect(useExplorer.getState().view).toBe('rack');
     });
+  });
+});
+
+describe('power shelf and ToR detail', () => {
+  it('counts 48 RJ45 ports, 4 larger cages and 3 side ports on the ToR switch, all placed on its front', () => {
+    const tor = topology.trayLayouts!['tor-switch']!;
+    const n = (id: string) => tor.slots.filter((s) => s.component === id && s.face === 'front').length;
+    expect(n('tor-rj45-port')).toBe(48);
+    expect(n('tor-uplink-cage')).toBe(4);
+    expect(n('tor-side-port')).toBe(3);
+  });
+
+  it('gives every PSU a power and a fault LED', () => {
+    const psus = topology.trayLayouts!['power-shelf']!.slots.filter((s) => s.component === 'psu');
+    for (const p of psus) expect(p.indicators?.map((i) => i.color)).toEqual(['green', 'amber']);
   });
 });

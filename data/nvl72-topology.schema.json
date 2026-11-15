@@ -723,6 +723,30 @@
           "type": "number",
           "exclusiveMinimum": 0,
           "maximum": 1
+        },
+        "indicators": {
+          "type": "array",
+          "description": "Status LEDs drawn on the part's front face.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "color",
+              "label"
+            ],
+            "properties": {
+              "color": {
+                "enum": [
+                  "green",
+                  "amber"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "pattern": "\\S"
+              }
+            }
+          }
         }
       }
     },

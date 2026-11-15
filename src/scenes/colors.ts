@@ -30,7 +30,11 @@ export function trayLegend(trayId: string): { label: string; color: string }[] {
   const rows = new Map<string, string>();
   for (const slot of model.trayLayout(trayId)?.slots ?? []) {
     const port = portType(slot.component);
-    const label = port ? `${port} port` : (model.getComponent(slot.component)?.name ?? slot.component);
+    const label = port
+      ? port === 'Not stated'
+        ? 'Other port (type not stated)'
+        : `${port} port`
+      : (model.getComponent(slot.component)?.name ?? slot.component);
     if (!rows.has(label)) rows.set(label, partColor(slot.component));
   }
   return [...rows.entries()].map(([label, color]) => ({ label, color }));

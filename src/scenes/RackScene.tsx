@@ -10,6 +10,7 @@ import {
   FRAME_WIDTH,
   DIM_COLOR,
   HOVER_COLOR,
+  SLIDE_OUT,
   NETWORK_COLORS,
   RU,
   SELECTED_COLOR,
@@ -21,8 +22,7 @@ import {
   type UnitBox,
 } from './geometry';
 
-/** How far a selected unit slides out of the rack, in metres. */
-const SLIDE_OUT = 0.12;
+import { FrontScene } from './FrontScene';
 /** Pointer travel (px) above which a click counts as a drag. */
 const DRAG_THRESHOLD = 6;
 
@@ -260,6 +260,7 @@ export function RackScene({ rear }: { rear: boolean }) {
       {layers.parts && unitTypes.map((id) => <UnitInstances key={id} componentId={id} />)}
       {layers.parts && <Handles />}
       <RearScene showLabels={rear} />
+      <FrontScene />
       {!rear && <GroupLabels />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />

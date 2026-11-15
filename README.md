@@ -105,8 +105,14 @@ VITE_SHOW_OFFICIAL_FIGURES=true npm run build
   SOCAMM, ConnectX-9, BlueField-4, drives, BMC/HMC, ports and more. The
   interior layout is schematic (marked *assumed*): it follows the arrangement
   in NVIDIA's top and front views but is not traced from them or to scale.
-- Switch trays and power shelves open the same way. Power shelf PSUs are
-  numbered 1 to 6 as in NVIDIA's service manual.
+- Switch trays, power shelves and ToR switches open the same way. Power shelf
+  PSUs are numbered 1 to 6 as in NVIDIA's service manual and show their power
+  and fault LEDs; the ToR switch shows the 48 RJ45 ports, 4 larger cages and 3
+  side ports of NVIDIA's Fig. 9. Every unit's front in the rack view is drawn
+  from the same layouts.
+- Select a ToR switch (or highlight ipminet) to see the 45 BMC links from
+  every compute and switch tray to the ToR pair. The routing and the split
+  between the two switches are not documented, so the lines are schematic.
 - **Rear** shows the back of the rack as in NVIDIA's rear view (Fig. 2): the
   NVLink cable cartridges, the two liquid cooling manifolds with their FD83
   hose connectors, the bus bar, their supports, the rear bezel and seismic

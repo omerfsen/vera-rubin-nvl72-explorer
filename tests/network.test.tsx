@@ -22,7 +22,7 @@ describe('network overlay members', () => {
 
   it('ipminet: BMC and BlueField-4 RJ45 ports, switch tray management ports, power shelves and ToR switches', () => {
     expect(ids('ipminet')).toEqual(
-      ['ct-port-bf4-rj45', 'ct-port-bmc-1gbe', 'power-shelf', 'st-port-bmc-eth', 'st-port-switch-mgmt', 'tor-switch'].sort(),
+      ['ct-port-bf4-rj45', 'ct-port-bmc-1gbe', 'power-shelf', 'ps-mgmt-rj45', 'st-port-bmc-eth', 'st-port-switch-mgmt', 'tor-switch'].sort(),
     );
     expect(units('ipminet')).toEqual(['compute-tray', 'power-shelf', 'switch-tray', 'tor-switch']);
   });
