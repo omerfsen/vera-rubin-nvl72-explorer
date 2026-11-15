@@ -169,6 +169,10 @@ images from `docs.nvidia.com`, and the figures load with no referrer.
   manual. Compute and switch trays are numbered from the top down; NVIDIA does
   not number them by rack position, so that numbering is marked *assumed*.
 
+## Contributing
+
+See [AGENTS.md](AGENTS.md) for the data rules, the checks to run and the commit style.
+
 ## Project layout
 
 ```
