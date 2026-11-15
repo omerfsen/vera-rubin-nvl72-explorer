@@ -37,7 +37,9 @@ Read `README.md` for what it does and `docs/DATA_MODEL.md` for the data.
 | `scripts/references.mjs` | Builds every component's `references` |
 | `data/i18n/{en,tr,zh}.json` | Every UI string (`ui`) and the translated descriptive text (`content`); English is the source |
 | `scripts/i18n-content.mjs` | Builds the `content` part of `en.json` from the data |
-| `tests/` | Schema, integrity, facts, model, UI and scene tests |
+| `tests/` | Schema, integrity, facts, model, UI, scene and MCP tests |
+| `mcp/`, `api/mcp.ts` | Read-only MCP server and its Vercel function |
+| `docs/mcp/` | MCP tools (generated), security, standards, build log, test results |
 
 The scene is generated from the data. Do not hard-code component IDs, counts
 or facts in `src/`; add them to the data and read them from there.
@@ -87,6 +89,29 @@ update the data and its sources, then update the fingerprints.
 - Keep keyboard, touch, phone width and the no-WebGL list working.
 - Dependencies are pinned to exact versions; the lockfile is committed.
 - Node 26 (`.nvmrc`, `engines`).
+
+## MCP server
+
+`mcp/server.ts` builds a read-only MCP server over the same data; `mcp/stdio.ts`
+serves it locally and `api/mcp.ts` (through `mcp/http.ts`) at `/mcp` on
+Vercel, with no login and per-IP rate limits. Read `docs/mcp/security.md`
+before changing it.
+
+- Every tool is read-only, with all four annotation hints written in its
+  `registerTool` call, an `outputSchema`, and arguments that are enums built
+  from the data or bounded values with `.strict()`. No tool reads files, runs
+  commands or calls the network.
+- Adding a tool: register it in `createServer`, add tests in
+  `tests/mcp.test.ts` (happy path and hostile arguments), then run
+  `npm run mcp:docs` to regenerate `docs/mcp/tools.md` and `tools.json`.
+- After changing the data, run `npm run mcp:docs` too: the enums come from
+  the data, and `tests/mcp-docs.test.ts` fails when the docs drift.
+- `npm run mcp:e2e` builds the stdio bundle and runs the raw JSON-RPC wire
+  test; `node scripts/mcp-live.mjs` checks the deployed endpoint.
+- Keep `server.json` in step with `SERVER_NAME`, `SERVER_VERSION` and `SITE`
+  (`tests/mcp-server-json.test.ts`).
+- Anything that would need private data or change state needs authentication
+  and a new security review; do not add it to the public endpoint.
 
 ## Commits and pull requests
 
