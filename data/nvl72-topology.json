@@ -3,6 +3,14 @@
   "schemaVersion": 1,
   "meta": {
     "title": "NVIDIA DGX Vera Rubin NVL72 rack topology (unofficial)",
+    "maintainer": {
+      "name": "Omer Sen",
+      "email": "omerfsen@gmail.com",
+      "github": "https://github.com/omerfsen",
+      "linkedin": "https://www.linkedin.com/in/omerfsen/",
+      "repository": "https://github.com/omerfsen/vera-rubin-nvl72-explorer",
+      "license": "Apache-2.0"
+    },
     "document": {
       "title": "NVIDIA DGX VR NVL72 User Guide",
       "date": "2026-11-05",

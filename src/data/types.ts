@@ -269,6 +269,7 @@ export interface Topology {
   schemaVersion: 1;
   meta: {
     title: string;
+    maintainer?: { name: string; email?: string; github?: string; linkedin?: string; repository: string; license: string };
     document: { title: string; date: string; urls: string[]; pdfPages?: Record<string, number>; pdfPagesNote?: string };
     serviceManual?: { title: string; date: string; urls: string[]; pdfPages?: Record<string, number> };
     retrieved: string;

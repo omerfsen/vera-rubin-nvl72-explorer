@@ -104,6 +104,39 @@
               }
             }
           }
+        },
+        "maintainer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "repository",
+            "license"
+          ],
+          "description": "Who maintains this dataset (not a fact about the rack).",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "github": {
+              "type": "string",
+              "format": "uri"
+            },
+            "linkedin": {
+              "type": "string",
+              "format": "uri"
+            },
+            "repository": {
+              "type": "string",
+              "format": "uri"
+            },
+            "license": {
+              "type": "string"
+            }
+          }
         }
       }
     },
