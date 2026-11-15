@@ -102,7 +102,7 @@
       "unit": "{name} {index}",
       "height": "{height} RU",
       "rear": "后部",
-      "rearNotDrawn": "后部尚未以 3D 绘制。"
+      "only3d": "后视图和托盘内部只在 3D 视图中绘制。"
     },
     "panel": {
       "selected": "已选择：{title}",
@@ -152,7 +152,8 @@
       "perParent": "每个{parent} {count} 个",
       "oneRack": "一个机柜：{gpus} 个 GPU 位于单个 NVLink 域中。",
       "perRack": "每个机柜 {total} 个（计算得出）",
-      "thisIs": "这是第 {index} 个。"
+      "thisIs": "这是第 {index} 个。",
+      "fromZero": "NVIDIA 从 0 开始编号（图 4 中的 GPU0 至 GPU3、CPU0 和 CPU1）；本应用的链接从 1 开始计数。"
     },
     "per": {
       "rack": "机柜",
@@ -407,12 +408,12 @@
       "ct-cold-water-inlet": {
         "name": "冷水入口（计算托盘）",
         "description": "计算托盘后部的冷水入口。",
-        "function": "将冷却液从机柜歧管引入托盘。"
+        "function": "将冷却液引入托盘。"
       },
       "ct-hot-water-outlet": {
         "name": "热水出口（计算托盘）",
         "description": "计算托盘后部的热水出口。",
-        "function": "将冷却液从托盘送回机柜歧管。"
+        "function": "将冷却液从托盘引出。"
       },
       "ct-bus-bar-connector": {
         "name": "母线排连接器（计算托盘）",
@@ -495,12 +496,12 @@
       "st-cold-water-inlet": {
         "name": "冷水入口（交换托盘）",
         "description": "交换托盘后部的冷水入口。",
-        "function": "将冷却液从机柜歧管引入托盘。"
+        "function": "将冷却液引入托盘。"
       },
       "st-hot-water-outlet": {
         "name": "热水出口（交换托盘）",
         "description": "交换托盘后部的热水出口。",
-        "function": "将冷却液从托盘送回机柜歧管。"
+        "function": "将冷却液从托盘引出。"
       },
       "st-power-connector": {
         "name": "电源连接器（交换托盘）",
@@ -550,7 +551,7 @@
         "function": "将计算托盘中的所有 BMC（包括 BlueField-4 BMC）和交换托盘的 BMC 连接到管理网络。",
         "specNotes": {
           "Front panel in Fig. 9": "依据图 9 计数；用户指南正文未给出端口数量，也未说明较大的笼以及右侧三个端口的类型。",
-          "BMC links in this rack": "根据数据中的数量计算得出；用户指南未说明它们在两台 ToR 交换机之间如何分配。"
+          "Connects": "1.5 节的原文表述。其所列的连接端口只提到计算托盘的带外 BMC 端口和 BlueField-4 BMC 端口；每台 ToR 交换机因此有多少条链路未作说明。"
         }
       },
       "tor-rj45-port": {
@@ -591,7 +592,7 @@
       "fd83-connector": {
         "name": "FD83 液冷软管连接器",
         "description": "液冷歧管上的软管连接器，在图 2 中标为“FD83 connectors for liquid cooling hoses”。",
-        "function": "将机柜歧管连接到设施的液冷软管。",
+        "function": "图 2 将其标注为 'FD83 connectors for liquid cooling hoses'；这些软管通向何处未作说明。",
         "note": "图 2 显示它们位于歧管两端；用户指南未给出数量。本应用在每个歧管的两端各画一个。"
       },
       "rear-supports": {
@@ -602,21 +603,20 @@
       },
       "rear-bezel": {
         "name": "后面板",
-        "description": "机柜背面可拆卸的盖板，在图 2 中标为“Rear Bezel”。",
+        "description": "机柜背面的盖板，在图 2 中标注为 'Rear Bezel'。",
         "function": "覆盖机柜后部。",
         "note": "在 Structure 图层中以透明面板表示。"
       },
       "seismic-bracing": {
         "name": "抗震支架",
         "description": "机柜下方的支架，在图 1 和图 2 中有标注。",
-        "function": "将机柜固定在原位。",
+        "function": "在图 1 和图 2 中标注为 'Seismic bracing'；指南未作进一步说明。",
         "note": "以机柜下方的底座框架表示。"
       }
     },
     "specLabels": {
       "AC input": "AC 输入",
       "After replacement": "更换后",
-      "BMC links in this rack": "本机柜中的 BMC 链路",
       "Compute boards": "计算板",
       "Compute trays": "计算托盘",
       "Connects": "连接",
@@ -626,7 +626,6 @@
       "DC output": "DC 输出",
       "Fault": "故障",
       "Front": "前部",
-      "Front LEDs": "前部 LED",
       "Front bays": "前部托架",
       "Front panel in Fig. 9": "图 9 中的前面板",
       "GPUs in the NVLink domain": "NVLink 域中的 GPU",
@@ -675,7 +674,8 @@
       "Speed": "速率",
       "Top-of-rack management switches": "机柜顶部管理交换机",
       "Vera CPUs": "Vera CPU",
-      "Voltage": "电压"
+      "Voltage": "电压",
+      "LEDs": "指示灯"
     },
     "networks": {
       "externalnet": {
@@ -743,7 +743,8 @@
         "description": "BlueField-4 BMC 连接到机柜顶部交换机。"
       },
       "st-bmc-tor": {
-        "description": "交换托盘 BMC 连接到机柜顶部交换机。"
+        "description": "机柜顶部交换机将交换托盘连接到管理网络。",
+        "note": "1.5 节说 ToR 交换机连接 'the switch trays'；其端口列表没有说明是交换托盘的哪些端口，因此本应用连接的是托盘而非其 BMC。"
       },
       "ps-ipminet": {
         "description": "ipminet 连通电源架的带外接口。"
@@ -762,7 +763,7 @@
       },
       "manifold-ct": {
         "description": "冷却液沿机柜上下流经内部歧管，然后流经计算托盘中的冷板。",
-        "note": "1.2 节中的“inner manifold”可能是托盘的 Internal Manifold（图 5），而不是后部歧管。"
+        "note": "1.2 节中的 'inner manifold' 可能是托盘内的 Internal Manifold（图 5），而不是后部歧管；参见关于内部歧管的待解问题。"
       },
       "manifold-st": {
         "description": "交换托盘为液冷：NVLink 交换芯片上装有冷板，后部有热水出口和冷水入口。",
@@ -773,7 +774,7 @@
       },
       "busbar-st": {
         "description": "母线排将 54 V DC 分配给机柜各组件；交换托盘后部有一个电源连接器。",
-        "note": "图 7 标注了交换托盘后部的电源连接器，但未说明它连接到母线排。"
+        "note": "1.4 节说 54 V 直流输出 'distributed through the bus bar to the rack components'，1.1 节说电源架为 'all trays and switches' 供电。图 7 标注了交换托盘后部的电源连接器。"
       },
       "bf4-left-storagenet-fig1": {
         "description": "图 1 将 BlueField-4 左侧 QSFP 端口标为 6（storagenet），而表 2.3 写的是 dgxnet。",
@@ -960,7 +961,7 @@
       },
       "base-command-manager": {
         "description": "管理所有系统组件：为托盘上电和断电，管理计算托盘启动所用的操作系统镜像，并通过 ipminet 访问带外接口。",
-        "note": "运行在机柜外的头节点上（2.2 节：ipminet 使 Base Command Manager 和头节点能够访问 BMC）。"
+        "note": "2.2 节：ipminet 使 Base Command Manager 和头节点能够访问机柜内的带外/BMC 接口。头节点位于何处未作说明。"
       },
       "cuda": {
         "description": "CUDA 平台：150 多个库，以及用于优化和调试 GPU 加速应用的工具；这些应用利用 NVLink 网络将工作分配到机柜中的每个 GPU。"
@@ -1193,8 +1194,8 @@
       "capturing-debug-logs-with-nvdebug": {
         "group": "调试日志",
         "title": "使用 NVDEBUG 采集调试日志",
-        "purpose": "访问可使用 NVDEBUG 的 BMC 或主机系统。确保具有运行诊断工具所需的权限。",
-        "note": "NVDEBUG 会自动收集一整套日志，包括 BMC 事件日志、固件版本、硬件清单和系统健康数据。这是高效、完整地收集日志的推荐方法。"
+        "purpose": "在排查复杂问题或与 NVIDIA 支持合作时，通常需要从计算托盘收集详细的调试日志。捕获和打包这些日志的首选方法是使用 NVDEBUG 工具，它会将所有相关的系统、固件和事件日志汇集到一个归档中以供分析。",
+        "note": "6.4.1.11.1 中的步骤：1. 访问可使用 NVDEBUG 的 BMC 或主机系统，确保拥有运行诊断工具所需的权限。2. 按照系统文档运行 NVDEBUG 工具；将 /path/to/save/debug-logs.tar.gz 替换为所需的输出位置。3. 将日志归档传送给支持联系人，或按 NVIDIA 支持的指示上传。NVDEBUG 会自动收集一整套日志，包括 BMC 事件日志、固件版本、硬件清单和系统健康数据。这是高效、完整收集日志的推荐方法。"
       }
     },
     "commandNotes": {
@@ -1216,7 +1217,7 @@
     },
     "trayLayouts": {
       "compute-tray": {
-        "note": "示意性布局，未按比例绘制，也并非描摹自 NVIDIA 的图。后半部：GPU 和 CPU 位于 HPM_L（左）和 HPM_R（右）上，与 2.4 节图 4 一致，SOCAMM 位于 CPU 周围（图 5）。前半部：左右两侧为 Bay B，含 ConnectX-9 模块和缓存驱动器；中间为 Bay C，含 BlueField-4 和 SMM（图 6）。1 GbE BMC 端口画在 SMM 的 RJ45 处，表 2.3 并未证实这一点。",
+        "note": "示意性布局，未按比例绘制，也并非描摹自 NVIDIA 的图。后半部：GPU 和 CPU 位于 HPM_L（左）和 HPM_R（右）上，与 2.4 节图 4 一致，SOCAMM 位于 CPU 周围（图 5）。前半部：左右两侧为 Bay B，含 ConnectX-9 模块和缓存驱动器；中间为 Bay C，含 BlueField-4 和 SMM（图 6）。1 GbE BMC 端口画在 SMM 的 RJ45 处，表 2.3 并未证实这一点。图 5（前端在右侧）将热水出口画在图像上方，即从前方看的右侧，冷水入口在左侧，母线排连接器在后缘中央。图 5 和图 7 未标注 NVLink 连接器；本应用将其画在电源连接器旁边。",
         "notPlaced": {
           "ct-port-lan-1gbe": "表 2.3 列出了它，但没有图显示其位置（docs/OPEN_QUESTIONS.md 第 4 项）。",
           "ct-nvlink-connectors": "位于单元背面：在机柜的 Rear 视图中绘制，在此处则作为托盘后缘上的连接端点绘制。",
@@ -1242,19 +1243,19 @@
           "15": "每个 GPU 都经线缆盒与全部九个 NVLink 交换托盘有 NVLink 连接。",
           "16": "每个 GPU 都经线缆盒与全部九个 NVLink 交换托盘有 NVLink 连接。",
           "17": "每个 GPU 都经线缆盒与全部九个 NVLink 交换托盘有 NVLink 连接。",
-          "18": "1.2 节：液体流经内部歧管，然后流经贴装在 CPU 和 GPU 上的冷板。未显示确切的管路。",
-          "19": "1.2 节：液体流经内部歧管，然后流经贴装在 CPU 和 GPU 上的冷板。未显示确切的管路。",
-          "20": "1.2 节：液体流经内部歧管，然后流经贴装在 CPU 和 GPU 上的冷板。未显示确切的管路。",
-          "21": "1.2 节：液体流经内部歧管，然后流经贴装在 CPU 和 GPU 上的冷板。未显示确切的管路。",
-          "22": "1.2 节：液体流经内部歧管，然后流经贴装在 CPU 和 GPU 上的冷板。未显示确切的管路。",
-          "23": "1.2 节：液体流经内部歧管，然后流经贴装在 CPU 和 GPU 上的冷板。未显示确切的管路。",
+          "18": "1.2 节：液体在 CPU 和 GPU 上 'through the inner manifold, then through the cold plates' 流动。这个内部歧管是否就是托盘内的 Internal Manifold（图 5）是一个待解问题，管路未画出。",
+          "19": "1.2 节：液体在 CPU 和 GPU 上 'through the inner manifold, then through the cold plates' 流动。这个内部歧管是否就是托盘内的 Internal Manifold（图 5）是一个待解问题，管路未画出。",
+          "20": "1.2 节：液体在 CPU 和 GPU 上 'through the inner manifold, then through the cold plates' 流动。这个内部歧管是否就是托盘内的 Internal Manifold（图 5）是一个待解问题，管路未画出。",
+          "21": "1.2 节：液体在 CPU 和 GPU 上 'through the inner manifold, then through the cold plates' 流动。这个内部歧管是否就是托盘内的 Internal Manifold（图 5）是一个待解问题，管路未画出。",
+          "22": "1.2 节：液体在 CPU 和 GPU 上 'through the inner manifold, then through the cold plates' 流动。这个内部歧管是否就是托盘内的 Internal Manifold（图 5）是一个待解问题，管路未画出。",
+          "23": "1.2 节：液体在 CPU 和 GPU 上 'through the inner manifold, then through the cold plates' 流动。这个内部歧管是否就是托盘内的 Internal Manifold（图 5）是一个待解问题，管路未画出。",
           "24": "图 5 标注了托盘后部的冷水入口和热水出口；未显示通往歧管的管路。",
           "25": "图 5 标注了托盘后部的冷水入口和热水出口；未显示通往歧管的管路。",
           "26": "图 5 标注了后部的母线排连接器和一块 Power Distribution Board；前者为后者供电是根据名称推断的，并未说明。"
         }
       },
       "switch-tray": {
-        "note": "示意性布局，未按比例绘制，也并非描摹自 NVIDIA 的图。后半部：交换板上的四个 NVSwitch 芯片，后部为水路和电源连接器（图 7）。前部：电池和 SSD，以及按表 2.5 从左到右排列的五个 RJ45 端口。",
+        "note": "示意性布局，未按比例绘制，也并非描摹自 NVIDIA 的图。后半部：交换板上的四个 NVSwitch 芯片，后部为水路和电源连接器（图 7）。前部：电池和 SSD，以及按表 2.5 从左到右排列的五个 RJ45 端口。图 7（前端在右侧）显示从前方看热水出口在右侧，冷水入口在左侧，电源连接器在后缘中央。图 5 和图 7 未标注 NVLink 连接器；本应用将其画在电源连接器旁边。电池和 SSD 按图 7 画在左侧。",
         "notPlaced": {
           "switch-bmc": "图 7 未显示 BMC 的位置。",
           "cpu-erot": "图 7 未显示 CPU ERoT 的位置。",
@@ -1316,7 +1317,7 @@
       }
     },
     "rearLayout": {
-      "note": "位于各单元后方的示意性布置，未按比例绘制。图 2 显示线缆盒位于后部中间，另有两个带 FD83 软管连接器的液冷歧管、电源母线排、它们的支架、后面板和抗震支架；未给出确切位置、跨度和数量。未说明哪个歧管负责供液、哪个负责回液。"
+      "note": "位于各单元后方的示意性布置，未按比例绘制。图 2 是分解图：显示了线缆盒、两个带 FD83 软管连接器的液冷歧管、电源母线排、它们的支架、后面板和抗震支架，但未给出位置、跨度或数量。由于图 5 和图 7 将托盘的电源连接器画在后缘中央，本应用将电源连接器和母线排居中，并将热水出口接到从前方看位于右侧的歧管。未说明哪个歧管负责供液、哪个负责回液。"
     }
   }
 }

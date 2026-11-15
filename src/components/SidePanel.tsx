@@ -137,7 +137,8 @@ function countText(c: Component, index: number | undefined, i18n: I18n): string[
   }
   const total = model.totalPerRack(c.id);
   if (total !== null && parent && parent.id !== ROOT_ID) lines.push(t('count.perRack', { total }));
-  if (index !== undefined) lines.push(t('count.thisIs', { index }));
+  if (index !== undefined) lines.push(t('count.thisIs', { index: model.displayIndex(c.id, index) }));
+  if (c.numbering?.start === 0) lines.push(t('count.fromZero'));
   return lines;
 }
 
@@ -282,6 +283,12 @@ export function SidePanel() {
               <li key={n.id} className={ownNetworks.has(n.id) ? 'chip' : 'chip chip-sub'} title={i18n.network(n.id, 'description', n.description)}>
                 <span className="chip-num">{n.number}</span> {n.name}
                 {n.fabric ? <span className="chip-fabric"> · {n.fabric}</span> : null}
+                {component.assumedNetworks?.includes(n.id) && (
+                  <>
+                    {' '}
+                    <Assumed note={note ?? ''} />
+                  </>
+                )}
                 {!ownNetworks.has(n.id) && <span className="sr-only">{t('panel.throughPart')}</span>}
               </li>
             ))}

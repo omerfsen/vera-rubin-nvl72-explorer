@@ -102,7 +102,7 @@
       "unit": "{name} {index}",
       "height": "{height} RU",
       "rear": "Arka",
-      "rearNotDrawn": "Arka taraf henüz 3B olarak çizilmiyor."
+      "only3d": "Arka görünüm ve tepsi içleri yalnızca 3B görünümde çizilir."
     },
     "panel": {
       "selected": "Seçili: {title}",
@@ -152,7 +152,8 @@
       "perParent": "Her {parent} başına {count}",
       "oneRack": "Tek kabin: tek bir NVLink alanında {gpus} GPU.",
       "perRack": "Kabin başına {total} (hesaplanmış)",
-      "thisIs": "Bu, {index} numaralı birimdir."
+      "thisIs": "Bu, {index} numaralı birimdir.",
+      "fromZero": "NVIDIA bunları 0'dan numaralar (Şekil 4'te GPU0–GPU3, CPU0 ve CPU1); bu uygulamadaki bağlantılar 1'den sayar."
     },
     "per": {
       "rack": "kabin",
@@ -407,12 +408,12 @@
       "ct-cold-water-inlet": {
         "name": "Soğuk su girişi (hesaplama tepsisi)",
         "description": "Hesaplama tepsisinin arkasındaki soğuk su girişi.",
-        "function": "Soğutma sıvısını kabinin manifoldundan tepsiye getirir."
+        "function": "Soğutucuyu tepsiye getirir."
       },
       "ct-hot-water-outlet": {
         "name": "Sıcak su çıkışı (hesaplama tepsisi)",
         "description": "Hesaplama tepsisinin arkasındaki sıcak su çıkışı.",
-        "function": "Soğutma sıvısını tepsiden kabinin manifolduna geri gönderir."
+        "function": "Soğutucuyu tepsiden çıkarır."
       },
       "ct-bus-bar-connector": {
         "name": "Bara konnektörü (hesaplama tepsisi)",
@@ -495,12 +496,12 @@
       "st-cold-water-inlet": {
         "name": "Soğuk su girişi (anahtar tepsisi)",
         "description": "Anahtar tepsisinin arkasındaki soğuk su girişi.",
-        "function": "Soğutma sıvısını kabinin manifoldundan tepsiye getirir."
+        "function": "Soğutucuyu tepsiye getirir."
       },
       "st-hot-water-outlet": {
         "name": "Sıcak su çıkışı (anahtar tepsisi)",
         "description": "Anahtar tepsisinin arkasındaki sıcak su çıkışı.",
-        "function": "Soğutma sıvısını tepsiden kabinin manifolduna geri gönderir."
+        "function": "Soğutucuyu tepsiden çıkarır."
       },
       "st-power-connector": {
         "name": "Güç konnektörü (anahtar tepsisi)",
@@ -550,7 +551,7 @@
         "function": "Hesaplama tepsilerindeki (BlueField-4 BMC'leri dahil) ve anahtar tepsilerindeki tüm BMC'leri yönetim ağına bağlar.",
         "specNotes": {
           "Front panel in Fig. 9": "Şekil 9'dan sayılmıştır; kılavuzun metni port sayısı vermez ve büyük yuvaların ya da sağdaki üç portun tipini belirtmez.",
-          "BMC links in this rack": "Verilerdeki sayılardan hesaplanmıştır; kılavuz bunların iki ToR anahtarı arasında nasıl bölündüğünü belirtmez."
+          "Connects": "Bölüm 1.5'in ifadesi. Bağlı portlar listesi yalnızca işlem tepsilerinin bant dışı BMC ve BlueField-4 BMC portlarını adlandırır; bunun ToR anahtarı başına kaç bağlantı ettiği verilmemiştir."
         }
       },
       "tor-rj45-port": {
@@ -591,7 +592,7 @@
       "fd83-connector": {
         "name": "FD83 sıvı soğutma hortum konnektörü",
         "description": "Sıvı soğutma manifoldları üzerindeki hortum konnektörleri; Şekil 2'de 'FD83 connectors for liquid cooling hoses' olarak etiketlenmiş.",
-        "function": "Kabinin manifoldlarını tesisin sıvı soğutma hortumlarına bağlar.",
+        "function": "Şekil 2 bunları 'FD83 connectors for liquid cooling hoses' olarak etiketler; bu hortumların nereye gittiği belirtilmemiştir.",
         "note": "Şekil 2 bunları manifoldların uçlarında gösterir; kılavuz bir sayı vermez. Bu uygulama her manifoldun her ucuna bir tane çizer."
       },
       "rear-supports": {
@@ -602,21 +603,20 @@
       },
       "rear-bezel": {
         "name": "Arka çerçeve",
-        "description": "Kabinin arkasındaki sökülebilir kapak parçaları; Şekil 2'de 'Rear Bezel' olarak etiketlenmiş.",
+        "description": "Kabinin arkasındaki kapak; Şekil 2'de 'Rear Bezel' olarak etiketlenmiştir.",
         "function": "Kabinin arkasını örter.",
         "note": "Structure katmanında yarı saydam bir panel olarak çizilmiştir."
       },
       "seismic-bracing": {
         "name": "Sismik destek",
         "description": "Kabinin altındaki destek; Şekil 1 ve Şekil 2'de etiketlenmiş.",
-        "function": "Kabini yerinde tutar.",
+        "function": "Şekil 1 ve Şekil 2'de 'Seismic bracing' olarak etiketlenmiştir; kılavuz bunu daha fazla açıklamaz.",
         "note": "Kabinin altında bir taban çerçevesi olarak çizilmiştir."
       }
     },
     "specLabels": {
       "AC input": "AC giriş",
       "After replacement": "Değişimden sonra",
-      "BMC links in this rack": "Bu kabindeki BMC bağlantıları",
       "Compute boards": "Hesaplama kartları",
       "Compute trays": "Hesaplama tepsileri",
       "Connects": "Bağlantılar",
@@ -626,7 +626,6 @@
       "DC output": "DC çıkış",
       "Fault": "Arıza",
       "Front": "Ön",
-      "Front LEDs": "Ön LED'ler",
       "Front bays": "Ön bölmeler",
       "Front panel in Fig. 9": "Şekil 9'da ön panel",
       "GPUs in the NVLink domain": "NVLink alanındaki GPU'lar",
@@ -675,7 +674,8 @@
       "Speed": "Hız",
       "Top-of-rack management switches": "Kabin üstü yönetim anahtarları",
       "Vera CPUs": "Vera CPU'lar",
-      "Voltage": "Gerilim"
+      "Voltage": "Gerilim",
+      "LEDs": "LED'ler"
     },
     "networks": {
       "externalnet": {
@@ -743,7 +743,8 @@
         "description": "BlueField-4 BMC'sinden kabin üstü (ToR) anahtarlarına."
       },
       "st-bmc-tor": {
-        "description": "Anahtar tepsisi BMC'sinden kabin üstü (ToR) anahtarlarına."
+        "description": "Kabin üstü anahtarlar, anahtar tepsilerini yönetim ağına bağlar.",
+        "note": "Bölüm 1.5, ToR anahtarlarının 'the switch trays' bağladığını söyler; port listesi hangi anahtar tepsisi portlarının bağlandığını adlandırmaz, bu yüzden bu uygulama BMC yerine tepsiyi bağlar."
       },
       "ps-ipminet": {
         "description": "ipminet, güç raflarının bant dışı arayüzlerine ulaşır."
@@ -762,7 +763,7 @@
       },
       "manifold-ct": {
         "description": "Soğutma sıvısı iç manifold üzerinden kabin boyunca aşağı yukarı, ardından hesaplama tepsilerindeki soğuk plakalardan geçer.",
-        "note": "Bölüm 1.2'deki 'inner manifold', arka manifoldlar yerine tepsinin Internal Manifold'u (Şekil 5) olabilir."
+        "note": "Bölüm 1.2'deki 'inner manifold', arka manifoldlar yerine tepsinin Internal Manifold'u (Şekil 5) olabilir; iç manifold hakkındaki açık soruya bakın."
       },
       "manifold-st": {
         "description": "Anahtar tepsisi sıvı soğutmalıdır: NVLink anahtarları üzerinde soğuk plakalar ve arkada bir sıcak su çıkışı ile bir soğuk su girişi bulunur.",
@@ -773,7 +774,7 @@
       },
       "busbar-st": {
         "description": "Bara 54 V DC'yi kabin bileşenlerine dağıtır; anahtar tepsisinin arkasında bir güç konnektörü vardır.",
-        "note": "Şekil 7 anahtar tepsisinin arka güç konnektörünü etiketler ancak baraya bağlandığını söylemez."
+        "note": "Bölüm 1.4, 54 V DC çıkışın 'distributed through the bus bar to the rack components' olduğunu, 1.1 ise güç raflarının 'all trays and switches' beslediğini söyler. Şekil 7, anahtar tepsisinin arkadaki güç konnektörünü etiketler."
       },
       "bf4-left-storagenet-fig1": {
         "description": "Şekil 1, BlueField-4 sol QSFP portunu 6 (storagenet) olarak işaretler; Tablo 2.3 ise dgxnet der.",
@@ -960,7 +961,7 @@
       },
       "base-command-manager": {
         "description": "Tüm sistem bileşenlerini yönetir: tepsileri açıp kapatır, hesaplama tepsilerinin önyüklendiği işletim sistemi imajlarını yönetir ve ipminet üzerinden bant dışı arayüzlere ulaşır.",
-        "note": "Kabin dışındaki head node'da çalışır (2.2: ipminet, Base Command Manager'a ve head node'a BMC'lere erişim verir)."
+        "note": "Bölüm 2.2: ipminet, Base Command Manager'a ve ana düğüme kabindeki bant dışı/BMC arayüzlerine erişim sağlar. Ana düğümün nerede durduğu belirtilmemiştir."
       },
       "cuda": {
         "description": "CUDA platformu: 150'den fazla kütüphane ile GPU hızlandırmalı uygulamaları optimize etme ve hata ayıklama araçları; bu uygulamalar işi kabindeki her GPU'ya dağıtmak için NVLink ağını kullanır."
@@ -1137,7 +1138,7 @@
         "group": "Hesaplar",
         "title": "Yeni Hesap Oluşturma",
         "purpose": "Belirtilen kullanıcı adı, parola ve rolle yeni bir kullanıcı hesabı oluşturur.",
-        "note": "Kullanıcı için gereken erişim düzeyine göre RoleId değerini Administrator , Operator veya ReadOnly olarak ayarlayabilirsiniz."
+        "note": "Kullanıcı için gereken erişim düzeyine göre RoleId değerini Administrator, Operator veya ReadOnly olarak ayarlayabilirsiniz."
       },
       "updating-password-for-an-existing-account": {
         "group": "Hesaplar",
@@ -1193,8 +1194,8 @@
       "capturing-debug-logs-with-nvdebug": {
         "group": "Hata ayıklama günlükleri",
         "title": "NVDEBUG ile Hata Ayıklama Günlüklerini Toplama",
-        "purpose": "NVDEBUG'ın bulunduğu BMC'ye veya host sisteme erişin. Tanılama araçlarını çalıştırmak için gerekli izinlere sahip olduğunuzdan emin olun.",
-        "note": "NVDEBUG; BMC olay günlükleri, ürün yazılımı sürümleri, donanım envanteri ve sistem sağlığı verileri dahil kapsamlı bir günlük kümesini otomatik olarak toplar. Verimli ve eksiksiz günlük toplama için önerilen yöntem budur."
+        "purpose": "Karmaşık sorunları giderirken veya NVIDIA desteğiyle çalışırken, işlem tepsisinden ayrıntılı hata ayıklama günlükleri toplamak çoğu zaman gerekir. Bu günlükleri toplamanın ve paketlemenin tercih edilen yolu, ilgili tüm sistem, ürün yazılımı ve olay günlüklerini analiz için tek bir arşivde toplayan NVDEBUG aracını kullanmaktır.",
+        "note": "6.4.1.11.1'deki adımlar: 1. NVDEBUG'un bulunduğu BMC'ye veya ana sisteme erişin. Tanılama araçlarını çalıştırmak için gerekli izinlere sahip olduğunuzdan emin olun. 2. NVDEBUG aracını sisteminizin belgelerine göre çalıştırın; /path/to/save/debug-logs.tar.gz yerine istediğiniz çıktı konumunu yazın. 3. Günlük arşivini destek irtibatınıza aktarın veya NVIDIA desteğinin talimatına göre yükleyin. NVDEBUG; BMC olay günlükleri, ürün yazılımı sürümleri, donanım envanteri ve sistem sağlığı verileri dahil kapsamlı bir günlük kümesini otomatik olarak toplar. Verimli ve eksiksiz günlük toplama için önerilen yöntem budur."
       }
     },
     "commandNotes": {
@@ -1216,7 +1217,7 @@
     },
     "trayLayouts": {
       "compute-tray": {
-        "note": "Şematik bir yerleşim; ölçekli değildir ve NVIDIA'nın şekillerinden kopyalanmamıştır. Arka yarı: 2.4 Şekil 4'teki gibi HPM_L (sol) ve HPM_R (sağ) üzerinde GPU'lar ve CPU'lar, CPU'ların çevresinde SOCAMM (Şekil 5). Ön yarı: solda ve sağda ConnectX-9 modülleri ve önbellek sürücüleriyle Bay B, ortada BlueField-4 ve SMM ile Bay C (Şekil 6). 1 GbE BMC portu SMM'nin RJ45'inde çizilmiştir; Tablo 2.3 bunu doğrulamaz.",
+        "note": "Şematik bir yerleşim; ölçekli değildir ve NVIDIA'nın şekillerinden kopyalanmamıştır. Arka yarı: 2.4 Şekil 4'teki gibi HPM_L (sol) ve HPM_R (sağ) üzerinde GPU'lar ve CPU'lar, CPU'ların çevresinde SOCAMM (Şekil 5). Ön yarı: solda ve sağda ConnectX-9 modülleri ve önbellek sürücüleriyle Bay B, ortada BlueField-4 ve SMM ile Bay C (Şekil 6). 1 GbE BMC portu SMM'nin RJ45'inde çizilmiştir; Tablo 2.3 bunu doğrulamaz. Şekil 5 (ön taraf sağda) sıcak su çıkışını görüntünün üstünde, yani önden bakıldığında sağda, soğuk su girişini solda ve bara konnektörünü arka kenarın ortasında gösterir. Şekil 5 ve Şekil 7 NVLink konnektörlerini etiketlemez; bu uygulama onları güç konnektörünün yanına çizer.",
         "notPlaced": {
           "ct-port-lan-1gbe": "Tablo 2.3 bunu listeler, ancak hiçbir şekil nerede olduğunu göstermez (docs/OPEN_QUESTIONS.md madde 4).",
           "ct-nvlink-connectors": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir.",
@@ -1242,19 +1243,19 @@
           "15": "Her GPU'nun, kablo kartuşu üzerinden dokuz NVLink anahtar tepsisinin tamamına NVLink'i vardır.",
           "16": "Her GPU'nun, kablo kartuşu üzerinden dokuz NVLink anahtar tepsisinin tamamına NVLink'i vardır.",
           "17": "Her GPU'nun, kablo kartuşu üzerinden dokuz NVLink anahtar tepsisinin tamamına NVLink'i vardır.",
-          "18": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
-          "19": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
-          "20": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
-          "21": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
-          "22": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
-          "23": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
+          "18": "Bölüm 1.2: sıvı CPU ve GPU'lar üzerinde 'through the inner manifold, then through the cold plates' akar. Bu iç manifoldun tepsinin Internal Manifold'u (Şekil 5) olup olmadığı açık bir sorudur ve borulama gösterilmemiştir.",
+          "19": "Bölüm 1.2: sıvı CPU ve GPU'lar üzerinde 'through the inner manifold, then through the cold plates' akar. Bu iç manifoldun tepsinin Internal Manifold'u (Şekil 5) olup olmadığı açık bir sorudur ve borulama gösterilmemiştir.",
+          "20": "Bölüm 1.2: sıvı CPU ve GPU'lar üzerinde 'through the inner manifold, then through the cold plates' akar. Bu iç manifoldun tepsinin Internal Manifold'u (Şekil 5) olup olmadığı açık bir sorudur ve borulama gösterilmemiştir.",
+          "21": "Bölüm 1.2: sıvı CPU ve GPU'lar üzerinde 'through the inner manifold, then through the cold plates' akar. Bu iç manifoldun tepsinin Internal Manifold'u (Şekil 5) olup olmadığı açık bir sorudur ve borulama gösterilmemiştir.",
+          "22": "Bölüm 1.2: sıvı CPU ve GPU'lar üzerinde 'through the inner manifold, then through the cold plates' akar. Bu iç manifoldun tepsinin Internal Manifold'u (Şekil 5) olup olmadığı açık bir sorudur ve borulama gösterilmemiştir.",
+          "23": "Bölüm 1.2: sıvı CPU ve GPU'lar üzerinde 'through the inner manifold, then through the cold plates' akar. Bu iç manifoldun tepsinin Internal Manifold'u (Şekil 5) olup olmadığı açık bir sorudur ve borulama gösterilmemiştir.",
           "24": "Şekil 5 tepsinin arkasındaki soğuk su girişini ve sıcak su çıkışını etiketler; manifolda giden borular gösterilmemiştir.",
           "25": "Şekil 5 tepsinin arkasındaki soğuk su girişini ve sıcak su çıkışını etiketler; manifolda giden borular gösterilmemiştir.",
           "26": "Şekil 5 arkada bir bara konnektörü ve bir Power Distribution Board etiketler; birinin diğerini beslediği adlarından çıkarılmıştır, belirtilmemiştir."
         }
       },
       "switch-tray": {
-        "note": "Şematik bir yerleşim; ölçekli değildir ve NVIDIA'nın şekillerinden kopyalanmamıştır. Arka yarı: anahtar kartı üzerinde dört NVSwitch yongası, arkada su ve güç konnektörleri (Şekil 7). Ön: pil ve SSD ile Tablo 2.5'teki gibi soldan sağa beş RJ45 port.",
+        "note": "Şematik bir yerleşim; ölçekli değildir ve NVIDIA'nın şekillerinden kopyalanmamıştır. Arka yarı: anahtar kartı üzerinde dört NVSwitch yongası, arkada su ve güç konnektörleri (Şekil 7). Ön: pil ve SSD ile Tablo 2.5'teki gibi soldan sağa beş RJ45 port. Şekil 7 (ön taraf sağda) önden bakıldığında sıcak su çıkışını sağda, soğuk su girişini solda ve güç konnektörünü arka kenarın ortasında gösterir. Şekil 5 ve Şekil 7 NVLink konnektörlerini etiketlemez; bu uygulama onları güç konnektörünün yanına çizer. Pil ve SSD, Şekil 7'deki gibi solda çizilmiştir.",
         "notPlaced": {
           "switch-bmc": "Şekil 7 BMC'nin nerede olduğunu göstermez.",
           "cpu-erot": "Şekil 7 CPU ERoT'un nerede olduğunu göstermez.",
@@ -1316,7 +1317,7 @@
       }
     },
     "rearLayout": {
-      "note": "Birimlerin arkasında şematik yerleşim, ölçekli değildir. Şekil 2, arkanın ortasında kablo kartuşlarını, FD83 hortum konnektörlü iki sıvı soğutma manifoldunu, güç barasını, bunların desteklerini, arka çerçeveyi ve sismik desteği gösterir; tam konumlar, açıklıklar ve sayılar verilmemiştir. Hangi manifoldun beslemeyi, hangisinin dönüşü taşıdığı belirtilmemiş."
+      "note": "Birimlerin arkasında şematik yerleşim, ölçekli değildir. Şekil 2 patlatılmış bir görünümdür: kablo kartuşlarını, FD83 hortum konnektörlü iki sıvı soğutma manifoldunu, güç barasını, bunların desteklerini, arka çerçeveyi ve sismik desteği gösterir, ancak konum, açıklık veya sayı vermez. Bu uygulama, Şekil 5 ve Şekil 7 tepsilerin güç konnektörünü arka kenarın ortasına koyduğu için güç konnektörlerini ve barayı ortalar, sıcak su çıkışlarını önden bakıldığında sağdaki manifolda koyar. Hangi manifoldun beslemeyi, hangisinin dönüşü taşıdığı belirtilmemiş."
     }
   }
 }

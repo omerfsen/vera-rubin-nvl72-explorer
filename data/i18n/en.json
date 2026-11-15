@@ -102,7 +102,7 @@
       "unit": "{name} {index}",
       "height": "{height} RU",
       "rear": "Rear",
-      "rearNotDrawn": "The rear is not drawn in 3D yet."
+      "only3d": "The rear view and the tray interiors are drawn only in the 3D view."
     },
     "panel": {
       "selected": "Selected: {title}",
@@ -152,7 +152,8 @@
       "perParent": "{count} per {parent}",
       "oneRack": "One rack: {gpus} GPUs in a single NVLink domain.",
       "perRack": "{total} per rack (computed)",
-      "thisIs": "This is number {index}."
+      "thisIs": "This is number {index}.",
+      "fromZero": "NVIDIA numbers these from 0 (GPU0 to GPU3, CPU0 and CPU1 in Fig. 4); links in this app count from 1."
     },
     "per": {
       "rack": "rack",
@@ -407,12 +408,12 @@
       "ct-cold-water-inlet": {
         "name": "Cold water inlet (compute tray)",
         "description": "Cold water inlet at the rear of the compute tray.",
-        "function": "Brings coolant from the rack's manifold into the tray."
+        "function": "Brings coolant into the tray."
       },
       "ct-hot-water-outlet": {
         "name": "Hot water outlet (compute tray)",
         "description": "Hot water outlet at the rear of the compute tray.",
-        "function": "Returns coolant from the tray to the rack's manifold."
+        "function": "Takes coolant out of the tray."
       },
       "ct-bus-bar-connector": {
         "name": "Bus bar connector (compute tray)",
@@ -495,12 +496,12 @@
       "st-cold-water-inlet": {
         "name": "Cold water inlet (switch tray)",
         "description": "Cold water inlet at the rear of the switch tray.",
-        "function": "Brings coolant from the rack's manifold into the tray."
+        "function": "Brings coolant into the tray."
       },
       "st-hot-water-outlet": {
         "name": "Hot water outlet (switch tray)",
         "description": "Hot water outlet at the rear of the switch tray.",
-        "function": "Returns coolant from the tray to the rack's manifold."
+        "function": "Takes coolant out of the tray."
       },
       "st-power-connector": {
         "name": "Power connector (switch tray)",
@@ -550,7 +551,7 @@
         "function": "Connects all BMCs in the compute trays (including the BlueField-4 BMCs) and the switch trays to the management network.",
         "specNotes": {
           "Front panel in Fig. 9": "Counted from Fig. 9; the guide's text gives no port count and does not name the type of the larger cages or the three ports at the right.",
-          "BMC links in this rack": "Computed from the counts in the data; the guide does not say how they split across the two ToR switches."
+          "Connects": "Wording of section 1.5. Its list of connected ports names only the compute trays' out-of-band BMC and BlueField-4 BMC ports; how many links that makes per ToR switch is not given."
         }
       },
       "tor-rj45-port": {
@@ -591,7 +592,7 @@
       "fd83-connector": {
         "name": "FD83 liquid cooling hose connector",
         "description": "Hose connectors on the liquid cooling manifolds, labelled 'FD83 connectors for liquid cooling hoses' in Fig. 2.",
-        "function": "Connect the rack's manifolds to the facility's liquid cooling hoses.",
+        "function": "Fig. 2 labels them 'FD83 connectors for liquid cooling hoses'; where those hoses go is not stated.",
         "note": "Fig. 2 shows them at the ends of the manifolds; the guide does not give a count. This app draws one at each end of each manifold."
       },
       "rear-supports": {
@@ -602,21 +603,20 @@
       },
       "rear-bezel": {
         "name": "Rear bezel",
-        "description": "The removable cover pieces on the back of the rack, labelled 'Rear Bezel' in Fig. 2.",
+        "description": "The cover on the back of the rack, labelled 'Rear Bezel' in Fig. 2.",
         "function": "Covers the rear of the rack.",
         "note": "Drawn as a see-through panel in the Structure layer."
       },
       "seismic-bracing": {
         "name": "Seismic bracing",
         "description": "Bracing under the rack, labelled in Fig. 1 and Fig. 2.",
-        "function": "Holds the rack in place.",
+        "function": "Labelled 'Seismic bracing' in Fig. 1 and Fig. 2; the guide does not describe it further.",
         "note": "Drawn as a base frame under the rack."
       }
     },
     "specLabels": {
       "AC input": "AC input",
       "After replacement": "After replacement",
-      "BMC links in this rack": "BMC links in this rack",
       "Compute boards": "Compute boards",
       "Compute trays": "Compute trays",
       "Connects": "Connects",
@@ -626,13 +626,13 @@
       "DC output": "DC output",
       "Fault": "Fault",
       "Front": "Front",
-      "Front LEDs": "Front LEDs",
       "Front bays": "Front bays",
       "Front panel in Fig. 9": "Front panel in Fig. 9",
       "GPUs in the NVLink domain": "GPUs in the NVLink domain",
       "Height": "Height",
       "Identity": "Identity",
       "In-network computing": "In-network computing",
+      "LEDs": "LEDs",
       "Label in Fig. 2": "Label in Fig. 2",
       "Label in Fig. 7": "Label in Fig. 7",
       "Labels in Fig. 2": "Labels in Fig. 2",
@@ -743,7 +743,8 @@
         "description": "BlueField-4 BMC to the top-of-rack switches."
       },
       "st-bmc-tor": {
-        "description": "Switch tray BMC to the top-of-rack switches."
+        "description": "The top-of-rack switches connect the switch trays to the management network.",
+        "note": "Section 1.5 says the ToR switches connect 'the switch trays'; its port list does not name which switch tray ports, so this app links the tray rather than its BMC."
       },
       "ps-ipminet": {
         "description": "ipminet reaches the out-of-band interfaces of the power shelves."
@@ -762,7 +763,7 @@
       },
       "manifold-ct": {
         "description": "Coolant runs up and down the rack through the inner manifold, then through the cold plates in the compute trays.",
-        "note": "Section 1.2's 'inner manifold' may be the tray's Internal Manifold (Fig. 5) rather than the rear manifolds."
+        "note": "Section 1.2's 'inner manifold' may be the tray's Internal Manifold (Fig. 5) rather than the rear manifolds; see the open question on the inner manifold."
       },
       "manifold-st": {
         "description": "The switch tray is liquid cooled: cold plates on the NVLink switches, with a hot water outlet and cold water inlet at the rear.",
@@ -773,7 +774,7 @@
       },
       "busbar-st": {
         "description": "The bus bar distributes the 54 V DC to the rack components; the switch tray has a power connector at its rear.",
-        "note": "Fig. 7 labels the switch tray's rear power connector but does not say it connects to the bus bar."
+        "note": "Section 1.4 says the 54 V DC output is 'distributed through the bus bar to the rack components', and 1.1 says the power shelves supply 'all trays and switches'. Fig. 7 labels the switch tray's rear power connector."
       },
       "bf4-left-storagenet-fig1": {
         "description": "Fig. 1 marks the BlueField-4 left QSFP port 6 (storagenet), while Table 2.3 says dgxnet.",
@@ -960,7 +961,7 @@
       },
       "base-command-manager": {
         "description": "Manages all system components: powers trays on and off, manages the operating system images that compute trays boot, and reaches the out-of-band interfaces over ipminet.",
-        "note": "Runs on the head node outside the rack (2.2: ipminet gives Base Command Manager and the head node access to the BMCs)."
+        "note": "Section 2.2: ipminet gives Base Command Manager and the head node access to the out-of-band/BMC interfaces in the rack. Where the head node sits is not stated."
       },
       "cuda": {
         "description": "The CUDA platform: more than 150 libraries and the tools to optimize and debug GPU-accelerated applications, which use the NVLink network to distribute work across every GPU in the rack."
@@ -1109,13 +1110,13 @@
         "group": "Firmware and images",
         "title": "Check BMC Firmware Signing Type",
         "purpose": "Checks the signing type of the BMC firmware image, which helps confirm the authenticity and security of the installed firmware.",
-        "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0 ."
+        "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0."
       },
       "check-hmc-firmware-signing-type": {
         "group": "Firmware and images",
         "title": "Check HMC Firmware Signing Type",
         "purpose": "Checks the signing type of the HMC firmware image.",
-        "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0 ."
+        "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0."
       },
       "enabling-global-write-protect": {
         "group": "Write protection",
@@ -1137,7 +1138,7 @@
         "group": "Accounts",
         "title": "Creating a New Account",
         "purpose": "Creates a new user account with the specified username, password, and role.",
-        "note": "You can set RoleId to Administrator , Operator , or ReadOnly based on the required access level for the user."
+        "note": "You can set RoleId to Administrator, Operator, or ReadOnly based on the required access level for the user."
       },
       "updating-password-for-an-existing-account": {
         "group": "Accounts",
@@ -1193,8 +1194,8 @@
       "capturing-debug-logs-with-nvdebug": {
         "group": "Debug logs",
         "title": "Capturing Debug Logs with NVDEBUG",
-        "purpose": "Access the BMC or host system where NVDEBUG is available. Ensure you have the necessary permissions to run diagnostic tools.",
-        "note": "NVDEBUG automatically collects a comprehensive set of logs, including BMC event logs, firmware versions, hardware inventory, and system health data. This is the recommended approach for efficient and complete log collection."
+        "purpose": "When troubleshooting complex issues or working with NVIDIA support, it is often necessary to collect detailed debug logs from the compute tray. The preferred method for capturing and packaging these logs is to use the NVDEBUG tool, which gathers all relevant system, firmware, and event logs into a single archive for analysis.",
+        "note": "Steps in 6.4.1.11.1: 1. Access the BMC or host system where NVDEBUG is available. Ensure you have the necessary permissions to run diagnostic tools. 2. Run the NVDEBUG tool according to your system's documentation; replace /path/to/save/debug-logs.tar.gz with your desired output location. 3. Transfer the log archive to your support contact or upload it as instructed by NVIDIA support. NVDEBUG automatically collects a comprehensive set of logs, including BMC event logs, firmware versions, hardware inventory, and system health data. This is the recommended approach for efficient and complete log collection."
       }
     },
     "commandNotes": {
@@ -1216,7 +1217,7 @@
     },
     "trayLayouts": {
       "compute-tray": {
-        "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: GPUs and CPUs on HPM_L (left) and HPM_R (right) as in 2.4 Fig. 4, SOCAMM around the CPUs (Fig. 5). Front half: Bay B left and right with ConnectX-9 modules and cache drives, Bay C in the middle with the BlueField-4 and the SMM (Fig. 6). The 1 GbE BMC port is drawn at the SMM's RJ45, which Table 2.3 does not confirm.",
+        "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: GPUs and CPUs on HPM_L (left) and HPM_R (right) as in 2.4 Fig. 4, SOCAMM around the CPUs (Fig. 5). Front half: Bay B left and right with ConnectX-9 modules and cache drives, Bay C in the middle with the BlueField-4 and the SMM (Fig. 6). The 1 GbE BMC port is drawn at the SMM's RJ45, which Table 2.3 does not confirm. Fig. 5 (front at the right) shows the hot water outlet at the top of the image, which is the right side seen from the front, the cold water inlet on the left, and the bus bar connector at the centre of the rear edge. Fig. 5 and Fig. 7 do not label the NVLink connectors; this app draws them beside the power connector.",
         "notPlaced": {
           "ct-port-lan-1gbe": "Table 2.3 lists it, but no figure shows where it is (docs/OPEN_QUESTIONS.md item 4).",
           "ct-nvlink-connectors": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here.",
@@ -1242,19 +1243,19 @@
           "15": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge.",
           "16": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge.",
           "17": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge.",
-          "18": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
-          "19": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
-          "20": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
-          "21": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
-          "22": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
-          "23": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
+          "18": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "19": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "20": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "21": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "22": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "23": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
           "24": "Fig. 5 labels the cold water inlet and hot water outlet at the rear of the tray; the piping to the manifold is not shown.",
           "25": "Fig. 5 labels the cold water inlet and hot water outlet at the rear of the tray; the piping to the manifold is not shown.",
           "26": "Fig. 5 labels a bus bar connector at the rear and a Power Distribution Board; that one feeds the other is read from their names, not stated."
         }
       },
       "switch-tray": {
-        "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: four NVSwitch chips on the switch board, with the water and power connectors at the rear (Fig. 7). Front: battery and SSD, and the five RJ45 ports from left to right as in Table 2.5.",
+        "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: four NVSwitch chips on the switch board, with the water and power connectors at the rear (Fig. 7). Front: battery and SSD, and the five RJ45 ports from left to right as in Table 2.5. Fig. 7 (front at the right) shows the hot water outlet on the right seen from the front, the cold water inlet on the left, and the power connector at the centre of the rear edge. Fig. 5 and Fig. 7 do not label the NVLink connectors; this app draws them beside the power connector. The battery and SSD are drawn on the left, as in Fig. 7.",
         "notPlaced": {
           "switch-bmc": "Fig. 7 does not show where the BMC is.",
           "cpu-erot": "Fig. 7 does not show where the CPU ERoT is.",
@@ -1316,7 +1317,7 @@
       }
     },
     "rearLayout": {
-      "note": "Schematic placement behind the units, not to scale. Fig. 2 shows the cable cartridges in the middle of the rear, two liquid cooling manifolds with FD83 hose connectors, the power bus bar, their supports, the rear bezel and seismic bracing; exact positions, spans and counts are not given. Which manifold carries supply and which return is not stated."
+      "note": "Schematic placement behind the units, not to scale. Fig. 2 is an exploded view: it shows the cable cartridges, two liquid cooling manifolds with FD83 hose connectors, the power bus bar, their supports, the rear bezel and seismic bracing, but no positions, spans or counts. This app centres the power connectors and the bus bar, as Fig. 5 and Fig. 7 put the trays' power connector at the centre of the rear edge, and puts the hot water outlets on the manifold on the right seen from the front. Which manifold carries supply and which return is not stated."
     }
   }
 }

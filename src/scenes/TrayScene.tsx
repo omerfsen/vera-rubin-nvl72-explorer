@@ -11,7 +11,7 @@ import {
   CONFLICT_COLOR,
   DIM_COLOR,
   HOVER_COLOR,
-  LED_COLORS,
+  ledColor,
   NETWORK_COLORS,
   LINK_COLORS,
   SCENE_COLORS,
@@ -43,11 +43,17 @@ function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: P
   const network = useExplorer((s) => s.network);
   const base = useMemo(() => new Color(partColor(items[0]!.slot.component)), [items]);
   // With the network overlay on, parts on the network take its colour (or the
-  // conflict colour), and everything else is dimmed.
+  // conflict colour), parts of a unit on the network (the ToR switch's ports)
+  // a muted version of it, and everything else is dimmed.
   const overlay = useMemo(() => {
     if (!network) return null;
-    const m = model.networkMembers(network).members.get(items[0]!.slot.component);
-    return m ? (m.alternative ? CONFLICT_COLOR : (NETWORK_COLORS[network] ?? '#ffffff')) : DIM_COLOR;
+    const { members, memberOf } = model.networkMembers(network);
+    const id = items[0]!.slot.component;
+    const owner = memberOf(id);
+    const color = NETWORK_COLORS[network] ?? '#ffffff';
+    if (!owner) return DIM_COLOR;
+    if (owner !== id) return `#${new Color(color).lerp(new Color(DIM_COLOR), 0.5).getHexString()}`;
+    return members.get(id)!.alternative ? CONFLICT_COLOR : color;
   }, [network, items]);
 
   useLayoutEffect(() => {
@@ -149,7 +155,7 @@ function Indicators({ layout }: { layout: TrayLayout }) {
         box.position[1] + box.size[1] / 2 - s * 1.4,
         box.position[2] + box.size[2] / 2 + 0.003,
       ];
-      return { key: `${slot.component}.${slot.index ?? 0}.${k}`, position, s, color: LED_COLORS[led.color] ?? '#ffffff' };
+      return { key: `${slot.component}.${slot.index ?? 0}.${k}`, position, s, color: ledColor(led) };
     }),
   );
   return (

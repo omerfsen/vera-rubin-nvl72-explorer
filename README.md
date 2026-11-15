@@ -180,7 +180,7 @@ See [AGENTS.md](AGENTS.md) for the data rules, the checks to run and the commit 
 data/              topology JSON + JSON Schema (the source of truth)
 docs/              data model, open questions
 src/data/          types and model helpers (instances, paths, totals)
-src/scenes/        3D scenes (rack now; trays, shelves and rear later)
+src/scenes/        3D scenes: rack front and rear, tray, shelf and ToR interiors
 src/components/    side panel, breadcrumb, search, list view
 src/state/         Zustand store and URL sync
 src/config/        feature flags

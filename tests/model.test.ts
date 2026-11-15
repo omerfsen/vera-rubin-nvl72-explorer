@@ -51,7 +51,18 @@ describe('selection paths', () => {
   it('labels segments for the breadcrumb', () => {
     const [tray, gpu] = model.parsePath('compute-tray.7/rubin-gpu.2')!;
     expect(model.segmentLabel(tray!)).toBe('Compute tray 7');
-    expect(model.segmentLabel(gpu!)).toBe('Rubin GPU 2');
+    // Path index 2 is NVIDIA's GPU1: Fig. 4 numbers GPUs and CPUs from 0.
+    expect(model.segmentLabel(gpu!)).toBe('Rubin GPU 1');
+    expect(model.segmentLabel({ id: 'vera-cpu', index: 1 })).toBe('Vera CPU 0');
+    expect(model.segmentLabel({ id: 'psu', index: 1 })).toBe('Power supply unit 1'.replace('Power supply unit', model.getComponent('psu')!.name));
+  });
+
+  it('shows the same number as the slot label NVIDIA prints', () => {
+    for (const slot of model.topology.trayLayouts!['compute-tray']!.slots) {
+      if (slot.component !== 'rubin-gpu' && slot.component !== 'vera-cpu') continue;
+      const n = model.displayIndex(slot.component, slot.index!);
+      expect(slot.label).toMatch(new RegExp(`^(GPU|CPU)${n} `));
+    }
   });
 
   it('builds a general path for any component', () => {

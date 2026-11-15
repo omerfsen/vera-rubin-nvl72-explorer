@@ -44,7 +44,7 @@ export function ProcedureBox() {
       </h3>
       <p aria-live="polite">{i18n.procedureStep(proc.id, step, s.text)}</p>
       {s.command && <CommandBlock text={s.command} />}
-      {safety.length > 0 && step === 0 && (
+      {safety.length > 0 && (
         <div className="safety">
           {safety.map((n) => (
             <p key={n.id} className="small">

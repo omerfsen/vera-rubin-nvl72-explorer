@@ -606,6 +606,33 @@
           "items": {
             "$ref": "#/$defs/reference"
           }
+        },
+        "numbering": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "start",
+            "source"
+          ],
+          "description": "The first number NVIDIA uses for these parts (0 for GPU0..GPU3). Paths in the URL stay 1-based.",
+          "properties": {
+            "start": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        },
+        "assumedNetworks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "uniqueItems": true,
+          "description": "Networks in `networks` that are this app's reading rather than stated for this part; the component's note says why."
         }
       }
     },
@@ -915,7 +942,7 @@
         },
         "indicators": {
           "type": "array",
-          "description": "Status LEDs drawn on the part's front face.",
+          "description": "Status LEDs drawn on the part's front face. unlit=true draws one switched off, for an LED the documents describe only in a failure state.",
           "items": {
             "type": "object",
             "additionalProperties": false,
@@ -933,6 +960,9 @@
               "label": {
                 "type": "string",
                 "pattern": "\\S"
+              },
+              "unlit": {
+                "type": "boolean"
               }
             }
           }
@@ -1274,6 +1304,14 @@
         "index": {
           "type": "integer",
           "minimum": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "description": "Other spellings NVIDIA's figures print for this label (see the row's note and the open questions); the figures do not say which bus each spelling belongs to."
         }
       }
     },

@@ -145,8 +145,53 @@ describe('power shelf and ToR detail', () => {
     expect(n('tor-side-port')).toBe(3);
   });
 
-  it('gives every PSU a power and a fault LED', () => {
-    const psus = topology.trayLayouts!['power-shelf']!.slots.filter((s) => s.component === 'psu');
-    for (const p of psus) expect(p.indicators?.map((i) => i.color)).toEqual(['green', 'amber']);
+  it('draws only the amber failure LED the service manual names, switched off', () => {
+    const slots = topology.trayLayouts!['power-shelf']!.slots.filter((s) => s.component === 'psu' || s.component === 'power-shelf-mgmt-module');
+    expect(slots).toHaveLength(7);
+    for (const p of slots) expect(p.indicators).toEqual([expect.objectContaining({ color: 'amber', unlit: true })]);
+  });
+});
+
+describe('positions read from Fig. 5 and Fig. 7', () => {
+  const point = (tray: string, id: string) => topology.trayLayouts![tray]!.points!.find((p) => p.id === id)!;
+  const slot = (tray: string, c: string) => topology.trayLayouts![tray]!.slots.find((s) => s.component === c)!;
+
+  it('puts the hot water outlet on the right seen from the front and the power connector at the centre', () => {
+    for (const [tray, power] of [['compute-tray', 'bus-bar-connector'], ['switch-tray', 'power-connector']] as const) {
+      expect(point(tray, 'hot-water-outlet').x).toBeGreaterThan(0);
+      expect(point(tray, 'cold-water-inlet').x).toBeLessThan(0);
+      expect(point(tray, power).x).toBe(0);
+    }
+  });
+
+  it('draws the switch tray battery and SSD on the left, as in Fig. 7', () => {
+    expect(slot('switch-tray', 'switch-tray-battery').x).toBeLessThan(0);
+    expect(slot('switch-tray', 'switch-tray-ssd').x).toBeLessThan(0);
+  });
+
+  it('uses the same sides at the rear: hot outlets to the right-hand manifold, power at the centre', () => {
+    const rl = topology.rearLayout!;
+    for (const u of rl.unitConnectors ?? []) {
+      if (u.kind === 'cooling') {
+        const hot = u.component.includes('hot');
+        expect(Math.sign(u.x), u.component).toBe(hot ? 1 : -1);
+        expect(Math.sign(rl.parts[u.toPart!]!.x), u.component).toBe(hot ? 1 : -1);
+      }
+      if (u.kind === 'power') expect(u.x, u.component).toBe(0);
+    }
+    expect(rl.parts.find((p) => p.component === 'bus-bar')!.x).toBe(0);
+  });
+});
+
+describe('inferences are marked', () => {
+  it('marks the inner manifold coolant links as assumed', () => {
+    const links = topology.trayLayouts!['compute-tray']!.links!.filter((l) => l.kind === 'coolant');
+    for (const l of links) expect(l.assumed, JSON.stringify(l.to)).toBe(true);
+    expect(topology.connections.find((c) => c.id === 'manifold-ct')!.assumed).toBe(true);
+  });
+
+  it('has no derived BMC link count presented as a ToR spec', () => {
+    const tor = topology.components.find((c) => c.id === 'tor-switch')!;
+    expect(tor.specs.map((s) => s.label)).not.toContain('BMC links in this rack');
   });
 });
