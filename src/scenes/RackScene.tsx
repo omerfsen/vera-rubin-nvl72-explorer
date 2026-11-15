@@ -145,30 +145,45 @@ function Handles() {
 
 /** Four corner posts plus top and bottom plates. */
 function RackFrame() {
+  const ref = useRef<InstancedMesh>(null);
   const height = frameHeight(model.totalRU);
   const halfW = FRAME_WIDTH / 2 - FRAME_POST / 2;
   const halfD = UNIT_DEPTH / 2 + 0.05;
-  const posts: [number, number][] = [
-    [-halfW, -halfD],
-    [halfW, -halfD],
-    [-halfW, halfD],
-    [halfW, halfD],
-  ];
+  // Four corner posts plus a top and a bottom plate, as one InstancedMesh.
+  const parts = useMemo<{ position: [number, number, number]; size: [number, number, number] }[]>(
+    () => [
+      ...([
+        [-halfW, -halfD],
+        [halfW, -halfD],
+        [-halfW, halfD],
+        [halfW, halfD],
+      ] as const).map(([x, z]) => ({
+        position: [x, 0, z] as [number, number, number],
+        size: [FRAME_POST, height, FRAME_POST] as [number, number, number],
+      })),
+      ...[height / 2, -height / 2].map((y) => ({
+        position: [0, y, 0] as [number, number, number],
+        size: [FRAME_WIDTH, 0.03, halfD * 2 + FRAME_POST] as [number, number, number],
+      })),
+    ],
+    [halfW, halfD, height],
+  );
+  useLayoutEffect(() => {
+    const mesh = ref.current;
+    if (!mesh) return;
+    parts.forEach((p, i) => {
+      scratch.position.set(...p.position);
+      scratch.scale.set(...p.size);
+      scratch.updateMatrix();
+      mesh.setMatrixAt(i, scratch.matrix);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+  }, [parts]);
   return (
-    <group raycast={() => null}>
-      {posts.map(([x, z]) => (
-        <mesh key={`${x}:${z}`} position={[x, 0, z]} raycast={() => null}>
-          <boxGeometry args={[FRAME_POST, height, FRAME_POST]} />
-          <meshStandardMaterial color="#1c2026" metalness={0.4} roughness={0.7} />
-        </mesh>
-      ))}
-      {[height / 2, -height / 2].map((y) => (
-        <mesh key={y} position={[0, y, 0]} raycast={() => null}>
-          <boxGeometry args={[FRAME_WIDTH, 0.03, halfD * 2 + FRAME_POST]} />
-          <meshStandardMaterial color="#1c2026" metalness={0.4} roughness={0.7} />
-        </mesh>
-      ))}
-    </group>
+    <instancedMesh ref={ref} args={[undefined, undefined, parts.length]} raycast={() => null}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="#1c2026" metalness={0.4} roughness={0.7} />
+    </instancedMesh>
   );
 }
 
