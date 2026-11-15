@@ -170,6 +170,45 @@ images from `docs.nvidia.com`, and the figures load with no referrer.
   manual. Compute and switch trays are numbered from the top down; NVIDIA does
   not number them by rack position, so that numbering is marked *assumed*.
 
+## Ask questions with MCP
+
+The same data is served as a read-only [MCP](https://modelcontextprotocol.io) server, so an AI assistant can answer questions about the rack and cite NVIDIA's documents. The public endpoint needs no login and is rate limited:
+
+```
+https://verarubin-nvl72.faruk.net/mcp
+```
+
+### Add it to a client
+
+- **Claude Code:** `claude mcp add --transport http vr-nvl72 https://verarubin-nvl72.faruk.net/mcp`
+- **Claude Desktop or claude.ai:** Settings, Connectors, Add custom connector, then paste the URL.
+- **VS Code** (`.vscode/mcp.json`):
+  ```json
+  { "servers": { "vr-nvl72": { "type": "http", "url": "https://verarubin-nvl72.faruk.net/mcp" } } }
+  ```
+- **Cursor** (`~/.cursor/mcp.json`): `{ "mcpServers": { "vr-nvl72": { "url": "https://verarubin-nvl72.faruk.net/mcp" } } }`
+- **Offline, over stdio:** `npm ci && npm run mcp:build`, then add `node /path/to/repo/mcp/dist/vr-nvl72-mcp.mjs` as a stdio server (for Claude Code: `claude mcp add vr-nvl72 -- node /path/to/repo/mcp/dist/vr-nvl72-mcp.mjs`).
+
+### Check that it works
+
+1. In Claude Code, run `claude mcp list`: `vr-nvl72` should show as connected. In other clients, the server's nine `nvl72_*` tools should appear in the tool list.
+2. Ask: "How many GPUs are in a Vera Rubin NVL72 rack?" The answer should be 72 (18 compute trays with 4 GPUs each), from `nvl72_overview` and `nvl72_get_component`, citing section 1.2 of the User Guide.
+3. Ask: "Which physical port is enP1p3s0f0np0?" It should find C1/C1_1 on bus `0001:03:00.0` with `nvl72_search`.
+4. Ask: "Where is compute tray 7 in the rack?" `nvl72_rack_layout` places it 14 RU from the top.
+5. Ask: "Show me the Redfish command to power-cycle a host." `nvl72_get_command` returns it exactly as the guide prints it.
+
+Without an AI client, `node scripts/mcp-live.mjs` connects with the official SDK client and runs the same checks. The tools are listed in [docs/mcp/tools.md](docs/mcp/tools.md); the security model is in [docs/mcp/security.md](docs/mcp/security.md).
+
+| Standard (spec 2026-07-28) | Status |
+| --- | --- |
+| `server/discover`, `resultType`, `serverInfo` in `_meta` | Yes, proved by `scripts/mcp-wire.mjs` |
+| `ttlMs` and `cacheScope` on `tools/list` | Yes: one hour, public |
+| Read-only tools with all four annotation hints, `outputSchema`, structured and text results | Yes, tested |
+| Arguments are enums or bounded values, unknown fields refused | Yes, tested with hostile values |
+| Rate limits on requests and tool calls | Yes, per IP; per instance on Vercel (see security) |
+| Host and Origin checks, body cap, stateless | Yes, tested |
+| Authentication | None: public data, nothing to protect or change (see security) |
+
 ## Contributing
 
 See [AGENTS.md](AGENTS.md) for the data rules, the checks to run and the commit style.
@@ -178,7 +217,9 @@ See [AGENTS.md](AGENTS.md) for the data rules, the checks to run and the commit 
 
 ```
 data/              topology JSON + JSON Schema (the source of truth)
-docs/              data model, open questions
+docs/              data model, open questions, MCP docs (docs/mcp/)
+mcp/               MCP server: tools (server.ts), stdio and HTTP entries
+api/               Vercel function that serves /mcp
 src/data/          types and model helpers (instances, paths, totals)
 src/scenes/        3D scenes: rack front and rear, tray, shelf and ToR interiors
 src/components/    side panel, breadcrumb, search, list view
