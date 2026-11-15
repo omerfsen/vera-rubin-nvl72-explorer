@@ -1,0 +1,1322 @@
+{
+  "ui": {
+    "language": {
+      "self": "TR",
+      "label": "Dil",
+      "translated": "Bu metin NVIDIA'nın İngilizce belgelerinden çevrilmiştir. Esas alınacak metin İngilizcedir."
+    },
+    "site": {
+      "title": "Vera Rubin NVL72 Gezgini",
+      "tagline": "Her bilgi NVIDIA'nın kendi belgelerine bağlı · resmi değildir, NVIDIA ile bağlantılı değildir",
+      "trademarks": "NVIDIA, DGX, Vera, Rubin, NVLink, NVSwitch, ConnectX ve BlueField, NVIDIA Corporation'ın ticari markalarıdır.",
+      "footer": "Veriler: {userGuide} ({userGuideDate}) ve {serviceManual} ({serviceManualDate}). Resmi değildir; NVIDIA ile bağlantılı değildir ve NVIDIA tarafından onaylanmamıştır. {trademarks} 3B geometri özgündür ve temsilidir."
+    },
+    "credits": {
+      "madeBy": "Hazırlayan: {name}",
+      "source": "GitHub'da kaynak kod",
+      "github": "GitHub",
+      "linkedin": "LinkedIn"
+    },
+    "top": {
+      "sources": "Kaynaklar",
+      "listView": "Liste görünümü",
+      "hideList": "Listeyi gizle"
+    },
+    "search": {
+      "placeholder": "Parça ara, ör. gpu, bluefield, tepsi 7",
+      "label": "Parça ara",
+      "in": "{parent} içinde",
+      "rackUnit": "kabin birimi"
+    },
+    "breadcrumb": {
+      "label": "İçerik yolu",
+      "rack": "Kabin"
+    },
+    "networkBar": {
+      "label": "Bir ağı vurgula",
+      "networks": "Ağlar:"
+    },
+    "layout": {
+      "listPane": "Liste olarak kabin",
+      "details": "Ayrıntılar",
+      "noWebgl": "Bu tarayıcıda WebGL yok, bu yüzden kabin liste olarak gösteriliyor.",
+      "sceneFailed": "3B görünüm başlatılamadı. Bunun yerine liste görünümünü kullanın.",
+      "loading": "3B görünüm yükleniyor…",
+      "stage": "Kabin görünümü. Birimler arasında gezinmek için yukarı ve aşağı ok tuşlarını kullanın."
+    },
+    "hint": {
+      "trayLong": "Bir parçaya tıklayın · döndürmek için sürükleyin · yakınlaştırmak için kaydırın veya kıstırın · ↑ ↓ ile gezinin · geri dönmek için Esc",
+      "trayShort": "Bir parçaya dokunun · döndürmek için sürükleyin · yakınlaştırmak için kıstırın",
+      "rearLong": "Arka: bir tepsinin NVLink bağlantılarının kartuş üzerinden her eşe ulaştığını görmek için tepsiye tıklayın · herhangi bir arka parçaya veya konnektöre tıklayın",
+      "rearShort": "Bir arka parçaya dokunun · döndürmek için sürükleyin",
+      "rackLong": "Bir birime tıklayın, açmak için yeniden tıklayın · döndürmek için sürükleyin · ↑ ↓ ile gezinin · açmak için Enter · geri dönmek için Esc",
+      "rackShort": "Bir birime dokunun, açmak için yeniden dokunun · döndürmek için sürükleyin"
+    },
+    "stage": {
+      "side": "Kabinin yüzü",
+      "front": "Ön",
+      "rear": "Arka",
+      "open": "{name} birimini aç",
+      "backToRack": "← Kabine dön",
+      "layers": "Katmanlar",
+      "showOrHide": "Göster veya gizle: {hint}",
+      "connectionTypes": "Bağlantı türleri",
+      "dashed": "Kesikli: varsayım, panele bakın"
+    },
+    "layers": {
+      "structure": "Yapı",
+      "structureHint": "iskelet: kabin çerçevesi veya tepsi gövdesi",
+      "parts": "Parçalar",
+      "partsHint": "kaslar: birimler, arka parçalar, yongalar, kartlar, sürücüler, portlar",
+      "links": "Bağlantılar",
+      "linksHint": "damarlar: PCIe, C2C, Clink, NVLink, soğutma sıvısı, güç"
+    },
+    "legend": {
+      "label": "Açıklama",
+      "on": "{name} üzerinde",
+      "conflict": "Çelişki: şekil ile tablo uyuşmuyor",
+      "notOn": "Bu ağda değil",
+      "rear": "{name} (arka)",
+      "port": "{type} portu",
+      "otherPort": "Diğer port (tipi belirtilmemiş)"
+    },
+    "scene": {
+      "trayOpened": "{name} için 3B görünüm açık. Parçaları arasında gezinmek için ok tuşlarını kullanın.",
+      "rack": "Kabinin 3B görünümü. Birim seçmek için liste görünümünü veya ok tuşlarını kullanın.",
+      "contextLost": "3B görünüm grafik bağlamını kaybetti. Kendiliğinden geri gelir; liste görünümü çalışmaya devam eder.",
+      "front": "Ön",
+      "rear": "Arka",
+      "group": "{count} × {name}",
+      "nvlinkFanout": "NVLink: {unit} → tüm {count} {peers}"
+    },
+    "unitPlural": {
+      "compute-tray": "hesaplama tepsisi",
+      "switch-tray": "NVLink 6 anahtar tepsisi",
+      "power-shelf": "güç rafı",
+      "tor-switch": "kabin üstü Ethernet anahtarı"
+    },
+    "list": {
+      "label": "Kabin birimleri, yukarıdan aşağıya",
+      "front": "Ön, yukarıdan aşağıya",
+      "group": "{count} × {name}",
+      "unit": "{name} {index}",
+      "height": "{height} RU",
+      "rear": "Arka",
+      "rearNotDrawn": "Arka taraf henüz 3B olarak çizilmiyor."
+    },
+    "panel": {
+      "selected": "Seçili: {title}",
+      "assumed": "varsayım",
+      "openToSee": "Parçalarını görmek için {title} birimini aç",
+      "whatItIs": "Nedir",
+      "whatItDoes": "Ne yapar",
+      "howMany": "Kaç tane",
+      "position": "Konum",
+      "nvidiaLabel": "NVIDIA etiketi: {label}",
+      "notDrawnReason": "Çizilmedi: {reason}",
+      "notDrawn": "3B görünümde ayrıca çizilmiyor.",
+      "networks": "Ağlar",
+      "noNetworks": "Kabinin yedi ağından hiçbirinde değil.",
+      "throughPart": " (içindeki bir parça üzerinden)",
+      "dashedChips": "Kesikli etiketler: içindeki bir parça üzerinden ulaşılır.",
+      "whatNetworksDo": "Bu ağlar ne yapar",
+      "networkItem": "{number}. {name}",
+      "specs": "Özellikler",
+      "insideTray": "Tepsi içinde bağlı olduğu parçalar",
+      "connections": "Bağlantılar",
+      "partsInside": "İçindeki parçalar",
+      "countNotStated": "sayı belirtilmemiş",
+      "times": "× {count}",
+      "note": "Not",
+      "source": "Kaynak",
+      "sourceLabel": "Kaynak:",
+      "figureAlt": "{name} için resmi şekil, NVIDIA DGX VR NVL72 User Guide'dan",
+      "figureCaption": "Şekil docs.nvidia.com'dan doğrudan bağlanmıştır. © NVIDIA Corporation.",
+      "documents": "NVIDIA belgelerinde",
+      "web": "web",
+      "pdfPage": "PDF s. {page}",
+      "figure": "şekil",
+      "openQuestion": "NVIDIA belgelerinde açık soru",
+      "openQuestions": "NVIDIA belgelerinde açık sorular"
+    },
+    "docs": {
+      "user-guide": "Kullanım Kılavuzu",
+      "service-manual": "Servis Kılavuzu"
+    },
+    "badge": {
+      "conflict": "çelişki",
+      "gap": "eksik"
+    },
+    "count": {
+      "notStated": "Kılavuz kaç tane olduğunu belirtmiyor.",
+      "perParent": "Her {parent} başına {count}",
+      "oneRack": "Tek kabin: tek bir NVLink alanında {gpus} GPU.",
+      "perRack": "Kabin başına {total} (hesaplanmış)",
+      "thisIs": "Bu, {index} numaralı birimdir."
+    },
+    "per": {
+      "rack": "kabin",
+      "compute-tray": "hesaplama tepsisi",
+      "switch-tray": "anahtar tepsisi",
+      "power-shelf": "güç rafı",
+      "tor-switch": "kabin üstü anahtar"
+    },
+    "host": {
+      "title": "Ana sistemde",
+      "label": "Etiket",
+      "bus": "PCIe veri yolu",
+      "interface": "Arayüz",
+      "rdma": "RDMA",
+      "na": "yok",
+      "allInstances": " · tüm örnekler gösteriliyor"
+    },
+    "network": {
+      "aria": "{name} ağı",
+      "title": "Ağ {number}: {name}",
+      "noPort": "NVIDIA belgelerine göre bu kabinde {name} ağında olan port yok.",
+      "onThe": " ({parent} üzerinde)",
+      "perRack": "kabin başına {total}",
+      "conflict": "Çelişki: kılavuzun şekli bu portu {name} ağına koyuyor, tablosu koymuyor. OPEN_QUESTIONS madde 3'e bakın.",
+      "off": "Vurgulamayı kapat"
+    },
+    "ops": {
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "software": "Yazılım",
+      "partOf": " ({name} parçası)",
+      "commands": "Komutlar ({count})",
+      "safety": "Güvenlik"
+    },
+    "procedure": {
+      "operations": "İşlemler",
+      "service": "Servis prosedürü",
+      "walkThrough": "Adım adım: {title} ({count} adım)",
+      "aria": "Servis prosedürü: {title}",
+      "heading": "{title} · adım {step} / {total}",
+      "previous": "← Önceki",
+      "next": "Sonraki →",
+      "close": "Kapat",
+      "exampleService": "Örnek bir birim üzerinde gösteriliyor. Prosedürün tamamını ve güvenlik notlarını NVIDIA'nın servis kılavuzundan izleyin.",
+      "exampleOperation": "Örnek bir birim üzerinde gösteriliyor. Prosedürün tamamını ve güvenlik notlarını NVIDIA'nın kullanım kılavuzundan izleyin."
+    },
+    "share": {
+      "title": "Paylaş",
+      "copyLink": "Bu görünümün bağlantısını kopyala",
+      "copyEmbed": "Gömme kodunu kopyala",
+      "linkCopied": "Bağlantı kopyalandı.",
+      "embedCopied": "Gömme kodu kopyalandı."
+    },
+    "sources": {
+      "back": "← Kabine dön",
+      "title": "Kaynaklar ve açık sorular",
+      "intro": "Bu gezgindeki her bilgi, NVIDIA belgelerinde geldiği bölüme bağlanır. Belgelerin belirtmediği her şey bir gerekçeyle {assumed} olarak işaretlenir; NVIDIA'nın şekilleri ile tablolarının uyuşmadığı yerler çözülmeden çelişki olarak tutulur.",
+      "documents": "Belgeler",
+      "citations": "({count} atıf)",
+      "conflicts": "NVIDIA belgelerindeki çelişkiler ({count})",
+      "gaps": "Eksikler: belgelerin söylemedikleri ({count})",
+      "sameList": "Aynı liste, her belgeden alıntılarla birlikte {file} dosyasındadır.",
+      "conflictingOne": "{count} çelişkili okuma da verilerde tutulur ve ağ vurgulamasında çelişki rengiyle çizilir.",
+      "conflictingMany": "{count} çelişkili okuma da verilerde tutulur ve ağ vurgulamasında çelişki rengiyle çizilir.",
+      "assumed": "Varsayımlar ({count})",
+      "about": "Hakkında",
+      "license": "Apache 2.0 lisansıyla lisanslanmıştır.",
+      "data": "Veriler",
+      "dataText": "Gezginin gösterdiği her şey, bir JSON Schema ile doğrulanan tek bir JSON dosyasından gelir. Yeniden kullanmak için ikisini de indirin: {json} · {schema}. Belgelerden {date} tarihinde alınmıştır.",
+      "schema": "şema",
+      "translations": "Arayüz metinleri ve çeviriler {files} klasöründedir.",
+      "specWhere": "{name}: {label}",
+      "heightOf": "{name} yüksekliği",
+      "trayNumbering": "Tepsi numaralandırması",
+      "layoutOf": "{name} yerleşimi",
+      "linkIn": "{name} içinde {kind} bağlantısı",
+      "rearLayout": "Arka yerleşim"
+    },
+    "types": {
+      "rack": "kabin",
+      "compute-tray": "hesaplama tepsisi",
+      "switch-tray": "anahtar tepsisi",
+      "power-shelf": "güç rafı",
+      "tor-switch": "ToR anahtarı",
+      "cpu": "cpu",
+      "gpu": "gpu",
+      "nic": "ağ kartı (nic)",
+      "dpu": "dpu",
+      "drive": "sürücü",
+      "switch-asic": "anahtar asic",
+      "psu": "güç kaynağı (psu)",
+      "bmc": "bmc",
+      "controller": "denetleyici",
+      "port": "port",
+      "cable-cartridge": "kablo kartuşu",
+      "manifold": "manifold",
+      "bus-bar": "bara",
+      "battery": "pil",
+      "memory": "bellek",
+      "board": "kart",
+      "connector": "konnektör",
+      "structure": "yapı"
+    },
+    "links": {
+      "pcie": "PCIe",
+      "c2c": "C2C (CPU'dan GPU'ya)",
+      "clink": "Clink (CPU'dan CPU'ya)",
+      "nvlink": "NVLink (kablo kartuşuna)",
+      "coolant": "Soğutma sıvısı",
+      "cooling": "Soğutma sıvısı",
+      "power": "Güç",
+      "ac": "AC güç kabloları (uzak güç paneline)"
+    },
+    "connectionKinds": {
+      "network": "ağ",
+      "not-connected": "bağlı değil",
+      "nvlink": "nvlink",
+      "power": "güç",
+      "cooling": "soğutma"
+    }
+  },
+  "content": {
+    "components": {
+      "rack": {
+        "name": "DGX Vera Rubin NVL72 kabini",
+        "description": "GPU'ları, NVLink pasif bakır kablo kartuşu arka paneli üzerinden NVLink ile birbirine bağlanan kabin ölçekli bir sistem. Hesaplama tepsileri, NVLink anahtar tepsileri, kabin üstü yönetim anahtarları, güç rafları, bir bara ve sıvı soğutma manifoldları içerir.",
+        "function": "Tek bir 72 GPU'luk NVLink alanı oluşturur. NVLink kabin içindeki dikey ölçekleme (scale-up) yapısı, InfiniBand kabinler arasındaki yatay ölçekleme (scale-out) yapısıdır; Ethernet ise depolama, yönetim ve harici trafiği taşır."
+      },
+      "compute-tray": {
+        "name": "Hesaplama tepsisi",
+        "description": "Hesaplama kartlarını ve çevre birimi aksesuar kartlarını barındıran ve bir OS imajı çalıştıran muhafaza. Bir tepside iki hesaplama kartı bulunur.",
+        "function": "2 Vera CPU ve 4 Rubin GPU içeren, bir OS imajı çalıştıran hesaplama düğümü. GPU'ları, tepsinin arkasındaki konnektörler ve NVLink anahtar tepsileri üzerinden NVLink ile diğer tepsilerdeki GPU'lara ulaşır.",
+        "specNotes": {
+          "OSFP ports (computenet)": "Şekil 1, sekiz OSFP yuvasını 5 numaralı ağ (computenet) ile işaretler."
+        }
+      },
+      "vera-cpu": {
+        "name": "Vera CPU",
+        "description": "NVIDIA Vera CPU. Hesaplama düğümünün bir parçası.",
+        "function": "Hesaplama düğümünün bir parçası; kılavuz bunu tepsi başına 2 Vera CPU ve 4 Rubin GPU olarak listeler."
+      },
+      "rubin-gpu": {
+        "name": "Rubin GPU",
+        "description": "NVIDIA Rubin GPU. Hesaplama düğümünün bir parçası.",
+        "function": "Hızlandırıcı. Kabindeki 72 GPU'nun tamamı, NVLink anahtar tepsileri üzerinden tek bir NVLink alanı oluşturur."
+      },
+      "connectx-9": {
+        "name": "ConnectX-9 G/Ç kartı",
+        "description": "NVIDIA ConnectX-9 G/Ç kartı.",
+        "function": "InfiniBand küme ara bağlantısı ve çok kabinli kümeleme (computenet).",
+        "note": "Kılavuz sayı konusunda kendisiyle çelişiyor. 1.2 yapılandırma tablosu 2 ConnectX-9 G/Ç kartı der. Şekil 4 (blok diyagram) 8 ConnectX-9 kartı çizer, Şekil 6 (önden görünüm) iki Bay B bölümünün her birinde 2 x CX9 modülü gösterir ve 2.2 şekilleri 8 OSFP yuvası gösterir. Bu uygulama tablodaki 2 değerini kullanır. Bkz. docs/OPEN_QUESTIONS.md.",
+        "specNotes": {
+          "PCIe port labels": "Her OSFP yuvası için bir tane olmak üzere sekiz etiket. 2.2 ve 2.4 şekilleri son ikisini C7/C3_1 ve C7/C3_2 olarak basar; tablo ise C7/C7_1 ve C7/C7_2 olarak basar."
+        }
+      },
+      "bluefield-4": {
+        "name": "BlueField-4 DPU",
+        "description": "NVIDIA BlueField-4 DPU.",
+        "function": "Ethernet depolama ve sistem yönetimi ağı. Sol QSFP portu dgxnet'te, sağ QSFP portu storagenet'te ve RJ45 portu ipminet'tedir.",
+        "specNotes": {
+          "PCIe labels": "Şekil 2 (2.2) ve Şekil 4 (2.4) BF_0 ve BF_1 basar. 2.4 tablosu, tekrarlanan arayüz ve RDMA adlarıyla birlikte hem 0005:41:00.x hem de 000d:41:00.x veri yolu için BF_0 basar. Bkz. docs/OPEN_QUESTIONS.md."
+        }
+      },
+      "host-bmc": {
+        "name": "Host BMC",
+        "description": "Hesaplama tepsisinin RJ45 portlu Board Management Controller'ı (kart yönetim denetleyicisi).",
+        "function": "HMC ile birlikte tepsi donanımının bant dışı yönetimi. Kabin üstü (ToR) anahtarlarına bağlıdır.",
+        "note": "Sayı, kılavuzdaki tekil ifadeden ('Host BMC with RJ45') ve Şekil 5'teki tek SMM'den çıkarılmıştır."
+      },
+      "hmc": {
+        "name": "Host Management Controller (HMC)",
+        "description": "Host Management Controller mikrodenetleyicisi.",
+        "function": "BMC ile birlikte hesaplama tepsisi donanımının bant dışı yönetimini sağlar.",
+        "note": "Metin bir sayı vermez. Şekil 5, 'w/ BMC+HMC+TPM' yazan tek bir SMM taşıyıcı kartı gösterir."
+      },
+      "e1s-cache-drive": {
+        "name": "E1.S NVMe önbellek sürücüsü",
+        "description": "Yerel veri önbelleği için E1.S NVMe sürücü.",
+        "function": "Önbellek sürücüleri tek bir RAID 0 birimi oluşturur. Bir veri kümesi paylaşımlı depolamadan ilk kez okunduğunda yazılım buraya bir kopyasını önbelleğe alabilir (yapılandırılmışsa cachefilesd); sonraki okumalar yerel önbellekten yapılır. Checkpoint işlemini de hızlandırabilir."
+      },
+      "e1s-boot-drive": {
+        "name": "E1.S NVMe önyükleme sürücüsü",
+        "description": "İşletim sistemini barındıran E1.S NVMe sürücü.",
+        "function": "Hesaplama tepsisinin OS'unu önyükler."
+      },
+      "ct-port-cx9-osfp": {
+        "name": "ConnectX-9 OSFP portu",
+        "description": "ConnectX-9 G/Ç kartı üzerindeki OSFP portu.",
+        "function": "Tepsiyi computenet'e (InfiniBand) bağlar.",
+        "note": "Hesaplama tepsisi başına sekiz adet (Şekil 1 sekiz yuvayı 5, computenet olarak işaretler). ConnectX-9 kartlarına aittirler, ancak kılavuz her kartta kaç port olduğunu belirtmediği için tepsi altında listelenirler."
+      },
+      "ct-port-bf4-left": {
+        "name": "BlueField-4 sol portu",
+        "description": "BlueField-4 DPU'nun sol QSFP portu.",
+        "function": "Tepsiyi dgxnet'e (Ethernet) bağlar.",
+        "note": "Kılavuz kendisiyle çelişiyor. Tablo 2.3 bu portu dgxnet'e (3) koyar. 2.2'deki Şekil 1 ise her iki QSFP portunu 6 (storagenet) olarak işaretler ve 3 ile işaretlenmiş hiçbir port göstermez. Bu uygulama tabloyu izler. Bkz. docs/OPEN_QUESTIONS.md.",
+        "specNotes": {
+          "Network in Fig. 1": "2.3 tablosuyla (dgxnet) çelişiyor."
+        }
+      },
+      "ct-port-bf4-right": {
+        "name": "BlueField-4 sağ portu",
+        "description": "BlueField-4 DPU'nun sağ QSFP portu.",
+        "function": "Tepsiyi storagenet'e (Ethernet) bağlar."
+      },
+      "ct-port-bf4-rj45": {
+        "name": "BlueField-4 RJ-45 portu",
+        "description": "BlueField-4 DPU'nun RJ-45 portu.",
+        "function": "ipminet'e (Ethernet) bağlanır."
+      },
+      "ct-port-bmc-1gbe": {
+        "name": "1 GbE BMC portu",
+        "description": "Host BMC'nin 1 GbE RJ45 portu.",
+        "function": "BMC'yi ipminet'e (Ethernet) bağlar."
+      },
+      "ct-port-lan-1gbe": {
+        "name": "1 GbE LAN portu",
+        "description": "Hesaplama tepsisi üzerindeki 1 GbE RJ45 LAN portu.",
+        "function": "Bu yapılandırmada bağlı değil.",
+        "note": "Tablo 2.3'te listelenir, ancak önden görünüm şekilleri yalnızca iki RJ45 port (BlueField-4 portu ve SMM portu) gösterdiği için konumu bilinmiyor."
+      },
+      "compute-tray-battery": {
+        "name": "Hesaplama tepsisi pili",
+        "description": "Hesaplama tepsisinin Bay-C modülündeki pil.",
+        "function": "Kullanım kılavuzu ve servis kılavuzu neye güç verdiğini belirtmez.",
+        "note": "Sayı, servis kılavuzundaki tekil ifadeden ('the battery') çıkarılmıştır."
+      },
+      "socamm": {
+        "name": "SOCAMM bellek modülü",
+        "description": "Üstten görünümde CPU'ların çevresinde gösterilen SOCAMM bellek modülü.",
+        "function": "Kılavuz bunları etiketler ancak açıklamaz.",
+        "note": "Sayı Şekil 5'teki '16x SOCAMM' etiketinden alınmıştır; metin SOCAMM'den bahsetmez."
+      },
+      "internal-manifold": {
+        "name": "Dahili manifold",
+        "description": "Hesaplama tepsisi içinde, CPU ve GPU alanı ile ön bölmeler arasındaki soğutma sıvısı manifoldu.",
+        "function": "Tepsinin sıvı soğutmasının bir parçası. Bölüm 1.2, sıvının 'runs up and down the rack through the inner manifold, then through the cold plates' (iç manifold üzerinden kabin boyunca aşağı yukarı, ardından soğuk plakalardan geçtiğini) söyler; bu o manifold olabilir.",
+        "note": "Şekil 5 bir 'Internal Manifold' etiketler. Bkz. docs/OPEN_QUESTIONS.md madde 12."
+      },
+      "power-distribution-board": {
+        "name": "Güç Dağıtım Kartı",
+        "description": "Hesaplama tepsisi içindeki güç dağıtım kartı.",
+        "function": "Kılavuz bunu etiketler ancak açıklamaz. Tepsi gücü arkasındaki bara konnektöründen alır.",
+        "note": "Sayı Şekil 5'teki tek etiketten alınmıştır."
+      },
+      "ct-nvlink-connectors": {
+        "name": "NVLink konnektörleri (hesaplama tepsisi)",
+        "description": "Hesaplama tepsisinin arkasında, NVLink kablo kartuşlarına takılan konnektörler.",
+        "function": "Tepsinin NVLink'lerini kablo kartuşlarına, onlar üzerinden de NVLink anahtar tepsilerine taşır.",
+        "note": "Kılavuz konnektör sayısını vermez."
+      },
+      "ct-cold-water-inlet": {
+        "name": "Soğuk su girişi (hesaplama tepsisi)",
+        "description": "Hesaplama tepsisinin arkasındaki soğuk su girişi.",
+        "function": "Soğutma sıvısını kabinin manifoldundan tepsiye getirir."
+      },
+      "ct-hot-water-outlet": {
+        "name": "Sıcak su çıkışı (hesaplama tepsisi)",
+        "description": "Hesaplama tepsisinin arkasındaki sıcak su çıkışı.",
+        "function": "Soğutma sıvısını tepsiden kabinin manifolduna geri gönderir."
+      },
+      "ct-bus-bar-connector": {
+        "name": "Bara konnektörü (hesaplama tepsisi)",
+        "description": "Hesaplama tepsisinin arkasındaki bara konnektörü.",
+        "function": "Tepsinin 54 V DC gücünü kabinin barasından alır."
+      },
+      "switch-tray": {
+        "name": "NVLink 6 anahtar tepsisi",
+        "description": "NVSwitch ASIC'leri içeren 1 RU'luk tepsi. Dokuz anahtar tepsisi, tek 72 GPU'luk L1 alanındaki tüm GPU'lara NVLink bağlantısı sağlar.",
+        "function": "NVLink trafiğini tüm hesaplama tepsilerinin GPU'ları arasında anahtarlar. Arkadaki kablo kartuşları üzerinden hesaplama tepsilerine bağlıdır.",
+        "specNotes": {
+          "NVSwitch ASICs": "Şekil 4 (hesaplama tepsisi blok diyagramı) anahtar tepsisi başına iki NVLink Switch simgesi çizer. Bkz. docs/OPEN_QUESTIONS.md.",
+          "Serial console": "Tablo 2.5, RS232 RJ45 portunu bağlı değil olarak listeler. Bkz. docs/OPEN_QUESTIONS.md."
+        }
+      },
+      "nvswitch-asic": {
+        "name": "NVSwitch ASIC",
+        "description": "72 NVLink 6 portlu NVSwitch ASIC.",
+        "function": "NVLink trafiğini anahtarlar. NVSwitch yongaları sunucular arasında engelsiz (non-blocking) anahtar görevi görür ve kolektif işlemleri hızlandırmak için ağ içi hesaplama (SHARP) yapar."
+      },
+      "switch-bmc": {
+        "name": "Anahtar tepsisi BMC'si",
+        "description": "Anahtar tepsisinin Board Management Controller'ı.",
+        "function": "Doğrulama (attestation) ve kurtarma. Kabin üstü (ToR) anahtarlarına bağlıdır.",
+        "note": "Sayı, kılavuzdaki tekil ifadeden ('BMC for attestation and recovery') çıkarılmıştır."
+      },
+      "cpu-erot": {
+        "name": "CPU ERoT",
+        "description": "Anahtar tepsisinin CPU ERoT'u.",
+        "function": "Güvenlik.",
+        "note": "Sayı, kılavuzdaki tekil ifadeden çıkarılmıştır. Kılavuz 'ERoT' kısaltmasını açmaz."
+      },
+      "st-port-rs232": {
+        "name": "BMC için RS232",
+        "description": "RJ45 portu, soldan birinci.",
+        "function": "Bu yapılandırmada bağlı değil."
+      },
+      "st-port-bmc-eth": {
+        "name": "Ethernet portu BMC",
+        "description": "RJ45 portu, soldan ikinci.",
+        "function": "Anahtar tepsisi BMC'sini ipminet'e (Ethernet) bağlar.",
+        "specNotes": {
+          "Label in Fig. 2": "Şekilde 'BCM' olarak basılmış."
+        }
+      },
+      "st-port-switch-mgmt": {
+        "name": "Anahtar yönetimi için Ethernet",
+        "description": "RJ45 portları, soldan üçüncü ve dördüncü.",
+        "function": "ipminet (Ethernet) üzerinde anahtar yönetimi."
+      },
+      "st-port-leakage": {
+        "name": "Sızıntı konnektörü",
+        "description": "RJ45 portu, soldan beşinci.",
+        "function": "Bu yapılandırmada bağlı değil."
+      },
+      "switch-tray-battery": {
+        "name": "Anahtar tepsisi pili",
+        "description": "NVLink anahtar tepsisindeki, bir üst kapağın altındaki tutucuda bulunan pil.",
+        "function": "Kullanım kılavuzu ve servis kılavuzu neye güç verdiğini belirtmez.",
+        "note": "Sayı, servis kılavuzundaki tekil ifadeden ('the battery') çıkarılmıştır."
+      },
+      "switch-tray-ssd": {
+        "name": "Anahtar tepsisi SSD'si",
+        "description": "NVLink anahtar tepsisindeki SSD.",
+        "function": "Kılavuz bunu etiketler ancak açıklamaz. Anahtar tepsisi NVOS çalıştırır (bölüm 4.4).",
+        "note": "Sayı Şekil 7'deki tek 'SSD' etiketinden alınmıştır."
+      },
+      "switch-board": {
+        "name": "Güç dağıtımlı anahtar kartı (SWB w/ PDB)",
+        "description": "Anahtar tepsisinin ana kartı; Şekil 7'de 'SWB w/ PDB' olarak etiketlenmiş.",
+        "function": "NVSwitch yongalarını taşır. Kılavuz bunu daha fazla açıklamaz.",
+        "note": "Şekil 7 bunu 'SWB w/ PDB' olarak etiketler ve kısaltmaları açmaz; 'switch board with power distribution board' (güç dağıtım kartlı anahtar kartı) bu uygulamanın yorumudur."
+      },
+      "st-nvlink-connectors": {
+        "name": "NVLink konnektörleri (anahtar tepsisi)",
+        "description": "Anahtar tepsisinin arkasında, NVLink kablo kartuşlarına takılan konnektörler.",
+        "function": "NVSwitch portlarını kablo kartuşlarına, onlar üzerinden de hesaplama tepsilerine taşır.",
+        "note": "Kılavuz konnektör sayısını vermez."
+      },
+      "st-cold-water-inlet": {
+        "name": "Soğuk su girişi (anahtar tepsisi)",
+        "description": "Anahtar tepsisinin arkasındaki soğuk su girişi.",
+        "function": "Soğutma sıvısını kabinin manifoldundan tepsiye getirir."
+      },
+      "st-hot-water-outlet": {
+        "name": "Sıcak su çıkışı (anahtar tepsisi)",
+        "description": "Anahtar tepsisinin arkasındaki sıcak su çıkışı.",
+        "function": "Soğutma sıvısını tepsiden kabinin manifolduna geri gönderir."
+      },
+      "st-power-connector": {
+        "name": "Güç konnektörü (anahtar tepsisi)",
+        "description": "Anahtar tepsisinin arkasındaki güç konnektörü.",
+        "function": "Tepsiye güç alır.",
+        "note": "Şekil 7 bunu etiketler; baraya bağlandığı belirtilmemiş."
+      },
+      "power-shelf": {
+        "name": "Güç rafı",
+        "description": "Uzak güç panelinden gelen AC güç kablolarıyla (power whip) beslenen 3 RU'luk raf.",
+        "function": "AC gücü 54 V DC'ye dönüştürür; bara bunu kabin bileşenlerine dağıtır."
+      },
+      "psu": {
+        "name": "Güç kaynağı (PSU)",
+        "description": "Hava soğutmalı güç kaynağı (PSU).",
+        "function": "Raf başına altı adet. Raf, AC gücü bara için 54 V DC çıkışa dönüştürür.",
+        "specNotes": {
+          "Redundancy": "Servis kılavuzu, 'as long as at least six power supplies are fully active and healthy' (en az altı güç kaynağı tamamen etkin ve sağlıklı olduğu sürece) herhangi bir PSU'nun değiştirilebileceğini söyler."
+        }
+      },
+      "power-shelf-mgmt-module": {
+        "name": "Güç rafı yönetim modülü",
+        "description": "Güç rafının önündeki, ağ yönetim kablosu için RJ45 portu olan yönetim modülü.",
+        "function": "Güç rafını yönetir. Modül değiştirilirken güç kaynakları çalışmaya devam eder.",
+        "note": "Sayı, raf başına bir modül gösteren Şekil 8'den ve servis kılavuzunun güç rafı şeklinden çıkarılmıştır. Kılavuz, yönetim kablosunun hangi ağa gittiğini belirtmez."
+      },
+      "ps-mgmt-rj45": {
+        "name": "Yönetim modülü RJ45 portu",
+        "description": "Güç rafı yönetim modülündeki, ağ yönetim kablosu için RJ45 portu.",
+        "function": "Güç rafının bant dışı yönetim arayüzüne ağ bağlantısını sağlar.",
+        "note": "Servis kılavuzu ağ yönetim kablosunu adıyla anar; bunun ipminet üzerinde olduğu, güç raflarının bant dışı arayüzlerini ipminet'e koyan bölüm 2.2'den çıkarılmıştır."
+      },
+      "ac-power-whip": {
+        "name": "AC güç kablosu (power whip)",
+        "description": "Güç rafını uzak güç panelinden besleyen AC güç kablosu.",
+        "function": "Rafı besler: raf başına 415-480 V AC'de iki adet 100 A güç kablosu (power whip)."
+      },
+      "ps-dc-output": {
+        "name": "54 V DC çıkışı (güç rafı)",
+        "description": "Güç rafının baraya giden 54 V DC çıkışı.",
+        "function": "Rafın dönüştürdüğü 54 V DC'yi baraya verir; bara bunu kabin bileşenlerine dağıtır.",
+        "note": "Kılavuz, rafın 54 V DC çıkışının bara üzerinden dağıtıldığını söyler ancak konnektörü açıklamaz."
+      },
+      "tor-switch": {
+        "name": "Kabin üstü Ethernet anahtarı",
+        "description": "Yönetim için kabin üstü (ToR) Ethernet anahtarı.",
+        "function": "Hesaplama tepsilerindeki (BlueField-4 BMC'leri dahil) ve anahtar tepsilerindeki tüm BMC'leri yönetim ağına bağlar.",
+        "specNotes": {
+          "Front panel in Fig. 9": "Şekil 9'dan sayılmıştır; kılavuzun metni port sayısı vermez ve büyük yuvaların ya da sağdaki üç portun tipini belirtmez.",
+          "BMC links in this rack": "Verilerdeki sayılardan hesaplanmıştır; kılavuz bunların iki ToR anahtarı arasında nasıl bölündüğünü belirtmez."
+        }
+      },
+      "tor-rj45-port": {
+        "name": "ToR RJ45 portu",
+        "description": "Kabin üstü (ToR) anahtarının önündeki RJ45 portu.",
+        "function": "Kabindeki BMC'leri yönetim ağına bağlar.",
+        "note": "Sayı Şekil 9'dan çıkarılmıştır. Hangi BMC'nin hangi portu kullandığı belirtilmemiş."
+      },
+      "tor-uplink-cage": {
+        "name": "ToR büyük port yuvası",
+        "description": "Şekil 9'da RJ45 bloklarının sağındaki dört büyük port yuvasından biri.",
+        "function": "Kılavuzda açıklanmamış.",
+        "note": "Sayı Şekil 9'dan çıkarılmıştır; kılavuz yuva tipini ve kullanımını belirtmez."
+      },
+      "tor-side-port": {
+        "name": "ToR sağ uçtaki port",
+        "description": "Şekil 9'da anahtarın sağ ucundaki dar paneldeki üç porttan biri.",
+        "function": "Kılavuzda açıklanmamış.",
+        "note": "Sayı Şekil 9'dan çıkarılmıştır; tipleri belirtilmemiş."
+      },
+      "nvlink-cable-cartridge": {
+        "name": "NVLink pasif bakır kablo kartuşu",
+        "description": "Kabinin arkasında NVLink arka panelini oluşturan pasif bakır kablo kartuşları.",
+        "function": "Hesaplama ve anahtar tepsilerinin arkasındaki konnektörler, hesaplama tepsilerini ve NVLink anahtar tepsilerini birbirine bağlayan kartuşlara takılır.",
+        "note": "Kılavuz kartuş sayısını belirtmez."
+      },
+      "liquid-cooling-manifold": {
+        "name": "Sıvı soğutma manifoldu",
+        "description": "Kabinin arkasındaki sıvı soğutma manifoldları. Giriş ve çıkışlarına arkadan erişilir; Şekil 2 ayrıca sıvı soğutma hortumları için FD83 konnektörlerini etiketler.",
+        "function": "Sıvı soğutmalı tepsiler için soğutma sıvısı taşır. Bölüm 1.2, sıvının 'runs up and down the rack through the inner manifold, then through the cold plates' (iç manifold üzerinden kabin boyunca aşağı yukarı, ardından soğuk plakalardan geçtiğini) söyler.",
+        "note": "Metin bir sayı vermez; Şekil 2 'Liquid cooling manifolds' etiketini iki manifolda yöneltir. Şekil 5 ayrıca hesaplama tepsisi içinde bir 'Internal Manifold' etiketler, dolayısıyla 1.2'deki 'inner manifold' o parçayı kastediyor olabilir."
+      },
+      "bus-bar": {
+        "name": "Sıvı soğutmalı bara",
+        "description": "Kabinin arkasındaki sıvı soğutmalı bara yapısı.",
+        "function": "Güç raflarının 54 V DC çıkışını kabin bileşenlerine dağıtır."
+      },
+      "fd83-connector": {
+        "name": "FD83 sıvı soğutma hortum konnektörü",
+        "description": "Sıvı soğutma manifoldları üzerindeki hortum konnektörleri; Şekil 2'de 'FD83 connectors for liquid cooling hoses' olarak etiketlenmiş.",
+        "function": "Kabinin manifoldlarını tesisin sıvı soğutma hortumlarına bağlar.",
+        "note": "Şekil 2 bunları manifoldların uçlarında gösterir; kılavuz bir sayı vermez. Bu uygulama her manifoldun her ucuna bir tane çizer."
+      },
+      "rear-supports": {
+        "name": "Manifold, kablo kartuşu ve bara destekleri",
+        "description": "Arkadaki manifoldları, kablo kartuşlarını ve barayı tutan yapı; Şekil 2'de etiketlenmiş.",
+        "function": "Arka parçalar için mekanik destek.",
+        "note": "Şekil ve sayı verilmemiş; çapraz çubuklar olarak çizilmiştir."
+      },
+      "rear-bezel": {
+        "name": "Arka çerçeve",
+        "description": "Kabinin arkasındaki sökülebilir kapak parçaları; Şekil 2'de 'Rear Bezel' olarak etiketlenmiş.",
+        "function": "Kabinin arkasını örter.",
+        "note": "Structure katmanında yarı saydam bir panel olarak çizilmiştir."
+      },
+      "seismic-bracing": {
+        "name": "Sismik destek",
+        "description": "Kabinin altındaki destek; Şekil 1 ve Şekil 2'de etiketlenmiş.",
+        "function": "Kabini yerinde tutar.",
+        "note": "Kabinin altında bir taban çerçevesi olarak çizilmiştir."
+      }
+    },
+    "specLabels": {
+      "AC input": "AC giriş",
+      "After replacement": "Değişimden sonra",
+      "BMC links in this rack": "Bu kabindeki BMC bağlantıları",
+      "Compute boards": "Hesaplama kartları",
+      "Compute trays": "Hesaplama tepsileri",
+      "Connects": "Bağlantılar",
+      "Cooling": "Soğutma",
+      "Current": "Akım",
+      "Customer-replaceable unit (CRU)": "Müşteri tarafından değiştirilebilir birim (CRU)",
+      "DC output": "DC çıkış",
+      "Fault": "Arıza",
+      "Front": "Ön",
+      "Front LEDs": "Ön LED'ler",
+      "Front bays": "Ön bölmeler",
+      "Front panel in Fig. 9": "Şekil 9'da ön panel",
+      "GPUs in the NVLink domain": "NVLink alanındaki GPU'lar",
+      "Height": "Yükseklik",
+      "Identity": "Kimlik",
+      "In-network computing": "Ağ içi hesaplama",
+      "Label in Fig. 2": "Şekil 2'deki etiket",
+      "Label in Fig. 7": "Şekil 7'deki etiket",
+      "Labels in Fig. 2": "Şekil 2'deki etiketler",
+      "Links": "Bağlantılar",
+      "Location": "Konum",
+      "Management": "Yönetim",
+      "NVLink": "NVLink",
+      "NVLink 6 ports": "NVLink 6 portları",
+      "NVLink 6 ports per ASIC": "ASIC başına NVLink 6 portu",
+      "NVLink 6 switch trays": "NVLink 6 anahtar tepsileri",
+      "NVLink domain size": "NVLink alanı boyutu",
+      "NVSwitch ASICs": "NVSwitch ASIC'leri",
+      "Network": "Ağ",
+      "Network in Fig. 1": "Şekil 1'deki ağ",
+      "Numbering": "Numaralandırma",
+      "OSFP ports (computenet)": "OSFP portları (computenet)",
+      "Other parts in Fig. 7": "Şekil 7'deki diğer parçalar",
+      "Out-of-band management": "Bant dışı yönetim",
+      "PCIe addresses (BDF)": "PCIe adresleri (BDF)",
+      "PCIe label": "PCIe etiketi",
+      "PCIe labels": "PCIe etiketleri",
+      "PCIe links": "PCIe bağlantıları",
+      "PCIe port labels": "PCIe port etiketleri",
+      "PSUs": "PSU'lar",
+      "Placement": "Yerleşim",
+      "Port type": "Port tipi",
+      "Ports": "Portlar",
+      "Position": "Konum",
+      "Power input": "Güç girişi",
+      "Power shelves": "Güç rafları",
+      "RAID level": "RAID seviyesi",
+      "Rating": "Değer",
+      "Rear connections": "Arka bağlantılar",
+      "Redundancy": "Yedeklilik",
+      "Removal": "Çıkarma",
+      "Replacement": "Değiştirme",
+      "Rubin GPUs": "Rubin GPU'lar",
+      "Serial console": "Seri konsol",
+      "Shown in": "Gösterildiği yer",
+      "Speed": "Hız",
+      "Top-of-rack management switches": "Kabin üstü yönetim anahtarları",
+      "Vera CPUs": "Vera CPU'lar",
+      "Voltage": "Gerilim"
+    },
+    "networks": {
+      "externalnet": {
+        "description": "Head node'un kurumsal ağa veya izin veriliyorsa internete harici iletişimi.",
+        "note": "Kılavuz bu ağın yapısını (fabric) belirtmez. Bölüm 2, Ethernet'in depolama, yönetim ve harici bağlantıyı taşıdığını söyler ancak bunu adıyla bu ağa bağlamaz."
+      },
+      "internalnet": {
+        "description": "Kontrol düzlemi düğümleri için hazırlama (provisioning) yetenekleri ve sistem yönetimi.",
+        "note": "Kılavuz bu ağın yapısını (fabric) belirtmez. Bölüm 2, Ethernet'in depolama, yönetim ve harici bağlantıyı taşıdığını söyler ancak bunu adıyla bu ağa bağlamaz."
+      },
+      "dgxnet": {
+        "description": "Hesaplama tepsilerini hazırlamak (provisioning) ve yönetmek için kullanılır."
+      },
+      "ipminet": {
+        "description": "Base Command Manager'a ve head node'a kabindeki her bileşenin bant dışı/BMC arayüzlerine erişim verir: hesaplama tepsileri, NVLink anahtar tepsileri, güç rafları, kabin üstü (ToR) anahtarları ve kontrol düzlemi düğümleri."
+      },
+      "computenet": {
+        "description": "Kabinler arası RDMA iletişimi (doğu/batı trafiği)."
+      },
+      "storagenet": {
+        "description": "Her düğüme depolama erişimi verir.",
+        "note": "Hesaplama tepsisinin storagenet portu Ethernet'tir (2.3). Bölüm 3.2, paylaşımlı depolamaya varsayılan olarak converged Ethernet üzerinden erişildiğini, ancak InfiniBand'in de kullanılabileceğini ekler."
+      },
+      "failovernet": {
+        "description": "Yalnızca yedekli failover yapılandırmasındaki head node'lar tarafından kullanılır.",
+        "note": "Kılavuz bu ağın yapısını (fabric) belirtmez."
+      }
+    },
+    "connections": {
+      "cx9-computenet": {
+        "description": "ConnectX-9 OSFP portundan computenet'e (InfiniBand)."
+      },
+      "bf4-left-dgxnet": {
+        "description": "BlueField-4 sol QSFP portundan dgxnet'e (Ethernet).",
+        "note": "2.2'deki Şekil 1 ise bu portu 6 (storagenet) olarak işaretler. Bkz. docs/OPEN_QUESTIONS.md."
+      },
+      "bf4-right-storagenet": {
+        "description": "BlueField-4 sağ QSFP portundan storagenet'e (Ethernet)."
+      },
+      "bf4-rj45-ipminet": {
+        "description": "BlueField-4 RJ-45 portundan ipminet'e (Ethernet)."
+      },
+      "ct-bmc-ipminet": {
+        "description": "1 GbE BMC portundan ipminet'e (Ethernet)."
+      },
+      "ct-lan-nc": {
+        "description": "1 GbE LAN portu: bağlı değil."
+      },
+      "st-rs232-nc": {
+        "description": "BMC için RS232: bağlı değil."
+      },
+      "st-bmc-ipminet": {
+        "description": "Ethernet portu BMC'den ipminet'e (Ethernet)."
+      },
+      "st-mgmt-ipminet": {
+        "description": "Anahtar yönetimi için Ethernet'ten ipminet'e (Ethernet)."
+      },
+      "st-leak-nc": {
+        "description": "Sızıntı konnektörü: bağlı değil."
+      },
+      "ct-bmc-tor": {
+        "description": "Hesaplama tepsisinin bant dışı yönetim BMC'sinden kabin üstü (ToR) anahtarlarına."
+      },
+      "bf4-bmc-tor": {
+        "description": "BlueField-4 BMC'sinden kabin üstü (ToR) anahtarlarına."
+      },
+      "st-bmc-tor": {
+        "description": "Anahtar tepsisi BMC'sinden kabin üstü (ToR) anahtarlarına."
+      },
+      "ps-ipminet": {
+        "description": "ipminet, güç raflarının bant dışı arayüzlerine ulaşır."
+      },
+      "tor-ipminet": {
+        "description": "ipminet, kabin üstü (ToR) anahtarlarının bant dışı arayüzlerine ulaşır."
+      },
+      "ct-nvlink": {
+        "description": "Hesaplama tepsisinin arkasındaki NVLink konnektörleri kablo kartuşlarına takılır."
+      },
+      "st-nvlink": {
+        "description": "Anahtar tepsisinin arkasındaki NVLink konnektörleri kablo kartuşlarına takılır."
+      },
+      "ps-busbar": {
+        "description": "Güç rafları 54 V DC'yi baraya verir."
+      },
+      "manifold-ct": {
+        "description": "Soğutma sıvısı iç manifold üzerinden kabin boyunca aşağı yukarı, ardından hesaplama tepsilerindeki soğuk plakalardan geçer.",
+        "note": "Bölüm 1.2'deki 'inner manifold', arka manifoldlar yerine tepsinin Internal Manifold'u (Şekil 5) olabilir."
+      },
+      "manifold-st": {
+        "description": "Anahtar tepsisi sıvı soğutmalıdır: NVLink anahtarları üzerinde soğuk plakalar ve arkada bir sıcak su çıkışı ile bir soğuk su girişi bulunur.",
+        "note": "Şekil 7 tepsinin su bağlantılarını gösterir; kılavuz bunların bu manifoldlara bağlandığını sözle belirtmez."
+      },
+      "busbar-ct": {
+        "description": "Bara 54 V DC'yi kabin bileşenlerine dağıtır; hesaplama tepsisi bunu arkasındaki bara konnektöründen alır."
+      },
+      "busbar-st": {
+        "description": "Bara 54 V DC'yi kabin bileşenlerine dağıtır; anahtar tepsisinin arkasında bir güç konnektörü vardır.",
+        "note": "Şekil 7 anahtar tepsisinin arka güç konnektörünü etiketler ancak baraya bağlandığını söylemez."
+      },
+      "bf4-left-storagenet-fig1": {
+        "description": "Şekil 1, BlueField-4 sol QSFP portunu 6 (storagenet) olarak işaretler; Tablo 2.3 ise dgxnet der.",
+        "note": "Tablo 2.3 ile çelişen alternatif bir yorum. Bkz. docs/OPEN_QUESTIONS.md madde 3."
+      },
+      "ps-mgmt-ipminet": {
+        "description": "Güç rafı yönetim modülü RJ45 portundan ipminet'e (Ethernet).",
+        "note": "Bölüm 2.2 güç raflarının bant dışı arayüzlerini ipminet'e koyar; portun kendisi yalnızca servis kılavuzunda adıyla geçer."
+      },
+      "cx9-card-computenet": {
+        "description": "ConnectX-9 G/Ç kartlarından OSFP portları üzerinden computenet'e (InfiniBand)."
+      }
+    },
+    "pcieNotes": {
+      "Printed C7/C3_1 in the 2.2 and 2.4 figures.": "2.2 ve 2.4 şekillerinde C7/C3_1 olarak basılmış.",
+      "Printed C7/C3_2 in the 2.2 and 2.4 figures.": "2.2 ve 2.4 şekillerinde C7/C3_2 olarak basılmış.",
+      "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1.": "ADDR1 sol QSFP portudur (2.2 Şekil 2). Şekiller bu satırın ikinci girdisini BF_1 olarak basar.",
+      "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2.": "ADDR2 sağ QSFP portudur (2.2 Şekil 2). Tablo burada ADDR1'in arayüz ve RDMA adlarını tekrarlar; bkz. docs/OPEN_QUESTIONS.md madde 2."
+    },
+    "procedures": {
+      "psu": {
+        "title": "Güç kaynağını (PSU) değiştirme",
+        "steps": [
+          "Arızalı PSU'yu kehribar rengi LED'inden bulun.",
+          "Önce yedekliliği kontrol edin: PSU'lar N+N yedeklidir ve en az altı güç kaynağı tamamen etkin ve sağlıklı olduğu sürece bir PSU değiştirilebilir.",
+          "Yeni PSU'yu ambalajından çıkarın. Arızalı PSU'yu çıkarmak için serbest bırakma tırnağını sola itin ve kolu çekin, ardından tamamen dışarı çekin.",
+          "Yeni PSU'yu yerine kilitlenene kadar takın; bir klik sesi duymalısınız.",
+          "LED'lerin yandığını doğrulayın ve arızanın giderildiğini sistem yöneticisiyle kontrol edin. Ürün yazılımı güncellemesi gerekebileceği için değişimin tamamlandığını onlara bildirin ve eski PSU'yu NVIDIA Enterprise Support'a geri gönderin."
+        ]
+      },
+      "pmm": {
+        "title": "Güç rafı yönetim modülünü değiştirme",
+        "steps": [
+          "Arızalı yönetim modülünü kehribar rengi LED'inden bulun.",
+          "Yeni modülü ambalajından çıkarın ve güç rafının çekme tırnağındaki MAC adresini kaydedin; bu adres yeni modüldeki MAC adresiyle eşleşmelidir.",
+          "Değişim sırasında güç kaynakları çalışmaya devam eder. Ağ yönetim kablosunu çıkarın.",
+          "Modülün üstündeki paneli içe doğru itin ve serbest bırakma mekanizmasına aşağı doğru bastırın. Modülü tamamen dışarı çekin ve yenisini klik sesi gelene kadar takın.",
+          "Gerekirse modülün ürün yazılımını güncelleyin ve çalışır durumda olduğunu sistem yöneticisiyle doğrulayın."
+        ]
+      },
+      "cache-drive": {
+        "title": "E1.S önbellek sürücüsünü değiştirme",
+        "steps": [
+          "Değiştirilecek her önbellek sürücüsünü belirleyin ve PCIe bus, device ve function (BDF) adresini kaydedin. Dört önbellek sürücüsü Bay B'dedir.",
+          "Sistem yöneticisine hesaplama tepsisini kapattırın.",
+          "Küçük, en soldaki tırnağı çerçeveye doğru bastırın; büyük tırnak açılır ve sürücü hafifçe dışarı çıkar. Sürücüyü dışarı çekin.",
+          "Yeni sürücüyü takın ve büyük tırnağı küçük tırnağa kilitlenene kadar içeri bastırın.",
+          "Gücü açın ve oturum açın. 'sudo nvme list' bir önyükleme sürücüsü ve dört önbellek sürücüsü göstermelidir.",
+          "Önbellek birimi kilitliyse 'sudo nv-disk-encrypt disable' ile kilidini açın. Önbellek birimini ve /raid'i 'configure_raid_array.py -c -f' ile yeniden oluşturun, ardından 'sudo nvsm show volumes' ile kontrol edin."
+        ]
+      },
+      "compute-battery": {
+        "title": "Hesaplama tepsisi pilini değiştirme",
+        "steps": [
+          "Sistem yöneticisi tüm hesaplama tepsilerini ve servis yapılacak tepsiyi kapatır. Beş dakika soğumasını bekleyin.",
+          "Tepsinin mandalını açın, rayın izin verdiği kadar dışarı çekin ve ikinci bir kişiyle birlikte raylardan kilidini açıp düz bir yüzeye kaldırın.",
+          "Tepsinin soğutma döngüsü basıncını araç setindeki manometreyle kontrol edin: 1 PSI veya üzerindeyse devam edin; 1 PSI'ın altındaysa önce NVIDIA Enterprise Support ile iletişime geçin.",
+          "Tepsi kapağını ve Bay-C modülünü çıkarın. Pil düzeneğinin üst kapağını çıkarın, pili değiştirin ve kapağı geri takın.",
+          "Bay-C modülünü ve kapağı yeniden takın ve tepsiyi ikinci bir kişiyle yerine koyun. Soğutma döngüsündeki kabarcıkları temizlemek için CDU'yu 20 dakika çalıştırın.",
+          "Sistem yöneticisi güç açma sırasını uygular, tepsinin açıldığını doğrular, ürün yazılımını sistemin geri kalanıyla eşleşecek şekilde günceller ve sistem sağlığını kontrol eder."
+        ]
+      },
+      "switch-battery": {
+        "title": "NVLink anahtar tepsisi pilini değiştirme",
+        "steps": [
+          "Sistem yöneticisi önce tüm hesaplama tepsilerini, ardından anahtar tepsisini kapatır. Beş dakika soğumasını bekleyin.",
+          "Tepsinin mandalını açın, raylarının üzerinde dışarı çekin ve ikinci bir kişiyle birlikte düz bir yüzeye kaldırın. Soğutma döngüsü basıncını kontrol edin: devam etmek için 1 PSI veya üzeri olmalıdır.",
+          "Torx T6 vidalarını sökün ve kapağı kaldırın.",
+          "Pilin üst kapağını çıkarın, pili tutucusundan kaydırarak çıkarın, yenisini takın ve kapağı yerine koyun.",
+          "Kapağı ve vidaları geri takın, tepsiyi ikinci bir kişiyle yeniden yerleştirin ve kabarcıkları temizlemek için CDU'yu 20 dakika çalıştırın.",
+          "Sistem yöneticisi güç açma sırasını uygular, tepsinin açıldığını doğrular, ürün yazılımını günceller ve sistem sağlığını kontrol eder."
+        ]
+      },
+      "bring-up": {
+        "title": "Kabini çevrimiçi duruma getirme",
+        "steps": [
+          "Başlamadan önce: güç rafları enerjili, kabin üstü (ToR) anahtarları etkin ve NMX-M hizmetleri kullanılabilir olmalıdır. Bunları Base Command Manager'da kontrol edin.",
+          "Önce NVLink anahtar tepsilerini Base Command Manager'dan açın. Her biri kabine özgü yapılandırmayla önyüklenir; böylece NVLink yapısı (fabric), herhangi bir GPU'nun ona ihtiyaç duymasından önce hazır olur.",
+          "Ardından hesaplama tepsilerini açın. Bunlar önyüklenirken Base Command Manager en son OS güncellemelerinin ve yapılandırmanın yüklü olduğunu kontrol eder.",
+          "Önyüklenen bir hesaplama tepsisi ağ üzerinden OS güncellemelerini denetler: varsa önyüklemeden önce yükler, yoksa yerel depolamadan hızlıca önyüklenir.",
+          "Hesaplama tepsileri daha sonra anahtar tepsilerine, depolamaya ve diğer hesaplama tepsilerine bağlanır. Güç işlemleri NVIDIA Mission Control üzerinden yönetilir."
+        ]
+      },
+      "cold-reboot": {
+        "title": "Kabini soğuk yeniden başlatma",
+        "steps": [
+          "İlk yazılım kurulumundan sonra, ürün yazılımı yükseltmelerinden sonra, tam kabin tanılamasından önce ve bir hesaplama tepsisi, anahtar tepsisi, trunk bağlantısı veya kablo kartuşu değiştirildikten sonra kullanın. NVIDIA bunun Mission Control üzerinden yapılmasını önerir. Tüm BMC'lerin, host'ların ve güç raflarının IP adreslerine ihtiyacınız vardır.",
+          "Tüm güç raflarının AC gücünü kapatın (paralel olarak kapatılabilirler), ardından PSU kondansatörlerinin boşalması için üç ila beş dakika bekleyin. İlk güç açılışında bu adımı atlayın.",
+          "Hiçbirinin yanıt vermediğinden emin olmak için tüm hesaplama ve anahtar tepsisi BMC'lerine ve OS adreslerine ping atın.",
+          "Tüm güç raflarının AC gücünü paralel olarak açın. Hesaplama ve anahtar tepsisi BMC'lerinin açılması için iki dakika bekleyin, ardından yanıt verene kadar tüm BMC adreslerine ping atın.",
+          "Anahtar tepsilerinin NVOS'a önyüklenmesini bekleyin ve iki dakika daha bekleyin.",
+          "Anahtar tepsilerini hazırlayın (provision). L11 tanılaması için her anahtar tepsisinde oturum açıp sağlığını kontrol edin. Çok düğümlü bir iş yükü için küme hazırlamayı tekrarlayın, ardından NMX-C hizmetlerini kurup başlatın ve sağlık kontrollerini çalıştırın.",
+          "Tüm hesaplama düğümlerini hesaplama tepsisi BMC'lerinden açın. Beş dakika bekleyin, hesaplama düğümlerine ping atın, ardından yeniden başlatma sonrası doğrulamayı çalıştırın."
+        ]
+      },
+      "warm-reboot": {
+        "title": "Kabini sıcak yeniden başlatma",
+        "steps": [
+          "Tüm hesaplama tepsilerini BMC'leri üzerinden (IPMI, Redfish veya desteklenen başka bir API) kapatın.",
+          "NMX-C hizmetini, onu çalıştıran anahtar düğümünde durdurun.",
+          "NMX-C'yi seçilen anahtar düğümünde başlatın. Küme önceden etkinleştirilmiş olmalıdır.",
+          "nmx-controller ve nmx-telemetry'nin ok durumuyla çalıştığını kontrol edin.",
+          "Hesaplama tepsilerini BMC'leri üzerinden yeniden açın.",
+          "Hesaplama tepsilerinde yeniden başlatma sonrası doğrulamayı çalıştırın."
+        ]
+      },
+      "post-reboot": {
+        "title": "Yeniden başlatma sonrası doğrulama",
+        "steps": [
+          "nvidia-persistenced'in çalıştığını ve iyi durumda olduğunu kontrol edin. Bunu bir GPU sıfırlamasından, hesaplama tepsisinin yeniden başlatılmasından veya kabinin soğuk ya da sıcak yeniden başlatılmasından sonra yapın.",
+          "nvidia-imex hizmetinin etkin ve çalışır durumda olduğunu kontrol edin.",
+          "Tüm NVLink'lerin etkin olduğunu kontrol edin.",
+          "Yapı (fabric) durumunu kontrol edin: her GPU state Completed ve status Success göstermelidir.",
+          "Eşler arası (peer-to-peer) topolojiyi kontrol edin: her GPU OK göstermelidir. Biri göstermiyorsa o GPU'yu sıfırlayın ve ilk kontrolden yeniden başlayın."
+        ]
+      },
+      "health-check": {
+        "title": "NVSM ile sistem sağlığını kontrol etme",
+        "steps": [
+          "Kabine bir SSH bağlantısı açın.",
+          "Temel sistem kontrolünü çalıştırın.",
+          "Özetteki her kontrolün Healthy ve genel sistem durumunun Healthy olduğunu kontrol edin."
+        ]
+      }
+    },
+    "openQuestions": {
+      "connectx-9-count": {
+        "title": "Hesaplama tepsisi başına ConnectX-9 kart sayısı",
+        "summary": "Yapılandırma tablosu 2 kart der; blok diyagram 8 çizer, önden görünüm her Bay B'de 2 x CX9 modülü gösterir ve port şekilleri 8 OSFP yuvası gösterir. Veriler 2'yi korur."
+      },
+      "bluefield-pcie": {
+        "title": "BlueField-4 PCIe girdileri",
+        "summary": "Tablo 2.4, tekrarlanan arayüz ve RDMA adlarıyla iki veri yolunda BF_0 basar; şekiller BF_0 ve BF_1 basar ve blok diyagram her iki CPU'ya bağlı tek bir BlueField-4 gösterir."
+      },
+      "bluefield-left-port": {
+        "title": "BlueField-4 sol QSFP portu: dgxnet mi storagenet mi?",
+        "summary": "Tablo 2.3 dgxnet der; port konumu şekli her iki QSFP portunu 6 (storagenet) olarak işaretler. Veriler tabloyu izler ve şeklin yorumunu bir çelişki olarak saklar."
+      },
+      "compute-rj45-count": {
+        "title": "Hesaplama tepsisindeki RJ45 portları",
+        "summary": "Tablo 2.3 üç RJ45 port listeler; şekiller iki tane gösterir. 1 GbE LAN portunun konumu bilinmiyor."
+      },
+      "nvswitch-count": {
+        "title": "Anahtar tepsisi başına NVSwitch yongaları",
+        "summary": "Metin ve Şekil 7 4 der; blok diyagram anahtar tepsisi başına 2 çizer. Veriler 4'ü korur."
+      },
+      "switch-console": {
+        "title": "Anahtar tepsisi seri konsolu",
+        "summary": "Bölüm 1.6, 115200 baud hızında bir RJ45 seri konsol verir; Tablo 2.5 ise RS232 RJ45 portunu bağlı değil olarak listeler."
+      },
+      "rack-positions": {
+        "title": "Kabin konumları",
+        "summary": "Şekil 1 birimlerin sırasını verir ancak RU konumlarını veya kabin yüksekliğini vermez; birimler arada boşluk olmadan üst üste dizilmiştir."
+      },
+      "tor-height": {
+        "title": "Kabin üstü (ToR) anahtarlarının yüksekliği",
+        "summary": "Belirtilmemiş; 1 RU olarak çizilmiştir."
+      },
+      "tray-numbering": {
+        "title": "Tepsi numaralandırması",
+        "summary": "Servis kılavuzunda güç rafları alttan itibaren 1'den 4'e numaralandırılır; hesaplama ve anahtar tepsileri hiçbir yerde konuma göre numaralandırılmaz."
+      },
+      "unstated-counts": {
+        "title": "Belgelerin vermediği sayılar",
+        "summary": "HMC, NVLink kablo kartuşları, sıvı soğutma manifoldları ve FD83 konnektörleri için belirtilmiş bir sayı yoktur."
+      },
+      "network-fabrics": {
+        "title": "externalnet, internalnet ve failovernet'in yapısı (fabric)",
+        "summary": "Kılavuz bu ağları açıklar ancak yapılarını (fabric) belirtmez."
+      },
+      "inner-manifold": {
+        "title": "'inner manifold' hangi manifold",
+        "summary": "Bölüm 1.2'deki inner manifold, tepsinin Internal Manifold'u (Şekil 5) veya kabinin arka manifoldları olabilir."
+      },
+      "tor-cabling": {
+        "title": "ToR anahtarlarına BMC kablolaması",
+        "summary": "Bölüm 1.5 tüm BMC'leri ToR anahtarlarına bağlar, ancak iki anahtar arasındaki dağılım ve kullanılan portlar belirtilmemiş."
+      }
+    },
+    "software": {
+      "mission-control": {
+        "description": "Tam yığın gözlemlenebilirlikle iş yükü farkındalıklı orkestrasyon: iş ve güç profili yönetimi, topoloji farkındalıklı zamanlama, hızlı checkpoint ve otonom iş kurtarma, sağlık kontrolleri ve bina yönetim sistemi entegrasyonu üzerinden sızıntı tespiti. Güç işlemleri ve ürün yazılımı güncellemeleri bunun üzerinden yönetilir.",
+        "note": "Küme düzeyinde yazılım; kılavuz hangi düğümde çalıştığını belirtmez."
+      },
+      "base-command-manager": {
+        "description": "Tüm sistem bileşenlerini yönetir: tepsileri açıp kapatır, hesaplama tepsilerinin önyüklendiği işletim sistemi imajlarını yönetir ve ipminet üzerinden bant dışı arayüzlere ulaşır.",
+        "note": "Kabin dışındaki head node'da çalışır (2.2: ipminet, Base Command Manager'a ve head node'a BMC'lere erişim verir)."
+      },
+      "cuda": {
+        "description": "CUDA platformu: 150'den fazla kütüphane ile GPU hızlandırmalı uygulamaları optimize etme ve hata ayıklama araçları; bu uygulamalar işi kabindeki her GPU'ya dağıtmak için NVLink ağını kullanır."
+      },
+      "imex": {
+        "description": "Bellek dışa ve içe aktarımı (export/import) kullanarak, bir NVLink alanında OS sınırlarının ötesindeki GPU'lar arasında GPU belleğini NVLink üzerinden eşler. Sistem başlangıcında veya CUDA işi başlatıldığında alandaki tüm düğümlerde başlatılır; düğümler arasında hesaplama düğümü ağı üzerinden iletişim kurar.",
+        "note": "Kılavuz bunun yalnızca hesaplama düğümlerinde çalıştığını söyler."
+      },
+      "nvos": {
+        "description": "NVLink anahtar tepsisinin işletim sistemi; CLI ve OpenAPI (Swagger) ile yönetilir. NVLink Subnet Manager, Fabric Manager, NMX-Controller, NMX-Telemetry ve NVSwitch ürün yazılımını içerir."
+      },
+      "nmx-controller": {
+        "description": "Yapı (fabric) için yazılım tanımlı ağ sağlayan küme uygulaması; DGX VR kabinlerinde hizmetleri subnet manager ve Fabric Manager'dır."
+      },
+      "fabric-manager": {
+        "description": "NVSwitch portları arasındaki yönlendirmeyi ve GPU tarafı yönlendirmeyi yapılandırır, GPU'ları başlatmak için GPU sürücüsüyle eşgüdüm sağlar ve yapıyı (fabric) NVLink ve NVSwitch hatalarına karşı izler."
+      },
+      "nvlsm": {
+        "description": "NVLink topolojisini keşfeder, GPU ve NVSwitch NVLink portlarına LID atar, anahtar yönlendirme tablolarını ve bölüm anahtarlarını (partition key) programlar ve NVLink yapısındaki değişiklikleri izler."
+      },
+      "nmx-telemetry": {
+        "description": "Bir NVLink alanındaki tüm NVLink anahtarlarından telemetri toplar ve birleştirir."
+      },
+      "doca": {
+        "description": "BlueField üzerinde veri merkezi iş yüklerini aktaran (offload), hızlandıran ve yalıtan uygulama ve hizmetler için çerçeve. DOCA-Host, kabindeki BlueField ve ConnectX cihazları için host sürücülerini ve araçlarını içerir."
+      },
+      "nccl": {
+        "description": "PCIe, NVLink, NVLink Multi-node, InfiniBand ve RoCE üzerinden GPU'lar arası iletişim kütüphaneleri: NCCL'in topoloji farkındalıklı kolektifleri, NVSHMEM'in bölümlenmiş küresel adres alanı ve UCX'in mesajlaşma ve uzak bellek erişimi."
+      },
+      "dcgm": {
+        "description": "Veri merkezi GPU'larını ve NVSwitch'leri yönetir ve izler: aktif sağlık izleme, tanılama, uyarılar ve güç ile saat politikaları."
+      },
+      "mft": {
+        "description": "Ağ ASIC'i ürün yazılımı yönetimi: standart veya özel bir ürün yazılımı imajı oluşturma, ürün yazılımı bilgilerini sorgulama ve imaj yazma (flash). DGX VR yazılım sürümüyle birlikte gelir.",
+        "note": "Kılavuz 'network ASIC' der; bunun kapsadığı cihazlar ConnectX-9 ve BlueField-4 olarak yorumlanmıştır."
+      },
+      "nvsm": {
+        "description": "Tanılama ve yönetim: sistem sağlığını belirler, bileşen sorunlarını ve uyarıları tespit eder ve stres testleri çalıştırır. 'sudo nvsm show health' genel sağlık özetini verir."
+      },
+      "nvdebug": {
+        "description": "BMC olay günlüklerini, ürün yazılımı sürümlerini, donanım envanterini ve sistem sağlığı verilerini NVIDIA desteği için tek bir arşivde toplar."
+      }
+    },
+    "safety": {
+      "battery": {
+        "title": "Piller",
+        "text": "Pil yanlış değiştirilirse patlama tehlikesi vardır: yalnızca üreticinin önerdiği pili kullanın. Pili şarj etmeyin, sökmeyin veya delmeyin; yerel kurallara göre bertaraf edin."
+      },
+      "esd": {
+        "title": "Elektrostatik deşarj",
+        "text": "ESD sürücülere, kartlara ve diğer parçalara zarar verebilir. Bir ESD iş istasyonunda çalışın veya antistatik bileklik takın ve kartları yalnızca kenarlarından tutun."
+      },
+      "psu": {
+        "title": "Güç kaynakları",
+        "text": "Güç kaynağının içinde kullanıcının bakım yapabileceği parça yoktur; içeride tehlikeli gerilim, akım ve enerji bulunur: açmayın. Çalışırken değiştirilebilen (hot-plug) bir güç kaynağını değiştirirken, çıkarmadan önce o kaynağın güç kablosunu çekin."
+      },
+      "standby": {
+        "title": "Bekleme gücü",
+        "text": "Güç düğmesi AC gücü tamamen kesmez: sistem prize takılı olduğu sürece bekleme gücü etkindir."
+      },
+      "rack-mount": {
+        "title": "Kabinde çalışma",
+        "text": "Kabin, ekipman dışarı çekildiğinde devrilmeyecek şekilde sabitlenmelidir. Kabinden aynı anda yalnızca bir ekipmanı dışarı çekin."
+      },
+      "lifting": {
+        "title": "Taşıma ve kaldırma",
+        "text": "Yerel iş sağlığı ve güvenliği kurallarına uyun ve ekipmanı taşırken ve kaldırırken mekanik veya diğer uygun yardımcı araçları kullanın."
+      },
+      "hot": {
+        "title": "Sıcak parçalar",
+        "text": "Sistem çalışıyorduysa işlemciler ve soğutucular sıcak olabilir. Kapakları açmadan önce sistemin soğumasını bekleyin."
+      },
+      "covers": {
+        "title": "Kapaklar ve hava akışı",
+        "text": "Sistemi yalnızca kapakları takılıyken ve içeride gevşek alet veya parça kalmadığını kontrol ettikten sonra çalıştırın."
+      }
+    },
+    "commands": {
+      "virtual-a-c-cycle": {
+        "group": "Güç kontrolü",
+        "title": "Sanal A/C Döngüsü",
+        "purpose": "Gücü fiziksel olarak kesmeden bir güç kesintisini (güç kablosunu çekip yeniden takmak gibi) simüle eder."
+      },
+      "graceful-shutdown": {
+        "group": "Güç kontrolü",
+        "title": "Düzgün Kapatma",
+        "purpose": "Host sistemin temiz bir şekilde kapatılmasını başlatır ve işletim sisteminin tüm hizmetleri ve işlemleri düzgün sonlandırmasına izin verir."
+      },
+      "force-power-off": {
+        "group": "Güç kontrolü",
+        "title": "Zorla Kapatma",
+        "purpose": "OS'un kapanmasını beklemeden host'un gücünü hemen keser."
+      },
+      "power-on-host": {
+        "group": "Güç kontrolü",
+        "title": "Host'u Aç",
+        "purpose": "Host'u açar."
+      },
+      "power-cycle-host": {
+        "group": "Güç kontrolü",
+        "title": "Host Güç Döngüsü",
+        "purpose": "Tam bir güç döngüsü uygular (kapatıp yeniden açar)."
+      },
+      "set-power-restore-policy-always-off": {
+        "group": "Güç kontrolü",
+        "title": "Güç Geri Yükleme Politikası: Her Zaman Kapalı",
+        "purpose": "Güç kaybından sonra, güç geri geldiğinde sistem kapalı kalır."
+      },
+      "set-power-restore-policy-last-state": {
+        "group": "Güç kontrolü",
+        "title": "Güç Geri Yükleme Politikası: Son Durum",
+        "purpose": "Güç kaybından sonra, güç geri geldiğinde sistem önceki durumuna (açık veya kapalı) döner."
+      },
+      "set-power-restore-policy-always-on": {
+        "group": "Güç kontrolü",
+        "title": "Güç Geri Yükleme Politikası: Her Zaman Açık",
+        "purpose": "Güç kaybından sonra, güç geri geldiğinde sistem otomatik olarak açılır."
+      },
+      "hmc-graceful-restart": {
+        "group": "HMC ve BMC sıfırlamaları",
+        "title": "HMC Düzgün Yeniden Başlatma",
+        "purpose": "HMC'yi kontrollü olarak yeniden başlatır; yeniden başlatmadan önce hizmetleri temiz bir şekilde kapatmasına izin verir. Çoğu bakım senaryosu için tercih edilen yöntem budur."
+      },
+      "hmc-force-restart": {
+        "group": "HMC ve BMC sıfırlamaları",
+        "title": "HMC Zorla Yeniden Başlatma",
+        "purpose": "Hizmetlerin düzgün kapanmasını beklemeden HMC'yi hemen yeniden başlatır.",
+        "note": "Uyarı: Host'un yeniden başlamasına veya veri kaybına yol açabileceği için acil durumlar dışında önerilmez."
+      },
+      "bmc-reset": {
+        "group": "HMC ve BMC sıfırlamaları",
+        "title": "BMC Sıfırlama",
+        "purpose": "BMC'yi zorla sıfırlar. Bu işlem genellikle ürün yazılımı güncellemelerinden sonra veya BMC yanıt vermez hale geldiğinde kullanılır."
+      },
+      "firmware-bundle-update": {
+        "group": "Ürün yazılımı ve imajlar",
+        "title": "Ürün Yazılımı Paketi Güncelleme",
+        "purpose": "Sisteme bir ürün yazılımı paketi yükler ve uygular. FILENAME'i ürün yazılımı paketinin yoluna ayarlayın. Aşağıdaki komut, güncelleme dosyasını BMC'ye göndermek için multipart form yüklemesi kullanır."
+      },
+      "get-firmware-versions-with-expand": {
+        "group": "Ürün yazılımı ve imajlar",
+        "title": "Ürün Yazılımı Sürümlerini Al (expand ile)",
+        "purpose": "İç içe envanter verilerini dahil etmek için $levels=1 ile $expand sorgusunu kullanarak tüm bileşenlerin ayrıntılı ürün yazılımı sürüm bilgilerini alır. Kabuğun bunları değişken olarak yorumlamaması için dolar işaretleri kaçışlıdır (\\$)."
+      },
+      "check-bmc-firmware-signing-type": {
+        "group": "Ürün yazılımı ve imajlar",
+        "title": "BMC Ürün Yazılımı İmzalama Tipini Kontrol Et",
+        "purpose": "BMC ürün yazılımı imajının imzalama tipini kontrol eder; bu, yüklü ürün yazılımının özgünlüğünü ve güvenliğini doğrulamaya yardımcı olur.",
+        "note": "<active image slot> değerini etkin slot kimliğiyle değiştirin. Bulmak için /redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0 adresinden ActiveSlotId özelliğini okuyun."
+      },
+      "check-hmc-firmware-signing-type": {
+        "group": "Ürün yazılımı ve imajlar",
+        "title": "HMC Ürün Yazılımı İmzalama Tipini Kontrol Et",
+        "purpose": "HMC ürün yazılımı imajının imzalama tipini kontrol eder.",
+        "note": "<active image slot> değerini etkin slot kimliğiyle değiştirin. Bulmak için /redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0 adresinden ActiveSlotId özelliğini okuyun."
+      },
+      "enabling-global-write-protect": {
+        "group": "Yazma koruması",
+        "title": "Genel Yazma Korumasını Etkinleştirme",
+        "purpose": "Sistem için donanım yazma korumasını etkinleştirir."
+      },
+      "disabling-global-write-protect": {
+        "group": "Yazma koruması",
+        "title": "Genel Yazma Korumasını Devre Dışı Bırakma",
+        "purpose": "Sistem için donanım yazma korumasını devre dışı bırakır."
+      },
+      "reading-global-write-protect": {
+        "group": "Yazma koruması",
+        "title": "Genel Yazma Korumasını Okuma",
+        "purpose": "Geçerli donanım yazma koruması durumunu okur.",
+        "note": "Yanlışlıkla veya yetkisiz yapılan değişiklikleri önlemek için ürün yazılımı güncellemelerinden veya yapılandırma değişikliklerinden sonra yazma korumasının etkinleştirilmesi önerilir."
+      },
+      "creating-a-new-account": {
+        "group": "Hesaplar",
+        "title": "Yeni Hesap Oluşturma",
+        "purpose": "Belirtilen kullanıcı adı, parola ve rolle yeni bir kullanıcı hesabı oluşturur.",
+        "note": "Kullanıcı için gereken erişim düzeyine göre RoleId değerini Administrator , Operator veya ReadOnly olarak ayarlayabilirsiniz."
+      },
+      "updating-password-for-an-existing-account": {
+        "group": "Hesaplar",
+        "title": "Mevcut Bir Hesabın Parolasını Güncelleme",
+        "purpose": "root kullanıcısı gibi mevcut bir hesabın parolasını günceller.",
+        "note": "CURRENT_PASSWORD'ü hesabın geçerli parolasıyla, NEW_PASSWORD'ü ise istenen yeni parolayla değiştirin."
+      },
+      "clear-hmc-event-log": {
+        "group": "Olay günlükleri",
+        "title": "HMC Olay Günlüğünü Temizle",
+        "purpose": "HMC olay günlüğündeki tüm girdileri temizler. Günlüğü düzenli tutmak ve yer açmak için bu komutu günlük verilerini inceledikten veya arşivledikten sonra kullanın."
+      },
+      "clear-bmc-event-log": {
+        "group": "Olay günlükleri",
+        "title": "BMC Olay Günlüğünü Temizle",
+        "purpose": "BMC olay günlüğündeki tüm girdileri kaldırır. Sorunlar çözüldükten sonra veya yeni sorun giderme adımlarına başlamadan önce günlüğü sıfırlamak için kullanışlıdır."
+      },
+      "reset-bmc-to-factory-defaults": {
+        "group": "Fabrika varsayılanları",
+        "title": "BMC'yi Fabrika Varsayılanlarına Sıfırla",
+        "purpose": "BMC'yi orijinal fabrika ayarlarına geri yükler. Tüm kullanıcı yapılandırmaları ve özel ayarlar kaybolur. BMC yanıt vermiyorsa veya tüm ayarları temizlemeniz gerekiyorsa bunu kullanın."
+      },
+      "reset-hmc-to-factory-defaults": {
+        "group": "Fabrika varsayılanları",
+        "title": "HMC'yi Fabrika Varsayılanlarına Sıfırla",
+        "purpose": "Host Management Controller'ı (HMC) fabrika varsayılan yapılandırmasına sıfırlar. Bu işlem HMC'deki tüm özel ayarları ve kullanıcı verilerini kaldırır."
+      },
+      "clear-the-emmc-this-will-clear-the-journal": {
+        "group": "Fabrika varsayılanları",
+        "title": "eMMC'yi Temizle (Bu İşlem Journal'ı Temizler)",
+        "purpose": "Sistem journal'ı dahil eMMC depolamasını güvenli bir şekilde siler. eMMC'de depolanan tüm verileri kalıcı olarak sileceği için bu işlemi dikkatle kullanın."
+      },
+      "reset-sbios-to-defaults": {
+        "group": "Fabrika varsayılanları",
+        "title": "SBIOS'u Varsayılanlara Sıfırla",
+        "purpose": "Sistem BIOS'u (SBIOS) ayarlarını fabrika varsayılanlarına geri yükler. Bu, yapılandırma sorunlarını çözmeye veya sistemi sıfırdan bir kuruluma hazırlamaya yardımcı olabilir."
+      },
+      "ipmi-host-sol-access": {
+        "group": "Konsol erişimi",
+        "title": "IPMI - Host SOL Erişimi",
+        "purpose": "IPMI kullanarak host'a bir Serial Over LAN (SOL) oturumu kurar. Bu, OS çalışmıyor olsa bile sistem konsoluyla uzaktan etkileşim kurmanızı sağlar."
+      },
+      "ssh-host-sol-access": {
+        "group": "Konsol erişimi",
+        "title": "SSH - Host SOL Erişimi",
+        "purpose": "Host'un SOL arayüzüne SSH erişimi sağlar. Uzak konsol erişimi için IPMI SOL'a bir alternatiftir."
+      },
+      "disable-ipmi": {
+        "group": "Ağ kontrolleri",
+        "title": "IPMI'ı Devre Dışı Bırak",
+        "purpose": "BMC'de IPMI protokolünü devre dışı bırakır. IPMI uzaktan yönetimi gerekmiyorsa daha yüksek güvenlik için önerilir."
+      },
+      "capturing-debug-logs-with-nvdebug": {
+        "group": "Hata ayıklama günlükleri",
+        "title": "NVDEBUG ile Hata Ayıklama Günlüklerini Toplama",
+        "purpose": "NVDEBUG'ın bulunduğu BMC'ye veya host sisteme erişin. Tanılama araçlarını çalıştırmak için gerekli izinlere sahip olduğunuzdan emin olun.",
+        "note": "NVDEBUG; BMC olay günlükleri, ürün yazılımı sürümleri, donanım envanteri ve sistem sağlığı verileri dahil kapsamlı bir günlük kümesini otomatik olarak toplar. Verimli ve eksiksiz günlük toplama için önerilen yöntem budur."
+      }
+    },
+    "commandNotes": {
+      "usage": "Önce BMC adresini ayarlayın (export bmcip=\"192.168.1.100\") veya ${bmcip} değerini elle değiştirin. Örneklerde örnek kimlik bilgileri kullanılmıştır; bunları kendi BMC kimlik bilgilerinizle değiştirin.",
+      "factoryReset": "BMC fabrika sıfırlamasından sonra varsayılan kullanıcı adı ve parola admin/admin'dir ve ilk oturum açışta bunları değiştirmeniz istenir. Varsayılan kimlik bilgilerini hemen değiştirin."
+    },
+    "nvlinkFabric": {
+      "description": "Her hesaplama tepsisinin, arkadaki kablo kartuşları üzerinden her NVLink anahtar tepsisine NVLink bağlantısı vardır: her GPU'nun dokuz anahtar tepsisinin tamamına NVLink'i vardır ve dokuz anahtar tepsisi 72 GPU'nun tamamını tek bir NVLink alanında birbirine bağlar."
+    },
+    "rackLayout": {
+      "note": "Grupların sırası Şekil 1'den alınmıştır. Kılavuz RU konumu vermediği için birimler arada boşluk olmadan üst üste dizilmiştir. Şekil 1 ayrıca alt güç raflarının altında boş paneller ve kabinin altında sismik destek gösterir.",
+      "numbering": "NVIDIA bu birimleri kabin konumuna göre numaralandırmaz (blok diyagram anahtar tepsilerini 1'den 9'a numaralandırır ancak her birinin nerede durduğunu söylemez). Bu uygulama onları kabinin üstünden aşağı doğru numaralandırır.",
+      "overrides": {
+        "power-shelf": "Servis kılavuzunun güç rafı şekli, rafları kabinin altından yukarı doğru 1'den 4'e numaralandırır."
+      },
+      "heights": {
+        "tor-switch": "Kılavuz kabin üstü (ToR) anahtarlarının yüksekliğini belirtmez. 1 RU olarak çizilmiştir."
+      }
+    },
+    "trayLayouts": {
+      "compute-tray": {
+        "note": "Şematik bir yerleşim; ölçekli değildir ve NVIDIA'nın şekillerinden kopyalanmamıştır. Arka yarı: 2.4 Şekil 4'teki gibi HPM_L (sol) ve HPM_R (sağ) üzerinde GPU'lar ve CPU'lar, CPU'ların çevresinde SOCAMM (Şekil 5). Ön yarı: solda ve sağda ConnectX-9 modülleri ve önbellek sürücüleriyle Bay B, ortada BlueField-4 ve SMM ile Bay C (Şekil 6). 1 GbE BMC portu SMM'nin RJ45'inde çizilmiştir; Tablo 2.3 bunu doğrulamaz.",
+        "notPlaced": {
+          "ct-port-lan-1gbe": "Tablo 2.3 bunu listeler, ancak hiçbir şekil nerede olduğunu göstermez (docs/OPEN_QUESTIONS.md madde 4).",
+          "ct-nvlink-connectors": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir.",
+          "ct-cold-water-inlet": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir.",
+          "ct-hot-water-outlet": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir.",
+          "ct-bus-bar-connector": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir."
+        },
+        "points": {
+          "nvlink-connectors": "Kablo kartuşuna giden NVLink konnektörleri",
+          "cold-water-inlet": "Soğuk su girişi",
+          "hot-water-outlet": "Sıcak su çıkışı",
+          "bus-bar-connector": "Bara konnektörü"
+        },
+        "links": {
+          "7": "Şekil 4 önyükleme sürücüsünü CPU 1 üzerinde çizer. PCIe veri yolu (000a:a1), GPU2 ve GPU3 ile aynı domain'dedir (2.4).",
+          "8": "Şekil 4, PCIe anahtarları üzerinden ikisi CPU 0'da ve ikisi CPU 1'de olmak üzere dört ConnectX-9 çifti çizer. Hangi ön bölmenin hangi çifti barındırdığı belirtilmemiş; bu uygulama sol bölmeyi CPU 0'a, sağ bölmeyi CPU 1'e bağlar.",
+          "9": "Şekil 4, PCIe anahtarları üzerinden ikisi CPU 0'da ve ikisi CPU 1'de olmak üzere dört ConnectX-9 çifti çizer. Hangi ön bölmenin hangi çifti barındırdığı belirtilmemiş; bu uygulama sol bölmeyi CPU 0'a, sağ bölmeyi CPU 1'e bağlar.",
+          "10": "Şekil 4 her ConnectX-9 PCIe anahtar grubuna bir E1.S sürücü koyar. Tablo 2.4, Bay_B_L sürücülerini C1/C3 (0001, 0004) ile, Bay_B_R sürücülerini ise C5/C7 (000c, 0009) ile aynı PCIe domain'lerine koyar. Bu uygulamadaki sürücü-kart eşleştirmesi bu domain'leri izler.",
+          "11": "Şekil 4 her ConnectX-9 PCIe anahtar grubuna bir E1.S sürücü koyar. Tablo 2.4, Bay_B_L sürücülerini C1/C3 (0001, 0004) ile, Bay_B_R sürücülerini ise C5/C7 (000c, 0009) ile aynı PCIe domain'lerine koyar. Bu uygulamadaki sürücü-kart eşleştirmesi bu domain'leri izler.",
+          "12": "Şekil 4 her ConnectX-9 PCIe anahtar grubuna bir E1.S sürücü koyar. Tablo 2.4, Bay_B_L sürücülerini C1/C3 (0001, 0004) ile, Bay_B_R sürücülerini ise C5/C7 (000c, 0009) ile aynı PCIe domain'lerine koyar. Bu uygulamadaki sürücü-kart eşleştirmesi bu domain'leri izler.",
+          "13": "Şekil 4 her ConnectX-9 PCIe anahtar grubuna bir E1.S sürücü koyar. Tablo 2.4, Bay_B_L sürücülerini C1/C3 (0001, 0004) ile, Bay_B_R sürücülerini ise C5/C7 (000c, 0009) ile aynı PCIe domain'lerine koyar. Bu uygulamadaki sürücü-kart eşleştirmesi bu domain'leri izler.",
+          "14": "Her GPU'nun, kablo kartuşu üzerinden dokuz NVLink anahtar tepsisinin tamamına NVLink'i vardır.",
+          "15": "Her GPU'nun, kablo kartuşu üzerinden dokuz NVLink anahtar tepsisinin tamamına NVLink'i vardır.",
+          "16": "Her GPU'nun, kablo kartuşu üzerinden dokuz NVLink anahtar tepsisinin tamamına NVLink'i vardır.",
+          "17": "Her GPU'nun, kablo kartuşu üzerinden dokuz NVLink anahtar tepsisinin tamamına NVLink'i vardır.",
+          "18": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
+          "19": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
+          "20": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
+          "21": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
+          "22": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
+          "23": "Bölüm 1.2: sıvı iç manifolddan, ardından CPU'lara ve GPU'lara bağlı soğuk plakalardan geçer. Tam boru düzeni gösterilmemiştir.",
+          "24": "Şekil 5 tepsinin arkasındaki soğuk su girişini ve sıcak su çıkışını etiketler; manifolda giden borular gösterilmemiştir.",
+          "25": "Şekil 5 tepsinin arkasındaki soğuk su girişini ve sıcak su çıkışını etiketler; manifolda giden borular gösterilmemiştir.",
+          "26": "Şekil 5 arkada bir bara konnektörü ve bir Power Distribution Board etiketler; birinin diğerini beslediği adlarından çıkarılmıştır, belirtilmemiştir."
+        }
+      },
+      "switch-tray": {
+        "note": "Şematik bir yerleşim; ölçekli değildir ve NVIDIA'nın şekillerinden kopyalanmamıştır. Arka yarı: anahtar kartı üzerinde dört NVSwitch yongası, arkada su ve güç konnektörleri (Şekil 7). Ön: pil ve SSD ile Tablo 2.5'teki gibi soldan sağa beş RJ45 port.",
+        "notPlaced": {
+          "switch-bmc": "Şekil 7 BMC'nin nerede olduğunu göstermez.",
+          "cpu-erot": "Şekil 7 CPU ERoT'un nerede olduğunu göstermez.",
+          "st-nvlink-connectors": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir.",
+          "st-cold-water-inlet": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir.",
+          "st-hot-water-outlet": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir.",
+          "st-power-connector": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir."
+        },
+        "points": {
+          "nvlink-connectors": "Kablo kartuşuna giden NVLink konnektörleri",
+          "power-connector": "Güç konnektörü",
+          "cold-water-inlet": "Soğuk su girişi",
+          "hot-water-outlet": "Sıcak su çıkışı"
+        },
+        "links": {
+          "0": "Tepsinin arkasındaki NVLink konnektörleri kablo kartuşlarına takılır (2.1); tepsi içindeki yönlendirme gösterilmemiştir.",
+          "1": "Tepsinin arkasındaki NVLink konnektörleri kablo kartuşlarına takılır (2.1); tepsi içindeki yönlendirme gösterilmemiştir.",
+          "2": "Tepsinin arkasındaki NVLink konnektörleri kablo kartuşlarına takılır (2.1); tepsi içindeki yönlendirme gösterilmemiştir.",
+          "3": "Tepsinin arkasındaki NVLink konnektörleri kablo kartuşlarına takılır (2.1); tepsi içindeki yönlendirme gösterilmemiştir.",
+          "4": "Şekil 7, dört NVLink anahtarı üzerindeki soğuk plakaların soğuk su girişine ve sıcak su çıkışına borularla bağlandığını gösterir; tam döngü sırası gösterilmemiştir.",
+          "5": "Şekil 7, dört NVLink anahtarı üzerindeki soğuk plakaların soğuk su girişine ve sıcak su çıkışına borularla bağlandığını gösterir; tam döngü sırası gösterilmemiştir.",
+          "6": "Şekil 7, dört NVLink anahtarı üzerindeki soğuk plakaların soğuk su girişine ve sıcak su çıkışına borularla bağlandığını gösterir; tam döngü sırası gösterilmemiştir.",
+          "7": "Şekil 7, dört NVLink anahtarı üzerindeki soğuk plakaların soğuk su girişine ve sıcak su çıkışına borularla bağlandığını gösterir; tam döngü sırası gösterilmemiştir.",
+          "8": "Şekil 7, dört NVLink anahtarı üzerindeki soğuk plakaların soğuk su girişine ve sıcak su çıkışına borularla bağlandığını gösterir; tam döngü sırası gösterilmemiştir.",
+          "9": "Şekil 7, dört NVLink anahtarı üzerindeki soğuk plakaların soğuk su girişine ve sıcak su çıkışına borularla bağlandığını gösterir; tam döngü sırası gösterilmemiştir.",
+          "10": "Şekil 7, dört NVLink anahtarı üzerindeki soğuk plakaların soğuk su girişine ve sıcak su çıkışına borularla bağlandığını gösterir; tam döngü sırası gösterilmemiştir.",
+          "11": "Şekil 7, dört NVLink anahtarı üzerindeki soğuk plakaların soğuk su girişine ve sıcak su çıkışına borularla bağlandığını gösterir; tam döngü sırası gösterilmemiştir.",
+          "12": "Şekil 7 arkada bir güç konnektörü ve 'SWB w/ PDB' etiketler; birinin diğerini beslediği adlarından çıkarılmıştır."
+        }
+      },
+      "power-shelf": {
+        "note": "Şematik bir yerleşim; ölçekli değildir ve NVIDIA'nın şekillerinden kopyalanmamıştır. Servis kılavuzundaki gibi soldan sağa ve yukarıdan aşağıya 1'den 6'ya numaralandırılmış, ikişerli üç sıra halinde altı PSU; yönetim modülü solda (Şekil 8). AC giriş ve baraya giden DC çıkış arkadadır.",
+        "notPlaced": {
+          "ac-power-whip": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir.",
+          "ps-dc-output": "Birimin arka yüzünde: kabinin Rear görünümünde çizilmiştir, burada ise tepsinin arka kenarında bir bağlantı uç noktası olarak gösterilir."
+        },
+        "points": {
+          "ac-whip-1": "AC güç kablosu (power whip) 1 (100 A, 415-480 V AC)",
+          "ac-whip-2": "AC güç kablosu (power whip) 2 (100 A, 415-480 V AC)",
+          "bus-bar-output": "Baraya giden 54 V DC çıkışı"
+        },
+        "links": {
+          "0": "Her rafı iki adet 100 A güç kablosu (power whip) besler (1.4); bunların altı PSU arasında nasıl bölündüğü belirtilmemiş.",
+          "1": "Raf, AC'yi baraya giden 54 V DC çıkışa dönüştürür (1.4); her PSU'dan gelen kablolama gösterilmemiştir.",
+          "2": "Her rafı iki adet 100 A güç kablosu (power whip) besler (1.4); bunların altı PSU arasında nasıl bölündüğü belirtilmemiş.",
+          "3": "Raf, AC'yi baraya giden 54 V DC çıkışa dönüştürür (1.4); her PSU'dan gelen kablolama gösterilmemiştir.",
+          "4": "Her rafı iki adet 100 A güç kablosu (power whip) besler (1.4); bunların altı PSU arasında nasıl bölündüğü belirtilmemiş.",
+          "5": "Raf, AC'yi baraya giden 54 V DC çıkışa dönüştürür (1.4); her PSU'dan gelen kablolama gösterilmemiştir.",
+          "6": "Her rafı iki adet 100 A güç kablosu (power whip) besler (1.4); bunların altı PSU arasında nasıl bölündüğü belirtilmemiş.",
+          "7": "Raf, AC'yi baraya giden 54 V DC çıkışa dönüştürür (1.4); her PSU'dan gelen kablolama gösterilmemiştir.",
+          "8": "Her rafı iki adet 100 A güç kablosu (power whip) besler (1.4); bunların altı PSU arasında nasıl bölündüğü belirtilmemiş.",
+          "9": "Raf, AC'yi baraya giden 54 V DC çıkışa dönüştürür (1.4); her PSU'dan gelen kablolama gösterilmemiştir.",
+          "10": "Her rafı iki adet 100 A güç kablosu (power whip) besler (1.4); bunların altı PSU arasında nasıl bölündüğü belirtilmemiş.",
+          "11": "Raf, AC'yi baraya giden 54 V DC çıkışa dönüştürür (1.4); her PSU'dan gelen kablolama gösterilmemiştir."
+        }
+      },
+      "tor-switch": {
+        "note": "Ön panel Şekil 9'daki gibi düzenlenmiştir: 16'şar RJ45 porttan oluşan üç blok, dört büyük yuva ve sağ uçta üç port. Kılavuz anahtarın içini açıklamadığı için içeride hiçbir şey çizilmemiştir."
+      }
+    },
+    "rearLayout": {
+      "note": "Birimlerin arkasında şematik yerleşim, ölçekli değildir. Şekil 2, arkanın ortasında kablo kartuşlarını, FD83 hortum konnektörlü iki sıvı soğutma manifoldunu, güç barasını, bunların desteklerini, arka çerçeveyi ve sismik desteği gösterir; tam konumlar, açıklıklar ve sayılar verilmemiştir. Hangi manifoldun beslemeyi, hangisinin dönüşü taşıdığı belirtilmemiş."
+    }
+  }
+}

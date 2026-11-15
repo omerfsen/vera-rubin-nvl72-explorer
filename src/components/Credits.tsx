@@ -1,20 +1,22 @@
 import site from '../../data/site.json';
+import { useI18n } from '../i18n';
 
 /** Author and project links, from data/site.json. */
 export function Credits() {
   const { author, repository } = site;
+  const { t } = useI18n();
   return (
     <span className="credits">
-      Made by {author.name}
+      {t('credits.madeBy', { name: author.name })}
       {' · '}
       <a href={repository} target="_blank" rel="noopener noreferrer">
-        Source on GitHub
+        {t('credits.source')}
       </a>
       {author.github && (
         <>
           {' · '}
           <a href={author.github} target="_blank" rel="noopener noreferrer">
-            GitHub
+            {t('credits.github')}
           </a>
         </>
       )}
@@ -22,7 +24,7 @@ export function Credits() {
         <>
           {' · '}
           <a href={author.linkedin} target="_blank" rel="noopener noreferrer">
-            LinkedIn
+            {t('credits.linkedin')}
           </a>
         </>
       )}

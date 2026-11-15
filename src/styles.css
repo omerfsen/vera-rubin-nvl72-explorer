@@ -109,6 +109,18 @@ button { font: inherit; color: inherit; }
 }
 .toggle[aria-expanded='true'] { border-color: var(--accent); }
 
+.lang-switch { display: flex; gap: 4px; }
+.lang-switch button {
+  padding: 4px 10px;
+  min-height: 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  cursor: pointer;
+}
+.lang-switch button[aria-pressed='true'] { border-color: var(--accent); background: #12303f; }
+.translated-notice { margin: 0 0 8px; padding: 6px 8px; border-left: 3px solid var(--warn); font-size: 0.85rem; }
+
 .breadcrumb { padding: 6px 16px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
 .breadcrumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .breadcrumb li { display: flex; align-items: center; }

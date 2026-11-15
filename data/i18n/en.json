@@ -1,0 +1,1322 @@
+{
+  "ui": {
+    "language": {
+      "self": "EN",
+      "label": "Language",
+      "translated": "This text is translated from NVIDIA's English documentation. The English is authoritative."
+    },
+    "site": {
+      "title": "Vera Rubin NVL72 Explorer",
+      "tagline": "Every fact linked to NVIDIA's own documentation · unofficial, not affiliated with NVIDIA",
+      "trademarks": "NVIDIA, DGX, Vera, Rubin, NVLink, NVSwitch, ConnectX and BlueField are trademarks of NVIDIA Corporation.",
+      "footer": "Data: {userGuide} ({userGuideDate}) and {serviceManual} ({serviceManualDate}). Unofficial; not affiliated with or endorsed by NVIDIA. {trademarks} 3D geometry is original and illustrative."
+    },
+    "credits": {
+      "madeBy": "Made by {name}",
+      "source": "Source on GitHub",
+      "github": "GitHub",
+      "linkedin": "LinkedIn"
+    },
+    "top": {
+      "sources": "Sources",
+      "listView": "List view",
+      "hideList": "Hide list"
+    },
+    "search": {
+      "placeholder": "Search parts, e.g. gpu, bluefield, tray 7",
+      "label": "Search parts",
+      "in": "in {parent}",
+      "rackUnit": "rack unit"
+    },
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "rack": "Rack"
+    },
+    "networkBar": {
+      "label": "Highlight a network",
+      "networks": "Networks:"
+    },
+    "layout": {
+      "listPane": "Rack as a list",
+      "details": "Details",
+      "noWebgl": "WebGL is not available in this browser, so the rack is shown as a list.",
+      "sceneFailed": "The 3D view could not start. Use the list view instead.",
+      "loading": "Loading 3D view…",
+      "stage": "Rack view. Use the up and down arrow keys to step through the units."
+    },
+    "hint": {
+      "trayLong": "Click a part · drag to rotate · scroll or pinch to zoom · ↑ ↓ to step · Esc to go back",
+      "trayShort": "Tap a part · drag to rotate · pinch to zoom",
+      "rearLong": "Rear: click a tray to see its NVLink reach every peer through the cartridge · click any rear part or connector",
+      "rearShort": "Tap a rear part · drag to rotate",
+      "rackLong": "Click a unit, click again to open it · drag to rotate · ↑ ↓ to step · Enter to open · Esc to go back",
+      "rackShort": "Tap a unit, tap again to open · drag to rotate"
+    },
+    "stage": {
+      "side": "Side of the rack",
+      "front": "Front",
+      "rear": "Rear",
+      "open": "Open {name}",
+      "backToRack": "← Back to rack",
+      "layers": "Layers",
+      "showOrHide": "Show or hide {hint}",
+      "connectionTypes": "Connection types",
+      "dashed": "Dashed: assumed, see the panel"
+    },
+    "layers": {
+      "structure": "Structure",
+      "structureHint": "the bones: rack frame or tray shell",
+      "parts": "Parts",
+      "partsHint": "the muscles: units, rear parts, chips, cards, drives, ports",
+      "links": "Connections",
+      "linksHint": "the veins: PCIe, C2C, Clink, NVLink, coolant, power"
+    },
+    "legend": {
+      "label": "Legend",
+      "on": "On {name}",
+      "conflict": "Conflict: figure and table disagree",
+      "notOn": "Not on this network",
+      "rear": "{name} (rear)",
+      "port": "{type} port",
+      "otherPort": "Other port (type not stated)"
+    },
+    "scene": {
+      "trayOpened": "3D view of {name} opened. Use the arrow keys to step through its parts.",
+      "rack": "3D view of the rack. Use the list view or the arrow keys to select units.",
+      "contextLost": "The 3D view lost its graphics context. It comes back on its own; the list view still works.",
+      "front": "Front",
+      "rear": "Rear",
+      "group": "{count} × {name}",
+      "nvlinkFanout": "NVLink: {unit} to all {count} {peers}"
+    },
+    "unitPlural": {
+      "compute-tray": "compute trays",
+      "switch-tray": "NVLink 6 switch trays",
+      "power-shelf": "power shelves",
+      "tor-switch": "top-of-rack Ethernet switches"
+    },
+    "list": {
+      "label": "Rack units, top to bottom",
+      "front": "Front, top to bottom",
+      "group": "{count} × {name}",
+      "unit": "{name} {index}",
+      "height": "{height} RU",
+      "rear": "Rear",
+      "rearNotDrawn": "The rear is not drawn in 3D yet."
+    },
+    "panel": {
+      "selected": "Selected: {title}",
+      "assumed": "assumed",
+      "openToSee": "Open {title} to see its parts",
+      "whatItIs": "What it is",
+      "whatItDoes": "What it does",
+      "howMany": "How many",
+      "position": "Position",
+      "nvidiaLabel": "NVIDIA label: {label}",
+      "notDrawnReason": "Not drawn: {reason}",
+      "notDrawn": "Not drawn on its own in the 3D view.",
+      "networks": "Networks",
+      "noNetworks": "Not on any of the seven rack networks.",
+      "throughPart": " (through a part inside)",
+      "dashedChips": "Dashed chips: reached through a part inside it.",
+      "whatNetworksDo": "What these networks do",
+      "networkItem": "{number}. {name}",
+      "specs": "Specs",
+      "insideTray": "Inside the tray, connected to",
+      "connections": "Connections",
+      "partsInside": "Parts inside",
+      "countNotStated": "count not stated",
+      "times": "× {count}",
+      "note": "Note",
+      "source": "Source",
+      "sourceLabel": "Source:",
+      "figureAlt": "Official figure for {name}, from the NVIDIA DGX VR NVL72 User Guide",
+      "figureCaption": "Figure hot-linked from docs.nvidia.com. © NVIDIA Corporation.",
+      "documents": "In NVIDIA's documents",
+      "web": "web",
+      "pdfPage": "PDF p. {page}",
+      "figure": "figure",
+      "openQuestion": "Open question in NVIDIA's documents",
+      "openQuestions": "Open questions in NVIDIA's documents"
+    },
+    "docs": {
+      "user-guide": "User Guide",
+      "service-manual": "Service Manual"
+    },
+    "badge": {
+      "conflict": "conflict",
+      "gap": "gap"
+    },
+    "count": {
+      "notStated": "The guide does not state how many.",
+      "perParent": "{count} per {parent}",
+      "oneRack": "One rack: {gpus} GPUs in a single NVLink domain.",
+      "perRack": "{total} per rack (computed)",
+      "thisIs": "This is number {index}."
+    },
+    "per": {
+      "rack": "rack",
+      "compute-tray": "compute tray",
+      "switch-tray": "switch tray",
+      "power-shelf": "power shelf",
+      "tor-switch": "top-of-rack switch"
+    },
+    "host": {
+      "title": "On the host",
+      "label": "Label",
+      "bus": "PCIe bus",
+      "interface": "Interface",
+      "rdma": "RDMA",
+      "na": "n/a",
+      "allInstances": " · all instances shown"
+    },
+    "network": {
+      "aria": "Network {name}",
+      "title": "Network {number}: {name}",
+      "noPort": "No port in this rack is on {name} in NVIDIA's documentation.",
+      "onThe": " on the {parent}",
+      "perRack": "{total} per rack",
+      "conflict": "Conflict: the guide's figure puts this port on {name}, its table does not. See OPEN_QUESTIONS item 3.",
+      "off": "Turn the overlay off"
+    },
+    "ops": {
+      "copy": "Copy",
+      "copied": "Copied",
+      "software": "Software",
+      "partOf": " (part of {name})",
+      "commands": "Commands ({count})",
+      "safety": "Safety"
+    },
+    "procedure": {
+      "operations": "Operations",
+      "service": "Service procedure",
+      "walkThrough": "Walk through: {title} ({count} steps)",
+      "aria": "Service procedure: {title}",
+      "heading": "{title} · step {step} of {total}",
+      "previous": "← Previous",
+      "next": "Next →",
+      "close": "Close",
+      "exampleService": "Shown on an example unit. Follow the full procedure and safety notes in NVIDIA's service manual.",
+      "exampleOperation": "Shown on an example unit. Follow the full procedure and safety notes in NVIDIA's user guide."
+    },
+    "share": {
+      "title": "Share",
+      "copyLink": "Copy link to this view",
+      "copyEmbed": "Copy embed code",
+      "linkCopied": "Link copied.",
+      "embedCopied": "Embed code copied."
+    },
+    "sources": {
+      "back": "← Back to the rack",
+      "title": "Sources and open questions",
+      "intro": "Every fact in this explorer links to the section of NVIDIA's documentation it comes from. Anything the documents do not state is marked {assumed} with a reason, and places where NVIDIA's figures and tables disagree are kept as conflicts rather than resolved.",
+      "documents": "Documents",
+      "citations": "({count} citations)",
+      "conflicts": "Conflicts in NVIDIA's documents ({count})",
+      "gaps": "Gaps: what the documents do not say ({count})",
+      "sameList": "The same list, with quotes from each document, is in {file}.",
+      "conflictingOne": "{count} conflicting reading is also kept in the data and drawn in the conflict colour in the network overlay.",
+      "conflictingMany": "{count} conflicting readings are also kept in the data and drawn in the conflict colour in the network overlay.",
+      "assumed": "Assumed ({count})",
+      "about": "About",
+      "license": "Licensed under Apache 2.0.",
+      "data": "The data",
+      "dataText": "Everything the explorer shows comes from one JSON file, checked against a JSON Schema. Download both to reuse them: {json} · {schema}. Taken from the documents on {date}.",
+      "schema": "schema",
+      "translations": "The interface text and the translations are in {files}.",
+      "specWhere": "{name}: {label}",
+      "heightOf": "Height of {name}",
+      "trayNumbering": "Tray numbering",
+      "layoutOf": "Layout of the {name}",
+      "linkIn": "{kind} link in the {name}",
+      "rearLayout": "Rear layout"
+    },
+    "types": {
+      "rack": "rack",
+      "compute-tray": "compute tray",
+      "switch-tray": "switch tray",
+      "power-shelf": "power shelf",
+      "tor-switch": "tor switch",
+      "cpu": "cpu",
+      "gpu": "gpu",
+      "nic": "nic",
+      "dpu": "dpu",
+      "drive": "drive",
+      "switch-asic": "switch asic",
+      "psu": "psu",
+      "bmc": "bmc",
+      "controller": "controller",
+      "port": "port",
+      "cable-cartridge": "cable cartridge",
+      "manifold": "manifold",
+      "bus-bar": "bus bar",
+      "battery": "battery",
+      "memory": "memory",
+      "board": "board",
+      "connector": "connector",
+      "structure": "structure"
+    },
+    "links": {
+      "pcie": "PCIe",
+      "c2c": "C2C (CPU to GPU)",
+      "clink": "Clink (CPU to CPU)",
+      "nvlink": "NVLink (to the cable cartridge)",
+      "coolant": "Coolant",
+      "cooling": "Coolant",
+      "power": "Power",
+      "ac": "AC power whips (to the remote power panel)"
+    },
+    "connectionKinds": {
+      "network": "network",
+      "not-connected": "not-connected",
+      "nvlink": "nvlink",
+      "power": "power",
+      "cooling": "cooling"
+    }
+  },
+  "content": {
+    "components": {
+      "rack": {
+        "name": "DGX Vera Rubin NVL72 rack",
+        "description": "A rack-scale system whose GPUs are connected by NVLink through the NVLink passive copper cable cartridge backplane. It holds compute trays, NVLink switch trays, top-of-rack management switches, power shelves, a bus bar and liquid cooling manifolds.",
+        "function": "Forms a single 72-GPU NVLink domain. NVLink is the scale-up fabric inside the rack, InfiniBand the scale-out fabric between racks, and Ethernet carries storage, management and external traffic."
+      },
+      "compute-tray": {
+        "name": "Compute tray",
+        "description": "An enclosure that holds the compute boards and peripheral accessory boards and runs an OS image. A tray has two compute boards.",
+        "function": "A compute node with 2 Vera CPUs and 4 Rubin GPUs that runs an OS image. Its GPUs reach the GPUs in the other trays over NVLink through connectors at the back of the tray and the NVLink switch trays.",
+        "specNotes": {
+          "OSFP ports (computenet)": "Fig. 1 marks eight OSFP cages with network 5 (computenet)."
+        }
+      },
+      "vera-cpu": {
+        "name": "Vera CPU",
+        "description": "NVIDIA Vera CPU. Part of the compute node.",
+        "function": "Part of the compute node, which the guide lists as 2 Vera CPUs and 4 Rubin GPUs per tray."
+      },
+      "rubin-gpu": {
+        "name": "Rubin GPU",
+        "description": "NVIDIA Rubin GPU. Part of the compute node.",
+        "function": "Accelerator. All 72 GPUs in the rack form one NVLink domain through the NVLink switch trays."
+      },
+      "connectx-9": {
+        "name": "ConnectX-9 I/O card",
+        "description": "NVIDIA ConnectX-9 I/O card.",
+        "function": "InfiniBand cluster interconnect and multi-rack clustering (computenet).",
+        "note": "The guide disagrees with itself on the count. The 1.2 configuration table says 2 ConnectX-9 I/O cards. Fig. 4 (block diagram) draws 8 ConnectX-9 cards, Fig. 6 (front view) shows 2 x CX9 modules in each of the two Bay B sections, and the 2.2 figures show 8 OSFP cages. This app keeps the table's 2. See docs/OPEN_QUESTIONS.md.",
+        "specNotes": {
+          "PCIe port labels": "Eight labels, one per OSFP cage. The 2.2 and 2.4 figures print the last two as C7/C3_1 and C7/C3_2; the table prints C7/C7_1 and C7/C7_2."
+        }
+      },
+      "bluefield-4": {
+        "name": "BlueField-4 DPU",
+        "description": "NVIDIA BlueField-4 DPU.",
+        "function": "Ethernet storage and system management networking. Its left QSFP port is on dgxnet, its right QSFP port on storagenet and its RJ45 port on ipminet.",
+        "specNotes": {
+          "PCIe labels": "Fig. 2 (2.2) and Fig. 4 (2.4) print BF_0 and BF_1. The 2.4 table prints BF_0 on both buses 0005:41:00.x and 000d:41:00.x, with repeated interface and RDMA names. See docs/OPEN_QUESTIONS.md."
+        }
+      },
+      "host-bmc": {
+        "name": "Host BMC",
+        "description": "Board Management Controller of the compute tray, with an RJ45 port.",
+        "function": "Out-of-band management of the tray hardware, together with the HMC. Connected to the top-of-rack switches.",
+        "note": "Count read from the guide's singular wording ('Host BMC with RJ45') and the single SMM in Fig. 5."
+      },
+      "hmc": {
+        "name": "Host Management Controller (HMC)",
+        "description": "Host Management Controller microcontroller.",
+        "function": "Provides out-of-band management of the compute tray hardware together with the BMC.",
+        "note": "The text gives no count. Fig. 5 shows one SMM carrier board 'w/ BMC+HMC+TPM'."
+      },
+      "e1s-cache-drive": {
+        "name": "E1.S NVMe cache drive",
+        "description": "E1.S NVMe drive for local data caching.",
+        "function": "The cache drives form one RAID 0 volume. On the first read of a dataset from shared storage, software can cache a copy here (cachefilesd, if configured); later reads come from the local cache. Can also speed up checkpointing."
+      },
+      "e1s-boot-drive": {
+        "name": "E1.S NVMe boot drive",
+        "description": "E1.S NVMe drive that holds the operating system.",
+        "function": "Boots the compute tray's OS."
+      },
+      "ct-port-cx9-osfp": {
+        "name": "ConnectX-9 OSFP port",
+        "description": "OSFP port on a ConnectX-9 I/O card.",
+        "function": "Connects the tray to computenet (InfiniBand).",
+        "note": "Eight per compute tray (Fig. 1 marks eight cages 5, computenet). They belong to the ConnectX-9 cards, but the guide does not say how many ports each card has, so they are listed under the tray."
+      },
+      "ct-port-bf4-left": {
+        "name": "BlueField-4 left port",
+        "description": "Left QSFP port of the BlueField-4 DPU.",
+        "function": "Connects the tray to dgxnet (Ethernet).",
+        "note": "The guide disagrees with itself. Table 2.3 puts this port on dgxnet (3). Fig. 1 in 2.2 marks both QSFP ports 6 (storagenet) and shows no port marked 3. This app follows the table. See docs/OPEN_QUESTIONS.md.",
+        "specNotes": {
+          "Network in Fig. 1": "Conflicts with the 2.3 table (dgxnet)."
+        }
+      },
+      "ct-port-bf4-right": {
+        "name": "BlueField-4 right port",
+        "description": "Right QSFP port of the BlueField-4 DPU.",
+        "function": "Connects the tray to storagenet (Ethernet)."
+      },
+      "ct-port-bf4-rj45": {
+        "name": "BlueField-4 RJ-45 port",
+        "description": "RJ-45 port of the BlueField-4 DPU.",
+        "function": "Connects to ipminet (Ethernet)."
+      },
+      "ct-port-bmc-1gbe": {
+        "name": "1 GbE BMC port",
+        "description": "1 GbE RJ45 port of the host BMC.",
+        "function": "Connects the BMC to ipminet (Ethernet)."
+      },
+      "ct-port-lan-1gbe": {
+        "name": "1 GbE LAN port",
+        "description": "1 GbE RJ45 LAN port on the compute tray.",
+        "function": "Not connected in this configuration.",
+        "note": "Listed in Table 2.3, but the front-view figures show only two RJ45 ports (the BlueField-4 port and the SMM port), so its position is unknown."
+      },
+      "compute-tray-battery": {
+        "name": "Compute tray battery",
+        "description": "Battery in the Bay-C module of the compute tray.",
+        "function": "The guide and the manual do not say what it powers.",
+        "note": "Count read from the manual's singular wording ('the battery')."
+      },
+      "socamm": {
+        "name": "SOCAMM memory module",
+        "description": "SOCAMM memory module, shown around the CPUs in the top view.",
+        "function": "The guide labels them but does not describe them.",
+        "note": "Count from the '16x SOCAMM' label in Fig. 5; the text does not mention SOCAMM."
+      },
+      "internal-manifold": {
+        "name": "Internal manifold",
+        "description": "Coolant manifold inside the compute tray, between the CPU and GPU area and the front bays.",
+        "function": "Part of the tray's liquid cooling. Section 1.2 says the liquid 'runs up and down the rack through the inner manifold, then through the cold plates'; this may be that manifold.",
+        "note": "Fig. 5 labels one 'Internal Manifold'. See docs/OPEN_QUESTIONS.md item 12."
+      },
+      "power-distribution-board": {
+        "name": "Power Distribution Board",
+        "description": "Power distribution board inside the compute tray.",
+        "function": "The guide labels it but does not describe it. The tray takes power through the bus bar connector at its rear.",
+        "note": "Count from the single label in Fig. 5."
+      },
+      "ct-nvlink-connectors": {
+        "name": "NVLink connectors (compute tray)",
+        "description": "Connectors at the back of the compute tray that plug into the NVLink cable cartridges.",
+        "function": "Carry the tray's NVLinks to the cable cartridges, and through them to the NVLink switch trays.",
+        "note": "The guide does not give the number of connectors."
+      },
+      "ct-cold-water-inlet": {
+        "name": "Cold water inlet (compute tray)",
+        "description": "Cold water inlet at the rear of the compute tray.",
+        "function": "Brings coolant from the rack's manifold into the tray."
+      },
+      "ct-hot-water-outlet": {
+        "name": "Hot water outlet (compute tray)",
+        "description": "Hot water outlet at the rear of the compute tray.",
+        "function": "Returns coolant from the tray to the rack's manifold."
+      },
+      "ct-bus-bar-connector": {
+        "name": "Bus bar connector (compute tray)",
+        "description": "Bus bar connector at the rear of the compute tray.",
+        "function": "Takes the tray's 54 V DC power from the rack's bus bar."
+      },
+      "switch-tray": {
+        "name": "NVLink 6 switch tray",
+        "description": "A 1 RU tray with NVSwitch ASICs. The nine switch trays give NVLink connectivity to all GPUs in the single 72-GPU L1 domain.",
+        "function": "Switches NVLink traffic between the GPUs of all compute trays. Connected to the compute trays through the cable cartridges at the rear.",
+        "specNotes": {
+          "NVSwitch ASICs": "Fig. 4 (compute tray block diagram) draws two NVLink Switch icons per switch tray. See docs/OPEN_QUESTIONS.md.",
+          "Serial console": "Table 2.5 lists the RS232 RJ45 port as not connected. See docs/OPEN_QUESTIONS.md."
+        }
+      },
+      "nvswitch-asic": {
+        "name": "NVSwitch ASIC",
+        "description": "NVSwitch ASIC with 72 NVLink 6 ports.",
+        "function": "Switches NVLink traffic. NVSwitch chips act as non-blocking switches between servers and do in-network computing (SHARP) to speed up collective operations."
+      },
+      "switch-bmc": {
+        "name": "Switch tray BMC",
+        "description": "Board Management Controller of the switch tray.",
+        "function": "Attestation and recovery. Connected to the top-of-rack switches.",
+        "note": "Count read from the guide's singular wording ('BMC for attestation and recovery')."
+      },
+      "cpu-erot": {
+        "name": "CPU ERoT",
+        "description": "CPU ERoT of the switch tray.",
+        "function": "Security.",
+        "note": "Count read from the guide's singular wording. The guide does not expand 'ERoT'."
+      },
+      "st-port-rs232": {
+        "name": "RS232 for BMC",
+        "description": "RJ45 port, first from the left.",
+        "function": "Not connected in this configuration."
+      },
+      "st-port-bmc-eth": {
+        "name": "Ethernet port BMC",
+        "description": "RJ45 port, second from the left.",
+        "function": "Connects the switch tray BMC to ipminet (Ethernet).",
+        "specNotes": {
+          "Label in Fig. 2": "Printed 'BCM' in the figure."
+        }
+      },
+      "st-port-switch-mgmt": {
+        "name": "Ethernet for switch management",
+        "description": "RJ45 ports, third and fourth from the left.",
+        "function": "Switch management on ipminet (Ethernet)."
+      },
+      "st-port-leakage": {
+        "name": "Leakage connector",
+        "description": "RJ45 port, fifth from the left.",
+        "function": "Not connected in this configuration."
+      },
+      "switch-tray-battery": {
+        "name": "Switch tray battery",
+        "description": "Battery on the NVLink switch tray, in a holder under a top cover.",
+        "function": "The guide and the manual do not say what it powers.",
+        "note": "Count read from the manual's singular wording ('the battery')."
+      },
+      "switch-tray-ssd": {
+        "name": "Switch tray SSD",
+        "description": "SSD in the NVLink switch tray.",
+        "function": "The guide labels it but does not describe it. The switch tray runs NVOS (section 4.4).",
+        "note": "Count from the single 'SSD' label in Fig. 7."
+      },
+      "switch-board": {
+        "name": "Switch board with power distribution (SWB w/ PDB)",
+        "description": "The main board of the switch tray, labelled 'SWB w/ PDB' in Fig. 7.",
+        "function": "Carries the NVSwitch chips. The guide does not describe it further.",
+        "note": "Fig. 7 labels it 'SWB w/ PDB' and does not expand the abbreviations; 'switch board with power distribution board' is this app's reading."
+      },
+      "st-nvlink-connectors": {
+        "name": "NVLink connectors (switch tray)",
+        "description": "Connectors at the back of the switch tray that plug into the NVLink cable cartridges.",
+        "function": "Carry the NVSwitch ports to the cable cartridges, and through them to the compute trays.",
+        "note": "The guide does not give the number of connectors."
+      },
+      "st-cold-water-inlet": {
+        "name": "Cold water inlet (switch tray)",
+        "description": "Cold water inlet at the rear of the switch tray.",
+        "function": "Brings coolant from the rack's manifold into the tray."
+      },
+      "st-hot-water-outlet": {
+        "name": "Hot water outlet (switch tray)",
+        "description": "Hot water outlet at the rear of the switch tray.",
+        "function": "Returns coolant from the tray to the rack's manifold."
+      },
+      "st-power-connector": {
+        "name": "Power connector (switch tray)",
+        "description": "Power connector at the rear of the switch tray.",
+        "function": "Takes power into the tray.",
+        "note": "Fig. 7 labels it; that it connects to the bus bar is not stated."
+      },
+      "power-shelf": {
+        "name": "Power shelf",
+        "description": "A 3 RU shelf fed by AC power whips from a remote power panel.",
+        "function": "Converts AC power into 54 V DC, which the bus bar distributes to the rack components."
+      },
+      "psu": {
+        "name": "Power supply unit (PSU)",
+        "description": "Air-cooled power supply unit.",
+        "function": "Six per shelf. The shelf converts AC power into a 54 V DC output for the bus bar.",
+        "specNotes": {
+          "Redundancy": "The manual says any one PSU can be replaced 'as long as at least six power supplies are fully active and healthy'."
+        }
+      },
+      "power-shelf-mgmt-module": {
+        "name": "Power shelf management module",
+        "description": "Management module at the front of the power shelf, with an RJ45 port for a network management cable.",
+        "function": "Manages the power shelf. The power supplies keep running while it is replaced.",
+        "note": "Count read from Fig. 8 and the service manual's power shelf figure, which show one module per shelf. The guide does not say which network the management cable goes to."
+      },
+      "ps-mgmt-rj45": {
+        "name": "Management module RJ45 port",
+        "description": "RJ45 port on the power shelf management module, for its network management cable.",
+        "function": "Gives the power shelf's out-of-band management interface its network connection.",
+        "note": "The service manual names the network management cable; that it is on ipminet is read from section 2.2, which puts the power shelves' out-of-band interfaces on ipminet."
+      },
+      "ac-power-whip": {
+        "name": "AC power whip",
+        "description": "AC power cable that feeds the power shelf from a remote power panel.",
+        "function": "Supplies the shelf: two 100 A whips at 415-480 V AC per shelf."
+      },
+      "ps-dc-output": {
+        "name": "54 V DC output (power shelf)",
+        "description": "The power shelf's 54 V DC output into the bus bar.",
+        "function": "Feeds the shelf's converted 54 V DC into the bus bar, which distributes it to the rack components.",
+        "note": "The guide says the shelf's 54 V DC output is distributed through the bus bar but does not describe the connector."
+      },
+      "tor-switch": {
+        "name": "Top-of-rack Ethernet switch",
+        "description": "Top-of-rack (ToR) Ethernet switch for management.",
+        "function": "Connects all BMCs in the compute trays (including the BlueField-4 BMCs) and the switch trays to the management network.",
+        "specNotes": {
+          "Front panel in Fig. 9": "Counted from Fig. 9; the guide's text gives no port count and does not name the type of the larger cages or the three ports at the right.",
+          "BMC links in this rack": "Computed from the counts in the data; the guide does not say how they split across the two ToR switches."
+        }
+      },
+      "tor-rj45-port": {
+        "name": "ToR RJ45 port",
+        "description": "RJ45 port on the front of the top-of-rack switch.",
+        "function": "Connects BMCs in the rack to the management network.",
+        "note": "Count read from Fig. 9. Which BMC uses which port is not stated."
+      },
+      "tor-uplink-cage": {
+        "name": "ToR larger port cage",
+        "description": "One of the four larger port cages to the right of the RJ45 blocks in Fig. 9.",
+        "function": "Not described in the guide.",
+        "note": "Count read from Fig. 9; the guide does not name the cage type or its use."
+      },
+      "tor-side-port": {
+        "name": "ToR port at the right end",
+        "description": "One of the three ports in the narrow panel at the right end of the switch in Fig. 9.",
+        "function": "Not described in the guide.",
+        "note": "Count read from Fig. 9; their types are not stated."
+      },
+      "nvlink-cable-cartridge": {
+        "name": "NVLink passive copper cable cartridge",
+        "description": "Passive copper cable cartridges at the rear of the rack, forming the NVLink backplane.",
+        "function": "Connectors at the back of the compute and switch trays plug into the cartridges, which interconnect the compute trays and NVLink switch trays.",
+        "note": "The guide does not state the number of cartridges."
+      },
+      "liquid-cooling-manifold": {
+        "name": "Liquid cooling manifold",
+        "description": "Liquid cooling manifolds at the rear of the rack. The rear gives access to their inlets and outlets; Fig. 2 also labels FD83 connectors for the liquid cooling hoses.",
+        "function": "Carry coolant for the liquid-cooled trays. Section 1.2 says the liquid 'runs up and down the rack through the inner manifold, then through the cold plates'.",
+        "note": "The text gives no count; Fig. 2 points the 'Liquid cooling manifolds' label at two manifolds. Fig. 5 also labels an 'Internal Manifold' inside the compute tray, so the 'inner manifold' in 1.2 may mean that part."
+      },
+      "bus-bar": {
+        "name": "Liquid-cooled bus bar",
+        "description": "Liquid-cooled bus bar structure at the rear of the rack.",
+        "function": "Distributes the 54 V DC output of the power shelves to the rack components."
+      },
+      "fd83-connector": {
+        "name": "FD83 liquid cooling hose connector",
+        "description": "Hose connectors on the liquid cooling manifolds, labelled 'FD83 connectors for liquid cooling hoses' in Fig. 2.",
+        "function": "Connect the rack's manifolds to the facility's liquid cooling hoses.",
+        "note": "Fig. 2 shows them at the ends of the manifolds; the guide does not give a count. This app draws one at each end of each manifold."
+      },
+      "rear-supports": {
+        "name": "Manifold, cable cartridge and bus bar supports",
+        "description": "The structure that holds the manifolds, cable cartridges and bus bar at the rear, labelled in Fig. 2.",
+        "function": "Mechanical support for the rear parts.",
+        "note": "Shape and count not given; drawn as crossbars."
+      },
+      "rear-bezel": {
+        "name": "Rear bezel",
+        "description": "The removable cover pieces on the back of the rack, labelled 'Rear Bezel' in Fig. 2.",
+        "function": "Covers the rear of the rack.",
+        "note": "Drawn as a see-through panel in the Structure layer."
+      },
+      "seismic-bracing": {
+        "name": "Seismic bracing",
+        "description": "Bracing under the rack, labelled in Fig. 1 and Fig. 2.",
+        "function": "Holds the rack in place.",
+        "note": "Drawn as a base frame under the rack."
+      }
+    },
+    "specLabels": {
+      "AC input": "AC input",
+      "After replacement": "After replacement",
+      "BMC links in this rack": "BMC links in this rack",
+      "Compute boards": "Compute boards",
+      "Compute trays": "Compute trays",
+      "Connects": "Connects",
+      "Cooling": "Cooling",
+      "Current": "Current",
+      "Customer-replaceable unit (CRU)": "Customer-replaceable unit (CRU)",
+      "DC output": "DC output",
+      "Fault": "Fault",
+      "Front": "Front",
+      "Front LEDs": "Front LEDs",
+      "Front bays": "Front bays",
+      "Front panel in Fig. 9": "Front panel in Fig. 9",
+      "GPUs in the NVLink domain": "GPUs in the NVLink domain",
+      "Height": "Height",
+      "Identity": "Identity",
+      "In-network computing": "In-network computing",
+      "Label in Fig. 2": "Label in Fig. 2",
+      "Label in Fig. 7": "Label in Fig. 7",
+      "Labels in Fig. 2": "Labels in Fig. 2",
+      "Links": "Links",
+      "Location": "Location",
+      "Management": "Management",
+      "NVLink": "NVLink",
+      "NVLink 6 ports": "NVLink 6 ports",
+      "NVLink 6 ports per ASIC": "NVLink 6 ports per ASIC",
+      "NVLink 6 switch trays": "NVLink 6 switch trays",
+      "NVLink domain size": "NVLink domain size",
+      "NVSwitch ASICs": "NVSwitch ASICs",
+      "Network": "Network",
+      "Network in Fig. 1": "Network in Fig. 1",
+      "Numbering": "Numbering",
+      "OSFP ports (computenet)": "OSFP ports (computenet)",
+      "Other parts in Fig. 7": "Other parts in Fig. 7",
+      "Out-of-band management": "Out-of-band management",
+      "PCIe addresses (BDF)": "PCIe addresses (BDF)",
+      "PCIe label": "PCIe label",
+      "PCIe labels": "PCIe labels",
+      "PCIe links": "PCIe links",
+      "PCIe port labels": "PCIe port labels",
+      "PSUs": "PSUs",
+      "Placement": "Placement",
+      "Port type": "Port type",
+      "Ports": "Ports",
+      "Position": "Position",
+      "Power input": "Power input",
+      "Power shelves": "Power shelves",
+      "RAID level": "RAID level",
+      "Rating": "Rating",
+      "Rear connections": "Rear connections",
+      "Redundancy": "Redundancy",
+      "Removal": "Removal",
+      "Replacement": "Replacement",
+      "Rubin GPUs": "Rubin GPUs",
+      "Serial console": "Serial console",
+      "Shown in": "Shown in",
+      "Speed": "Speed",
+      "Top-of-rack management switches": "Top-of-rack management switches",
+      "Vera CPUs": "Vera CPUs",
+      "Voltage": "Voltage"
+    },
+    "networks": {
+      "externalnet": {
+        "description": "External communication for the head node to the enterprise network or to the internet, if allowed.",
+        "note": "The guide does not name the fabric for this network. Chapter 2 says Ethernet carries storage, management and external connectivity, but does not tie that to this network by name."
+      },
+      "internalnet": {
+        "description": "Provisioning capabilities and system management for the control plane nodes.",
+        "note": "The guide does not name the fabric for this network. Chapter 2 says Ethernet carries storage, management and external connectivity, but does not tie that to this network by name."
+      },
+      "dgxnet": {
+        "description": "Used to provision and manage the compute trays."
+      },
+      "ipminet": {
+        "description": "Gives Base Command Manager and the head node access to the out-of-band/BMC interfaces of every component in the rack: compute trays, NVLink switch trays, power shelves, top-of-rack switches and control plane nodes."
+      },
+      "computenet": {
+        "description": "RDMA communication across racks (east/west traffic)."
+      },
+      "storagenet": {
+        "description": "Gives each node access to storage.",
+        "note": "The compute tray's storagenet port is Ethernet (2.3). Section 3.2 adds that shared storage is accessed over converged Ethernet by default, although InfiniBand can also be used."
+      },
+      "failovernet": {
+        "description": "Used only by head nodes in a redundant failover configuration.",
+        "note": "The guide does not name the fabric for this network."
+      }
+    },
+    "connections": {
+      "cx9-computenet": {
+        "description": "ConnectX-9 OSFP port to computenet (InfiniBand)."
+      },
+      "bf4-left-dgxnet": {
+        "description": "BlueField-4 left QSFP port to dgxnet (Ethernet).",
+        "note": "Fig. 1 in 2.2 marks this port 6 (storagenet) instead. See docs/OPEN_QUESTIONS.md."
+      },
+      "bf4-right-storagenet": {
+        "description": "BlueField-4 right QSFP port to storagenet (Ethernet)."
+      },
+      "bf4-rj45-ipminet": {
+        "description": "BlueField-4 RJ-45 port to ipminet (Ethernet)."
+      },
+      "ct-bmc-ipminet": {
+        "description": "1 GbE BMC port to ipminet (Ethernet)."
+      },
+      "ct-lan-nc": {
+        "description": "1 GbE LAN port: not connected."
+      },
+      "st-rs232-nc": {
+        "description": "RS232 for BMC: not connected."
+      },
+      "st-bmc-ipminet": {
+        "description": "Ethernet port BMC to ipminet (Ethernet)."
+      },
+      "st-mgmt-ipminet": {
+        "description": "Ethernet for switch management to ipminet (Ethernet)."
+      },
+      "st-leak-nc": {
+        "description": "Leakage connector: not connected."
+      },
+      "ct-bmc-tor": {
+        "description": "Compute tray out-of-band management BMC to the top-of-rack switches."
+      },
+      "bf4-bmc-tor": {
+        "description": "BlueField-4 BMC to the top-of-rack switches."
+      },
+      "st-bmc-tor": {
+        "description": "Switch tray BMC to the top-of-rack switches."
+      },
+      "ps-ipminet": {
+        "description": "ipminet reaches the out-of-band interfaces of the power shelves."
+      },
+      "tor-ipminet": {
+        "description": "ipminet reaches the out-of-band interfaces of the top-of-rack switches."
+      },
+      "ct-nvlink": {
+        "description": "NVLink connectors at the back of the compute tray plug into the cable cartridges."
+      },
+      "st-nvlink": {
+        "description": "NVLink connectors at the back of the switch tray plug into the cable cartridges."
+      },
+      "ps-busbar": {
+        "description": "Power shelves output 54 V DC into the bus bar."
+      },
+      "manifold-ct": {
+        "description": "Coolant runs up and down the rack through the inner manifold, then through the cold plates in the compute trays.",
+        "note": "Section 1.2's 'inner manifold' may be the tray's Internal Manifold (Fig. 5) rather than the rear manifolds."
+      },
+      "manifold-st": {
+        "description": "The switch tray is liquid cooled: cold plates on the NVLink switches, with a hot water outlet and cold water inlet at the rear.",
+        "note": "Fig. 7 shows the tray's water connections; the guide does not say in words that they connect to these manifolds."
+      },
+      "busbar-ct": {
+        "description": "The bus bar distributes the 54 V DC to the rack components; the compute tray takes it through the bus bar connector at its rear."
+      },
+      "busbar-st": {
+        "description": "The bus bar distributes the 54 V DC to the rack components; the switch tray has a power connector at its rear.",
+        "note": "Fig. 7 labels the switch tray's rear power connector but does not say it connects to the bus bar."
+      },
+      "bf4-left-storagenet-fig1": {
+        "description": "Fig. 1 marks the BlueField-4 left QSFP port 6 (storagenet), while Table 2.3 says dgxnet.",
+        "note": "An alternative reading that conflicts with Table 2.3. See docs/OPEN_QUESTIONS.md item 3."
+      },
+      "ps-mgmt-ipminet": {
+        "description": "Power shelf management module RJ45 to ipminet (Ethernet).",
+        "note": "Section 2.2 puts the power shelves' out-of-band interfaces on ipminet; the port itself is named only in the service manual."
+      },
+      "cx9-card-computenet": {
+        "description": "ConnectX-9 I/O cards to computenet (InfiniBand), through their OSFP ports."
+      }
+    },
+    "pcieNotes": {
+      "Printed C7/C3_1 in the 2.2 and 2.4 figures.": "Printed C7/C3_1 in the 2.2 and 2.4 figures.",
+      "Printed C7/C3_2 in the 2.2 and 2.4 figures.": "Printed C7/C3_2 in the 2.2 and 2.4 figures.",
+      "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1.": "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1.",
+      "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2.": "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2."
+    },
+    "procedures": {
+      "psu": {
+        "title": "Replace a power supply (PSU)",
+        "steps": [
+          "Find the failed PSU by its amber LED.",
+          "Check redundancy first: the PSUs are N+N redundant, and one PSU can be replaced as long as at least six power supplies are fully active and healthy.",
+          "Unpack the new PSU. Push the failed PSU's release tab to the left and pull the handle to eject it, then pull it all the way out.",
+          "Insert the new PSU until it locks in place; you should hear a click.",
+          "Confirm the LEDs power on and check with the system administrator that the fault has cleared. Tell them the replacement is done in case a firmware update is needed, and ship the old PSU back to NVIDIA Enterprise Support."
+        ]
+      },
+      "pmm": {
+        "title": "Replace a power shelf management module",
+        "steps": [
+          "Find the failed management module by its amber LED.",
+          "Unpack the new module and record the MAC address on the power shelf pull tab; it must match the MAC address on the new module.",
+          "The power supplies keep running during the replacement. Unplug the network management cable.",
+          "Push the panel above the module inward and press down on the release mechanism. Pull the module all the way out and insert the new one until it clicks.",
+          "Update the module firmware if needed, and confirm with the system administrator that it is up and running."
+        ]
+      },
+      "cache-drive": {
+        "title": "Replace an E1.S cache drive",
+        "steps": [
+          "Identify each cache drive to replace and record its PCIe bus, device and function (BDF) address. The four cache drives are in Bay B.",
+          "Have the system administrator power off the compute tray.",
+          "Press the smaller, leftmost tab toward the bezel; the larger tab flips open and the drive comes out slightly. Pull the drive out.",
+          "Insert the new drive and press the larger tab in until it locks into the smaller one.",
+          "Power on and log in. 'sudo nvme list' should show one boot drive and four cache drives.",
+          "If the cache volume was locked, unlock it with 'sudo nv-disk-encrypt disable'. Re-create the cache volume and /raid with 'configure_raid_array.py -c -f', then check it with 'sudo nvsm show volumes'."
+        ]
+      },
+      "compute-battery": {
+        "title": "Replace the compute tray battery",
+        "steps": [
+          "The system administrator powers off all compute trays and the tray to be serviced. Let it cool for five minutes.",
+          "Unlatch the tray, pull it out as far as the rail allows, and with a second person unlock it from the rails and lift it onto a flat surface.",
+          "Check the tray's cooling-loop pressure with the toolkit gauge: continue at 1 PSI or above; below 1 PSI, contact NVIDIA Enterprise Support first.",
+          "Remove the tray lid and the Bay-C module. Remove the battery assembly's top cover, replace the battery, and refit the cover.",
+          "Reinstall the Bay-C module and the lid, and put the tray back with a second person. Run the CDU for 20 minutes to clear bubbles from the cooling loop.",
+          "The system administrator runs the power-on sequence, confirms the tray comes up, updates its firmware to match the rest of the system, and checks system health."
+        ]
+      },
+      "switch-battery": {
+        "title": "Replace the NVLink switch tray battery",
+        "steps": [
+          "The system administrator powers off all compute trays, then the switch tray. Let it cool for five minutes.",
+          "Unlatch the tray, pull it out on its rails, and with a second person lift it onto a flat surface. Check the cooling-loop pressure: 1 PSI or above to continue.",
+          "Remove the Torx T6 screws and lift off the lid.",
+          "Remove the battery's top cover, slide the battery out of its holder, fit the new one and replace the cover.",
+          "Refit the lid and screws, reinstall the tray with a second person, and run the CDU for 20 minutes to clear bubbles.",
+          "The system administrator runs the power-on sequence, confirms the tray comes up, updates its firmware and checks system health."
+        ]
+      },
+      "bring-up": {
+        "title": "Bring the rack online",
+        "steps": [
+          "Before you start: the power shelves are energized, the top-of-rack switches are active and NMX-M services are available. Check them in Base Command Manager.",
+          "Power on the NVLink switch trays first, from Base Command Manager. Each one boots with rack-specific configuration, so the NVLink fabric is up before any GPU needs it.",
+          "Then power on the compute trays. While they boot, Base Command Manager checks that the latest OS updates and configuration are installed.",
+          "A booting compute tray checks for OS updates over the network: it installs them before booting, or boots quickly from local storage if there are none.",
+          "The compute trays then connect to the switch trays, storage and the other compute trays. Power operations are orchestrated through NVIDIA Mission Control."
+        ]
+      },
+      "cold-reboot": {
+        "title": "Cold reboot the rack",
+        "steps": [
+          "Use it after the first software install, after firmware upgrades, before full rack diagnostics, and after replacing a compute tray, switch tray, trunk link or cable cartridge. NVIDIA recommends doing it through Mission Control. You need the IP addresses of all BMCs, hosts and power shelves.",
+          "Turn off AC power to all power shelves (they can go off in parallel), then wait three to five minutes for the PSU capacitors to discharge. Skip this on the very first power-up.",
+          "Ping all compute and switch tray BMCs and OS addresses to make sure none of them answers.",
+          "Turn on AC power to all power shelves, in parallel. Wait two minutes for the compute and switch tray BMCs to power up, then ping all BMC addresses until they answer.",
+          "Let the switch trays boot to NVOS and wait two more minutes.",
+          "Provision the switch trays. For L11 diagnostics, log in to each switch tray and check its health. For a multi-node workload, repeat the cluster provisioning, then set up and start the NMX-C services and run the health checks.",
+          "Power on all compute nodes from the compute tray BMCs. Wait five minutes, ping the compute nodes, then run the post-reboot verification."
+        ]
+      },
+      "warm-reboot": {
+        "title": "Warm reboot the rack",
+        "steps": [
+          "Power off all compute trays through their BMCs (IPMI, Redfish or another supported API).",
+          "Stop the NMX-C service on the switch node that runs it.",
+          "Start NMX-C on the selected switch node. The cluster must already be enabled.",
+          "Check that nmx-controller and nmx-telemetry are running with status ok.",
+          "Power the compute trays back on through their BMCs.",
+          "Run the post-reboot verification on the compute trays."
+        ]
+      },
+      "post-reboot": {
+        "title": "Verify after a reboot",
+        "steps": [
+          "Check that nvidia-persistenced is running and in a good state. Do this after a GPU reset, a compute tray reboot, or a cold or warm rack reboot.",
+          "Check that the nvidia-imex service is active and running.",
+          "Check that all NVLinks are active.",
+          "Check the fabric state: every GPU shows state Completed and status Success.",
+          "Check the peer-to-peer topology: every GPU shows OK. If one does not, reset that GPU and start again from the first check."
+        ]
+      },
+      "health-check": {
+        "title": "Check system health with NVSM",
+        "steps": [
+          "Open an SSH connection to the rack.",
+          "Run the basic system check.",
+          "Check that every check in the summary is Healthy and the overall system status is Healthy."
+        ]
+      }
+    },
+    "openQuestions": {
+      "connectx-9-count": {
+        "title": "Number of ConnectX-9 cards per compute tray",
+        "summary": "The configuration table says 2 cards; the block diagram draws 8, the front view shows 2 x CX9 modules in each Bay B, and the port figures show 8 OSFP cages. The data keeps 2."
+      },
+      "bluefield-pcie": {
+        "title": "BlueField-4 PCIe entries",
+        "summary": "Table 2.4 prints BF_0 on two buses with repeated interface and RDMA names; the figures print BF_0 and BF_1, and the block diagram shows one BlueField-4 linked to both CPUs."
+      },
+      "bluefield-left-port": {
+        "title": "BlueField-4 left QSFP port: dgxnet or storagenet?",
+        "summary": "Table 2.3 says dgxnet; the port-location figure marks both QSFP ports 6 (storagenet). The data follows the table and keeps the figure's reading as a conflict."
+      },
+      "compute-rj45-count": {
+        "title": "RJ45 ports on the compute tray",
+        "summary": "Table 2.3 lists three RJ45 ports; the figures show two. The 1 GbE LAN port has no known position."
+      },
+      "nvswitch-count": {
+        "title": "NVSwitch chips per switch tray",
+        "summary": "The text and Fig. 7 say 4; the block diagram draws 2 per switch tray. The data keeps 4."
+      },
+      "switch-console": {
+        "title": "Switch tray serial console",
+        "summary": "Section 1.6 gives an RJ45 serial console at 115200 baud; Table 2.5 lists the RS232 RJ45 port as not connected."
+      },
+      "rack-positions": {
+        "title": "Rack positions",
+        "summary": "Fig. 1 gives the order of the units but no RU positions or rack height; units are stacked without gaps."
+      },
+      "tor-height": {
+        "title": "Height of the top-of-rack switches",
+        "summary": "Not stated; drawn as 1 RU."
+      },
+      "tray-numbering": {
+        "title": "Tray numbering",
+        "summary": "Power shelves are numbered 1 to 4 from the bottom in the service manual; compute and switch trays are not numbered by position anywhere."
+      },
+      "unstated-counts": {
+        "title": "Counts the documents do not give",
+        "summary": "HMC, NVLink cable cartridges, liquid cooling manifolds and FD83 connectors have no stated count."
+      },
+      "network-fabrics": {
+        "title": "Fabric of externalnet, internalnet and failovernet",
+        "summary": "The guide describes these networks but does not name their fabric."
+      },
+      "inner-manifold": {
+        "title": "Which manifold is the 'inner manifold'",
+        "summary": "Section 1.2's inner manifold may be the tray's Internal Manifold (Fig. 5) or the rack's rear manifolds."
+      },
+      "tor-cabling": {
+        "title": "BMC cabling to the ToR switches",
+        "summary": "Section 1.5 connects all BMCs to the ToR switches, but the split across the two switches and the ports used are not stated."
+      }
+    },
+    "software": {
+      "mission-control": {
+        "description": "Workload-aware orchestration with full-stack observability: job and power-profile management, topology-aware scheduling, fast checkpointing and autonomous job recovery, health checks, and leak detection through building-management integration. Power operations and firmware updates are orchestrated through it.",
+        "note": "Cluster-level software; the guide does not say which node it runs on."
+      },
+      "base-command-manager": {
+        "description": "Manages all system components: powers trays on and off, manages the operating system images that compute trays boot, and reaches the out-of-band interfaces over ipminet.",
+        "note": "Runs on the head node outside the rack (2.2: ipminet gives Base Command Manager and the head node access to the BMCs)."
+      },
+      "cuda": {
+        "description": "The CUDA platform: more than 150 libraries and the tools to optimize and debug GPU-accelerated applications, which use the NVLink network to distribute work across every GPU in the rack."
+      },
+      "imex": {
+        "description": "Maps GPU memory over NVLink between GPUs across OS boundaries in an NVLink domain, using memory export and import. Started on all nodes in the domain at system startup or at CUDA job launch; communicates across nodes over the compute node network.",
+        "note": "The guide says it runs exclusively on compute nodes."
+      },
+      "nvos": {
+        "description": "The operating system of the NVLink switch tray, with a CLI and OpenAPI (Swagger) management. It includes the NVLink Subnet Manager, Fabric Manager, NMX-Controller, NMX-Telemetry and the NVSwitch firmware."
+      },
+      "nmx-controller": {
+        "description": "Cluster application for fabric software-defined networking; in DGX VR racks its services are the subnet manager and Fabric Manager."
+      },
+      "fabric-manager": {
+        "description": "Configures routing among NVSwitch ports and the GPU-side routing, coordinates with the GPU driver to initialize the GPUs, and monitors the fabric for NVLink and NVSwitch errors."
+      },
+      "nvlsm": {
+        "description": "Discovers the NVLink topology, assigns LIDs to GPU and NVSwitch NVLink ports, programs the switch forwarding tables and the partition keys, and monitors changes in the NVLink fabric."
+      },
+      "nmx-telemetry": {
+        "description": "Collects and aggregates telemetry from all the NVLink switches in an NVLink domain."
+      },
+      "doca": {
+        "description": "Framework for applications and services that offload, accelerate and isolate data center workloads on BlueField. DOCA-Host includes the host drivers and tools for the BlueField and ConnectX devices in the rack."
+      },
+      "nccl": {
+        "description": "Inter-GPU communication libraries over PCIe, NVLink, NVLink Multi-node, InfiniBand and RoCE: NCCL's topology-aware collectives, NVSHMEM's partitioned global address space, and UCX's messaging and remote memory access."
+      },
+      "dcgm": {
+        "description": "Manages and monitors data center GPUs and NVSwitches: active health monitoring, diagnostics, alerts, and power and clock policies."
+      },
+      "mft": {
+        "description": "Network ASIC firmware management: build a standard or custom firmware image, query firmware information, and flash an image. Shipped with the DGX VR software release.",
+        "note": "The guide says 'network ASIC'; which devices that covers is read as the ConnectX-9 and BlueField-4."
+      },
+      "nvsm": {
+        "description": "Diagnostics and management: determines system health, identifies component issues and alerts, and runs stress tests. 'sudo nvsm show health' gives the overall health summary."
+      },
+      "nvdebug": {
+        "description": "Collects BMC event logs, firmware versions, hardware inventory and system health data into one archive for NVIDIA support."
+      }
+    },
+    "safety": {
+      "battery": {
+        "title": "Batteries",
+        "text": "Danger of explosion if the battery is replaced incorrectly: use only the battery the manufacturer recommends. Do not recharge, disassemble or puncture it, and dispose of it according to local rules."
+      },
+      "esd": {
+        "title": "Electrostatic discharge",
+        "text": "ESD can damage drives, boards and other parts. Work at an ESD workstation or wear an antistatic wrist strap, and hold boards only by their edges."
+      },
+      "psu": {
+        "title": "Power supplies",
+        "text": "A power supply has no user-serviceable parts and hazardous voltage, current and energy inside: do not open it. When replacing a hot-plug power supply, unplug the power cord of that supply before removing it."
+      },
+      "standby": {
+        "title": "Standby power",
+        "text": "The power button does not completely turn off AC power: standby power is active whenever the system is plugged in."
+      },
+      "rack-mount": {
+        "title": "Working in the rack",
+        "text": "The rack must be anchored so it cannot tip when equipment is extended. Extend only one piece of equipment from the rack at a time."
+      },
+      "lifting": {
+        "title": "Moving and lifting",
+        "text": "Follow local occupational health and safety rules, and use mechanical or other suitable assistance when moving and lifting equipment."
+      },
+      "hot": {
+        "title": "Hot parts",
+        "text": "If the system has been running, processors and heat sinks may be hot. Let the system cool before opening the covers."
+      },
+      "covers": {
+        "title": "Covers and airflow",
+        "text": "Operate the system only with its covers installed, after checking that no loose tools or parts are left inside."
+      }
+    },
+    "commands": {
+      "virtual-a-c-cycle": {
+        "group": "Power control",
+        "title": "Virtual A/C Cycle",
+        "purpose": "Simulates a power drop (like pulling and reinserting the power cord) without physically disconnecting the power."
+      },
+      "graceful-shutdown": {
+        "group": "Power control",
+        "title": "Graceful Shutdown",
+        "purpose": "Initiates a clean shutdown of the host system, allowing the operating system to properly terminate all services and processes."
+      },
+      "force-power-off": {
+        "group": "Power control",
+        "title": "Force Power Off",
+        "purpose": "Immediately cuts power to the host without waiting for the OS to shut down."
+      },
+      "power-on-host": {
+        "group": "Power control",
+        "title": "Power On Host",
+        "purpose": "Turns the host on."
+      },
+      "power-cycle-host": {
+        "group": "Power control",
+        "title": "Power Cycle Host",
+        "purpose": "Performs a full power cycle (off and then back on)."
+      },
+      "set-power-restore-policy-always-off": {
+        "group": "Power control",
+        "title": "Set Power Restore Policy: Always Off",
+        "purpose": "After power loss, the system will remain off when power is restored."
+      },
+      "set-power-restore-policy-last-state": {
+        "group": "Power control",
+        "title": "Set Power Restore Policy: Last State",
+        "purpose": "After power loss, the system will return to its previous state (on or off) when power is restored."
+      },
+      "set-power-restore-policy-always-on": {
+        "group": "Power control",
+        "title": "Set Power Restore Policy: Always On",
+        "purpose": "After power loss, the system will automatically power on when power is restored."
+      },
+      "hmc-graceful-restart": {
+        "group": "HMC and BMC resets",
+        "title": "HMC Graceful Restart",
+        "purpose": "Performs a controlled restart of the HMC, allowing it to shut down services cleanly before rebooting. This is the preferred method for most maintenance scenarios."
+      },
+      "hmc-force-restart": {
+        "group": "HMC and BMC resets",
+        "title": "HMC Force Restart",
+        "purpose": "Immediately restarts the HMC without waiting for services to shut down gracefully.",
+        "note": "Warning: This is not recommended except in emergency situations, as it may lead to a host restart or data loss."
+      },
+      "bmc-reset": {
+        "group": "HMC and BMC resets",
+        "title": "BMC Reset",
+        "purpose": "Performs a forced reset of the BMC. This operation is typically used after firmware updates or if the BMC becomes unresponsive."
+      },
+      "firmware-bundle-update": {
+        "group": "Firmware and images",
+        "title": "Firmware Bundle Update",
+        "purpose": "Uploads and applies a firmware bundle to the system. Set FILENAME to the path of the firmware bundle. The following command uses a multipart form upload to send the update file to the BMC."
+      },
+      "get-firmware-versions-with-expand": {
+        "group": "Firmware and images",
+        "title": "Get Firmware Versions (with expand)",
+        "purpose": "Retrieves detailed firmware version information for all components, using the $expand query with $levels=1 to include nested inventory data. The dollar signs are escaped (\\$) so the shell does not treat them as variables."
+      },
+      "check-bmc-firmware-signing-type": {
+        "group": "Firmware and images",
+        "title": "Check BMC Firmware Signing Type",
+        "purpose": "Checks the signing type of the BMC firmware image, which helps confirm the authenticity and security of the installed firmware.",
+        "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0 ."
+      },
+      "check-hmc-firmware-signing-type": {
+        "group": "Firmware and images",
+        "title": "Check HMC Firmware Signing Type",
+        "purpose": "Checks the signing type of the HMC firmware image.",
+        "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0 ."
+      },
+      "enabling-global-write-protect": {
+        "group": "Write protection",
+        "title": "Enabling Global Write Protect",
+        "purpose": "Enables hardware write protection for the system."
+      },
+      "disabling-global-write-protect": {
+        "group": "Write protection",
+        "title": "Disabling Global Write Protect",
+        "purpose": "Disables hardware write protection for the system."
+      },
+      "reading-global-write-protect": {
+        "group": "Write protection",
+        "title": "Reading Global Write Protect",
+        "purpose": "Reads the current hardware write protection status.",
+        "note": "Enabling write protection is recommended after firmware updates or configuration changes to prevent accidental or unauthorized modifications."
+      },
+      "creating-a-new-account": {
+        "group": "Accounts",
+        "title": "Creating a New Account",
+        "purpose": "Creates a new user account with the specified username, password, and role.",
+        "note": "You can set RoleId to Administrator , Operator , or ReadOnly based on the required access level for the user."
+      },
+      "updating-password-for-an-existing-account": {
+        "group": "Accounts",
+        "title": "Updating Password for an Existing Account",
+        "purpose": "Updates the password for an existing account, such as the root user.",
+        "note": "Replace CURRENT_PASSWORD with the current password for the account, and NEW_PASSWORD with the desired new password."
+      },
+      "clear-hmc-event-log": {
+        "group": "Event logs",
+        "title": "Clear HMC Event Log",
+        "purpose": "Clears all entries from the HMC event log. Use this command after reviewing or archiving log data to maintain log clarity and free up space."
+      },
+      "clear-bmc-event-log": {
+        "group": "Event logs",
+        "title": "Clear BMC Event Log",
+        "purpose": "Removes all entries from the BMC event log. This is useful for resetting the log after resolving issues or before starting new troubleshooting steps."
+      },
+      "reset-bmc-to-factory-defaults": {
+        "group": "Factory defaults",
+        "title": "Reset BMC to Factory Defaults",
+        "purpose": "Restores the BMC to its original factory settings. All user configurations and custom settings will be lost. Use this if the BMC is unresponsive or you need to clear all settings."
+      },
+      "reset-hmc-to-factory-defaults": {
+        "group": "Factory defaults",
+        "title": "Reset HMC to Factory Defaults",
+        "purpose": "Resets the Host Management Controller (HMC) to its factory default configuration. This will remove all custom settings and user data from the HMC."
+      },
+      "clear-the-emmc-this-will-clear-the-journal": {
+        "group": "Factory defaults",
+        "title": "Clear the eMMC (This Will Clear the Journal)",
+        "purpose": "Securely erases the eMMC storage, including the system journal. Use this operation with caution, as it will permanently delete all data stored on the eMMC."
+      },
+      "reset-sbios-to-defaults": {
+        "group": "Factory defaults",
+        "title": "Reset SBIOS to Defaults",
+        "purpose": "Restores the system BIOS (SBIOS) settings to their factory defaults. This can help resolve configuration issues or prepare the system for a fresh deployment."
+      },
+      "ipmi-host-sol-access": {
+        "group": "Console access",
+        "title": "IPMI - Host SOL Access",
+        "purpose": "Establishes a Serial Over LAN (SOL) session to the host using IPMI. This allows you to interact with the system console remotely, even if the OS is not running."
+      },
+      "ssh-host-sol-access": {
+        "group": "Console access",
+        "title": "SSH - Host SOL Access",
+        "purpose": "Provides SSH access to the host’s SOL interface. This is an alternative to IPMI SOL for remote console access."
+      },
+      "disable-ipmi": {
+        "group": "Network controls",
+        "title": "Disable IPMI",
+        "purpose": "Disables the IPMI protocol on the BMC. This is recommended for enhanced security if IPMI remote management is not required."
+      },
+      "capturing-debug-logs-with-nvdebug": {
+        "group": "Debug logs",
+        "title": "Capturing Debug Logs with NVDEBUG",
+        "purpose": "Access the BMC or host system where NVDEBUG is available. Ensure you have the necessary permissions to run diagnostic tools.",
+        "note": "NVDEBUG automatically collects a comprehensive set of logs, including BMC event logs, firmware versions, hardware inventory, and system health data. This is the recommended approach for efficient and complete log collection."
+      }
+    },
+    "commandNotes": {
+      "usage": "Set the BMC address first (export bmcip=\"192.168.1.100\") or replace ${bmcip} by hand. The examples use example credentials; replace them with your BMC credentials.",
+      "factoryReset": "After a BMC factory reset the default username and password are admin/admin, and you are asked to change them at the first login. Change default credentials immediately."
+    },
+    "nvlinkFabric": {
+      "description": "Every compute tray has NVLinks to every NVLink switch tray, through the cable cartridges at the rear: each GPU has NVLinks to all nine switch trays, and the nine switch trays connect all 72 GPUs in one NVLink domain."
+    },
+    "rackLayout": {
+      "note": "Order of the groups from Fig. 1. The guide gives no RU positions, so the units are stacked without gaps. Fig. 1 also shows blank panels below the lower power shelves and seismic bracing under the rack.",
+      "numbering": "NVIDIA does not number these units by rack position (the block diagram numbers switch trays 1 to 9 without saying where each sits). This app numbers them from the top of the rack down.",
+      "overrides": {
+        "power-shelf": "The service manual's power shelf figure numbers the shelves 1 to 4 from the bottom of the rack up."
+      },
+      "heights": {
+        "tor-switch": "The guide does not state the height of the top-of-rack switches. Drawn as 1 RU."
+      }
+    },
+    "trayLayouts": {
+      "compute-tray": {
+        "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: GPUs and CPUs on HPM_L (left) and HPM_R (right) as in 2.4 Fig. 4, SOCAMM around the CPUs (Fig. 5). Front half: Bay B left and right with ConnectX-9 modules and cache drives, Bay C in the middle with the BlueField-4 and the SMM (Fig. 6). The 1 GbE BMC port is drawn at the SMM's RJ45, which Table 2.3 does not confirm.",
+        "notPlaced": {
+          "ct-port-lan-1gbe": "Table 2.3 lists it, but no figure shows where it is (docs/OPEN_QUESTIONS.md item 4).",
+          "ct-nvlink-connectors": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here.",
+          "ct-cold-water-inlet": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here.",
+          "ct-hot-water-outlet": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here.",
+          "ct-bus-bar-connector": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        "points": {
+          "nvlink-connectors": "NVLink connectors to the cable cartridge",
+          "cold-water-inlet": "Cold water inlet",
+          "hot-water-outlet": "Hot water outlet",
+          "bus-bar-connector": "Bus bar connector"
+        },
+        "links": {
+          "7": "Fig. 4 draws the boot drive on CPU 1. Its PCIe bus (000a:a1) is in the same domain as GPU2 and GPU3 (2.4).",
+          "8": "Fig. 4 draws four ConnectX-9 pairs, two on CPU 0 and two on CPU 1, through PCIe switches. Which front bay holds which pair is not stated; this app links the left bay to CPU 0 and the right bay to CPU 1.",
+          "9": "Fig. 4 draws four ConnectX-9 pairs, two on CPU 0 and two on CPU 1, through PCIe switches. Which front bay holds which pair is not stated; this app links the left bay to CPU 0 and the right bay to CPU 1.",
+          "10": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains.",
+          "11": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains.",
+          "12": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains.",
+          "13": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains.",
+          "14": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge.",
+          "15": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge.",
+          "16": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge.",
+          "17": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge.",
+          "18": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
+          "19": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
+          "20": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
+          "21": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
+          "22": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
+          "23": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown.",
+          "24": "Fig. 5 labels the cold water inlet and hot water outlet at the rear of the tray; the piping to the manifold is not shown.",
+          "25": "Fig. 5 labels the cold water inlet and hot water outlet at the rear of the tray; the piping to the manifold is not shown.",
+          "26": "Fig. 5 labels a bus bar connector at the rear and a Power Distribution Board; that one feeds the other is read from their names, not stated."
+        }
+      },
+      "switch-tray": {
+        "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: four NVSwitch chips on the switch board, with the water and power connectors at the rear (Fig. 7). Front: battery and SSD, and the five RJ45 ports from left to right as in Table 2.5.",
+        "notPlaced": {
+          "switch-bmc": "Fig. 7 does not show where the BMC is.",
+          "cpu-erot": "Fig. 7 does not show where the CPU ERoT is.",
+          "st-nvlink-connectors": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here.",
+          "st-cold-water-inlet": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here.",
+          "st-hot-water-outlet": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here.",
+          "st-power-connector": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        "points": {
+          "nvlink-connectors": "NVLink connectors to the cable cartridge",
+          "power-connector": "Power connector",
+          "cold-water-inlet": "Cold water inlet",
+          "hot-water-outlet": "Hot water outlet"
+        },
+        "links": {
+          "0": "NVLink connectors at the back of the tray plug into the cable cartridges (2.1); the routing inside the tray is not shown.",
+          "1": "NVLink connectors at the back of the tray plug into the cable cartridges (2.1); the routing inside the tray is not shown.",
+          "2": "NVLink connectors at the back of the tray plug into the cable cartridges (2.1); the routing inside the tray is not shown.",
+          "3": "NVLink connectors at the back of the tray plug into the cable cartridges (2.1); the routing inside the tray is not shown.",
+          "4": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown.",
+          "5": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown.",
+          "6": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown.",
+          "7": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown.",
+          "8": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown.",
+          "9": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown.",
+          "10": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown.",
+          "11": "Fig. 7 shows cold plates on the four NVLink switches piped to the cold water inlet and hot water outlet; the exact loop order is not shown.",
+          "12": "Fig. 7 labels a power connector at the rear and the 'SWB w/ PDB'; that one feeds the other is read from their names."
+        }
+      },
+      "power-shelf": {
+        "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Six PSUs in three rows of two, numbered 1 to 6 left to right and top to bottom as in the service manual; the management module on the left (Fig. 8). AC input and the DC output to the bus bar are at the rear.",
+        "notPlaced": {
+          "ac-power-whip": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here.",
+          "ps-dc-output": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        "points": {
+          "ac-whip-1": "AC power whip 1 (100 A, 415-480 V AC)",
+          "ac-whip-2": "AC power whip 2 (100 A, 415-480 V AC)",
+          "bus-bar-output": "54 V DC output to the bus bar"
+        },
+        "links": {
+          "0": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated.",
+          "1": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown.",
+          "2": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated.",
+          "3": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown.",
+          "4": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated.",
+          "5": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown.",
+          "6": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated.",
+          "7": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown.",
+          "8": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated.",
+          "9": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown.",
+          "10": "Two 100 A whips supply each shelf (1.4); how they are split between the six PSUs is not stated.",
+          "11": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown."
+        }
+      },
+      "tor-switch": {
+        "note": "Front panel arranged as in Fig. 9: three blocks of 16 RJ45 ports, four larger cages and three ports at the right end. The guide does not describe the inside of the switch, so nothing inside is drawn."
+      }
+    },
+    "rearLayout": {
+      "note": "Schematic placement behind the units, not to scale. Fig. 2 shows the cable cartridges in the middle of the rear, two liquid cooling manifolds with FD83 hose connectors, the power bus bar, their supports, the rear bezel and seismic bracing; exact positions, spans and counts are not given. Which manifold carries supply and which return is not stated."
+    }
+  }
+}

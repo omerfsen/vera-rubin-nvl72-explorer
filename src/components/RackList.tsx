@@ -1,6 +1,7 @@
 import { model } from '../data';
 import { TYPE_COLORS } from '../scenes/geometry';
 import { useExplorer } from '../state/store';
+import { useI18n } from '../i18n';
 
 /**
  * The rack as a plain list, top to bottom. It is the fallback when WebGL is
@@ -9,21 +10,24 @@ import { useExplorer } from '../state/store';
 export function RackList() {
   const selected = useExplorer((s) => s.selected);
   const select = useExplorer((s) => s.select);
+  const i18n = useI18n();
+  const { t } = i18n;
   const current = selected.split('/')[0];
   const groups = model.topology.rackLayout.groups;
   const rear = model.childrenOf('rack').filter((c) => c.rearSide);
 
   return (
-    <nav className="rack-list" aria-label="Rack units, top to bottom">
-      <h2>Front, top to bottom</h2>
+    <nav className="rack-list" aria-label={t('list.label')}>
+      <h2>{t('list.front')}</h2>
       {groups.map((g, gi) => {
         const c = model.getComponent(g.component);
+        const name = i18n.name(g.component);
         const units = model.rackUnits.filter((u) => u.group === gi);
         return (
           <section key={gi}>
             <h3>
               <span className="swatch" style={{ background: TYPE_COLORS[c?.type ?? 'rack'] }} aria-hidden="true" />
-              {g.count} × {c?.name}
+              {t('list.group', { count: g.count, name })}
             </h3>
             <ul>
               {units.map((u) => (
@@ -35,11 +39,8 @@ export function RackList() {
                     className={current === u.key ? 'selected' : undefined}
                     onClick={() => select(u.key)}
                   >
-                    {c?.name} {u.index}
-                    <span className="muted">
-                      {' '}
-                      · {u.heightRU} RU
-                    </span>
+                    {t('list.unit', { name, index: u.index })}
+                    <span className="muted"> · {t('list.height', { height: u.heightRU })}</span>
                   </button>
                 </li>
               ))}
@@ -47,7 +48,7 @@ export function RackList() {
           </section>
         );
       })}
-      <h2>Rear</h2>
+      <h2>{t('list.rear')}</h2>
       <ul>
         {rear.map((c) => (
           <li key={c.id}>
@@ -57,12 +58,12 @@ export function RackList() {
               className={current === c.id ? 'selected' : undefined}
               onClick={() => select(c.id)}
             >
-              {c.name}
+              {i18n.name(c.id)}
             </button>
           </li>
         ))}
       </ul>
-      <p className="muted small">The rear is not drawn in 3D yet.</p>
+      <p className="muted small">{t('list.rearNotDrawn')}</p>
     </nav>
   );
 }

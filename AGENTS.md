@@ -35,6 +35,8 @@ Read `README.md` for what it does and `docs/DATA_MODEL.md` for the data.
 | `src/components/` | Side panel, search, breadcrumb, network bar, sources page, procedures |
 | `src/state/` | Zustand store and URL state |
 | `scripts/references.mjs` | Builds every component's `references` |
+| `data/i18n/{en,tr,zh}.json` | Every UI string (`ui`) and the translated descriptive text (`content`); English is the source |
+| `scripts/i18n-content.mjs` | Builds the `content` part of `en.json` from the data |
 | `tests/` | Schema, integrity, facts, model, UI and scene tests |
 
 The scene is generated from the data. Do not hard-code component IDs, counts
@@ -44,13 +46,17 @@ or facts in `src/`; add them to the data and read them from there.
 
 ```bash
 npm run data:refs   # rebuild components[].references
+npm run i18n:en     # rebuild the content part of data/i18n/en.json
 npm test            # schema, integrity and drift checks
 npm run typecheck
 npm run build
 npm run e2e         # real browser tests; locally: PW_CHROMIUM_PATH=/usr/bin/chromium npm run e2e
 ```
 
-`tests/references.test.ts` fails if `references` is out of date. Tray layouts
+`tests/references.test.ts` fails if `references` is out of date. `tests/i18n.test.ts` fails if `en.json` is out of date, or if
+`tr.json` or `zh.json` lacks a key, has an extra one, or changes a `{placeholder}`;
+add the Turkish and Chinese text for any new string. Do not put user-visible
+English in `src/`: add a `ui` key and read it with `useI18n().t()`. Tray layouts
 must place every part inside the tray or list it in `notPlaced` with a reason;
 `tests/m3.test.ts` checks this for every layout.
 

@@ -120,3 +120,30 @@ test.describe('fallbacks and layouts', () => {
     await expect(page.locator('.footer')).toBeHidden();
   });
 });
+
+test.describe('languages', () => {
+  test('switches to Turkish and Chinese and keeps the choice in the URL', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto('/?select=compute-tray.7');
+    await rackReady(page);
+    await page.getByRole('button', { name: 'TR', exact: true }).click();
+    await expect.poll(() => param(page, 'lang')).toBe('tr');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'tr');
+    await expect(page.getByText('Bu metin NVIDIA')).toBeVisible();
+    await page.getByRole('button', { name: '中文', exact: true }).click();
+    await expect.poll(() => param(page, 'lang')).toBe('zh');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'zh');
+    await page.getByRole('button', { name: 'EN', exact: true }).click();
+    await expect.poll(() => param(page, 'lang')).toBeNull();
+    expect(param(page, 'select')).toBe('compute-tray.7');
+    expect(errors).toEqual([]);
+  });
+
+  test('opens straight into Chinese from a shared link', async ({ page }) => {
+    await page.goto('/?lang=zh');
+    await rackReady(page);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'zh');
+    await expect(page.getByRole('button', { name: '中文', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  });
+});

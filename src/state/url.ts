@@ -1,4 +1,5 @@
 import type { Model } from '../data/model';
+import { DEFAULT_LANG, isLang, type Lang } from '../i18n/lang';
 
 export type View = 'rack' | 'rear' | 'tray';
 export const VIEWS: readonly View[] = ['rack', 'rear', 'tray'];
@@ -18,12 +19,14 @@ export interface UrlState {
   page?: string;
   /** Embedded in another page: no header, network bar or footer. */
   embed?: boolean;
+  /** Interface language; left out of the URL for English. */
+  lang?: Lang;
 }
 
 export const DEFAULT_URL_STATE: UrlState = { view: 'rack', select: '', list: false };
 
 /** The query keys this app owns. Everything else in the query is left alone. */
-const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed']);
+const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang']);
 
 /**
  * The rack unit whose interior can be opened for this selection, e.g.
@@ -51,6 +54,8 @@ export function readUrlState(search: string, model: Model): UrlState {
     ...procState(params, model),
     page: params.get('page') === 'sources' ? 'sources' : '',
     embed: params.get('embed') === '1',
+    // Only a language named in the URL; the store falls back to the saved one.
+    ...(isLang(params.get('lang')) ? { lang: params.get('lang') as Lang } : {}),
   };
 }
 
@@ -86,5 +91,6 @@ export function writeUrlState(search: string, state: UrlState): string {
   if (state.proc) kept.push(`proc=${encodeURIComponent(state.proc)}`, `step=${(state.step ?? 0) + 1}`);
   if (state.page) kept.push(`page=${encodeURIComponent(state.page)}`);
   if (state.embed) kept.push('embed=1');
+  if (state.lang && state.lang !== DEFAULT_LANG) kept.push(`lang=${encodeURIComponent(state.lang)}`);
   return kept.length === 0 ? '' : `?${kept.join('&')}`;
 }

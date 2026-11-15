@@ -2,6 +2,7 @@
 // so the legend does not pull the 3D bundle into the main chunk.
 import { model } from '../data';
 import { PART_COLORS, PORT_COLORS } from './geometry';
+import { i18nFor, type I18n } from '../i18n';
 
 /** Connector type of a port component ("OSFP", "QSFP", "RJ45"), or null. */
 export function portType(componentId: string): string | null {
@@ -26,15 +27,15 @@ export function isPartSelected(instancePath: string, selected: string): boolean 
 }
 
 /** Legend rows for a tray layout: one per part type, ports grouped by connector. */
-export function trayLegend(trayId: string): { label: string; color: string }[] {
+export function trayLegend(trayId: string, i18n: I18n = i18nFor('en')): { label: string; color: string }[] {
   const rows = new Map<string, string>();
   for (const slot of model.trayLayout(trayId)?.slots ?? []) {
     const port = portType(slot.component);
     const label = port
       ? port === 'Not stated'
-        ? 'Other port (type not stated)'
-        : `${port} port`
-      : (model.getComponent(slot.component)?.name ?? slot.component);
+        ? i18n.t('legend.otherPort')
+        : i18n.t('legend.port', { type: port })
+      : i18n.name(slot.component);
     if (!rows.has(label)) rows.set(label, partColor(slot.component));
   }
   return [...rows.entries()].map(([label, color]) => ({ label, color }));
