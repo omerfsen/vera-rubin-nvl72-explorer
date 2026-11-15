@@ -6,6 +6,7 @@ import { Rods } from './Rods';
 import { model } from '../data';
 import type { RearPart } from '../data/types';
 import { useExplorer } from '../state/store';
+import { useI18n } from '../i18n';
 import { FRAME_WIDTH, HOVER_COLOR, LINK_COLORS, REAR_COLORS, REAR_STYLE, RU, SCENE_COLORS, SELECTED_COLOR, UNIT_DEPTH, UNIT_WIDTH } from './geometry';
 
 /** Parts drawn see-through (the rear bezel) and under the rack (seismic bracing), from data/display.json. */
@@ -268,6 +269,7 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
   const connected = useThree((s) => s.events.connected);
   const selected = useExplorer((s) => s.selected);
   const hovered = useExplorer((s) => s.hovered);
+  const i18n = useI18n();
   if (!connected) return null;
   const labels: { text: string; position: Vec }[] = [];
   for (const target of new Set([hovered, selected])) {
@@ -276,7 +278,7 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
     if (!box) continue;
     const segs = model.parsePath(target) ?? [];
     const last = segs[segs.length - 1];
-    const text = last ? model.segmentLabel(last) : target;
+    const text = last ? i18n.segmentLabel(last) : target;
     labels.push({ text, position: [box.position[0], box.position[1] + Math.min(box.size[1] / 2, 0.15) + 0.04, box.position[2] - box.size[2] / 2] });
   }
   const unit = model.rackUnitByKey.get(selected.split('/')[0] ?? '');
@@ -284,13 +286,14 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
   const peerType = unit && FABRIC ? FABRIC.endpoints.find((e) => e !== unit.componentId && FABRIC.endpoints.includes(unit.componentId)) : undefined;
   if (unit && cart && peerType) {
     const peer = model.getComponent(peerType);
-    const name = peer?.name ?? peerType;
-    // "Compute tray" reads as a common noun; keep product names ("NVLink 6 ...") as they are.
-    const noun = /^[A-Z][a-z]/.test(name) ? name.charAt(0).toLowerCase() + name.slice(1) : name;
-    const peers = `all ${peer?.count ?? ''} ${noun}s`;
+    const count = model.rackUnits.filter((u) => u.componentId === peerType).length;
     const top = (model.totalRU * RU) / 2;
     labels.push({
-      text: `NVLink: ${model.segmentLabel({ id: unit.componentId, index: unit.index })} to ${peers}`,
+      text: i18n.t('scene.nvlinkFanout', {
+        unit: i18n.segmentLabel({ id: unit.componentId, index: unit.index }),
+        count,
+        peers: i18n.t(`unitPlural.${peer?.type ?? peerType}`),
+      }),
       position: [cart.position[0], top - (unit.topRU + unit.heightRU / 2) * RU + 0.05, cart.position[2] - cart.size[2] / 2 - 0.05],
     });
   }

@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 
 import { model } from '../data';
 import { useExplorer } from '../state/store';
 import { search } from './search';
+import { useI18n } from '../i18n';
 
 export function Search() {
   const [query, setQuery] = useState('');
@@ -10,7 +11,8 @@ export function Search() {
   const select = useExplorer((s) => s.select);
   const listId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const hits = useMemo(() => search(model, query), [query]);
+  const i18n = useI18n();
+  const hits = useMemo(() => search(model, query, undefined, i18n), [query, i18n]);
   const showList = open && hits.length > 0;
 
   useEffect(() => {
@@ -49,8 +51,8 @@ export function Search() {
         ref={inputRef}
         id="search-input"
         type="search"
-        placeholder="Search parts, e.g. gpu, bluefield, tray 7"
-        aria-label="Search parts"
+        placeholder={i18n.t('search.placeholder')}
+        aria-label={i18n.t('search.label')}
         role="combobox"
         aria-expanded={showList}
         aria-controls={listId}

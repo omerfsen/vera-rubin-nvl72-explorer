@@ -5,6 +5,7 @@ import { Color, InstancedMesh, Object3D } from 'three';
 import { model } from '../data';
 import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
+import { i18nFor, useI18n, type I18n } from '../i18n';
 import { isPartSelected, partColor } from './colors';
 import {
   CONFLICT_COLOR,
@@ -221,26 +222,25 @@ function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout })
 }
 
 /** Name shown for a part instance: NVIDIA's label when the layout has one. */
-export function partLabel(item: Placed): string {
-  const c = model.getComponent(item.slot.component);
-  const name = c?.name ?? item.slot.component;
+export function partLabel(item: Placed, i18n: I18n = i18nFor('en')): string {
   if (item.slot.label) return item.slot.label;
-  return item.slot.index === undefined ? name : `${name} ${item.slot.index}`;
+  return i18n.segmentLabel({ id: item.slot.component, index: item.slot.index });
 }
 
 function Labels({ placed, heightRU }: { placed: Placed[]; heightRU: number }) {
   const connected = useThree((s) => s.events.connected);
   const hovered = useExplorer((s) => s.hovered);
+  const i18n = useI18n();
   if (!connected) return null;
   const hoveredItem = placed.find((p) => p.path === hovered);
   const box = hoveredItem ? slotBox(hoveredItem.slot, heightRU) : null;
   return (
     <>
       <Html position={[0, 0.02, TRAY_DEPTH / 2 + 0.12]} center className="tray-label" style={{ pointerEvents: 'none' }}>
-        <span>Front</span>
+        <span>{i18n.t('scene.front')}</span>
       </Html>
       <Html position={[0, 0.02, -TRAY_DEPTH / 2 - 0.12]} center className="tray-label" style={{ pointerEvents: 'none' }}>
-        <span>Rear</span>
+        <span>{i18n.t('scene.rear')}</span>
       </Html>
       {hoveredItem && box && (
         <Html
@@ -249,7 +249,7 @@ function Labels({ placed, heightRU }: { placed: Placed[]; heightRU: number }) {
           className="part-tooltip"
           style={{ pointerEvents: 'none' }}
         >
-          <span>{partLabel(hoveredItem)}</span>
+          <span>{partLabel(hoveredItem, i18n)}</span>
         </Html>
       )}
     </>

@@ -17,7 +17,8 @@
     "test:watch": "vitest",
     "data:refs": "node scripts/references.mjs",
     "e2e": "playwright test",
-    "docs:check": "node scripts/check-docs.mjs"
+    "docs:check": "node scripts/check-docs.mjs",
+    "i18n:en": "node scripts/i18n-content.mjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

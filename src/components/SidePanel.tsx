@@ -10,7 +10,8 @@ import { HostView } from './HostView';
 import { ProcedureBox, ProcedureStart } from './Procedure';
 import { Share } from './Share';
 import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
-import { LINK_COLORS, LINK_NAMES } from '../scenes/geometry';
+import { LINK_COLORS } from '../scenes/geometry';
+import { useI18n, type I18n } from '../i18n';
 
 function SourceLink({ source }: { source: Source }) {
   return (
@@ -21,25 +22,28 @@ function SourceLink({ source }: { source: Source }) {
 }
 
 function Assumed({ note }: { note?: string }) {
+  const { t } = useI18n();
   return (
     <span className="assumed" title={note}>
-      assumed
+      {t('panel.assumed')}
     </span>
   );
 }
 
 function SpecRow({ spec, component }: { spec: Spec; component: Component }) {
+  const i18n = useI18n();
+  const note = i18n.specNote(component.id, spec.label, spec.note);
   const value = `${spec.value}${spec.unit ? ` ${spec.unit}` : ''}`;
   const differentSource = spec.source && spec.source.url + spec.source.section !== component.source.url + component.source.section;
   return (
     <tr>
-      <th scope="row">{spec.label}</th>
+      <th scope="row">{i18n.specLabel(spec.label)}</th>
       <td>
-        {value} {spec.assumed && <Assumed note={spec.note} />}
-        {spec.note && <div className="note">{spec.note}</div>}
+        {value} {spec.assumed && <Assumed note={note} />}
+        {note && <div className="note">{note}</div>}
         {differentSource && spec.source && (
           <div className="spec-source">
-            Source: <SourceLink source={spec.source} />
+            {i18n.t('panel.sourceLabel')} <SourceLink source={spec.source} />
           </div>
         )}
       </td>
@@ -47,27 +51,25 @@ function SpecRow({ spec, component }: { spec: Spec; component: Component }) {
   );
 }
 
-/** The other end of a connection, unless the description already names it. */
-const DOC_NAMES: Record<string, string> = { 'user-guide': 'User Guide', 'service-manual': 'Service Manual' };
-
 /** Every section of NVIDIA's documents about this part, with the HTML section, the PDF page and figure links. */
 function Documents({ component }: { component: Component }) {
+  const { t } = useI18n();
   if (component.references.length === 0) return null;
   return (
     <section>
-      <h3>In NVIDIA's documents</h3>
+      <h3>{t('panel.documents')}</h3>
       <ul className="plain doc-list">
         {component.references.map((r) => (
           <li key={`${r.document}|${r.section}`}>
-            <span className="muted">{DOC_NAMES[r.document]}</span> {r.section}:{' '}
+            <span className="muted">{t(`docs.${r.document}`)}</span> {r.section}:{' '}
             <a href={r.html} target="_blank" rel="noopener noreferrer">
-              web
+              {t('panel.web')}
             </a>
             {r.pdf && (
               <>
                 {' · '}
                 <a href={r.pdf} target="_blank" rel="noopener noreferrer">
-                  PDF p. {r.pdf.split('#page=')[1]}
+                  {t('panel.pdfPage', { page: r.pdf.split('#page=')[1] ?? '' })}
                 </a>
               </>
             )}
@@ -75,7 +77,7 @@ function Documents({ component }: { component: Component }) {
               <span key={f}>
                 {' · '}
                 <a href={f} target="_blank" rel="noopener noreferrer">
-                  figure
+                  {t('panel.figure')}
                 </a>
               </span>
             ))}
@@ -88,65 +90,67 @@ function Documents({ component }: { component: Component }) {
 
 /** Open questions in NVIDIA's documents that involve this part. */
 function OpenQuestions({ component }: { component: Component }) {
+  const i18n = useI18n();
+  const { t } = i18n;
   const qs = (model.topology.openQuestions ?? []).filter((q) => q.components.includes(component.id));
   if (qs.length === 0) return null;
   return (
     <section className="open-questions">
-      <h3>Open question{qs.length > 1 ? 's' : ''} in NVIDIA's documents</h3>
+      <h3>{qs.length > 1 ? t('panel.openQuestions') : t('panel.openQuestion')}</h3>
       {qs.map((q) => (
         <p key={q.id}>
-          <span className={q.kind === 'conflict' ? 'assumed' : 'gap-badge'}>{q.kind}</span> <strong>{q.title}.</strong>{' '}
-          {q.summary}
+          <span className={q.kind === 'conflict' ? 'assumed' : 'gap-badge'}>{t(`badge.${q.kind}`)}</span>{' '}
+          <strong>{i18n.question(q.id, 'title', q.title)}.</strong> {i18n.question(q.id, 'summary', q.summary)}
         </p>
       ))}
     </section>
   );
 }
 
-function connectionText(c: Connection, selfId: string): string {
+/** The other end of a connection, unless the description already names it. */
+function connectionText(c: Connection, selfId: string, i18n: I18n): string {
   const other = c.from === selfId ? c.to : c.from;
+  const description = i18n.connection(c.id, 'description', c.description);
   const parts: string[] = [];
-  if (other) parts.push(model.getComponent(other)?.name ?? other);
+  if (other) parts.push(i18n.name(other));
   if (c.network) parts.push(model.getNetwork(c.network)?.name ?? c.network);
-  return parts.filter((p) => !c.description.includes(p)).join(' · ');
+  return parts.filter((p) => !description.includes(p) && !c.description.includes(p)).join(' · ');
 }
 
 /** "compute tray", "power shelf": generic unit names read better lowercased; product names keep their case. */
-function perLabel(parent: Component): string {
-  const generic: Partial<Record<Component['type'], string>> = {
-    rack: 'rack',
-    'compute-tray': 'compute tray',
-    'switch-tray': 'switch tray',
-    'power-shelf': 'power shelf',
-    'tor-switch': 'top-of-rack switch',
-  };
-  return generic[parent.type] ?? parent.name;
+function perLabel(parent: Component, i18n: I18n): string {
+  const generic = ['rack', 'compute-tray', 'switch-tray', 'power-shelf', 'tor-switch'];
+  return generic.includes(parent.type) ? i18n.t(`per.${parent.type}`) : i18n.name(parent.id);
 }
 
-function countText(c: Component, index: number | undefined): string[] {
+function countText(c: Component, index: number | undefined, i18n: I18n): string[] {
+  const { t } = i18n;
   const lines: string[] = [];
   const parent = c.parent ? model.getComponent(c.parent) : undefined;
   if (c.count === null) {
-    lines.push('The guide does not state how many.');
+    lines.push(t('count.notStated'));
   } else if (parent) {
-    lines.push(`${c.count} per ${perLabel(parent)}`);
+    lines.push(t('count.perParent', { count: c.count, parent: perLabel(parent, i18n) }));
   } else {
     const gpus = c.specs.find((s) => s.label === 'GPUs in the NVLink domain')?.value;
-    lines.push(gpus ? `One rack: ${gpus} GPUs in a single NVLink domain.` : `${c.count}`);
+    lines.push(gpus ? t('count.oneRack', { gpus }) : `${c.count}`);
   }
   const total = model.totalPerRack(c.id);
-  if (total !== null && parent && parent.id !== ROOT_ID) lines.push(`${total} per rack (computed)`);
-  if (index !== undefined) lines.push(`This is number ${index}.`);
+  if (total !== null && parent && parent.id !== ROOT_ID) lines.push(t('count.perRack', { total }));
+  if (index !== undefined) lines.push(t('count.thisIs', { index }));
   return lines;
 }
 
 export function SidePanel() {
   const selected = useExplorer((s) => s.selected);
   const select = useExplorer((s) => s.select);
+  const i18n = useI18n();
+  const { t } = i18n;
   const segments = model.parsePath(selected) ?? [];
   const last = segments[segments.length - 1];
   const component = model.getComponent(last?.id ?? ROOT_ID)!;
-  const title = last ? model.segmentLabel(last) : component.name;
+  const title = last ? i18n.segmentLabel(last) : i18n.name(component.id);
+  const note = i18n.component(component, 'note');
   const children = model.childrenOf(component.id);
   const connections = model.connectionsOf(component.id);
   const networks = model.networksWithin(component.id);
@@ -182,21 +186,26 @@ export function SidePanel() {
   return (
     <article className="panel-body" aria-labelledby="panel-title">
       <p className="sr-only" aria-live="polite">
-        Selected: {title}
+        {t('panel.selected', { title })}
       </p>
+      {i18n.lang !== 'en' && (
+        <p className="note translated-notice" lang={i18n.lang}>
+          {t('language.translated')}
+        </p>
+      )}
       <ProcedureBox />
       <NetworkInfo />
       <header className="panel-header">
-        <p className="kind">{component.type.replace(/-/g, ' ')}</p>
+        <p className="kind">{i18n.typeName(component.type)}</p>
         <h2 id="panel-title" ref={headingRef} tabIndex={-1}>
-          {title} {component.assumed && <Assumed note={component.note} />}
+          {title} {component.assumed && <Assumed note={note} />}
         </h2>
       </header>
 
       {trayKey && selected === trayKey && view === 'rack' && (
         <p>
           <button type="button" className="open-tray" onClick={openTray}>
-            Open {title} to see its parts
+            {t('panel.openToSee', { title })}
           </button>
         </p>
       )}
@@ -204,93 +213,95 @@ export function SidePanel() {
       <OpenQuestions component={component} />
 
       <section>
-        <h3>What it is</h3>
-        <p>{component.description}</p>
+        <h3>{t('panel.whatItIs')}</h3>
+        <p>{i18n.component(component, 'description')}</p>
       </section>
 
       <section>
-        <h3>What it does</h3>
-        <p>{component.function}</p>
+        <h3>{t('panel.whatItDoes')}</h3>
+        <p>{i18n.component(component, 'function')}</p>
       </section>
 
       <section>
-        <h3>How many</h3>
-        {countText(component, last?.index).map((line) => (
+        <h3>{t('panel.howMany')}</h3>
+        {countText(component, last?.index, i18n).map((line) => (
           <p key={line}>{line}</p>
         ))}
         {isNumberedUnit && numbering?.overrides?.[component.id] ? (
           <p className="note">
-            {numbering.overrides[component.id]!.note} Source: <SourceLink source={numbering.overrides[component.id]!.source} />
+            {i18n.overrideNote(component.id, numbering.overrides[component.id]!.note)} {t('panel.sourceLabel')} <SourceLink source={numbering.overrides[component.id]!.source} />
           </p>
         ) : (
           isNumberedUnit &&
           numbering?.assumed && (
             <p className="note">
-              <Assumed note={numbering.note} /> {numbering.note}
+              <Assumed note={i18n.numberingNote(numbering.note)} /> {i18n.numberingNote(numbering.note)}
             </p>
           )
         )}
         {height?.assumed && (
           <p className="note">
-            <Assumed note={height.note} /> {height.note}
+            <Assumed note={i18n.heightNote(component.id, height.note)} /> {i18n.heightNote(component.id, height.note)}
           </p>
         )}
       </section>
 
       {component.rearSide && model.topology.rearLayout && (
         <section>
-          <h3>Position</h3>
+          <h3>{t('panel.position')}</h3>
           <p className="note">
-            {model.topology.rearLayout.assumed && <Assumed note={model.topology.rearLayout.note} />}{' '}
-            {model.topology.rearLayout.note}
+            {model.topology.rearLayout.assumed && <Assumed note={i18n.rearNote(model.topology.rearLayout.note)} />}{' '}
+            {i18n.rearNote(model.topology.rearLayout.note)}
           </p>
         </section>
       )}
 
       {within && layout && (
         <section>
-          <h3>Position</h3>
-          {slot?.label && <p>NVIDIA label: {slot.label}</p>}
+          <h3>{t('panel.position')}</h3>
+          {slot?.label && <p>{t('panel.nvidiaLabel', { label: slot.label })}</p>}
           {slot && (
             <p className="note">
-              {layout.assumed && <Assumed note={layout.note} />} {layout.note}
+              {layout.assumed && <Assumed note={i18n.trayNote(trayId!, layout.note)} />} {i18n.trayNote(trayId!, layout.note)}
             </p>
           )}
-          {!slot && notPlaced && <p className="note">Not drawn: {notPlaced.reason}</p>}
-          {!slot && !notPlaced && <p className="muted">Not drawn on its own in the 3D view.</p>}
+          {!slot && notPlaced && (
+            <p className="note">{t('panel.notDrawnReason', { reason: i18n.notPlaced(trayId!, notPlaced.component, notPlaced.reason) })}</p>
+          )}
+          {!slot && !notPlaced && <p className="muted">{t('panel.notDrawn')}</p>}
         </section>
       )}
 
       <section>
-        <h3>Networks</h3>
+        <h3>{t('panel.networks')}</h3>
         {networks.length === 0 ? (
-          <p className="muted">Not on any of the seven rack networks.</p>
+          <p className="muted">{t('panel.noNetworks')}</p>
         ) : (
           <ul className="chips">
             {networks.map((n) => (
-              <li key={n.id} className={ownNetworks.has(n.id) ? 'chip' : 'chip chip-sub'} title={n.description}>
+              <li key={n.id} className={ownNetworks.has(n.id) ? 'chip' : 'chip chip-sub'} title={i18n.network(n.id, 'description', n.description)}>
                 <span className="chip-num">{n.number}</span> {n.name}
                 {n.fabric ? <span className="chip-fabric"> · {n.fabric}</span> : null}
-                {!ownNetworks.has(n.id) && <span className="sr-only"> (through a part inside)</span>}
+                {!ownNetworks.has(n.id) && <span className="sr-only">{t('panel.throughPart')}</span>}
               </li>
             ))}
           </ul>
         )}
         {networks.some((n) => !ownNetworks.has(n.id)) && (
-          <p className="muted small">Dashed chips: reached through a part inside it.</p>
+          <p className="muted small">{t('panel.dashedChips')}</p>
         )}
         {networks.length > 0 && (
           <details className="net-details">
-            <summary>What these networks do</summary>
+            <summary>{t('panel.whatNetworksDo')}</summary>
             <dl>
               {networks.map((n) => (
                 <div key={n.id}>
                   <dt>
-                    {n.number}. {n.name}
+                    {t('panel.networkItem', { number: n.number, name: n.name })}
                   </dt>
                   <dd>
-                    {n.description}
-                    {n.note && <span className="note"> {n.note}</span>}
+                    {i18n.network(n.id, 'description', n.description)}
+                    {n.note && <span className="note"> {i18n.network(n.id, 'note', n.note)}</span>}
                   </dd>
                 </div>
               ))}
@@ -301,7 +312,7 @@ export function SidePanel() {
 
       {component.specs.length > 0 && (
         <section>
-          <h3>Specs</h3>
+          <h3>{t('panel.specs')}</h3>
           <table className="specs">
             <tbody>
               {component.specs.map((s) => (
@@ -324,28 +335,30 @@ export function SidePanel() {
 
       {trayLinks.length > 0 && trayId && within && (
         <section>
-          <h3>Inside the tray, connected to</h3>
+          <h3>{t('panel.insideTray')}</h3>
           <ul className="plain">
             {trayLinks.map((l, i) => {
+              const linkIndex = layout?.links?.indexOf(l) ?? -1;
+              const linkNote = i18n.linkNote(trayId, linkIndex, l.note);
               const fromHere = model.linkEndPath(trayId, l.from)?.replace(/\.\d+$/, '') === within.replace(/\.\d+$/, '');
               const other = fromHere ? l.to : l.from;
               const otherPath = model.linkEndPath(trayId, other);
               return (
                 <li key={i}>
                   <span className="conn-kind" style={{ borderColor: LINK_COLORS[l.kind] }}>
-                    {LINK_NAMES[l.kind] ?? l.kind}
+                    {i18n.linkName(l.kind)}
                   </span>{' '}
                   {otherPath ? (
                     <button type="button" className="link-button" onClick={() => select(`${trayKey}/${otherPath}`)}>
-                      {model.linkEndLabel(trayId, other)}
+                      {i18n.linkEndLabel(trayId, other)}
                     </button>
                   ) : (
-                    model.linkEndLabel(trayId, other)
+                    i18n.linkEndLabel(trayId, other)
                   )}{' '}
-                  {l.assumed && <Assumed note={l.note} />}
-                  {l.note && <div className="note">{l.note}</div>}
+                  {l.assumed && <Assumed note={linkNote} />}
+                  {linkNote && <div className="note">{linkNote}</div>}
                   <div className="spec-source">
-                    Source: <SourceLink source={l.source} />
+                    {t('panel.sourceLabel')} <SourceLink source={l.source} />
                   </div>
                 </li>
               );
@@ -356,16 +369,16 @@ export function SidePanel() {
 
       {connections.length > 0 && (
         <section>
-          <h3>Connections</h3>
+          <h3>{t('panel.connections')}</h3>
           <ul className="plain">
             {connections.map((c) => (
               <li key={c.id}>
-                <span className="conn-kind">{c.kind}</span> {c.description}
-                {connectionText(c, component.id) && <span className="muted"> ({connectionText(c, component.id)})</span>}
-                {c.assumed && <Assumed note={c.note} />}
-                {c.note && <div className="note">{c.note}</div>}
+                <span className="conn-kind">{t(`connectionKinds.${c.kind}`)}</span> {i18n.connection(c.id, 'description', c.description)}
+                {connectionText(c, component.id, i18n) && <span className="muted"> ({connectionText(c, component.id, i18n)})</span>}
+                {c.assumed && <Assumed note={i18n.connection(c.id, 'note', c.note)} />}
+                {c.note && <div className="note">{i18n.connection(c.id, 'note', c.note)}</div>}
                 <div className="spec-source">
-                  Source: <SourceLink source={c.source} />
+                  {t('panel.sourceLabel')} <SourceLink source={c.source} />
                 </div>
               </li>
             ))}
@@ -375,7 +388,7 @@ export function SidePanel() {
 
       {children.length > 0 && (
         <section>
-          <h3>Parts inside</h3>
+          <h3>{t('panel.partsInside')}</h3>
           <ul className="parts">
             {children.map((child) => (
               <li key={child.id}>
@@ -385,8 +398,8 @@ export function SidePanel() {
                     select(component.id === ROOT_ID ? model.pathForComponent(child.id) : `${selected}/${child.id}`)
                   }
                 >
-                  <span>{child.name}</span>
-                  <span className="muted">{child.count === null ? 'count not stated' : `× ${child.count}`}</span>
+                  <span>{i18n.name(child.id)}</span>
+                  <span className="muted">{child.count === null ? t('panel.countNotStated') : t('panel.times', { count: child.count })}</span>
                 </button>
               </li>
             ))}
@@ -394,17 +407,17 @@ export function SidePanel() {
         </section>
       )}
 
-      {component.note && (
+      {note && (
         <section>
-          <h3>Note</h3>
+          <h3>{t('panel.note')}</h3>
           <p className="note">
-            {component.assumed && <Assumed note={component.note} />} {component.note}
+            {component.assumed && <Assumed note={note} />} {note}
           </p>
         </section>
       )}
 
       <section>
-        <h3>Source</h3>
+        <h3>{t('panel.source')}</h3>
         <p>
           <SourceLink source={component.source} />
         </p>
@@ -412,11 +425,11 @@ export function SidePanel() {
           <figure className="official-figure">
             <img
               src={officialFigureUrl(component.source.figure)}
-              alt={`Official figure for ${component.name}, from the NVIDIA DGX VR NVL72 User Guide`}
+              alt={t('panel.figureAlt', { name: i18n.name(component.id) })}
               loading="lazy"
               referrerPolicy="no-referrer"
             />
-            <figcaption>Figure hot-linked from docs.nvidia.com. © NVIDIA Corporation.</figcaption>
+            <figcaption>{t('panel.figureCaption')}</figcaption>
           </figure>
         )}
       </section>

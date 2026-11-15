@@ -4,6 +4,7 @@ import { Html } from '@react-three/drei';
 import { Color, InstancedMesh, Matrix4, Object3D } from 'three';
 import { model } from '../data';
 import { useExplorer } from '../state/store';
+import { useI18n } from '../i18n';
 import { RearScene } from './RearScene';
 import {
   FRAME_POST,
@@ -211,6 +212,7 @@ function RackFrame() {
 /** "10 x Compute tray" style labels beside each layout group. */
 function GroupLabels() {
   const groups = model.topology.rackLayout.groups;
+  const i18n = useI18n();
   // drei's <Html> picks its DOM target from the connected event source. R3F
   // connects events after the children's first layout effects, so a label
   // mounted earlier would move targets mid-commit and could be lost.
@@ -223,7 +225,7 @@ function GroupLabels() {
         const first = boxByKey.get(units[0]!.key)!;
         const last = boxByKey.get(units[units.length - 1]!.key)!;
         const y = (first.position[1] + last.position[1]) / 2;
-        const name = model.getComponent(g.component)?.name ?? g.component;
+        const name = i18n.name(g.component);
         return (
           <Html
             key={gi}
@@ -233,9 +235,7 @@ function GroupLabels() {
             style={{ pointerEvents: 'none' }}
             zIndexRange={[20, 10]}
           >
-            <span>
-              {g.count} × {name}
-            </span>
+            <span>{i18n.t('scene.group', { count: g.count, name })}</span>
           </Html>
         );
       })}

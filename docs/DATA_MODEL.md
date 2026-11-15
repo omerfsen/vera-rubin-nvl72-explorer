@@ -156,3 +156,14 @@ renders it and does not hold facts of its own.
 and nothing else: colours per type, network and link kind, link names, LED
 and scene colours, and rear part styling. The code keeps only geometry
 (sizes in metres, camera positions) and interaction.
+
+## Translations
+
+`data/i18n/en.json`, `tr.json` and `zh.json` hold the interface strings
+(`ui`, with `{name}` placeholders) and the descriptive text of the data
+(`content`, keyed by component, network, connection, procedure and other ids;
+spec labels keyed by their English label). The `content` part of `en.json` is
+generated from `nvl72-topology.json` by `npm run i18n:en`. IDs, product names,
+network names, commands, spec values and NVIDIA's section titles are never
+translated. The English data is authoritative; any missing translation falls
+back to it. The language goes in the URL as `lang=tr` or `lang=zh`.

@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { Breadcrumb } from './components/Breadcrumb';
 import { NetworkBar } from './components/NetworkBar';
 import { Credits } from './components/Credits';
-import site from '../data/site.json';
 import { SourcesPage } from './components/SourcesPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RackList } from './components/RackList';
@@ -10,10 +9,12 @@ import { Search } from './components/Search';
 import { SidePanel } from './components/SidePanel';
 import { hasWebGL } from './lib/webgl';
 import { model } from './data';
-import { CONFLICT_COLOR, DIM_COLOR, LINK_COLORS, LINK_NAMES, NETWORK_COLORS, REAR_COLORS, TYPE_COLORS } from './scenes/geometry';
+import { CONFLICT_COLOR, DIM_COLOR, LINK_COLORS, NETWORK_COLORS, REAR_COLORS, TYPE_COLORS } from './scenes/geometry';
 import { trayLegend } from './scenes/colors';
 import { trayKeyOf } from './state/url';
 import { syncUrl, useExplorer } from './state/store';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { useI18n } from './i18n';
 
 const Scene = lazy(() => import('./scenes/Scene'));
 
@@ -49,17 +50,19 @@ function useKeyboard() {
 
 function Legend({ trayId }: { trayId: string | null }) {
   const network = useExplorer((s) => s.network);
+  const i18n = useI18n();
+  const { t } = i18n;
   const net = network ? model.getNetwork(network) : undefined;
   if (net) {
     const { members } = model.networkMembers(net.id);
     const conflict = [...members.values()].some((m) => m.alternative);
     const rows = [
-      { label: `On ${net.name}`, color: NETWORK_COLORS[net.id] ?? '#ffffff' },
-      ...(conflict ? [{ label: 'Conflict: figure and table disagree', color: CONFLICT_COLOR }] : []),
-      { label: 'Not on this network', color: DIM_COLOR },
+      { label: t('legend.on', { name: net.name }), color: NETWORK_COLORS[net.id] ?? '#ffffff' },
+      ...(conflict ? [{ label: t('legend.conflict'), color: CONFLICT_COLOR }] : []),
+      { label: t('legend.notOn'), color: DIM_COLOR },
     ];
     return (
-      <ul className="legend" aria-label="Legend">
+      <ul className="legend" aria-label={t('legend.label')}>
         {rows.map((r) => (
           <li key={r.label}>
             <span className="swatch" style={{ background: r.color }} aria-hidden="true" />
@@ -70,18 +73,18 @@ function Legend({ trayId }: { trayId: string | null }) {
     );
   }
   const rows = trayId
-    ? trayLegend(trayId)
+    ? trayLegend(trayId, i18n)
     : [...new Set(model.rackUnits.map((u) => u.componentId))].map((id) => {
         const c = model.getComponent(id);
-        return { label: c?.name ?? id, color: TYPE_COLORS[c?.type ?? 'rack'] ?? '#666666' };
+        return { label: i18n.name(id), color: TYPE_COLORS[c?.type ?? 'rack'] ?? '#666666' };
       }).concat(
         [...new Set((model.topology.rearLayout?.parts ?? []).map((p) => p.component))].map((id) => {
           const c = model.getComponent(id);
-          return { label: `${c?.name ?? id} (rear)`, color: REAR_COLORS[c?.type ?? ''] ?? '#666666' };
+          return { label: t('legend.rear', { name: i18n.name(id) }), color: REAR_COLORS[c?.type ?? ''] ?? '#666666' };
         }),
       );
   return (
-    <ul className={trayId ? 'legend legend-tray' : 'legend'} aria-label="Legend">
+    <ul className={trayId ? 'legend legend-tray' : 'legend'} aria-label={t('legend.label')}>
       {rows.map((r) => (
         <li key={r.label}>
           <span className="swatch" style={{ background: r.color }} aria-hidden="true" />
@@ -92,11 +95,7 @@ function Legend({ trayId }: { trayId: string | null }) {
   );
 }
 
-const LAYERS = [
-  { key: 'structure', label: 'Structure', hint: 'the bones: rack frame or tray shell' },
-  { key: 'parts', label: 'Parts', hint: 'the muscles: units, rear parts, chips, cards, drives, ports' },
-  { key: 'links', label: 'Connections', hint: 'the veins: PCIe, C2C, Clink, NVLink, coolant, power' },
-] as const;
+const LAYERS = ['structure', 'parts', 'links'] as const;
 
 /** "Open tray" in the rack view; "Back to rack" and the layer toggles inside a tray. */
 function StageActions({ trayKey, view }: { trayKey: string | null; view: string }) {
@@ -105,8 +104,10 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
   const setSide = useExplorer((s) => s.setSide);
   const layers = useExplorer((s) => s.layers);
   const toggleLayer = useExplorer((s) => s.toggleLayer);
+  const i18n = useI18n();
+  const { t } = i18n;
   const inTray = view === 'tray' && trayKey !== null;
-  const name = trayKey ? model.segmentLabel(model.parsePath(trayKey)![0]!) : '';
+  const name = trayKey ? i18n.segmentLabel(model.parsePath(trayKey)![0]!) : '';
   // Link kinds shown in the legend: the tray's own links, or the rack-level connections at the rear.
   const kinds = inTray
     ? [...new Set((model.trayLayout(trayKey!.split('.')[0]!)?.links ?? []).map((l) => l.kind))]
@@ -121,45 +122,45 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
     <div className="stage-actions">
       {inTray ? (
         <button type="button" onClick={closeTray}>
-          ← Back to rack
+          {t('stage.backToRack')}
         </button>
       ) : (
-        <div className="layer-toggles" role="group" aria-label="Side of the rack">
+        <div className="layer-toggles" role="group" aria-label={t('stage.side')}>
           <button type="button" aria-pressed={view !== 'rear'} onClick={() => setSide('rack')}>
-            Front
+            {t('stage.front')}
           </button>
           <button type="button" aria-pressed={view === 'rear'} onClick={() => setSide('rear')}>
-            Rear
+            {t('stage.rear')}
           </button>
           {trayKey && (
             <button type="button" className="open-button" onClick={openTray}>
-              Open {name}
+              {t('stage.open', { name })}
             </button>
           )}
         </div>
       )}
-      <div className="layer-toggles" role="group" aria-label="Layers">
+      <div className="layer-toggles" role="group" aria-label={t('stage.layers')}>
         {LAYERS.map((l) => (
           <button
-            key={l.key}
+            key={l}
             type="button"
-            aria-pressed={layers[l.key]}
-            title={`Show or hide ${l.hint}`}
-            onClick={() => toggleLayer(l.key)}
+            aria-pressed={layers[l]}
+            title={t('stage.showOrHide', { hint: t(`layers.${l}Hint`) })}
+            onClick={() => toggleLayer(l)}
           >
-            {l.label}
+            {t(`layers.${l}`)}
           </button>
         ))}
       </div>
       {layers.links && (inTray || view === 'rear') && (
-        <ul className="link-legend" aria-label="Connection types">
+        <ul className="link-legend" aria-label={t('stage.connectionTypes')}>
           {kinds.map((k) => (
             <li key={k}>
               <span className="line-swatch" style={{ background: LINK_COLORS[k] }} aria-hidden="true" />
-              {LINK_NAMES[k] ?? k}
+              {i18n.linkName(k)}
             </li>
           ))}
-          {inTray && <li className="muted">Dashed: assumed, see the panel</li>}
+          {inTray && <li className="muted">{t('stage.dashed')}</li>}
         </ul>
       )}
     </div>
@@ -175,6 +176,7 @@ export default function App() {
   const page = useExplorer((s) => s.page);
   const setPage = useExplorer((s) => s.setPage);
   const embed = useExplorer((s) => s.embed);
+  const { t } = useI18n();
   const trayKey = trayKeyOf(selected, model);
   const inTray = view === 'tray' && trayKey !== null;
   useKeyboard();
@@ -186,12 +188,13 @@ export default function App() {
     <div className={embed ? 'app embed' : 'app'}>
       <header className="topbar">
         <div className="brand">
-          <h1>{site.title}</h1>
-          <p className="tagline">{site.tagline}</p>
+          <h1>{t('site.title')}</h1>
+          <p className="tagline">{t('site.tagline')}</p>
         </div>
         <Search />
+        <LanguageSwitcher />
         <button type="button" className="toggle" aria-pressed={page === 'sources'} onClick={() => setPage(page === 'sources' ? '' : 'sources')}>
-          Sources
+          {t('top.sources')}
         </button>
         {webgl && (
           <button
@@ -201,7 +204,7 @@ export default function App() {
             aria-controls="list-pane"
             onClick={() => setListOpen(!listOpen)}
           >
-            {listOpen ? 'Hide list' : 'List view'}
+            {listOpen ? t('top.hideList') : t('top.listView')}
           </button>
         )}
       </header>
@@ -216,10 +219,10 @@ export default function App() {
       ) : (
       <main className={!webgl ? 'layout list-only' : showList ? 'layout with-list' : 'layout'}>
         {showList && (
-          <aside className="list-pane" id="list-pane" aria-label="Rack as a list">
+          <aside className="list-pane" id="list-pane" aria-label={t('layout.listPane')}>
             {!webgl && (
               <p className="notice" role="status">
-                WebGL is not available in this browser, so the rack is shown as a list.
+                {t('layout.noWebgl')}
               </p>
             )}
             <RackList />
@@ -231,17 +234,17 @@ export default function App() {
             className="stage"
             id="rack-stage"
             tabIndex={0}
-            aria-label="Rack view. Use the up and down arrow keys to step through the units."
+            aria-label={t('layout.stage')}
             aria-describedby="stage-hint"
           >
             <ErrorBoundary
               fallback={
                 <p className="notice" role="alert">
-                  The 3D view could not start. Use the list view instead.
+                  {t('layout.sceneFailed')}
                 </p>
               }
             >
-              <Suspense fallback={<p className="notice">Loading 3D view…</p>}>
+              <Suspense fallback={<p className="notice">{t('layout.loading')}</p>}>
                 <Scene />
               </Suspense>
             </ErrorBoundary>
@@ -250,38 +253,39 @@ export default function App() {
             <p className="hint" id="stage-hint">
               {inTray ? (
                 <>
-                  <span className="hint-long">Click a part · drag to rotate · scroll or pinch to zoom · ↑ ↓ to step · Esc to go back</span>
-                  <span className="hint-short">Tap a part · drag to rotate · pinch to zoom</span>
+                  <span className="hint-long">{t('hint.trayLong')}</span>
+                  <span className="hint-short">{t('hint.trayShort')}</span>
                 </>
               ) : view === 'rear' ? (
                 <>
-                  <span className="hint-long">
-                    Rear: click a tray to see its NVLink reach every peer through the cartridge · click any rear part or connector
-                  </span>
-                  <span className="hint-short">Tap a rear part · drag to rotate</span>
+                  <span className="hint-long">{t('hint.rearLong')}</span>
+                  <span className="hint-short">{t('hint.rearShort')}</span>
                 </>
               ) : (
                 <>
-                  <span className="hint-long">
-                    Click a unit, click again to open it · drag to rotate · ↑ ↓ to step · Enter to open · Esc to go back
-                  </span>
-                  <span className="hint-short">Tap a unit, tap again to open · drag to rotate</span>
+                  <span className="hint-long">{t('hint.rackLong')}</span>
+                  <span className="hint-short">{t('hint.rackShort')}</span>
                 </>
               )}
             </p>
           </section>
         )}
 
-        <section className={selected ? 'panel open' : 'panel'} aria-label="Details">
+        <section className={selected ? 'panel open' : 'panel'} aria-label={t('layout.details')}>
           <SidePanel />
         </section>
       </main>
       )}
 
       <footer className="footer">
-        Data: {model.topology.meta.document.title} ({model.topology.meta.document.date}) and{' '}
-        {model.topology.meta.serviceManual?.title} ({model.topology.meta.serviceManual?.date}). Unofficial; not affiliated
-        with or endorsed by NVIDIA. {site.trademarks} 3D geometry is original and illustrative. <Credits />
+        {t('site.footer', {
+          userGuide: model.topology.meta.document.title,
+          userGuideDate: model.topology.meta.document.date,
+          serviceManual: model.topology.meta.serviceManual?.title ?? '',
+          serviceManualDate: model.topology.meta.serviceManual?.date ?? '',
+          trademarks: t('site.trademarks'),
+        })}{' '}
+        <Credits />
       </footer>
     </div>
   );

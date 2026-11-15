@@ -4,6 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import type { Vector3 } from 'three';
 import { model } from '../data';
 import { useExplorer } from '../state/store';
+import { useI18n } from '../i18n';
 import { trayKeyOf } from '../state/url';
 import { RackScene, rackCameraDistance } from './RackScene';
 import { TrayScene } from './TrayScene';
@@ -54,6 +55,7 @@ export default function Scene() {
   const selected = useExplorer((s) => s.selected);
   const trayKey = view === 'tray' ? trayKeyOf(selected, model) : null;
   const [contextLost, setContextLost] = useState(false);
+  const { t, segmentLabel } = useI18n();
   const layout = trayKey ? model.trayLayout(trayKey.split('.')[0]!) : undefined;
   // Tall shelves (PSU rows) and units that are only a front panel (the ToR switch) are seen from the front.
   const tall = layout ? (layout.heightRU ?? 1) > 1 || layout.slots.every((s) => s.face === 'front') : false;
@@ -67,8 +69,8 @@ export default function Scene() {
         role="img"
         aria-label={
           trayKey
-            ? `3D view of ${model.segmentLabel(model.parsePath(trayKey)![0]!)} opened. Use the arrow keys to step through its parts.`
-            : '3D view of the rack. Use the list view or the arrow keys to select units.'
+            ? t('scene.trayOpened', { name: segmentLabel(model.parsePath(trayKey)![0]!) })
+            : t('scene.rack')
         }
         onPointerMissed={() => useExplorer.getState().setHovered(null)}
         onCreated={({ gl, invalidate }) => {
@@ -91,7 +93,7 @@ export default function Scene() {
       </Canvas>
       {contextLost && (
         <p className="notice context-lost" role="status">
-          The 3D view lost its graphics context. It comes back on its own; the list view still works.
+          {t('scene.contextLost')}
         </p>
       )}
     </>

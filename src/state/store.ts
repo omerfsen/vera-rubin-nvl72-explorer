@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { model } from '../data';
 import { DEFAULT_URL_STATE, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
+import { initialLang, storeLang, storedLang, type Lang } from '../i18n/lang';
 
 interface ExplorerState {
   view: View;
@@ -23,6 +24,9 @@ interface ExplorerState {
   page: string;
   setPage: (page: string) => void;
   embed: boolean;
+  /** Interface language. */
+  lang: Lang;
+  setLang: (lang: Lang) => void;
   toggleLayer: (layer: 'structure' | 'parts' | 'links') => void;
   select: (path: string) => void;
   setHovered: (key: string | null) => void;
@@ -43,6 +47,8 @@ interface ExplorerState {
 
 const initial =
   typeof window === 'undefined' ? DEFAULT_URL_STATE : readUrlState(window.location.search, model);
+const initialLanguage: Lang =
+  typeof window === 'undefined' ? 'en' : initialLang(initial.lang, storedLang(), window.navigator?.language);
 
 export const useExplorer = create<ExplorerState>((set, get) => ({
   view: initial.view,
@@ -74,6 +80,11 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   page: initial.page ?? '',
   setPage: (page) => set({ page }),
   embed: initial.embed ?? false,
+  lang: initialLanguage,
+  setLang: (lang) => {
+    storeLang(lang);
+    set({ lang });
+  },
   toggleLayer: (layer) => set({ layers: { ...get().layers, [layer]: !get().layers[layer] } }),
   select: (path) => {
     const segments = model.parsePath(path);
@@ -157,7 +168,9 @@ export function syncUrl(): () => void {
       step: s.step,
       page: s.page,
       embed: s.embed,
+      lang: s.lang,
     });
+    if (document.documentElement.lang !== s.lang) document.documentElement.lang = s.lang;
     if (search === window.location.search) return;
     window.history.replaceState(window.history.state, '', `${window.location.pathname}${search}${window.location.hash}`);
   };
