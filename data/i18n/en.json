@@ -5,6 +5,12 @@
       "label": "Language",
       "translated": "This text is translated from NVIDIA's English documentation. The English is authoritative."
     },
+    "theme": {
+      "label": "Colour theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
     "site": {
       "title": "Vera Rubin NVL72 Explorer",
       "tagline": "Every fact linked to NVIDIA's own documentation · unofficial, not affiliated with NVIDIA",

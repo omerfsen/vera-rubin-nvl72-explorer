@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { model } from '../data';
 import { DEFAULT_URL_STATE, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
 import { initialLang, storeLang, storedLang, type Lang } from '../i18n/lang';
+import { applyTheme, darkQuery, resolveTheme, storedThemePref, storeThemePref, type Theme, type ThemePref } from '../theme';
 
 interface ExplorerState {
   view: View;
@@ -27,6 +28,10 @@ interface ExplorerState {
   /** Interface language. */
   lang: Lang;
   setLang: (lang: Lang) => void;
+  /** Colour theme the viewer chose, and the theme it resolves to now. */
+  themePref: ThemePref;
+  theme: Theme;
+  setThemePref: (pref: ThemePref) => void;
   toggleLayer: (layer: 'structure' | 'parts' | 'links') => void;
   select: (path: string) => void;
   setHovered: (key: string | null) => void;
@@ -50,7 +55,15 @@ const initial =
 const initialLanguage: Lang =
   typeof window === 'undefined' ? 'en' : initialLang(initial.lang, storedLang(), window.navigator?.language);
 
+const initialThemePref: ThemePref = typeof window === 'undefined' ? 'system' : storedThemePref();
+
 export const useExplorer = create<ExplorerState>((set, get) => ({
+  themePref: initialThemePref,
+  theme: resolveTheme(initialThemePref, darkQuery()?.matches ?? null),
+  setThemePref: (pref) => {
+    storeThemePref(pref);
+    set({ themePref: pref, theme: resolveTheme(pref, darkQuery()?.matches ?? null) });
+  },
   view: initial.view,
   selected: initial.select,
   hovered: null,
@@ -177,4 +190,21 @@ export function syncUrl(): () => void {
   // Canonicalize once at start, e.g. drop an invalid ?select= from a shared link.
   write(useExplorer.getState());
   return useExplorer.subscribe(write);
+}
+
+/** Keep the page root on the current theme, and follow the OS while System is chosen. */
+export function syncTheme(): () => void {
+  applyTheme(useExplorer.getState().theme);
+  const unsubscribe = useExplorer.subscribe((s) => applyTheme(s.theme));
+  const query = darkQuery();
+  const onChange = () => {
+    const s = useExplorer.getState();
+    const theme = resolveTheme(s.themePref, query?.matches ?? null);
+    if (theme !== s.theme) useExplorer.setState({ theme });
+  };
+  query?.addEventListener('change', onChange);
+  return () => {
+    unsubscribe();
+    query?.removeEventListener('change', onChange);
+  };
 }

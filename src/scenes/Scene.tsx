@@ -8,7 +8,7 @@ import { useI18n } from '../i18n';
 import { trayKeyOf } from '../state/url';
 import { RackScene, rackCameraDistance } from './RackScene';
 import { TrayScene } from './TrayScene';
-import { SCENE_COLORS } from './geometry';
+import { useSceneTheme } from './useSceneTheme';
 
 const FOV = 38;
 const RACK_DISTANCE = rackCameraDistance(FOV);
@@ -83,8 +83,7 @@ export default function Scene() {
           });
         }}
       >
-        <color attach="background" args={[SCENE_COLORS.background]} />
-        <hemisphereLight args={[SCENE_COLORS.skyLight, SCENE_COLORS.groundLight, 0.9]} />
+        <ThemeColors />
         <directionalLight position={[2.5, 3, 4]} intensity={1.6} />
         <directionalLight position={[-3, 1, -2]} intensity={0.4} />
         {trayKey ? <TrayScene key={trayKey} trayKey={trayKey} /> : <RackScene rear={view === 'rear'} />}
@@ -96,6 +95,19 @@ export default function Scene() {
           {t('scene.contextLost')}
         </p>
       )}
+    </>
+  );
+}
+
+/** Background and sky light for the current theme; redraws once when the theme changes. */
+function ThemeColors() {
+  const { scene } = useSceneTheme();
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => invalidate(), [scene, invalidate]);
+  return (
+    <>
+      <color key={`bg-${scene.background}`} attach="background" args={[scene.background]} />
+      <hemisphereLight key={`sky-${scene.skyLight}`} args={[scene.skyLight, scene.groundLight, 0.9]} />
     </>
   );
 }

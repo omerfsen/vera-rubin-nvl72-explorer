@@ -97,7 +97,8 @@ export const NETWORK_COLORS: Record<string, string> = display.colors.networks;
 /** Ports where the guide's table and figure disagree about this network. */
 export const CONFLICT_COLOR = display.colors.conflict;
 /** Everything not on the highlighted network. */
-export const DIM_COLOR = display.colors.dim;
+/** Colour of parts off the shown network, per theme. */
+export const DIM_COLORS: Record<'light' | 'dark', string> = display.colors.dim;
 
 /** How far a selected unit slides out of the rack, in metres. */
 export const SLIDE_OUT = 0.12;
@@ -113,4 +114,6 @@ export function ledColor(led: { color: string; unlit?: boolean }): string {
 /** Rear part styling from data/display.json. */
 export const REAR_STYLE = display.rear;
 /** Scene colours (background, frame, floor, tray shell) from data/display.json. */
-export const SCENE_COLORS = display.colors.scene;
+/** 3D scene colours (background, lights, frame, tray shell) per theme. */
+export const SCENE_THEMES = display.colors.scene;
+export type SceneColors = (typeof SCENE_THEMES)['dark'];

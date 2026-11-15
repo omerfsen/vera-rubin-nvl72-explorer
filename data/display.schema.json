@@ -42,8 +42,23 @@
           "pattern": "^#[0-9a-f]{6}$"
         },
         "dim": {
-          "type": "string",
-          "pattern": "^#[0-9a-f]{6}$"
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dark",
+            "light"
+          ],
+          "description": "Colour of parts off the shown network, per theme.",
+          "properties": {
+            "dark": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "light": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            }
+          }
         },
         "conflict": {
           "type": "string",
@@ -95,52 +110,116 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "background",
-            "skyLight",
-            "groundLight",
-            "floor",
-            "rackFrame",
-            "handles",
-            "trayBase",
-            "trayWall",
-            "rearBezel"
+            "dark",
+            "light"
           ],
+          "description": "3D scene colours per theme.",
           "properties": {
-            "background": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
+            "dark": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "background",
+                "skyLight",
+                "groundLight",
+                "floor",
+                "rackFrame",
+                "handles",
+                "trayBase",
+                "trayWall",
+                "rearBezel"
+              ],
+              "properties": {
+                "background": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "skyLight": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "groundLight": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "floor": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "rackFrame": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "handles": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "trayBase": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "trayWall": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "rearBezel": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                }
+              }
             },
-            "skyLight": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
-            },
-            "groundLight": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
-            },
-            "floor": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
-            },
-            "rackFrame": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
-            },
-            "handles": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
-            },
-            "trayBase": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
-            },
-            "trayWall": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
-            },
-            "rearBezel": {
-              "type": "string",
-              "pattern": "^#[0-9a-f]{6}$"
+            "light": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "background",
+                "skyLight",
+                "groundLight",
+                "floor",
+                "rackFrame",
+                "handles",
+                "trayBase",
+                "trayWall",
+                "rearBezel"
+              ],
+              "properties": {
+                "background": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "skyLight": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "groundLight": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "floor": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "rackFrame": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "handles": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "trayBase": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "trayWall": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                },
+                "rearBezel": {
+                  "type": "string",
+                  "pattern": "^#[0-9a-f]{6}$"
+                }
+              }
             }
           }
         }

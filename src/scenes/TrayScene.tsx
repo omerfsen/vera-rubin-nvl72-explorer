@@ -1,3 +1,4 @@
+import { useSceneTheme } from './useSceneTheme';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useThree, type ThreeEvent } from '@react-three/fiber';
 import { Html, QuadraticBezierLine } from '@react-three/drei';
@@ -9,12 +10,10 @@ import { i18nFor, useI18n, type I18n } from '../i18n';
 import { isPartSelected, partColor } from './colors';
 import {
   CONFLICT_COLOR,
-  DIM_COLOR,
   HOVER_COLOR,
   ledColor,
   NETWORK_COLORS,
   LINK_COLORS,
-  SCENE_COLORS,
   SELECTED_COLOR,
   TYPE_COLORS,
   TRAY_DEPTH,
@@ -41,6 +40,7 @@ function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: P
   const select = useExplorer((s) => s.select);
   const setHovered = useExplorer((s) => s.setHovered);
   const network = useExplorer((s) => s.network);
+  const { dim } = useSceneTheme();
   const base = useMemo(() => new Color(partColor(items[0]!.slot.component)), [items]);
   // With the network overlay on, parts on the network take its colour (or the
   // conflict colour), parts of a unit on the network (the ToR switch's ports)
@@ -51,10 +51,10 @@ function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: P
     const id = items[0]!.slot.component;
     const owner = memberOf(id);
     const color = NETWORK_COLORS[network] ?? '#ffffff';
-    if (!owner) return DIM_COLOR;
-    if (owner !== id) return `#${new Color(color).lerp(new Color(DIM_COLOR), 0.5).getHexString()}`;
+    if (!owner) return dim;
+    if (owner !== id) return `#${new Color(color).lerp(new Color(dim), 0.5).getHexString()}`;
     return members.get(id)!.alternative ? CONFLICT_COLOR : color;
-  }, [network, items]);
+  }, [network, items, dim]);
 
   useLayoutEffect(() => {
     const mesh = ref.current;
@@ -119,13 +119,14 @@ function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: P
 /** Base plate, side and rear walls, and the front panel of the open tray. */
 function TrayShell({ heightRU, frontColor }: { heightRU: number; frontColor: string }) {
   const wall = 0.012;
+  const { scene } = useSceneTheme();
   const TRAY_HEIGHT_RU = TRAY_HEIGHT * heightRU;
   const frontHeight = heightRU > 1 ? TRAY_HEIGHT * 0.12 : TRAY_HEIGHT_RU;
   const parts: { position: [number, number, number]; size: [number, number, number]; color: string }[] = [
-    { position: [0, 0, 0], size: [TRAY_WIDTH, 0.01, TRAY_DEPTH], color: SCENE_COLORS.trayBase },
-    { position: [-TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: SCENE_COLORS.trayWall },
-    { position: [TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: SCENE_COLORS.trayWall },
-    { position: [0, TRAY_HEIGHT_RU / 2, -TRAY_DEPTH / 2], size: [TRAY_WIDTH, TRAY_HEIGHT_RU, wall], color: SCENE_COLORS.trayWall },
+    { position: [0, 0, 0], size: [TRAY_WIDTH, 0.01, TRAY_DEPTH], color: scene.trayBase },
+    { position: [-TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: scene.trayWall },
+    { position: [TRAY_WIDTH / 2, TRAY_HEIGHT_RU / 2, 0], size: [wall, TRAY_HEIGHT_RU, TRAY_DEPTH], color: scene.trayWall },
+    { position: [0, TRAY_HEIGHT_RU / 2, -TRAY_DEPTH / 2], size: [TRAY_WIDTH, TRAY_HEIGHT_RU, wall], color: scene.trayWall },
     // The front of a tall shelf is mostly its parts (PSUs), so only a low lip is drawn there.
     { position: [0, frontHeight / 2, TRAY_DEPTH / 2], size: [TRAY_WIDTH, frontHeight, wall], color: frontColor },
   ];
@@ -280,6 +281,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
   }, [layout, trayKey, trayId]);
   const placed = useMemo(() => groups.flatMap(([, items]) => items), [groups]);
   const layers = useExplorer((s) => s.layers);
+  const floor = useSceneTheme().scene.floor;
   const heightRU = layout?.heightRU ?? 1;
   const invalidate = useThree((s) => s.invalidate);
   useEffect(() => invalidate(), [layers, invalidate]);
@@ -299,7 +301,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
       <Labels placed={placed} heightRU={heightRU} />
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
-        <meshStandardMaterial color={SCENE_COLORS.floor} />
+        <meshStandardMaterial color={floor} />
       </mesh>
     </group>
   );
