@@ -373,3 +373,17 @@ button { font: inherit; color: inherit; }
 .net-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--net); }
 .network-info { border: 2px solid; border-radius: var(--radius); padding: 10px 12px; margin-bottom: 14px; }
 .network-info h3 { color: var(--text); text-transform: none; letter-spacing: 0; font-size: 0.95rem; }
+
+.rear-label span {
+  display: block;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text);
+  background: rgb(22 26 32 / 0.8);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  pointer-events: none;
+  user-select: none;
+}
+.rear-label { pointer-events: none; }

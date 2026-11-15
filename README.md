@@ -107,9 +107,14 @@ VITE_SHOW_OFFICIAL_FIGURES=true npm run build
   in NVIDIA's top and front views but is not traced from them or to scale.
 - Switch trays and power shelves open the same way. Power shelf PSUs are
   numbered 1 to 6 as in NVIDIA's service manual.
-- **Rear** shows the back of the rack: the NVLink cable cartridges, the two
-  liquid cooling manifolds and the bus bar, with every unit's NVLink, coolant
-  and power connection to them. Selecting a unit lights up its own.
+- **Rear** shows the back of the rack as in NVIDIA's rear view (Fig. 2): the
+  NVLink cable cartridges, the two liquid cooling manifolds with their FD83
+  hose connectors, the bus bar, their supports, the rear bezel and seismic
+  bracing. Every unit's back carries its own connectors (NVLink connectors,
+  water inlet and outlet, bus bar or power connector; AC whips and the 54 V DC
+  output on power shelves), each wired to the part it plugs into. Select a
+  compute tray to see its NVLinks reach all 9 switch trays through the
+  cartridge, or a switch tray to see it reach all 18 compute trays.
 - **Networks** (the bar under the breadcrumb) highlights one of the seven
   networks: in the rack, the units with a port on it; inside a tray, the exact
   ports. The panel lists what is on it, with counts per rack. The BlueField-4

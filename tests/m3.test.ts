@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { model, topology } from '../src/data';
 import { useExplorer } from '../src/state/store';
 import { trayKeyOf } from '../src/state/url';
-import { rearBoxes, rearSegments } from '../src/scenes/RearScene';
+import { fabricSegments, rearBoxes, rearSegments, unitConnectorBoxes } from '../src/scenes/RearScene';
 
 const descendants = (id: string): string[] =>
   topology.components.filter((c) => model.ancestorsOf(c.id).includes(id)).map((c) => c.id);
@@ -72,25 +72,54 @@ describe('rear of the rack', () => {
   const boxes = rearBoxes();
   const segments = rearSegments(boxes);
 
-  it('draws the cartridges, two manifolds and the bus bar', () => {
-    expect(boxes.map((b) => b.part.component).sort()).toEqual(
-      ['bus-bar', 'liquid-cooling-manifold', 'liquid-cooling-manifold', 'nvlink-cable-cartridge'].sort(),
-    );
+  it('draws the cartridges, two manifolds, the bus bar, FD83 connectors, supports, bracing and bezel', () => {
+    const count = (id: string) => boxes.filter((b) => b.part.component === id).length;
+    expect(count('nvlink-cable-cartridge')).toBe(1);
+    expect(count('liquid-cooling-manifold')).toBe(2);
+    expect(count('bus-bar')).toBe(1);
+    expect(count('fd83-connector')).toBe(4);
+    expect(count('rear-supports')).toBe(2);
+    expect(count('seismic-bracing')).toBe(1);
+    expect(count('rear-bezel')).toBe(1);
     for (const b of boxes) expect(b.size[1], b.part.component).toBeGreaterThan(0);
   });
 
-  it('connects every compute and switch tray to the cartridge over NVLink', () => {
-    const nv = segments.filter((s) => s.kind === 'nvlink');
-    expect(nv).toHaveLength(18 + 9);
-    expect(new Set(nv.map((s) => s.rearPath))).toEqual(new Set(['nvlink-cable-cartridge']));
+  it('puts the connectors from the guide on the back of every unit', () => {
+    const c = unitConnectorBoxes();
+    const of = (suffix: string) => c.filter((x) => x.path.endsWith(suffix));
+    expect(of('/ct-nvlink-connectors')).toHaveLength(18);
+    expect(of('/ct-cold-water-inlet')).toHaveLength(18);
+    expect(of('/st-power-connector')).toHaveLength(9);
+    expect(c.filter((x) => x.kind === 'ac')).toHaveLength(4 * 2);
+    for (const x of c) expect(model.parsePath(x.path), x.path).not.toBeNull();
   });
 
-  it('cools every compute and switch tray from both manifolds and powers them from the bus bar', () => {
+  it('only wires a connector to a rear part that a type-level connection names', () => {
+    const layout = topology.rearLayout!;
+    for (const uc of layout.unitConnectors ?? []) {
+      if (uc.toPart === undefined) continue;
+      const rear = layout.parts[uc.toPart]!.component;
+      const ok = topology.connections.some(
+        (x) => (x.from === uc.unit && x.to === rear) || (x.from === rear && x.to === uc.unit),
+      );
+      expect(ok, `${uc.component} -> ${rear}`).toBe(true);
+      expect(model.getComponent(uc.component)?.parent, uc.component).toBe(uc.unit);
+    }
+  });
+
+  it('connects trays to the cartridge, manifolds and bus bar, and power shelves to the bus bar', () => {
+    expect(segments.filter((s) => s.kind === 'nvlink')).toHaveLength(18 + 9);
     expect(segments.filter((s) => s.kind === 'cooling')).toHaveLength((18 + 9) * 2);
-    const power = segments.filter((s) => s.kind === 'power');
-    expect(power.filter((s) => s.unitKey.startsWith('power-shelf.'))).toHaveLength(4);
-    expect(power.filter((s) => s.unitKey.startsWith('compute-tray.'))).toHaveLength(18);
-    expect(power.filter((s) => s.unitKey.startsWith('switch-tray.') && s.assumed)).toHaveLength(9);
+    expect(segments.filter((s) => s.kind === 'power')).toHaveLength(18 + 9 + 4);
+    expect(segments.filter((s) => s.kind === 'ac')).toHaveLength(8);
+  });
+
+  it('fans a compute tray out to all 9 switch trays, and a switch tray to all 18 compute trays', () => {
+    expect(fabricSegments('compute-tray.7', boxes).map((s) => s.rearPath)).toEqual(
+      Array.from({ length: 9 }, (_, i) => `switch-tray.${i + 1}`),
+    );
+    expect(fabricSegments('switch-tray.2', boxes)).toHaveLength(18);
+    expect(fabricSegments('power-shelf.1', boxes)).toEqual([]);
   });
 
   describe('view', () => {

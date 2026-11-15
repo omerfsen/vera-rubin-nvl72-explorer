@@ -966,6 +966,70 @@
       "note": "Count from the single label in Fig. 5."
     },
     {
+      "id": "ct-nvlink-connectors",
+      "type": "connector",
+      "name": "NVLink connectors (compute tray)",
+      "count": null,
+      "parent": "compute-tray",
+      "description": "Connectors at the back of the compute tray that plug into the NVLink cable cartridges.",
+      "function": "Carry the tray's NVLinks to the cable cartridges, and through them to the NVLink switch trays.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+        "section": "2.1 NVLink Networking"
+      },
+      "note": "The guide does not give the number of connectors."
+    },
+    {
+      "id": "ct-cold-water-inlet",
+      "type": "connector",
+      "name": "Cold water inlet (compute tray)",
+      "count": 1,
+      "parent": "compute-tray",
+      "description": "Cold water inlet at the rear of the compute tray.",
+      "function": "Brings coolant from the rack's manifold into the tray.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
+      }
+    },
+    {
+      "id": "ct-hot-water-outlet",
+      "type": "connector",
+      "name": "Hot water outlet (compute tray)",
+      "count": 1,
+      "parent": "compute-tray",
+      "description": "Hot water outlet at the rear of the compute tray.",
+      "function": "Returns coolant from the tray to the rack's manifold.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
+      }
+    },
+    {
+      "id": "ct-bus-bar-connector",
+      "type": "connector",
+      "name": "Bus bar connector (compute tray)",
+      "count": 1,
+      "parent": "compute-tray",
+      "description": "Bus bar connector at the rear of the compute tray.",
+      "function": "Takes the tray's 54 V DC power from the rack's bus bar.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
+      }
+    },
+    {
       "id": "switch-tray",
       "type": "switch-tray",
       "name": "NVLink 6 switch tray",
@@ -1331,6 +1395,71 @@
       "note": "Fig. 7 labels it 'SWB w/ PDB' and does not expand the abbreviations; 'switch board with power distribution board' is this app's reading."
     },
     {
+      "id": "st-nvlink-connectors",
+      "type": "connector",
+      "name": "NVLink connectors (switch tray)",
+      "count": null,
+      "parent": "switch-tray",
+      "description": "Connectors at the back of the switch tray that plug into the NVLink cable cartridges.",
+      "function": "Carry the NVSwitch ports to the cable cartridges, and through them to the compute trays.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+        "section": "2.1 NVLink Networking"
+      },
+      "note": "The guide does not give the number of connectors."
+    },
+    {
+      "id": "st-cold-water-inlet",
+      "type": "connector",
+      "name": "Cold water inlet (switch tray)",
+      "count": 1,
+      "parent": "switch-tray",
+      "description": "Cold water inlet at the rear of the switch tray.",
+      "function": "Brings coolant from the rack's manifold into the tray.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+      }
+    },
+    {
+      "id": "st-hot-water-outlet",
+      "type": "connector",
+      "name": "Hot water outlet (switch tray)",
+      "count": 1,
+      "parent": "switch-tray",
+      "description": "Hot water outlet at the rear of the switch tray.",
+      "function": "Returns coolant from the tray to the rack's manifold.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+      }
+    },
+    {
+      "id": "st-power-connector",
+      "type": "connector",
+      "name": "Power connector (switch tray)",
+      "count": 1,
+      "parent": "switch-tray",
+      "description": "Power connector at the rear of the switch tray.",
+      "function": "Takes power into the tray.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+      },
+      "note": "Fig. 7 labels it; that it connects to the bus bar is not stated."
+    },
+    {
       "id": "power-shelf",
       "type": "power-shelf",
       "name": "Power shelf",
@@ -1506,6 +1635,53 @@
       "note": "Count read from Fig. 8 and the service manual's power shelf figure, which show one module per shelf. The guide does not say which network the management cable goes to."
     },
     {
+      "id": "ac-power-whip",
+      "type": "connector",
+      "name": "AC power whip",
+      "count": 2,
+      "parent": "power-shelf",
+      "description": "AC power cable that feeds the power shelf from a remote power panel.",
+      "function": "Supplies the shelf: two 100 A whips at 415-480 V AC per shelf.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Current",
+          "value": 100,
+          "unit": "A"
+        },
+        {
+          "label": "Voltage",
+          "value": "415-480 V AC"
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+        "section": "1.4 Power Shelves"
+      }
+    },
+    {
+      "id": "ps-dc-output",
+      "type": "connector",
+      "name": "54 V DC output (power shelf)",
+      "count": 1,
+      "parent": "power-shelf",
+      "description": "The power shelf's 54 V DC output into the bus bar.",
+      "function": "Feeds the shelf's converted 54 V DC into the bus bar, which distributes it to the rack components.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Voltage",
+          "value": 54,
+          "unit": "V DC"
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+        "section": "1.4 Power Shelves"
+      },
+      "note": "The guide says the shelf's 54 V DC output is distributed through the bus bar but does not describe the connector."
+    },
+    {
       "id": "tor-switch",
       "type": "tor-switch",
       "name": "Top-of-rack Ethernet switch",
@@ -1610,6 +1786,78 @@
           "section": "1.4 Power Shelves"
         }
       ],
+      "rearSide": true
+    },
+    {
+      "id": "fd83-connector",
+      "type": "connector",
+      "name": "FD83 liquid cooling hose connector",
+      "count": null,
+      "parent": "rack",
+      "description": "Hose connectors on the liquid cooling manifolds, labelled 'FD83 connectors for liquid cooling hoses' in Fig. 2.",
+      "function": "Connect the rack's manifolds to the facility's liquid cooling hoses.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+        "section": "1.1 Rack Configuration, Fig. 2 (Rack Rear View)",
+        "figure": "hardware-rack-rear-VRNVL72.png"
+      },
+      "note": "Fig. 2 shows them at the ends of the manifolds; the guide does not give a count. This app draws one at each end of each manifold.",
+      "rearSide": true
+    },
+    {
+      "id": "rear-supports",
+      "type": "structure",
+      "name": "Manifold, cable cartridge and bus bar supports",
+      "count": null,
+      "parent": "rack",
+      "description": "The structure that holds the manifolds, cable cartridges and bus bar at the rear, labelled in Fig. 2.",
+      "function": "Mechanical support for the rear parts.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+        "section": "1.1 Rack Configuration, Fig. 2 (Rack Rear View)",
+        "figure": "hardware-rack-rear-VRNVL72.png"
+      },
+      "note": "Shape and count not given; drawn as crossbars.",
+      "rearSide": true
+    },
+    {
+      "id": "rear-bezel",
+      "type": "structure",
+      "name": "Rear bezel",
+      "count": null,
+      "parent": "rack",
+      "description": "The removable cover pieces on the back of the rack, labelled 'Rear Bezel' in Fig. 2.",
+      "function": "Covers the rear of the rack.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+        "section": "1.1 Rack Configuration, Fig. 2 (Rack Rear View)",
+        "figure": "hardware-rack-rear-VRNVL72.png"
+      },
+      "note": "Drawn as a see-through panel in the Structure layer.",
+      "rearSide": true
+    },
+    {
+      "id": "seismic-bracing",
+      "type": "structure",
+      "name": "Seismic bracing",
+      "count": null,
+      "parent": "rack",
+      "description": "Bracing under the rack, labelled in Fig. 1 and Fig. 2.",
+      "function": "Holds the rack in place.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+        "section": "1.1 Rack Configuration, Fig. 2 (Rack Rear View)",
+        "figure": "hardware-rack-rear-VRNVL72.png"
+      },
+      "note": "Drawn as a base frame under the rack.",
       "rearSide": true
     }
   ],
@@ -2015,6 +2263,22 @@
         {
           "component": "ct-port-lan-1gbe",
           "reason": "Table 2.3 lists it, but no figure shows where it is (docs/OPEN_QUESTIONS.md item 4)."
+        },
+        {
+          "component": "ct-nvlink-connectors",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        {
+          "component": "ct-cold-water-inlet",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        {
+          "component": "ct-hot-water-outlet",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        {
+          "component": "ct-bus-bar-connector",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
         }
       ],
       "slots": [
@@ -3013,6 +3277,22 @@
         {
           "component": "cpu-erot",
           "reason": "Fig. 7 does not show where the CPU ERoT is."
+        },
+        {
+          "component": "st-nvlink-connectors",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        {
+          "component": "st-cold-water-inlet",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        {
+          "component": "st-hot-water-outlet",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        {
+          "component": "st-power-connector",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
         }
       ],
       "points": [
@@ -3693,6 +3973,16 @@
           "assumed": true,
           "note": "The shelf converts AC into a 54 V DC output to the bus bar (1.4); the wiring from each PSU is not shown."
         }
+      ],
+      "notPlaced": [
+        {
+          "component": "ac-power-whip",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        },
+        {
+          "component": "ps-dc-output",
+          "reason": "On the back face of the unit: drawn in the rack's Rear view, and as a connection end point on the tray's rear edge here."
+        }
       ]
     }
   },
@@ -3703,7 +3993,7 @@
       "figure": "hardware-rack-rear-VRNVL72.png"
     },
     "assumed": true,
-    "note": "Schematic placement behind the units, not to scale. Fig. 2 shows the cable cartridges in the middle of the rear, two liquid cooling manifolds and the power bus bar; their exact positions and spans are not given.",
+    "note": "Schematic placement behind the units, not to scale. Fig. 2 shows the cable cartridges in the middle of the rear, two liquid cooling manifolds with FD83 hose connectors, the power bus bar, their supports, the rear bezel and seismic bracing; exact positions, spans and counts are not given. Which manifold carries supply and which return is not stated.",
     "parts": [
       {
         "component": "nvlink-cable-cartridge",
@@ -3732,6 +4022,156 @@
         "w": 0.05,
         "from": "top",
         "to": "bottom"
+      },
+      {
+        "component": "fd83-connector",
+        "x": -0.42,
+        "w": 0.09,
+        "at": "top",
+        "heightRU": 1.2
+      },
+      {
+        "component": "fd83-connector",
+        "x": -0.42,
+        "w": 0.09,
+        "at": "bottom",
+        "heightRU": 1.2
+      },
+      {
+        "component": "fd83-connector",
+        "x": 0.42,
+        "w": 0.09,
+        "at": "top",
+        "heightRU": 1.2
+      },
+      {
+        "component": "fd83-connector",
+        "x": 0.42,
+        "w": 0.09,
+        "at": "bottom",
+        "heightRU": 1.2
+      },
+      {
+        "component": "rear-supports",
+        "x": 0.0,
+        "w": 0.95,
+        "at": "top",
+        "heightRU": 0.6,
+        "layer": "structure"
+      },
+      {
+        "component": "rear-supports",
+        "x": 0.0,
+        "w": 0.95,
+        "at": "bottom",
+        "heightRU": 0.6,
+        "layer": "structure"
+      },
+      {
+        "component": "seismic-bracing",
+        "x": 0.0,
+        "w": 1.0,
+        "at": "below",
+        "heightRU": 1.5,
+        "layer": "structure"
+      },
+      {
+        "component": "rear-bezel",
+        "x": 0.0,
+        "w": 1.0,
+        "from": "top",
+        "to": "bottom",
+        "layer": "structure"
+      }
+    ],
+    "unitConnectors": [
+      {
+        "unit": "compute-tray",
+        "component": "ct-nvlink-connectors",
+        "x": 0.0,
+        "w": 0.34,
+        "kind": "nvlink",
+        "toPart": 0
+      },
+      {
+        "unit": "compute-tray",
+        "component": "ct-hot-water-outlet",
+        "x": -0.42,
+        "w": 0.06,
+        "kind": "cooling",
+        "toPart": 1
+      },
+      {
+        "unit": "compute-tray",
+        "component": "ct-cold-water-inlet",
+        "x": 0.42,
+        "w": 0.06,
+        "kind": "cooling",
+        "toPart": 2
+      },
+      {
+        "unit": "compute-tray",
+        "component": "ct-bus-bar-connector",
+        "x": 0.3,
+        "w": 0.05,
+        "kind": "power",
+        "toPart": 3
+      },
+      {
+        "unit": "switch-tray",
+        "component": "st-nvlink-connectors",
+        "x": 0.0,
+        "w": 0.34,
+        "kind": "nvlink",
+        "toPart": 0
+      },
+      {
+        "unit": "switch-tray",
+        "component": "st-hot-water-outlet",
+        "x": -0.42,
+        "w": 0.06,
+        "kind": "cooling",
+        "toPart": 1
+      },
+      {
+        "unit": "switch-tray",
+        "component": "st-cold-water-inlet",
+        "x": 0.42,
+        "w": 0.06,
+        "kind": "cooling",
+        "toPart": 2
+      },
+      {
+        "unit": "switch-tray",
+        "component": "st-power-connector",
+        "x": 0.3,
+        "w": 0.05,
+        "kind": "power",
+        "toPart": 3
+      },
+      {
+        "unit": "power-shelf",
+        "component": "ac-power-whip",
+        "index": 1,
+        "x": -0.32,
+        "w": 0.06,
+        "kind": "ac"
+      },
+      {
+        "unit": "power-shelf",
+        "component": "ac-power-whip",
+        "index": 2,
+        "x": -0.18,
+        "w": 0.06,
+        "kind": "ac"
+      },
+      {
+        "unit": "power-shelf",
+        "component": "ps-dc-output",
+        "x": 0.3,
+        "w": 0.08,
+        "kind": "power",
+        "toPart": 3
       }
     ]
   }

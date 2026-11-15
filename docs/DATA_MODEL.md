@@ -98,6 +98,15 @@ by, for example each compute tray to the cable cartridge (NVLink), to both
 manifolds (coolant) and to the bus bar (power). The placement is schematic and
 marked `assumed`.
 
+A rear part can also be a short piece fixed `at` the `top`, `bottom` or
+`below` the stack with a `heightRU` (FD83 connectors, supports, seismic
+bracing), and can belong to the `structure` layer instead of `parts`.
+`rearLayout.unitConnectors` puts connectors on the back face of every unit of
+a type (`unit`, `component`, `x`, `w`, `kind`) and names the rear part each
+one plugs into by its index in `parts` (`toPart`); AC whips have none, since
+they leave the rack. A test checks that each `toPart` matches a type-level
+connection in the data.
+
 `trayLayouts` also cover the switch tray and the power shelf. A layout can set
 `heightRU` (the power shelf is 3); stacked parts such as PSU rows use `y` as
 their bottom elevation.

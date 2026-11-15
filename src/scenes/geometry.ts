@@ -114,6 +114,7 @@ export const LINK_COLORS: Record<string, string> = {
   coolant: '#4aa8ff',
   cooling: '#4aa8ff',
   power: '#ff6b6b',
+  ac: '#ff9f43',
 };
 
 export const LINK_NAMES: Record<string, string> = {
@@ -124,6 +125,7 @@ export const LINK_NAMES: Record<string, string> = {
   nvlink: 'NVLink (to the cable cartridge)',
   coolant: 'Coolant',
   power: 'Power',
+  ac: 'AC power whips (to the remote power panel)',
 };
 
 /** Colour per rear part type. */
@@ -131,6 +133,8 @@ export const REAR_COLORS: Record<string, string> = {
   'cable-cartridge': '#6b5a3a',
   manifold: '#2f6f9a',
   'bus-bar': '#a8743c',
+  connector: '#7fb8d8',
+  structure: '#3a3f47',
 };
 
 /** Overlay colour per network (numbered 1 to 7 as in the guide). */

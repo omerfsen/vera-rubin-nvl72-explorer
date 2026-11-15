@@ -57,7 +57,9 @@ export type ComponentType =
   | 'bus-bar'
   | 'battery'
   | 'memory'
-  | 'board';
+  | 'board'
+  | 'connector'
+  | 'structure';
 
 export interface Component extends Provenance {
   id: string;
@@ -162,12 +164,31 @@ export interface RearPart {
   index?: number;
   x: number;
   w: number;
-  from: string;
-  to: string;
+  /** A span from one unit (or "top") to another (or "bottom")... */
+  from?: string;
+  to?: string;
+  /** ...or a short piece at the top, the bottom, or below the stack. */
+  at?: 'top' | 'bottom' | 'below';
+  heightRU?: number;
+  /** Which layer toggle shows it (default parts). */
+  layer?: 'parts' | 'structure';
+}
+
+/** A connector on the back face of every unit of one type, and the rear part it plugs into. */
+export interface UnitConnector {
+  unit: string;
+  component: string;
+  index?: number;
+  x: number;
+  w: number;
+  kind: 'nvlink' | 'cooling' | 'power' | 'ac';
+  /** Index into RearLayout.parts; omitted for AC whips, which leave the rack. */
+  toPart?: number;
 }
 
 export interface RearLayout extends Provenance {
   parts: RearPart[];
+  unitConnectors?: UnitConnector[];
 }
 
 export interface Topology {

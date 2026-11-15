@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useThree, type ThreeEvent } from '@react-three/fiber';
-import { Color, InstancedMesh, Object3D } from 'three';
+import { Html } from '@react-three/drei';
+import { Color, InstancedMesh, Object3D, Quaternion, Vector3 } from 'three';
 import { model } from '../data';
 import type { RearPart } from '../data/types';
 import { useExplorer } from '../state/store';
@@ -10,41 +11,78 @@ const DRAG_THRESHOLD = 6;
 /** Rear parts stand well behind the units so the connections between them are visible. */
 const REAR_Z = -UNIT_DEPTH / 2 - 0.24;
 const ROD = 0.012;
+const BACK_FACE = -UNIT_DEPTH / 2;
 const scratch = new Object3D();
+const ALONG = new Vector3(0, 0, 1);
 
-/** Vertical extent (top y, bottom y) of a span such as "compute-tray.1" to "compute-tray.18". */
-function spanY(from: string, to: string): [number, number] {
+type Vec = [number, number, number];
+
+/** Vertical extent (top y, bottom y) of a rear part: a span between units, or a short piece at the top, bottom or below. */
+function partY(part: RearPart): [number, number] {
   const top = (model.totalRU * RU) / 2;
+  if (part.at) {
+    const h = (part.heightRU ?? 1) * RU;
+    if (part.at === 'top') return [top, top - h];
+    if (part.at === 'bottom') return [-top + h, -top];
+    return [-top - 0.02, -top - 0.02 - h]; // below the stack
+  }
   const unitTop = (key: string) => top - (model.rackUnitByKey.get(key)?.topRU ?? 0) * RU;
   const unitBottom = (key: string) => {
     const u = model.rackUnitByKey.get(key);
     return u ? top - (u.topRU + u.heightRU) * RU : -top;
   };
+  const from = part.from ?? 'top';
+  const to = part.to ?? 'bottom';
   return [from === 'top' ? top : unitTop(from), to === 'bottom' ? -top : unitBottom(to)];
+}
+
+/** Depth and z position per rear part type. */
+function partDepth(part: RearPart): { depth: number; z: number } {
+  const type = model.getComponent(part.component)?.type;
+  if (type === 'cable-cartridge') return { depth: 0.1, z: REAR_Z - 0.05 };
+  if (type === 'connector') return { depth: 0.07, z: REAR_Z - 0.025 };
+  if (type === 'structure') {
+    if (part.component === 'rear-bezel') return { depth: 0.01, z: REAR_Z - 0.2 };
+    if (part.component === 'seismic-bracing') return { depth: UNIT_DEPTH + 0.5, z: -0.2 };
+    return { depth: 0.03, z: REAR_Z - 0.13 };
+  }
+  return { depth: 0.05, z: REAR_Z - 0.025 };
 }
 
 export interface RearBox {
   part: RearPart;
+  /** Position in the data's rearLayout.parts list. */
+  partIndex: number;
   path: string;
-  position: [number, number, number];
-  size: [number, number, number];
+  layer: 'parts' | 'structure';
+  position: Vec;
+  size: Vec;
 }
 
 /** Boxes for every rear part in the data's rear layout. */
 export function rearBoxes(): RearBox[] {
-  return (model.topology.rearLayout?.parts ?? []).map((part) => {
-    const [yTop, yBottom] = spanY(part.from, part.to);
-    const depth = part.component === 'nvlink-cable-cartridge' ? 0.1 : 0.05;
+  return (model.topology.rearLayout?.parts ?? []).map((part, partIndex) => {
+    const [yTop, yBottom] = partY(part);
+    const { depth, z } = partDepth(part);
     return {
       part,
+      partIndex,
       path: model.pathForComponent(part.component) + (part.index ? `.${part.index}` : ''),
-      position: [part.x * FRAME_WIDTH, (yTop + yBottom) / 2, REAR_Z - depth / 2],
+      layer: part.layer ?? 'parts',
+      position: [part.x * FRAME_WIDTH, (yTop + yBottom) / 2, z],
       size: [part.w * FRAME_WIDTH, yTop - yBottom, depth],
     };
   });
 }
 
-function RearParts({ boxes }: { boxes: RearBox[] }) {
+interface Clickable {
+  path: string;
+  position: Vec;
+  size: Vec;
+}
+
+/** Instanced, clickable boxes with per-instance colour, hover and selection. */
+function ClickableBoxes({ items, colorOf }: { items: Clickable[]; colorOf: (i: number) => string }) {
   const ref = useRef<InstancedMesh>(null);
   const invalidate = useThree((s) => s.invalidate);
   const selected = useExplorer((s) => s.selected);
@@ -56,22 +94,22 @@ function RearParts({ boxes }: { boxes: RearBox[] }) {
     const mesh = ref.current;
     if (!mesh) return;
     const color = new Color();
-    boxes.forEach((b, i) => {
+    items.forEach((b, i) => {
       scratch.position.set(...b.position);
+      scratch.quaternion.identity();
       scratch.scale.set(...b.size);
       scratch.updateMatrix();
       mesh.setMatrixAt(i, scratch.matrix);
-      const type = model.getComponent(b.part.component)?.type ?? '';
-      if (selected === b.path) color.set(SELECTED_COLOR);
+      if (selected === b.path || selected.replace(/\.\d+$/, '') === b.path) color.set(SELECTED_COLOR);
       else if (hovered === b.path) color.set(HOVER_COLOR);
-      else color.set(REAR_COLORS[type] ?? '#666666');
+      else color.set(colorOf(i));
       mesh.setColorAt(i, color);
     });
     mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     mesh.computeBoundingSphere();
     invalidate();
-  }, [boxes, selected, hovered, invalidate]);
+  }, [items, selected, hovered, invalidate, colorOf]);
 
   useEffect(
     () => () => {
@@ -79,11 +117,12 @@ function RearParts({ boxes }: { boxes: RearBox[] }) {
     },
     [],
   );
-  const pathOf = (e: ThreeEvent<PointerEvent | MouseEvent>) => (e.instanceId === undefined ? null : (boxes[e.instanceId]?.path ?? null));
+  const pathOf = (e: ThreeEvent<PointerEvent | MouseEvent>) => (e.instanceId === undefined ? null : (items[e.instanceId]?.path ?? null));
+  if (items.length === 0) return null;
   return (
     <instancedMesh
       ref={ref}
-      args={[undefined, undefined, boxes.length]}
+      args={[undefined, undefined, items.length]}
       onPointerMove={(e) => {
         e.stopPropagation();
         const p = pathOf(e);
@@ -107,108 +146,217 @@ function RearParts({ boxes }: { boxes: RearBox[] }) {
   );
 }
 
+export interface UnitConnectorBox extends Clickable {
+  kind: string;
+  unitKey: string;
+  toPart?: number;
+}
+
+/** Connector boxes on the back face of every unit, from rearLayout.unitConnectors. */
+export function unitConnectorBoxes(): UnitConnectorBox[] {
+  const top = (model.totalRU * RU) / 2;
+  const out: UnitConnectorBox[] = [];
+  for (const c of model.topology.rearLayout?.unitConnectors ?? []) {
+    for (const unit of model.rackUnits.filter((u) => u.componentId === c.unit)) {
+      const y = top - (unit.topRU + unit.heightRU / 2) * RU;
+      const h = Math.min(unit.heightRU * RU * 0.6, RU * 0.6);
+      const within = model.pathForComponent(c.component).split('/').slice(1).join('/');
+      out.push({
+        path: `${unit.key}/${within}${c.index ? `.${c.index}` : ''}`,
+        kind: c.kind,
+        unitKey: unit.key,
+        position: [c.x * UNIT_WIDTH, y, BACK_FACE - 0.015],
+        size: [c.w * UNIT_WIDTH, h, 0.03],
+        toPart: c.toPart,
+      });
+    }
+  }
+  return out;
+}
+
 export interface RearSegment {
   kind: string;
   unitKey: string;
   rearPath: string;
-  assumed: boolean;
-  from: [number, number, number];
-  to: [number, number, number];
+  from: Vec;
+  to: Vec;
 }
 
 /**
- * One segment per (rack unit, rear part) pair named by a type-level
- * connection in the data, e.g. every compute tray to the cable cartridge.
+ * One rod per unit connector: from the connector to the rear part it plugs
+ * into (NVLink to the cartridge, water to a manifold, power to the bus bar),
+ * or away from the rack for the AC whips.
  */
 export function rearSegments(boxes: RearBox[]): RearSegment[] {
-  const rearIds = new Set(boxes.map((b) => b.part.component));
-  const top = (model.totalRU * RU) / 2;
   const segs: RearSegment[] = [];
-  for (const c of model.topology.connections) {
-    if (!c.to) continue;
-    const [rearId, unitType] = rearIds.has(c.from) ? [c.from, c.to] : rearIds.has(c.to) ? [c.to, c.from] : [null, null];
-    if (!rearId || !unitType || !model.isRackUnitType(unitType)) continue;
-    for (const unit of model.rackUnits.filter((u) => u.componentId === unitType)) {
-      const y = top - (unit.topRU + unit.heightRU / 2) * RU;
-      for (const box of boxes.filter((b) => b.part.component === rearId)) {
-        const [yTop, yBottom] = [box.position[1] + box.size[1] / 2, box.position[1] - box.size[1] / 2];
-        if (y > yTop || y < yBottom) continue;
-        const startX = Math.max(-UNIT_WIDTH / 2, Math.min(UNIT_WIDTH / 2, box.position[0] * 0.8));
-        segs.push({
-          kind: c.kind,
-          unitKey: unit.key,
-          rearPath: box.path,
-          assumed: c.assumed === true,
-          from: [startX, y, -UNIT_DEPTH / 2],
-          to: [box.position[0], y, box.position[2] + box.size[2] / 2],
-        });
-      }
+  for (const c of unitConnectorBoxes()) {
+    const start: Vec = [c.position[0], c.position[1], BACK_FACE - 0.03];
+    if (c.toPart === undefined) {
+      segs.push({ kind: c.kind, unitKey: c.unitKey, rearPath: 'remote-power-panel', from: start, to: [start[0] - 0.12, start[1] - 0.04, REAR_Z - 0.4] });
+      continue;
     }
+    const box = boxes.find((b) => b.partIndex === c.toPart);
+    if (!box) continue;
+    segs.push({
+      kind: c.kind,
+      unitKey: c.unitKey,
+      rearPath: box.path,
+      from: start,
+      to: [box.position[0], c.position[1], box.position[2] + box.size[2] / 2],
+    });
   }
   return segs;
 }
 
 /**
- * The rack's "veins" behind the units, as thin rods (lines are only 1 px wide
- * in WebGL). Rods of the selected unit or rear part are bright; the rest are
- * faint while something is selected.
+ * The NVLink fabric through the cartridge for one selected tray: a compute
+ * tray reaches all nine switch trays, a switch tray all eighteen compute
+ * trays (block diagram, section 1.2 Fig. 4, and section 1.3).
  */
-function RearLinks({ segments }: { segments: RearSegment[] }) {
-  const selected = useExplorer((s) => s.selected);
-  const first = selected.split('/')[0] ?? '';
-  const kinds = useMemo(() => [...new Set(segments.map((s) => s.kind))], [segments]);
-  return (
-    <group>
-      {kinds.flatMap((kind) =>
-        [true, false].map((active) => {
-          const list = segments.filter(
-            (s) => s.kind === kind && (selected === '' || s.unitKey === first || s.rearPath === selected) === active,
-          );
-          return list.length === 0 ? null : <Rods key={`${kind}-${active}`} list={list} color={LINK_COLORS[kind] ?? '#ffffff'} faint={!active} />;
-        }),
-      )}
-    </group>
-  );
+export function fabricSegments(unitKey: string, boxes: RearBox[]): RearSegment[] {
+  const unit = model.rackUnitByKey.get(unitKey);
+  const cartridge = boxes.find((b) => b.part.component === 'nvlink-cable-cartridge');
+  if (!unit || !cartridge) return [];
+  const peerType = unit.componentId === 'compute-tray' ? 'switch-tray' : unit.componentId === 'switch-tray' ? 'compute-tray' : null;
+  if (!peerType) return [];
+  const top = (model.totalRU * RU) / 2;
+  const yOf = (u: { topRU: number; heightRU: number }) => top - (u.topRU + u.heightRU / 2) * RU;
+  const peers = model.rackUnits.filter((u) => u.componentId === peerType);
+  const z = cartridge.position[2] - cartridge.size[2] / 2 - 0.01;
+  const half = cartridge.size[0] / 2 - 0.02;
+  return peers.map((p, i) => {
+    const x = cartridge.position[0] - half + ((i + 0.5) / peers.length) * half * 2;
+    return { kind: 'nvlink', unitKey, rearPath: p.key, from: [x, yOf(unit), z], to: [x, yOf(p), z] };
+  });
 }
 
-function Rods({ list, color, faint }: { list: RearSegment[]; color: string; faint: boolean }) {
+/** Rods between two points, in any direction, as one InstancedMesh. */
+function Rods({ list, color, opacity, thickness = ROD }: { list: RearSegment[]; color: string; opacity: number; thickness?: number }) {
   const ref = useRef<InstancedMesh>(null);
   const invalidate = useThree((s) => s.invalidate);
   useLayoutEffect(() => {
     const mesh = ref.current;
     if (!mesh) return;
+    const dir = new Vector3();
+    const q = new Quaternion();
     list.forEach((s, i) => {
-      const dx = s.to[0] - s.from[0];
-      const dz = s.to[2] - s.from[2];
-      const length = Math.hypot(dx, dz);
-      scratch.position.set((s.from[0] + s.to[0]) / 2, s.from[1], (s.from[2] + s.to[2]) / 2);
-      scratch.rotation.set(0, Math.atan2(dx, dz), 0);
-      scratch.scale.set(ROD, ROD, length);
+      dir.set(s.to[0] - s.from[0], s.to[1] - s.from[1], s.to[2] - s.from[2]);
+      const length = dir.length();
+      q.setFromUnitVectors(ALONG, dir.normalize());
+      scratch.position.set((s.from[0] + s.to[0]) / 2, (s.from[1] + s.to[1]) / 2, (s.from[2] + s.to[2]) / 2);
+      scratch.quaternion.copy(q);
+      scratch.scale.set(thickness, thickness, length);
       scratch.updateMatrix();
       mesh.setMatrixAt(i, scratch.matrix);
     });
     mesh.instanceMatrix.needsUpdate = true;
     mesh.computeBoundingSphere();
-    scratch.rotation.set(0, 0, 0);
+    scratch.quaternion.identity();
     invalidate();
-  }, [list, invalidate]);
+  }, [list, invalidate, thickness]);
+  if (list.length === 0) return null;
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, list.length]} raycast={() => null}>
       <boxGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial color={color} transparent opacity={faint ? 0.35 : 0.95} />
+      <meshBasicMaterial color={color} transparent opacity={opacity} />
     </instancedMesh>
   );
 }
 
-/** Rear parts of the rack and the connections from every unit to them. */
-export function RearScene() {
+/** The rack's "veins" behind the units: bright for the selection, faint otherwise, plus the NVLink fan-out. */
+function RearLinks({ segments, boxes }: { segments: RearSegment[]; boxes: RearBox[] }) {
+  const selected = useExplorer((s) => s.selected);
+  const first = selected.split('/')[0] ?? '';
+  const kinds = useMemo(() => [...new Set(segments.map((s) => s.kind))], [segments]);
+  const fabric = useMemo(() => fabricSegments(first, boxes), [first, boxes]);
+  return (
+    <group>
+      {kinds.flatMap((kind) =>
+        [true, false].map((active) => (
+          <Rods
+            key={`${kind}-${active}`}
+            list={segments.filter(
+              (s) => s.kind === kind && (selected === '' || s.unitKey === first || s.rearPath === selected) === active,
+            )}
+            color={LINK_COLORS[kind] ?? '#ffffff'}
+            opacity={active ? 0.95 : 0.3}
+          />
+        )),
+      )}
+      <Rods list={fabric} color={LINK_COLORS.nvlink ?? '#ffff66'} opacity={0.95} thickness={0.008} />
+    </group>
+  );
+}
+
+/**
+ * Labels only for what the pointer is on or what is selected (the legend
+ * names every part), plus the selected tray's NVLink fan-out: labelling all
+ * rear parts at once piles them up from this angle.
+ */
+function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitConnectorBox[] }) {
+  const connected = useThree((s) => s.events.connected);
+  const selected = useExplorer((s) => s.selected);
+  const hovered = useExplorer((s) => s.hovered);
+  if (!connected) return null;
+  const labels: { text: string; position: Vec }[] = [];
+  for (const target of new Set([hovered, selected])) {
+    if (!target) continue;
+    const box = boxes.find((b) => b.path === target) ?? connectors.find((c) => c.path === target);
+    if (!box) continue;
+    const segs = model.parsePath(target) ?? [];
+    const last = segs[segs.length - 1];
+    const text = last ? model.segmentLabel(last) : target;
+    labels.push({ text, position: [box.position[0], box.position[1] + Math.min(box.size[1] / 2, 0.15) + 0.04, box.position[2] - box.size[2] / 2] });
+  }
+  const unit = model.rackUnitByKey.get(selected.split('/')[0] ?? '');
+  const cart = boxes.find((b) => b.part.component === 'nvlink-cable-cartridge');
+  if (unit && cart && (unit.componentId === 'compute-tray' || unit.componentId === 'switch-tray')) {
+    const peers = unit.componentId === 'compute-tray' ? 'all 9 NVLink switch trays' : 'all 18 compute trays';
+    const top = (model.totalRU * RU) / 2;
+    labels.push({
+      text: `NVLink: ${model.segmentLabel({ id: unit.componentId, index: unit.index })} to ${peers}`,
+      position: [cart.position[0], top - (unit.topRU + unit.heightRU / 2) * RU + 0.05, cart.position[2] - cart.size[2] / 2 - 0.05],
+    });
+  }
+  return (
+    <>
+      {labels.map((l) => (
+        <Html key={l.text} position={l.position} center className="rear-label" style={{ pointerEvents: 'none' }} zIndexRange={[20, 10]}>
+          <span>{l.text}</span>
+        </Html>
+      ))}
+    </>
+  );
+}
+
+/** Rear parts of the rack, the connectors on every unit's back and the connections between them. */
+export function RearScene({ showLabels }: { showLabels: boolean }) {
   const layers = useExplorer((s) => s.layers);
   const boxes = useMemo(rearBoxes, []);
   const segments = useMemo(() => rearSegments(boxes), [boxes]);
+  const connectors = useMemo(unitConnectorBoxes, []);
+  const solid = useMemo(
+    () => boxes.filter((b) => b.part.component !== 'rear-bezel' && (b.layer === 'parts' ? layers.parts : layers.structure)),
+    [boxes, layers],
+  );
+  const bezel = useMemo(() => (layers.structure ? boxes.filter((b) => b.part.component === 'rear-bezel') : []), [boxes, layers]);
+  const colorOfPart = useMemo(
+    () => (i: number) => REAR_COLORS[model.getComponent(solid[i]!.part.component)?.type ?? ''] ?? '#666666',
+    [solid],
+  );
+  const colorOfConnector = useMemo(() => (i: number) => LINK_COLORS[connectors[i]!.kind] ?? '#999999', [connectors]);
   return (
     <group>
-      {layers.parts && <RearParts boxes={boxes} />}
-      {layers.links && <RearLinks segments={segments} />}
+      <ClickableBoxes items={solid} colorOf={colorOfPart} />
+      {bezel.map((b) => (
+        <mesh key={b.path} position={b.position} raycast={() => null}>
+          <boxGeometry args={b.size} />
+          <meshStandardMaterial color="#1b1f25" transparent opacity={0.18} depthWrite={false} />
+        </mesh>
+      ))}
+      {layers.parts && <ClickableBoxes items={connectors} colorOf={colorOfConnector} />}
+      {layers.links && <RearLinks segments={segments} boxes={boxes} />}
+      {showLabels && <RearLabels boxes={boxes} connectors={connectors} />}
     </group>
   );
 }

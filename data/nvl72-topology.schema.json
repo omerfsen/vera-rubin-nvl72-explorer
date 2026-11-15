@@ -331,7 +331,9 @@
         "bus-bar",
         "battery",
         "memory",
-        "board"
+        "board",
+        "connector",
+        "structure"
       ]
     },
     "component": {
@@ -886,9 +888,7 @@
       "required": [
         "component",
         "x",
-        "w",
-        "from",
-        "to"
+        "w"
       ],
       "properties": {
         "component": {
@@ -915,8 +915,41 @@
         "to": {
           "type": "string",
           "pattern": "^(top|bottom|[a-z0-9-]+\\.[1-9][0-9]*)$"
+        },
+        "at": {
+          "enum": [
+            "top",
+            "bottom",
+            "below"
+          ],
+          "description": "A short part fixed at the top or bottom of the stack, or below it, instead of a from/to span."
+        },
+        "heightRU": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "layer": {
+          "enum": [
+            "parts",
+            "structure"
+          ],
+          "description": "Which layer toggle shows it (default parts)."
         }
-      }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "from",
+            "to"
+          ]
+        },
+        {
+          "required": [
+            "at",
+            "heightRU"
+          ]
+        }
+      ]
     },
     "rearLayout": {
       "allOf": [
@@ -937,6 +970,58 @@
           "items": {
             "$ref": "#/$defs/rearPart"
           }
+        },
+        "unitConnectors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitConnector"
+          }
+        }
+      }
+    },
+    "unitConnector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit",
+        "component",
+        "x",
+        "w",
+        "kind"
+      ],
+      "properties": {
+        "unit": {
+          "$ref": "#/$defs/id"
+        },
+        "component": {
+          "$ref": "#/$defs/id"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "x": {
+          "type": "number",
+          "minimum": -0.5,
+          "maximum": 0.5
+        },
+        "w": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "kind": {
+          "enum": [
+            "nvlink",
+            "cooling",
+            "power",
+            "ac"
+          ]
+        },
+        "toPart": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index into rearLayout.parts this connector links to; omitted for AC whips, which leave the rack."
         }
       }
     }

@@ -259,7 +259,7 @@ export function RackScene({ rear }: { rear: boolean }) {
       {layers.structure && <RackFrame />}
       {layers.parts && unitTypes.map((id) => <UnitInstances key={id} componentId={id} />)}
       {layers.parts && <Handles />}
-      <RearScene />
+      <RearScene showLabels={rear} />
       {!rear && <GroupLabels />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />

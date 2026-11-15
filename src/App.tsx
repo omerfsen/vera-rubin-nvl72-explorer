@@ -242,7 +242,7 @@ export default function App() {
               ) : view === 'rear' ? (
                 <>
                   <span className="hint-long">
-                    Rear: click a cartridge, manifold or the bus bar · lines show NVLink, coolant and power to every unit
+                    Rear: click a tray to see its NVLink reach every peer through the cartridge · click any rear part or connector
                   </span>
                   <span className="hint-short">Tap a rear part · drag to rotate</span>
                 </>
