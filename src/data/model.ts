@@ -81,24 +81,24 @@ export function createModel(topology: Topology) {
 
   const rackUnits: RackUnit[] = [];
   {
-    const perType = new Map<string, number>();
+    // Lay the units out top to bottom, then number each type in its own order.
     let top = 0;
     topology.rackLayout.groups.forEach((g, groupIndex) => {
       for (let i = 0; i < g.count; i++) {
-        const index = (perType.get(g.component) ?? 0) + 1;
-        perType.set(g.component, index);
         const h = heightRU(g.component);
-        rackUnits.push({
-          key: `${g.component}.${index}`,
-          componentId: g.component,
-          index,
-          topRU: top,
-          heightRU: h,
-          group: groupIndex,
-        });
+        rackUnits.push({ key: '', componentId: g.component, index: 0, topRU: top, heightRU: h, group: groupIndex });
         top += h;
       }
     });
+    const overrides = topology.rackLayout.numbering?.overrides ?? {};
+    for (const id of new Set(rackUnits.map((u) => u.componentId))) {
+      const ofType = rackUnits.filter((u) => u.componentId === id);
+      if (overrides[id]?.order === 'bottom-to-top') ofType.reverse();
+      ofType.forEach((u, i) => {
+        u.index = i + 1;
+        u.key = `${id}.${i + 1}`;
+      });
+    }
   }
   const totalRU = rackUnits.reduce((sum, u) => sum + u.heightRU, 0);
   const rackUnitByKey = new Map(rackUnits.map((u) => [u.key, u]));

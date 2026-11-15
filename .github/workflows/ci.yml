@@ -30,9 +30,12 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE_PATH: /vera-rubin-nvl72-explorer/
-      - name: Check that no image files are bundled
+      - name: Check that no image files are committed or bundled
         run: |
-          if find dist -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.gif' \) | grep -q .; then
-            echo "dist/ contains image files; NVIDIA figures must only be hot-linked." >&2
+          pattern='\.(png|jpe?g|webp|gif|svg|ico|avif|bmp|tiff?)$'
+          found="$( { git ls-files; find dist -type f; } | grep -Ei "$pattern" || true)"
+          if [ -n "$found" ]; then
+            echo "$found" >&2
+            echo "Image files found; NVIDIA figures must only be hot-linked." >&2
             exit 1
           fi

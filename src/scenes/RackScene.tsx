@@ -73,6 +73,13 @@ function UnitInstances({ componentId }: { componentId: string }) {
     invalidate();
   }, [units, selectedKey, hovered, base, invalidate]);
 
+  useEffect(
+    () => () => {
+      document.body.style.cursor = '';
+    },
+    [],
+  );
+
   const keyOf = (e: ThreeEvent<PointerEvent | MouseEvent>) =>
     e.instanceId === undefined ? null : (units[e.instanceId]?.key ?? null);
 
@@ -168,11 +175,11 @@ function RackFrame() {
 /** "10 x Compute tray" style labels beside each layout group. */
 function GroupLabels() {
   const groups = model.topology.rackLayout.groups;
-  // drei's <Html> attaches to the canvas parent, which is not in the DOM on
-  // the very first commit; mount the labels one tick later so none is lost.
-  const [ready, setReady] = useState(false);
-  useEffect(() => setReady(true), []);
-  if (!ready) return null;
+  // drei's <Html> picks its DOM target from the connected event source. R3F
+  // connects events after the children's first layout effects, so a label
+  // mounted earlier would move targets mid-commit and could be lost.
+  const connected = useThree((s) => s.events.connected);
+  if (!connected) return null;
   return (
     <>
       {groups.map((g, gi) => {
@@ -187,6 +194,7 @@ function GroupLabels() {
             position={[-FRAME_WIDTH / 2 - 0.04, y, UNIT_DEPTH / 2]}
             center={false}
             className="group-label"
+            style={{ pointerEvents: 'none' }}
             zIndexRange={[20, 10]}
           >
             <span>
@@ -199,39 +207,69 @@ function GroupLabels() {
   );
 }
 
+/**
+ * Camera distance from the rack centre at which the whole frame fits the
+ * vertical field of view: margin for a slid-out unit, plus half the depth
+ * because the front face is closer to the camera than the centre.
+ */
+function fitDistance(height: number, fovDeg: number): number {
+  return ((height / 2) * 1.2) / Math.tan(((fovDeg / 2) * Math.PI) / 180) + UNIT_DEPTH / 2;
+}
+
+const FOV = 38;
+
 export default function RackScene() {
   const height = frameHeight(model.totalRU);
+  const distance = fitDistance(height, FOV);
+  const [contextLost, setContextLost] = useState(false);
   return (
-    <Canvas
-      frameloop="demand"
-      dpr={[1, 2]}
-      camera={{ position: [0.75, 0.3, 3.2], fov: 38, near: 0.05, far: 50 }}
-      aria-label="3D view of the rack. Use the list view or the arrow keys to select units."
-      onPointerMissed={() => useExplorer.getState().setHovered(null)}
-    >
-      <color attach="background" args={['#0e1115']} />
-      <hemisphereLight args={['#dfe7f2', '#1a1d22', 0.9]} />
-      <directionalLight position={[2.5, 3, 4]} intensity={1.6} />
-      <directionalLight position={[-3, 1, -2]} intensity={0.4} />
-      <RackFrame />
-      {unitTypes.map((id) => (
-        <UnitInstances key={id} componentId={id} />
-      ))}
-      <Handles />
-      <GroupLabels />
-      <OrbitControls
-        makeDefault
-        target={[0, 0, 0]}
-        enablePan={false}
-        enableDamping={false}
-        minDistance={1.2}
-        maxDistance={6}
-        maxPolarAngle={Math.PI * 0.85}
-      />
-      <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
-        <circleGeometry args={[2.2, 48]} />
-        <meshStandardMaterial color="#14181d" />
-      </mesh>
-    </Canvas>
+    <>
+      <Canvas
+        frameloop="demand"
+        dpr={[1, 2]}
+        camera={{ position: [distance * 0.23, 0.3, distance], fov: FOV, near: 0.05, far: 50 }}
+        role="img"
+        aria-label="3D view of the rack. Use the list view or the arrow keys to select units."
+        onPointerMissed={() => useExplorer.getState().setHovered(null)}
+        onCreated={({ gl, invalidate }) => {
+          // three.js handles context loss itself; with frameloop="demand" nothing
+          // redraws after a restore unless we ask for a frame.
+          gl.domElement.addEventListener('webglcontextlost', () => setContextLost(true));
+          gl.domElement.addEventListener('webglcontextrestored', () => {
+            setContextLost(false);
+            invalidate();
+          });
+        }}
+      >
+        <color attach="background" args={['#0e1115']} />
+        <hemisphereLight args={['#dfe7f2', '#1a1d22', 0.9]} />
+        <directionalLight position={[2.5, 3, 4]} intensity={1.6} />
+        <directionalLight position={[-3, 1, -2]} intensity={0.4} />
+        <RackFrame />
+        {unitTypes.map((id) => (
+          <UnitInstances key={id} componentId={id} />
+        ))}
+        <Handles />
+        <GroupLabels />
+        <OrbitControls
+          makeDefault
+          target={[0, 0, 0]}
+          enablePan={false}
+          enableDamping={false}
+          minDistance={1.2}
+          maxDistance={distance * 2}
+          maxPolarAngle={Math.PI * 0.85}
+        />
+        <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
+          <circleGeometry args={[2.2, 48]} />
+          <meshStandardMaterial color="#14181d" />
+        </mesh>
+      </Canvas>
+      {contextLost && (
+        <p className="notice context-lost" role="status">
+          The 3D view lost its graphics context. It comes back on its own; the list view still works.
+        </p>
+      )}
+    </>
   );
 }

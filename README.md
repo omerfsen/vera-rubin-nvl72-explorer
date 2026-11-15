@@ -5,8 +5,13 @@ learning. Click a unit in the rack to see what it is, what it does, how many
 there are, which networks it sits on, and where in the NVIDIA documentation
 that comes from.
 
+It shows the **Vera Rubin** generation (Vera CPU + Rubin GPU, NVLink 6), not
+the earlier Grace Blackwell GB200/GB300 NVL72 racks.
+
 It is a learning tool, not a digital twin. It has no telemetry and no
 performance simulation.
+
+Live: https://verarubin-nvl72.faruk.net
 
 > **Unofficial.** This project is not affiliated with, endorsed by, or
 > sponsored by NVIDIA Corporation. NVIDIA, DGX, Vera, Rubin, NVLink, NVSwitch,
@@ -26,11 +31,15 @@ Milestone 1 of 4:
 
 ## Source of truth
 
-All data comes from the **NVIDIA DGX VR NVL72 User Guide** (5 Nov 2026):
+All data comes from two NVIDIA documents:
 
-- https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf
-- https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html
-- https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html
+- **NVIDIA DGX VR NVL72 User Guide** (5 Nov 2026):
+  https://docs.nvidia.com/dgx/dgxvr-user-guide/ (HTML, the same content as
+  the [PDF](https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf))
+- **NVIDIA DGX VR NVL72 Service Manual** (7 Oct 2026):
+  https://docs.nvidia.com/dgx/dgxvr-service-manual/ (HTML and
+  [PDF](https://docs.nvidia.com/dgx/dgxvr-service-manual/dgxvr-service-manual.pdf)),
+  for customer-replaceable units and power shelf numbering
 
 Every fact in [`data/nvl72-topology.json`](data/nvl72-topology.json) carries
 a source (URL and section). Anything the guide does not state is either left
@@ -41,7 +50,7 @@ badges. Gaps and contradictions in the guide are listed in
 
 ## Run locally
 
-Needs Node.js 22 or newer (CI uses 24, see `.nvmrc`).
+Needs Node.js 26 (see `.nvmrc`; CI and Vercel use the same major).
 
 ```bash
 npm ci
@@ -61,8 +70,21 @@ The build is fully static. To serve it from a sub-path of another site, set
 VITE_BASE_PATH=/vera-rubin-nvl72-explorer/ npm run build
 ```
 
-Then copy `dist/` to that path. It defaults to `/`. See
-[`.env.example`](.env.example).
+Then copy `dist/` to that path. It defaults to `/`. To try a sub-path build
+locally, set the same variable for preview and open the sub-path:
+
+```bash
+VITE_BASE_PATH=/vera-rubin-nvl72-explorer/ npm run preview
+# http://localhost:4173/vera-rubin-nvl72-explorer/
+```
+
+See [`.env.example`](.env.example).
+
+## Deployment
+
+The site is deployed on Vercel from `main` (production) and from every pull
+request (preview), using [`vercel.json`](vercel.json). Production is served at
+https://verarubin-nvl72.faruk.net. https://vr-nvl72.faruk.net redirects there.
 
 ## Official figures (off by default)
 
@@ -82,8 +104,11 @@ VITE_SHOW_OFFICIAL_FIGURES=true npm run build
   level. `/` jumps to search.
 - **List view** shows the rack as a plain list. The app also uses it on its
   own when the browser has no WebGL.
-- The URL holds the selection (e.g. `?select=compute-tray.7`), so you can
-  share a link to any unit.
+- The URL holds the selection and the list pane (e.g.
+  `?select=compute-tray.7&list=1`), so you can share a link to any unit.
+- Power shelves are numbered 1 to 4 from the bottom up, as in NVIDIA's service
+  manual. Compute and switch trays are numbered from the top down; NVIDIA does
+  not number them by rack position, so that numbering is marked *assumed*.
 
 ## Project layout
 
@@ -108,4 +133,4 @@ Omer Sen
 
 ## License
 
-To be confirmed.
+Apache License 2.0. See [LICENSE](LICENSE).

@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode;
 }
 
-/** Shows the fallback if the 3D view fails, e.g. when WebGL is lost. */
+/** Shows the fallback if the 3D view throws, e.g. when the renderer cannot be created. */
 export class ErrorBoundary extends Component<Props, { failed: boolean }> {
   state = { failed: false };
 

@@ -61,6 +61,32 @@
         "retrieved": {
           "type": "string",
           "format": "date"
+        },
+        "serviceManual": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "date",
+            "urls"
+          ],
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date"
+            },
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              },
+              "minItems": 1
+            }
+          }
         }
       }
     },
@@ -102,20 +128,33 @@
       ],
       "properties": {
         "url": {
-          "description": "Page URL, with the section anchor when the page has one.",
+          "description": "A page of the DGX VR NVL72 User Guide or Service Manual, with the section anchor, or one of their PDFs.",
           "type": "string",
           "format": "uri",
-          "pattern": "^https://docs\\.nvidia\\.com/dgx/dgxvr-user-guide/"
+          "pattern": "^https://docs\\.nvidia\\.com/dgx/(dgxvr-user-guide/((hardware|networking|storage)\\.html(#[a-z0-9-]+)?|dgxvr-user-guide\\.pdf)|dgxvr-service-manual/((index|introduction|psu-replacement|pmm-replacement|cache-replacement|compute-battery-replacement|switch-battery-replacement)\\.html(#[a-z0-9-]+)?|dgxvr-service-manual\\.pdf))$"
         },
         "section": {
-          "description": "Section number and title, plus table or figure.",
           "type": "string",
-          "minLength": 1
+          "pattern": "\\S",
+          "description": "Section number and title, plus table or figure."
         },
         "figure": {
-          "description": "File name under https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/. Only hot-linked, and only when SHOW_OFFICIAL_FIGURES is on.",
-          "type": "string",
-          "pattern": "^[A-Za-z0-9_.-]+\\.png$"
+          "description": "One of the 13 official figure files under https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/. Only hot-linked, and only when SHOW_OFFICIAL_FIGURES is on.",
+          "enum": [
+            "hardware-rack-configuration-VRNVL72.png",
+            "hardware-rack-rear-VRNVL72.png",
+            "hardware-compute-tray-vrnvl72.png",
+            "hardware-compute-tray-block-diagram-VRNVL72.png",
+            "hardware-compute-tray-top-VRNVL72.png",
+            "hardware-compute-tray-front-VRNVL72.png",
+            "hardware-nvlink-switch-tray-VRNVL72.png",
+            "hardware-power-shelf-VRNVL72.png",
+            "hardware-tor-ethernet-VRNVL72.png",
+            "network-port-numbers-VRNVL72.png",
+            "network-port-types-VRNVL72.png",
+            "network-port-labels-1-VRNVL72.png",
+            "network-port-labels-2-VRNVL72.png"
+          ]
         }
       }
     },
@@ -131,7 +170,7 @@
         },
         "note": {
           "type": "string",
-          "minLength": 1
+          "pattern": "\\S"
         }
       },
       "required": [
@@ -163,7 +202,7 @@
       "properties": {
         "label": {
           "type": "string",
-          "minLength": 1
+          "pattern": "\\S"
         },
         "value": {
           "type": [
@@ -182,7 +221,8 @@
           "type": "boolean"
         },
         "note": {
-          "type": "string"
+          "type": "string",
+          "pattern": "\\S"
         }
       },
       "if": {
@@ -205,6 +245,20 @@
       "allOf": [
         {
           "$ref": "#/$defs/provenance"
+        },
+        {
+          "if": {
+            "properties": {
+              "fabric": {
+                "type": "string"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "fabricSource"
+            ]
+          }
         }
       ],
       "type": "object",
@@ -238,6 +292,10 @@
             "Ethernet",
             null
           ]
+        },
+        "fabricSource": {
+          "$ref": "#/$defs/source",
+          "description": "Where the fabric is stated, when that is not the network's own source."
         }
       }
     },
@@ -260,7 +318,8 @@
         "port",
         "cable-cartridge",
         "manifold",
-        "bus-bar"
+        "bus-bar",
+        "battery"
       ]
     },
     "component": {
@@ -336,6 +395,14 @@
         "rearSide": {
           "description": "Sits at the rear of the rack.",
           "type": "boolean"
+        },
+        "textSources": {
+          "description": "Extra sources for facts in description and function that the main source does not state.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 1
         }
       }
     },
@@ -412,6 +479,30 @@
           "properties": {
             "scheme": {
               "const": "top-to-bottom-per-type"
+            },
+            "overrides": {
+              "type": "object",
+              "description": "Per-type numbering that differs from the default scheme.",
+              "additionalProperties": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/provenance"
+                  }
+                ],
+                "type": "object",
+                "unevaluatedProperties": false,
+                "required": [
+                  "order"
+                ],
+                "properties": {
+                  "order": {
+                    "enum": [
+                      "top-to-bottom",
+                      "bottom-to-top"
+                    ]
+                  }
+                }
+              }
             }
           }
         }
@@ -421,6 +512,77 @@
       "allOf": [
         {
           "$ref": "#/$defs/provenance"
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "network"
+              }
+            }
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "to"
+                ]
+              },
+              {
+                "required": [
+                  "network"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "not-connected"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "to"
+                  ]
+                },
+                {
+                  "required": [
+                    "network"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "nvlink",
+                  "power",
+                  "cooling"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "to"
+            ],
+            "not": {
+              "required": [
+                "network"
+              ]
+            }
+          }
         }
       ],
       "type": "object",

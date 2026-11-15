@@ -10,14 +10,21 @@ side panel are all generated from this file.
 ## Rules
 
 - Every component, network, connection, rack layout entry and height has a
-  `source`: `{ url, section, figure? }`. The URL must point into
-  `https://docs.nvidia.com/dgx/dgxvr-user-guide/`. A spec without its own
-  `source` uses its component's source.
+  `source`: `{ url, section, figure? }`. The URL must be a page of the DGX VR
+  NVL72 User Guide (`hardware`, `networking`, `storage`) or Service Manual,
+  or one of their PDFs. A spec without its own `source` uses its component's
+  source. Facts in `description` or `function` that the main source does not
+  state are cited in `textSources`. A network's `fabric` is cited in
+  `fabricSource`.
 - If the guide does not state something, either leave it out, set it to
   `null` (for `count`), or set `"assumed": true`. An assumed item must have a
   `note`. The schema enforces this.
-- `figure` names a file under the guide's `_images/` folder. It is only
-  hot-linked, and only when `SHOW_OFFICIAL_FIGURES` is on.
+- `figure` must be one of the 13 user guide figures under the guide's
+  `_images/` folder. It is only hot-linked, and only when
+  `SHOW_OFFICIAL_FIGURES` is on. Service manual figures are cited by section
+  only.
+- When a figure and the text disagree, the data keeps the text and adds a
+  `note`. The conflict is listed in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md).
 
 ## Top level
 
@@ -34,7 +41,7 @@ side panel are all generated from this file.
 | Field | Meaning |
 | --- | --- |
 | `id` | Kebab-case id, unique. |
-| `type` | One of `rack`, `compute-tray`, `switch-tray`, `power-shelf`, `tor-switch`, `cpu`, `gpu`, `nic`, `dpu`, `drive`, `switch-asic`, `psu`, `bmc`, `controller`, `port`, `cable-cartridge`, `manifold`, `bus-bar`. |
+| `type` | One of `rack`, `compute-tray`, `switch-tray`, `power-shelf`, `tor-switch`, `cpu`, `gpu`, `nic`, `dpu`, `drive`, `switch-asic`, `psu`, `bmc`, `controller`, `port`, `cable-cartridge`, `manifold`, `bus-bar`, `battery`. |
 | `name` | Display name. |
 | `count` | How many per *parent* instance. `null` if the guide does not say. The app multiplies along the parent chain for "per rack" totals. |
 | `parent` | Parent component id. `null` only for `rack`. |
@@ -43,15 +50,18 @@ side panel are all generated from this file.
 | `networks` | Network ids this component itself is on. Each one must be backed by a sourced connection. |
 | `specs` | `{ label, value, unit?, source?, assumed?, note? }` list. |
 | `source`, `assumed`, `note` | Provenance. |
+| `textSources` | Extra sources for facts in `description` and `function`. |
 | `rearSide` | `true` for parts at the rear of the rack (cartridges, manifolds, bus bar). |
 
 ## Rack layout and instances
 
 `rackLayout.groups` is the stack from Fig. 1, top to bottom, for example
 `{ "component": "compute-tray", "count": 10 }`. The app expands it into
-numbered units (`compute-tray.1` to `compute-tray.18`), numbering each type
-from the top down. The numbering is an assumption, recorded in
-`rackLayout.numbering`.
+numbered units (`compute-tray.1` to `compute-tray.18`). By default each type
+is numbered from the top down, which is an assumption recorded in
+`rackLayout.numbering`. `rackLayout.numbering.overrides` holds sourced
+exceptions: power shelves are numbered from the bottom up, as in the service
+manual.
 
 ## Selection paths and URLs
 
@@ -62,6 +72,7 @@ instance number:
 - `compute-tray.7/rubin-gpu`: the Rubin GPUs in compute tray 7
 - `compute-tray.7/rubin-gpu.2`: GPU 2 in compute tray 7
 
-The path goes in the URL as `?select=...`. The view goes in as `?view=...`
-and is left out when it is the default (`rack`). Invalid paths fall back to
-the rack.
+The path goes in the URL as `?select=...` and the list pane as `list=1`. The
+view goes in as `?view=...` and is left out when it is the default (`rack`).
+Invalid paths fall back to the rack. Other query parameters are left exactly
+as they were.

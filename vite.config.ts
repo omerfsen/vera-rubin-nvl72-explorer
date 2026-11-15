@@ -6,8 +6,11 @@ import react from '@vitejs/plugin-react';
 // path comes from VITE_BASE_PATH (default "/").
 export function normalizeBase(raw: string | undefined): string {
   const value = (raw ?? '').trim();
-  if (value === '' || value === '/') return '/';
-  return `/${value.replace(/^\/+|\/+$/g, '')}/`;
+  // Vite also accepts a full URL or "./" (relative); pass those through.
+  if (/^https?:\/\//i.test(value)) return value.endsWith('/') ? value : `${value}/`;
+  if (value === './' || value === '.') return './';
+  const segments = value.split('/').filter((s) => s !== '' && s !== '.');
+  return segments.length === 0 ? '/' : `/${segments.join('/')}/`;
 }
 
 export default defineConfig(({ mode }) => {

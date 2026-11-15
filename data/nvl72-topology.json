@@ -13,7 +13,15 @@
         "https://docs.nvidia.com/dgx/dgxvr-user-guide/storage.html"
       ]
     },
-    "retrieved": "2026-11-15"
+    "retrieved": "2026-11-15",
+    "serviceManual": {
+      "title": "NVIDIA DGX VR NVL72 Service Manual",
+      "date": "2026-10-07",
+      "urls": [
+        "https://docs.nvidia.com/dgx/dgxvr-service-manual/dgxvr-service-manual.pdf",
+        "https://docs.nvidia.com/dgx/dgxvr-service-manual/index.html"
+      ]
+    }
   },
   "networks": [
     {
@@ -26,7 +34,7 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
         "section": "2.2 Network Overview"
       },
-      "note": "The guide does not name the fabric for this network. Chapter 2 says Ethernet carries storage, management and external connectivity, but does not map it to this network by name."
+      "note": "The guide does not name the fabric for this network. Chapter 2 says Ethernet carries storage, management and external connectivity, but does not tie that to this network by name."
     },
     {
       "id": "internalnet",
@@ -38,7 +46,7 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
         "section": "2.2 Network Overview"
       },
-      "note": "The guide does not name the fabric for this network. Chapter 2 says Ethernet carries storage, management and external connectivity, but does not map it to this network by name."
+      "note": "The guide does not name the fabric for this network. Chapter 2 says Ethernet carries storage, management and external connectivity, but does not tie that to this network by name."
     },
     {
       "id": "dgxnet",
@@ -50,7 +58,10 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
         "section": "2.2 Network Overview"
       },
-      "note": "Description from 2.2 Network Overview; fabric from the 2.3 Compute Tray Network Ports table."
+      "fabricSource": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+        "section": "2.3 Compute Tray Network Ports, port table"
+      }
     },
     {
       "id": "ipminet",
@@ -62,7 +73,10 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
         "section": "2.2 Network Overview"
       },
-      "note": "Description from 2.2 Network Overview; fabric from the 2.3 Compute Tray Network Ports table."
+      "fabricSource": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+        "section": "2.3 Compute Tray Network Ports, port table"
+      }
     },
     {
       "id": "computenet",
@@ -74,7 +88,10 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
         "section": "2.2 Network Overview"
       },
-      "note": "Description from 2.2 Network Overview; fabric from the 2.3 Compute Tray Network Ports table."
+      "fabricSource": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+        "section": "2.3 Compute Tray Network Ports, port table"
+      }
     },
     {
       "id": "storagenet",
@@ -86,7 +103,11 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
         "section": "2.2 Network Overview"
       },
-      "note": "Description from 2.2 Network Overview; fabric from the 2.3 Compute Tray Network Ports table."
+      "fabricSource": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+        "section": "2.3 Compute Tray Network Ports, port table"
+      },
+      "note": "The compute tray's storagenet port is Ethernet (2.3). Section 3.2 adds that shared storage is accessed over converged Ethernet by default, although InfiniBand can also be used."
     },
     {
       "id": "failovernet",
@@ -158,7 +179,17 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
         "section": "1.1 Rack Configuration, Fig. 1 (DGX Vera Rubin NVL72 Rack Configuration)",
         "figure": "hardware-rack-configuration-VRNVL72.png"
-      }
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html",
+          "section": "Chapter 1. Hardware (introduction)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html",
+          "section": "Chapter 2. Networking (introduction)"
+        }
+      ]
     },
     {
       "id": "compute-tray",
@@ -167,7 +198,7 @@
       "count": 18,
       "parent": "rack",
       "description": "An enclosure that holds the compute boards and peripheral accessory boards and runs an OS image. A tray has two compute boards.",
-      "function": "Runs the workload. Its GPUs reach the GPUs in the other trays over NVLink through connectors at the back of the tray and the NVLink switch trays.",
+      "function": "A compute node with 2 Vera CPUs and 4 Rubin GPUs that runs an OS image. Its GPUs reach the GPUs in the other trays over NVLink through connectors at the back of the tray and the NVLink switch trays.",
       "networks": [
         "computenet",
         "dgxnet",
@@ -210,18 +241,64 @@
         },
         {
           "label": "Cooling",
-          "value": "Liquid, through the inner manifold and cold plates on the CPUs, GPUs and some networking and storage parts"
+          "value": "Liquid: runs up and down the rack through the inner manifold, then through cold plates on the CPUs, GPUs and various networking and storage components",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          }
         },
         {
           "label": "Out-of-band management",
-          "value": "BMC and HMC microcontrollers; external access through standard BMC and console interfaces"
+          "value": "BMC and HMC microcontrollers; external access through standard BMC and console interfaces",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          }
+        },
+        {
+          "label": "OSFP ports (computenet)",
+          "value": 8,
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+            "section": "2.2 Network Overview, Fig. 1 (network port locations)",
+            "figure": "network-port-numbers-VRNVL72.png"
+          },
+          "note": "Fig. 1 marks eight OSFP cages with network 5 (computenet)."
+        },
+        {
+          "label": "Front bays",
+          "value": "Two Bay B sections, each with 2 x CX9 modules and 2 x E1.S NVMe cache drives; a center Bay C with the BlueField-4 and the SMM",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 6 (Compute Tray Front View)",
+            "figure": "hardware-compute-tray-front-VRNVL72.png"
+          }
+        },
+        {
+          "label": "Rear connections",
+          "value": "Hot water outlet, cold water inlet, bus bar connector",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          }
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
-        "section": "1.2 Compute Trays",
+        "section": "1.2 Compute Trays, Fig. 3 (Compute Tray)",
         "figure": "hardware-compute-tray-vrnvl72.png"
-      }
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html",
+          "section": "Chapter 1. Hardware (introduction)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays"
+        }
+      ]
     },
     {
       "id": "vera-cpu",
@@ -230,7 +307,7 @@
       "count": 2,
       "parent": "compute-tray",
       "description": "NVIDIA Vera CPU. Part of the compute node.",
-      "function": "Host processor of the compute node, which the guide lists as 2 Vera CPUs and 4 Rubin GPUs per tray.",
+      "function": "Part of the compute node, which the guide lists as 2 Vera CPUs and 4 Rubin GPUs per tray.",
       "networks": [],
       "specs": [
         {
@@ -238,8 +315,25 @@
           "value": "Cold plate (liquid)",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
-            "section": "1.2 Compute Trays",
-            "figure": "hardware-compute-tray-vrnvl72.png"
+            "section": "1.2 Compute Trays"
+          }
+        },
+        {
+          "label": "Links",
+          "value": "CPU0 and CPU1 are joined by a Clink; each CPU has C2C links to two GPUs (CPU0: GPU0, GPU1; CPU1: GPU2, GPU3)",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "label": "Placement",
+          "value": "CPU0 on HPM_L (HPM Left), CPU1 on HPM_R (HPM Right)",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, top-view table and Fig. 4",
+            "figure": "network-port-labels-2-VRNVL72.png"
           }
         }
       ],
@@ -272,8 +366,26 @@
           "value": "HPM_L GPU_0, HPM_L GPU_1, HPM_R GPU_2, HPM_R GPU_3",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
-            "section": "2.4 Network Interface Names, PCIe tables",
-            "figure": "network-port-labels-1-VRNVL72.png"
+            "section": "2.4 Network Interface Names, top-view table and Fig. 4",
+            "figure": "network-port-labels-2-VRNVL72.png"
+          }
+        },
+        {
+          "label": "Placement",
+          "value": "GPU0 and GPU1 on HPM_L (HPM Left) with CPU0; GPU2 and GPU3 on HPM_R (HPM Right) with CPU1",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, top-view table and Fig. 4",
+            "figure": "network-port-labels-2-VRNVL72.png"
+          }
+        },
+        {
+          "label": "NVLink",
+          "value": "Each GPU has NVLinks to all nine NVLink switch trays, through the cable cartridge",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
           }
         },
         {
@@ -281,15 +393,24 @@
           "value": "Cold plate (liquid)",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
-            "section": "1.2 Compute Trays",
-            "figure": "hardware-compute-tray-vrnvl72.png"
+            "section": "1.2 Compute Trays"
           }
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
         "section": "1.2 Compute Trays, compute tray configuration table"
-      }
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+          "section": "1.1 Rack Configuration"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+          "section": "1.3 NVLink Switch Trays"
+        }
+      ]
     },
     {
       "id": "connectx-9",
@@ -317,16 +438,17 @@
           "value": "C1/C1_1, C1/C1_2, C3/C3_1, C3/C3_2, C5/C5_1, C5/C5_2, C7/C7_1, C7/C7_2",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
-            "section": "2.4 Network Interface Names, PCIe tables",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
             "figure": "network-port-labels-1-VRNVL72.png"
           },
-          "note": "The configuration table says 2 ConnectX-9 cards; the PCIe table lists four labels (C1, C3, C5, C7) with two ports each. See docs/OPEN_QUESTIONS.md."
+          "note": "Eight labels, one per OSFP cage. The 2.2 and 2.4 figures print the last two as C7/C3_1 and C7/C3_2; the table prints C7/C7_1 and C7/C7_2."
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
         "section": "1.2 Compute Trays, compute tray configuration table"
-      }
+      },
+      "note": "The guide disagrees with itself on the count. The 1.2 configuration table says 2 ConnectX-9 I/O cards. Fig. 4 (block diagram) draws 8 ConnectX-9 cards, Fig. 6 (front view) shows 2 x CX9 modules in each of the two Bay B sections, and the 2.2 figures show 8 OSFP cages. This app keeps the table's 2. See docs/OPEN_QUESTIONS.md."
     },
     {
       "id": "bluefield-4",
@@ -344,28 +466,42 @@
       "specs": [
         {
           "label": "Ports",
-          "value": "2 x QSFP, 1 x RJ45",
+          "value": "2 x QSFP, 1 x RJ-45",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
-            "section": "2.3 Compute Tray Network Ports, port table",
-            "figure": "network-port-types-VRNVL72.png"
+            "section": "2.3 Compute Tray Network Ports, port table"
           }
         },
         {
-          "label": "PCIe entries",
-          "value": "COMPUTE_n_n_BF_0_MAC_ADDR1/ADDR2 on buses 0005:41:00.x and 000d:41:00.x",
+          "label": "PCIe links",
+          "value": "One BlueField-4 with a PCIe link to each CPU",
           "source": {
-            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
-            "section": "2.4 Network Interface Names, PCIe table (top view)",
-            "figure": "network-port-labels-2-VRNVL72.png"
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "label": "PCIe labels",
+          "value": "COMPUTE_n_n_BF_0_MAC_ADDR1/ADDR2 and COMPUTE_n_n_BF_1_MAC_ADDR1/ADDR2; ADDR1 on the left QSFP port, ADDR2 on the right",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+            "section": "2.2 Network Overview, Fig. 2 (network port types)",
+            "figure": "network-port-types-VRNVL72.png"
           },
-          "note": "The same label appears on two buses. See docs/OPEN_QUESTIONS.md."
+          "note": "Fig. 2 (2.2) and Fig. 4 (2.4) print BF_0 and BF_1. The 2.4 table prints BF_0 on both buses 0005:41:00.x and 000d:41:00.x, with repeated interface and RDMA names. See docs/OPEN_QUESTIONS.md."
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
         "section": "1.2 Compute Trays, compute tray configuration table"
-      }
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+          "section": "2.3 Compute Tray Network Ports, port table"
+        }
+      ]
     },
     {
       "id": "host-bmc",
@@ -378,11 +514,32 @@
       "networks": [
         "ipminet"
       ],
-      "specs": [],
+      "specs": [
+        {
+          "label": "Location",
+          "value": "On the SMM carrier board (with HMC and TPM) in Bay C",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          }
+        }
+      ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
-        "section": "1.2 Compute Trays, compute tray configuration table"
-      }
+        "section": "1.2 Compute Trays"
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+          "section": "1.5 Top-of-Rack Ethernet Switches"
+        }
+      ],
+      "note": "Count read from the guide's singular wording ('Host BMC with RJ45') and the single SMM in Fig. 5."
     },
     {
       "id": "hmc",
@@ -393,13 +550,23 @@
       "description": "Host Management Controller microcontroller.",
       "function": "Provides out-of-band management of the compute tray hardware together with the BMC.",
       "networks": [],
-      "specs": [],
+      "specs": [
+        {
+          "label": "Location",
+          "value": "On the SMM carrier board (with BMC and TPM) in Bay C",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          }
+        }
+      ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
-        "section": "1.2 Compute Trays",
-        "figure": "hardware-compute-tray-vrnvl72.png"
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
       },
-      "note": "The guide does not state how many HMCs a tray has."
+      "note": "The text gives no count. Fig. 5 shows one SMM carrier board 'w/ BMC+HMC+TPM'."
     },
     {
       "id": "e1s-cache-drive",
@@ -424,15 +591,54 @@
           "value": "Bay_B_L E1.s_Top, Bay_B_L E1.s_Bottom, Bay_B_R E1.s_Top, Bay_B_R E1.s_Bottom",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
-            "section": "2.4 Network Interface Names, PCIe tables",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
             "figure": "network-port-labels-1-VRNVL72.png"
+          }
+        },
+        {
+          "label": "Location",
+          "value": "Two in each Bay B section",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 6 (Compute Tray Front View)",
+            "figure": "hardware-compute-tray-front-VRNVL72.png"
+          }
+        },
+        {
+          "label": "Customer-replaceable unit (CRU)",
+          "value": "Yes",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
+            "section": "Service Manual 1.1 Customer-Replaceable Units"
+          }
+        },
+        {
+          "label": "PCIe addresses (BDF)",
+          "value": "Bay_B_L top 0001:06:00.0, Bay_B_L bottom 0004:06:00.0, Bay_B_R top 000C:06:00.0, Bay_B_R bottom 0009:06:00.0",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#dgxvr-sm-cache-identify",
+            "section": "Service Manual 4.2 Identify the Failed Cache Drive (cache drive figure)"
+          }
+        },
+        {
+          "label": "After replacement",
+          "value": "Power the tray off first; afterwards rebuild the cache volume and the /raid filesystem",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 4.4 Finalize the Replacement Procedure"
           }
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
         "section": "1.2 Compute Trays, compute tray configuration table"
-      }
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/storage.html#internal-storage",
+          "section": "3.1 Internal Storage"
+        }
+      ]
     },
     {
       "id": "e1s-boot-drive",
@@ -449,14 +655,30 @@
           "value": "Bay_C E1.S_Boot Drive",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
-            "section": "2.4 Network Interface Names, PCIe table (top view)"
+            "section": "2.4 Network Interface Names, top-view table and Fig. 4",
+            "figure": "network-port-labels-2-VRNVL72.png"
+          }
+        },
+        {
+          "label": "Location",
+          "value": "On the SMM in Bay C",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
           }
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
         "section": "1.2 Compute Trays, compute tray configuration table"
-      }
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/storage.html#internal-storage",
+          "section": "3.1 Internal Storage"
+        }
+      ]
     },
     {
       "id": "ct-port-cx9-osfp",
@@ -480,7 +702,14 @@
         "section": "2.3 Compute Tray Network Ports, port table",
         "figure": "network-port-types-VRNVL72.png"
       },
-      "note": "The guide does not state the number of OSFP ports per card."
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+          "section": "2.2 Network Overview, Fig. 1 (network port locations)",
+          "figure": "network-port-numbers-VRNVL72.png"
+        }
+      ],
+      "note": "The guide does not say how many OSFP ports each card has. The 2.2 figures show 8 OSFP cages per compute tray."
     },
     {
       "id": "ct-port-bf4-left",
@@ -497,13 +726,24 @@
         {
           "label": "Port type",
           "value": "QSFP"
+        },
+        {
+          "label": "Network in Fig. 1",
+          "value": "6 (storagenet)",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+            "section": "2.2 Network Overview, Fig. 1 (network port locations)",
+            "figure": "network-port-numbers-VRNVL72.png"
+          },
+          "note": "Conflicts with the 2.3 table (dgxnet)."
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
         "section": "2.3 Compute Tray Network Ports, port table",
         "figure": "network-port-types-VRNVL72.png"
-      }
+      },
+      "note": "The guide disagrees with itself. Table 2.3 puts this port on dgxnet (3). Fig. 1 in 2.2 marks both QSFP ports 6 (storagenet) and shows no port marked 3. This app follows the table. See docs/OPEN_QUESTIONS.md."
     },
     {
       "id": "ct-port-bf4-right",
@@ -520,6 +760,15 @@
         {
           "label": "Port type",
           "value": "QSFP"
+        },
+        {
+          "label": "Network in Fig. 1",
+          "value": "6 (storagenet)",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+            "section": "2.2 Network Overview, Fig. 1 (network port locations)",
+            "figure": "network-port-numbers-VRNVL72.png"
+          }
         }
       ],
       "source": {
@@ -531,10 +780,10 @@
     {
       "id": "ct-port-bf4-rj45",
       "type": "port",
-      "name": "BlueField-4 RJ45 port",
+      "name": "BlueField-4 RJ-45 port",
       "count": 1,
       "parent": "bluefield-4",
-      "description": "RJ45 port of the BlueField-4 DPU.",
+      "description": "RJ-45 port of the BlueField-4 DPU.",
       "function": "Connects to ipminet (Ethernet).",
       "networks": [
         "ipminet"
@@ -601,7 +850,49 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
         "section": "2.3 Compute Tray Network Ports, port table",
         "figure": "network-port-types-VRNVL72.png"
-      }
+      },
+      "note": "Listed in Table 2.3, but the front-view figures show only two RJ45 ports (the BlueField-4 port and the SMM port), so its position is unknown."
+    },
+    {
+      "id": "compute-tray-battery",
+      "type": "battery",
+      "name": "Compute tray battery",
+      "count": 1,
+      "parent": "compute-tray",
+      "description": "Battery in the Bay-C module of the compute tray.",
+      "function": "The guide and the manual do not say what it powers.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Customer-replaceable unit (CRU)",
+          "value": "Yes",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
+            "section": "Service Manual 1.1 Customer-Replaceable Units"
+          }
+        },
+        {
+          "label": "Location",
+          "value": "Bay-C module",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#replace-the-battery",
+            "section": "Service Manual 5.4 Replace the Battery"
+          }
+        },
+        {
+          "label": "Replacement",
+          "value": "All compute trays powered off; the tray is removed and its cooling loop pressure checked (1 PSI or above)",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#compute-tray-battery-replacement-overview",
+            "section": "Service Manual 5.1 Compute Tray Battery Replacement Overview"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#replace-the-battery",
+        "section": "Service Manual 5.4 Replace the Battery"
+      },
+      "note": "Count read from the manual's singular wording ('the battery')."
     },
     {
       "id": "switch-tray",
@@ -626,11 +917,38 @@
         },
         {
           "label": "NVSwitch ASICs",
-          "value": 4
+          "value": 4,
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays"
+          },
+          "note": "Fig. 4 (compute tray block diagram) draws two NVLink Switch icons per switch tray. See docs/OPEN_QUESTIONS.md."
         },
         {
           "label": "NVLink 6 ports per ASIC",
-          "value": 72
+          "value": 72,
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays"
+          }
+        },
+        {
+          "label": "Cooling",
+          "value": "Liquid: cold plates on the NVLink switches, hot water outlet and cold water inlet",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          }
+        },
+        {
+          "label": "Other parts in Fig. 7",
+          "value": "Power connector, SWB w/ PDB, battery, SSD",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          }
         },
         {
           "label": "Serial console",
@@ -644,9 +962,19 @@
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
-        "section": "1.3 NVLink Switch Trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
         "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
-      }
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+          "section": "1.3 NVLink Switch Trays"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+          "section": "2.1 NVLink Networking"
+        }
+      ]
     },
     {
       "id": "nvswitch-asic",
@@ -655,7 +983,7 @@
       "count": 4,
       "parent": "switch-tray",
       "description": "NVSwitch ASIC with 72 NVLink 6 ports.",
-      "function": "Non-blocking switch for NVLink between GPUs. Also does in-network computing (SHARP) to speed up collective operations.",
+      "function": "Switches NVLink traffic. NVSwitch chips act as non-blocking switches between servers and do in-network computing (SHARP) to speed up collective operations.",
       "networks": [],
       "specs": [
         {
@@ -669,13 +997,27 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
             "section": "2.1 NVLink Networking"
           }
+        },
+        {
+          "label": "Cooling",
+          "value": "Cold plate (liquid)",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          }
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
-        "section": "1.3 NVLink Switch Trays",
-        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
-      }
+        "section": "1.3 NVLink Switch Trays"
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+          "section": "2.1 NVLink Networking"
+        }
+      ]
     },
     {
       "id": "switch-bmc",
@@ -691,9 +1033,15 @@
       "specs": [],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
-        "section": "1.3 NVLink Switch Trays",
-        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
-      }
+        "section": "1.3 NVLink Switch Trays"
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+          "section": "1.5 Top-of-Rack Ethernet Switches"
+        }
+      ],
+      "note": "Count read from the guide's singular wording ('BMC for attestation and recovery')."
     },
     {
       "id": "cpu-erot",
@@ -707,9 +1055,9 @@
       "specs": [],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
-        "section": "1.3 NVLink Switch Trays",
-        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
-      }
+        "section": "1.3 NVLink Switch Trays"
+      },
+      "note": "Count read from the guide's singular wording. The guide does not expand 'ERoT'."
     },
     {
       "id": "st-port-rs232",
@@ -732,8 +1080,7 @@
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
-        "section": "2.5 NVLink Switch Network Ports, port table",
-        "figure": "network-port-numbers-VRNVL72.png"
+        "section": "2.5 NVLink Switch Network Ports, port table"
       }
     },
     {
@@ -741,7 +1088,7 @@
       "type": "port",
       "name": "Ethernet port BMC",
       "count": 1,
-      "parent": "switch-tray",
+      "parent": "switch-bmc",
       "description": "RJ45 port, second from the left.",
       "function": "Connects the switch tray BMC to ipminet (Ethernet).",
       "networks": [
@@ -755,12 +1102,21 @@
         {
           "label": "Position",
           "value": "2nd from left"
+        },
+        {
+          "label": "Label in Fig. 2",
+          "value": "BCM",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+            "section": "2.2 Network Overview, Fig. 2 (network port types)",
+            "figure": "network-port-types-VRNVL72.png"
+          },
+          "note": "Printed 'BCM' in the figure."
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
-        "section": "2.5 NVLink Switch Network Ports, port table",
-        "figure": "network-port-numbers-VRNVL72.png"
+        "section": "2.5 NVLink Switch Network Ports, port table"
       }
     },
     {
@@ -782,12 +1138,20 @@
         {
           "label": "Position",
           "value": "3rd and 4th from left"
+        },
+        {
+          "label": "Labels in Fig. 2",
+          "value": "COMe0, COMe1",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+            "section": "2.2 Network Overview, Fig. 2 (network port types)",
+            "figure": "network-port-types-VRNVL72.png"
+          }
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
-        "section": "2.5 NVLink Switch Network Ports, port table",
-        "figure": "network-port-numbers-VRNVL72.png"
+        "section": "2.5 NVLink Switch Network Ports, port table"
       }
     },
     {
@@ -811,9 +1175,50 @@
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
-        "section": "2.5 NVLink Switch Network Ports, port table",
-        "figure": "network-port-numbers-VRNVL72.png"
+        "section": "2.5 NVLink Switch Network Ports, port table"
       }
+    },
+    {
+      "id": "switch-tray-battery",
+      "type": "battery",
+      "name": "Switch tray battery",
+      "count": 1,
+      "parent": "switch-tray",
+      "description": "Battery on the NVLink switch tray, in a holder under a top cover.",
+      "function": "The guide and the manual do not say what it powers.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Customer-replaceable unit (CRU)",
+          "value": "Yes",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
+            "section": "Service Manual 1.1 Customer-Replaceable Units"
+          }
+        },
+        {
+          "label": "Shown in",
+          "value": "Fig. 7 labels 'Battery'",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+            "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+            "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+          }
+        },
+        {
+          "label": "Replacement",
+          "value": "All compute trays and the switch tray powered off; the tray is removed and its cooling loop pressure checked (1 PSI or above)",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#nvlink-switch-tray-battery-replacement-overview",
+            "section": "Service Manual 6.1 NVLink Switch Tray Battery Replacement Overview"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#replace-the-battery",
+        "section": "Service Manual 6.4 Replace the Battery"
+      },
+      "note": "Count read from the manual's singular wording ('the battery')."
     },
     {
       "id": "power-shelf",
@@ -830,32 +1235,67 @@
         {
           "label": "Height",
           "value": 3,
-          "unit": "RU"
+          "unit": "RU",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          }
         },
         {
           "label": "Rating",
           "value": 110,
-          "unit": "kW"
+          "unit": "kW",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          }
         },
         {
           "label": "PSUs",
-          "value": 6
+          "value": 6,
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          }
         },
         {
           "label": "AC input",
-          "value": "2 x 100 A whips at 415-480 V AC"
+          "value": "2 x 100 A whips at 415-480 V AC",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          }
         },
         {
           "label": "DC output",
           "value": 54,
-          "unit": "V DC"
+          "unit": "V DC",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          }
+        },
+        {
+          "label": "Management",
+          "value": "Power shelf management module with an RJ45 port",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves, Fig. 8 (Power Shelf)",
+            "figure": "hardware-power-shelf-VRNVL72.png"
+          }
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
-        "section": "1.4 Power Shelves",
+        "section": "1.4 Power Shelves, Fig. 8 (Power Shelf)",
         "figure": "hardware-power-shelf-VRNVL72.png"
-      }
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+          "section": "1.4 Power Shelves"
+        }
+      ]
     },
     {
       "id": "psu",
@@ -864,7 +1304,7 @@
       "count": 6,
       "parent": "power-shelf",
       "description": "Air-cooled power supply unit.",
-      "function": "Part of the shelf's AC to 54 V DC conversion.",
+      "function": "Six per shelf. The shelf converts AC power into a 54 V DC output for the bus bar.",
       "networks": [],
       "specs": [
         {
@@ -875,13 +1315,85 @@
         {
           "label": "Cooling",
           "value": "Air"
+        },
+        {
+          "label": "Customer-replaceable unit (CRU)",
+          "value": "Yes",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
+            "section": "Service Manual 1.1 Customer-Replaceable Units"
+          }
+        },
+        {
+          "label": "Redundancy",
+          "value": "N+N",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+            "section": "Service Manual 2.2 Identify the Failed Power Supply (power shelf figure)"
+          },
+          "note": "The manual says any one PSU can be replaced 'as long as at least six power supplies are fully active and healthy'."
+        },
+        {
+          "label": "Numbering",
+          "value": "1 to 6 within a shelf: left to right, top to bottom",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+            "section": "Service Manual 2.2 Identify the Failed Power Supply (power shelf figure)"
+          }
         }
       ],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
-        "section": "1.4 Power Shelves",
-        "figure": "hardware-power-shelf-VRNVL72.png"
+        "section": "1.4 Power Shelves"
       }
+    },
+    {
+      "id": "power-shelf-mgmt-module",
+      "type": "controller",
+      "name": "Power shelf management module",
+      "count": 1,
+      "parent": "power-shelf",
+      "description": "Management module at the front of the power shelf, with an RJ45 port for a network management cable.",
+      "function": "Manages the power shelf. The power supplies keep running while it is replaced.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Customer-replaceable unit (CRU)",
+          "value": "Yes",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
+            "section": "Service Manual 1.1 Customer-Replaceable Units"
+          }
+        },
+        {
+          "label": "Network",
+          "value": "RJ45 network management cable",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+            "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+          }
+        },
+        {
+          "label": "Identity",
+          "value": "MAC address on the power shelf pull tab must match the module",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#dgxvr-sm-pmm-identify",
+            "section": "Service Manual 3.2 Identify the Failed Power Shelf Management Module"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+        "section": "1.4 Power Shelves, Fig. 8 (Power Shelf)",
+        "figure": "hardware-power-shelf-VRNVL72.png"
+      },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+          "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+        }
+      ],
+      "note": "Count read from Fig. 8 and the service manual's power shelf figure, which show one module per shelf. The guide does not say which network the management cable goes to."
     },
     {
       "id": "tor-switch",
@@ -897,7 +1409,7 @@
       "specs": [],
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
-        "section": "1.5 Top-of-Rack Ethernet Switches",
+        "section": "1.5 Top-of-Rack Ethernet Switches, Fig. 9",
         "figure": "hardware-tor-ethernet-VRNVL72.png"
       }
     },
@@ -912,11 +1424,22 @@
       "networks": [],
       "specs": [],
       "source": {
-        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
-        "section": "2.1 NVLink Networking"
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+        "section": "1.1 Rack Configuration, Fig. 2 (Rack Rear View)",
+        "figure": "hardware-rack-rear-VRNVL72.png"
       },
-      "rearSide": true,
-      "note": "The guide does not state the number of cartridges."
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html",
+          "section": "Chapter 1. Hardware (introduction)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+          "section": "2.1 NVLink Networking"
+        }
+      ],
+      "note": "The guide does not state the number of cartridges.",
+      "rearSide": true
     },
     {
       "id": "liquid-cooling-manifold",
@@ -924,17 +1447,27 @@
       "name": "Liquid cooling manifold",
       "count": null,
       "parent": "rack",
-      "description": "Liquid cooling manifolds at the rear of the rack, with their inlets and outlets.",
-      "function": "Coolant runs up and down the rack through the inner manifold, then through the cold plates in the trays.",
+      "description": "Liquid cooling manifolds at the rear of the rack. The rear gives access to their inlets and outlets; Fig. 2 also labels FD83 connectors for the liquid cooling hoses.",
+      "function": "Carry coolant for the liquid-cooled trays. Section 1.2 says the liquid 'runs up and down the rack through the inner manifold, then through the cold plates'.",
       "networks": [],
       "specs": [],
       "source": {
-        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
-        "section": "1.2 Compute Trays",
-        "figure": "hardware-compute-tray-vrnvl72.png"
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+        "section": "1.1 Rack Configuration, Fig. 2 (Rack Rear View)",
+        "figure": "hardware-rack-rear-VRNVL72.png"
       },
-      "rearSide": true,
-      "note": "The guide does not state the number of manifolds."
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+          "section": "1.1 Rack Configuration"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays"
+        }
+      ],
+      "note": "The text gives no count; Fig. 2 points the 'Liquid cooling manifolds' label at two manifolds. Fig. 5 also labels an 'Internal Manifold' inside the compute tray, so the 'inner manifold' in 1.2 may mean that part.",
+      "rearSide": true
     },
     {
       "id": "bus-bar",
@@ -949,14 +1482,24 @@
         {
           "label": "Voltage",
           "value": 54,
-          "unit": "V DC"
+          "unit": "V DC",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+            "section": "1.4 Power Shelves"
+          }
         }
       ],
       "source": {
-        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
-        "section": "1.4 Power Shelves",
-        "figure": "hardware-power-shelf-VRNVL72.png"
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+        "section": "1.1 Rack Configuration, Fig. 2 (Rack Rear View)",
+        "figure": "hardware-rack-rear-VRNVL72.png"
       },
+      "textSources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+          "section": "1.4 Power Shelves"
+        }
+      ],
       "rearSide": true
     }
   ],
@@ -993,7 +1536,7 @@
       "section": "1.1 Rack Configuration, Fig. 1 (DGX Vera Rubin NVL72 Rack Configuration)",
       "figure": "hardware-rack-configuration-VRNVL72.png"
     },
-    "note": "Order of the groups from Fig. 1. The guide gives no RU positions, so the units are stacked without gaps.",
+    "note": "Order of the groups from Fig. 1. The guide gives no RU positions, so the units are stacked without gaps. Fig. 1 also shows blank panels below the lower power shelves and seismic bracing under the rack.",
     "heightsRU": {
       "compute-tray": {
         "value": 1,
@@ -1036,7 +1579,17 @@
         "figure": "hardware-rack-configuration-VRNVL72.png"
       },
       "assumed": true,
-      "note": "The guide does not number the trays. This app numbers each type from the top of the rack down (Compute tray 1 is the highest compute tray)."
+      "note": "The guide does not number compute trays or switch trays by rack position (Fig. 4 numbers switch trays 1 to 9 without saying where each sits). This app numbers them from the top of the rack down (Compute tray 1 is the highest compute tray).",
+      "overrides": {
+        "power-shelf": {
+          "order": "bottom-to-top",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+            "section": "Service Manual 2.2 Identify the Failed Power Supply (power shelf figure)"
+          },
+          "note": "The service manual's power shelf figure numbers the shelves 1 to 4 from the bottom of the rack up."
+        }
+      }
     }
   },
   "connections": [
@@ -1062,7 +1615,8 @@
         "section": "2.3 Compute Tray Network Ports, port table",
         "figure": "network-port-types-VRNVL72.png"
       },
-      "network": "dgxnet"
+      "network": "dgxnet",
+      "note": "Fig. 1 in 2.2 marks this port 6 (storagenet) instead. See docs/OPEN_QUESTIONS.md."
     },
     {
       "id": "bf4-right-storagenet",
@@ -1080,7 +1634,7 @@
       "id": "bf4-rj45-ipminet",
       "from": "ct-port-bf4-rj45",
       "kind": "network",
-      "description": "BlueField-4 RJ45 port to ipminet (Ethernet).",
+      "description": "BlueField-4 RJ-45 port to ipminet (Ethernet).",
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
         "section": "2.3 Compute Tray Network Ports, port table",
@@ -1244,8 +1798,7 @@
       "description": "Power shelves output 54 V DC into the bus bar.",
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
-        "section": "1.4 Power Shelves",
-        "figure": "hardware-power-shelf-VRNVL72.png"
+        "section": "1.4 Power Shelves"
       },
       "to": "bus-bar"
     },
@@ -1253,13 +1806,28 @@
       "id": "manifold-ct",
       "from": "liquid-cooling-manifold",
       "kind": "cooling",
-      "description": "Coolant runs through the inner manifold, then the cold plates in the compute trays.",
+      "description": "Coolant runs up and down the rack through the inner manifold, then through the cold plates in the compute trays.",
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
         "section": "1.2 Compute Trays",
         "figure": "hardware-compute-tray-vrnvl72.png"
       },
-      "to": "compute-tray"
+      "to": "compute-tray",
+      "note": "Section 1.2's 'inner manifold' may be the tray's Internal Manifold (Fig. 5) rather than the rear manifolds."
+    },
+    {
+      "id": "manifold-st",
+      "from": "liquid-cooling-manifold",
+      "to": "switch-tray",
+      "kind": "cooling",
+      "description": "The switch tray is liquid cooled: cold plates on the NVLink switches, with a hot water outlet and cold water inlet at the rear.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+        "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
+        "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
+      },
+      "note": "Fig. 7 shows the tray's water connections; the guide does not say in words that they connect to these manifolds.",
+      "assumed": true
     }
   ]
 }

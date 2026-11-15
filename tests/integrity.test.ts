@@ -41,14 +41,19 @@ describe('references inside the data file', () => {
     }
   });
 
-  it('backs every network a component claims with a sourced connection', () => {
+  it('backs every network a component claims with a sourced connection from it or a part inside it', () => {
     for (const c of topology.components) {
+      const own = [c.id, ...topology.components.filter((d) => model.ancestorsOf(d.id).includes(c.id)).map((d) => d.id)];
       for (const n of c.networks) {
-        const backed = [c.id, ...topology.components.filter((d) => model.ancestorsOf(d.id).includes(c.id)).map((d) => d.id)];
-        const hit = topology.connections.some((x) => backed.includes(x.from) && x.network === n);
-        const viaTor = n === 'ipminet' && topology.connections.some((x) => x.from === c.id && x.to === 'tor-switch');
-        expect(hit || viaTor, `${c.id} on ${n}`).toBe(true);
+        const hit = topology.connections.some((x) => own.includes(x.from) && x.network === n);
+        expect(hit, `${c.id} on ${n}`).toBe(true);
       }
+    }
+  });
+
+  it('lists the network on every component that has a connection to it', () => {
+    for (const x of topology.connections) {
+      if (x.network) expect(model.getComponent(x.from)?.networks, x.id).toContain(x.network);
     }
   });
 
@@ -61,8 +66,71 @@ describe('references inside the data file', () => {
     for (const [id, count] of placed) expect(model.getComponent(id)?.count, id).toBe(count);
   });
 
-  it('gives a height for every component in the rack layout', () => {
-    for (const g of topology.rackLayout.groups) expect(topology.rackLayout.heightsRU?.[g.component], g.component).toBeDefined();
+  it('gives a height for every component in the rack layout, and only for those', () => {
+    const inLayout = new Set(topology.rackLayout.groups.map((g) => g.component));
+    for (const id of inLayout) expect(topology.rackLayout.heightsRU?.[id], id).toBeDefined();
+    for (const id of Object.keys(topology.rackLayout.heightsRU ?? {})) expect(inLayout, id).toContain(id);
+  });
+
+  it('keeps specs that repeat a count or height in step with it', () => {
+    const spec = (id: string, label: string) => model.getComponent(id)?.specs.find((s) => s.label === label)?.value;
+    expect(spec('rack', 'Compute trays')).toBe(model.getComponent('compute-tray')?.count);
+    expect(spec('rack', 'NVLink 6 switch trays')).toBe(model.getComponent('switch-tray')?.count);
+    expect(spec('rack', 'Top-of-rack management switches')).toBe(model.getComponent('tor-switch')?.count);
+    expect(spec('rack', 'Power shelves')).toBe(model.getComponent('power-shelf')?.count);
+    expect(spec('rack', 'GPUs in the NVLink domain')).toBe(model.totalPerRack('rubin-gpu'));
+    expect(spec('switch-tray', 'NVSwitch ASICs')).toBe(model.getComponent('nvswitch-asic')?.count);
+    expect(spec('power-shelf', 'PSUs')).toBe(model.getComponent('psu')?.count);
+    for (const id of ['compute-tray', 'switch-tray', 'power-shelf']) {
+      expect(spec(id, 'Height'), id).toBe(model.heightRU(id));
+    }
+  });
+});
+
+describe('facts the brief extracted from the guide', () => {
+  const count = (id: string) => model.getComponent(id)?.count;
+  const value = (id: string, label: string) => model.getComponent(id)?.specs.find((s) => s.label === label)?.value;
+  const portLink = (port: string) => topology.connections.find((x) => x.from === port);
+
+  it('compute tray: 2 CPUs, 4 GPUs, 2 ConnectX-9, 1 BlueField-4, 4 cache drives in RAID 0, 1 boot drive', () => {
+    expect(count('vera-cpu')).toBe(2);
+    expect(count('rubin-gpu')).toBe(4);
+    expect(count('connectx-9')).toBe(2);
+    expect(count('bluefield-4')).toBe(1);
+    expect(count('e1s-cache-drive')).toBe(4);
+    expect(count('e1s-boot-drive')).toBe(1);
+    expect(String(value('e1s-cache-drive', 'RAID level'))).toMatch(/RAID 0/);
+  });
+
+  it('switch tray: 4 NVSwitch ASICs with 72 NVLink 6 ports each', () => {
+    expect(count('nvswitch-asic')).toBe(4);
+    expect(value('nvswitch-asic', 'NVLink 6 ports')).toBe(72);
+  });
+
+  it('power shelf: 3 RU, 110 kW, 6 x 18.3 kW PSUs, 2 x 100 A at 415-480 V AC in, 54 V DC out', () => {
+    expect(value('power-shelf', 'Height')).toBe(3);
+    expect(value('power-shelf', 'Rating')).toBe(110);
+    expect(value('power-shelf', 'AC input')).toBe('2 x 100 A whips at 415-480 V AC');
+    expect(value('power-shelf', 'DC output')).toBe(54);
+    expect(value('psu', 'Rating')).toBe(18.3);
+  });
+
+  it('maps every compute and switch tray port to the network in tables 2.3 and 2.5', () => {
+    expect(portLink('ct-port-cx9-osfp')?.network).toBe('computenet');
+    expect(portLink('ct-port-bf4-left')?.network).toBe('dgxnet');
+    expect(portLink('ct-port-bf4-right')?.network).toBe('storagenet');
+    expect(portLink('ct-port-bf4-rj45')?.network).toBe('ipminet');
+    expect(portLink('ct-port-bmc-1gbe')?.network).toBe('ipminet');
+    expect(portLink('ct-port-lan-1gbe')?.kind).toBe('not-connected');
+    expect(portLink('st-port-bmc-eth')?.network).toBe('ipminet');
+    expect(portLink('st-port-switch-mgmt')?.network).toBe('ipminet');
+    expect(portLink('st-port-rs232')?.kind).toBe('not-connected');
+    expect(portLink('st-port-leakage')?.kind).toBe('not-connected');
+    expect(count('st-port-switch-mgmt')).toBe(2);
+  });
+
+  it('flags the BlueField-4 left port conflict between Table 2.3 and Fig. 1', () => {
+    expect(model.getComponent('ct-port-bf4-left')?.note).toMatch(/storagenet/);
   });
 });
 

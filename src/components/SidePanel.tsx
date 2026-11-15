@@ -102,10 +102,17 @@ export function SidePanel() {
         {countText(component, last?.index).map((line) => (
           <p key={line}>{line}</p>
         ))}
-        {isNumberedUnit && numbering?.assumed && (
+        {isNumberedUnit && numbering?.overrides?.[component.id] ? (
           <p className="note">
-            <Assumed note={numbering.note} /> {numbering.note}
+            {numbering.overrides[component.id]!.note} Source: <SourceLink source={numbering.overrides[component.id]!.source} />
           </p>
+        ) : (
+          isNumberedUnit &&
+          numbering?.assumed && (
+            <p className="note">
+              <Assumed note={numbering.note} /> {numbering.note}
+            </p>
+          )
         )}
         {height?.assumed && (
           <p className="note">
@@ -196,8 +203,21 @@ export function SidePanel() {
         <p>
           <SourceLink source={component.source} />
         </p>
+        {component.textSources && component.textSources.length > 0 && (
+          <p className="small">
+            Also from:{' '}
+            {component.textSources.map((s, i) => (
+              <span key={`${s.url}|${s.section}`}>
+                {i > 0 && ' · '}
+                <SourceLink source={s} />
+              </span>
+            ))}
+          </p>
+        )}
         <p className="muted small">
-          {model.topology.meta.document.title}, {model.topology.meta.document.date}.
+          {component.source.url.includes('dgxvr-service-manual')
+            ? `${model.topology.meta.serviceManual?.title}, ${model.topology.meta.serviceManual?.date}.`
+            : `${model.topology.meta.document.title}, ${model.topology.meta.document.date}.`}
         </p>
         {SHOW_OFFICIAL_FIGURES && component.source.figure && (
           <figure className="official-figure">

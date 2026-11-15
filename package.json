@@ -6,7 +6,7 @@
   "author": "Omer Sen",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": "26.x"
   },
   "scripts": {
     "dev": "vite",

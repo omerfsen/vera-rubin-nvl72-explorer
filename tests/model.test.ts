@@ -8,6 +8,12 @@ describe('rack units', () => {
     expect(trays[10]!.group).toBe(4); // tray 11 is the first one below the switch trays
   });
 
+  it('numbers power shelves from the bottom up, as the service manual does', () => {
+    const shelves = model.rackUnits.filter((u) => u.componentId === 'power-shelf');
+    expect(shelves.map((u) => u.index)).toEqual([4, 3, 2, 1]);
+    expect(model.rackUnits[model.rackUnits.length - 1]!.key).toBe('power-shelf.1');
+  });
+
   it('stacks without gaps and adds up the heights', () => {
     let top = 0;
     for (const u of model.rackUnits) {
@@ -38,7 +44,8 @@ describe('selection paths', () => {
     expect(model.parsePath('switch-tray.1/rubin-gpu')).toBeNull();
     expect(model.parsePath('nope')).toBeNull();
     expect(model.parsePath('compute-tray.7//')).toBeNull();
-    expect(model.parsePath('hmc.1')).toBeNull(); // HMC count is not stated
+    expect(model.parsePath('hmc.1')).toBeNull(); // hmc is not a child of the rack
+    expect(model.parsePath('compute-tray.1/hmc.1')).toBeNull(); // HMC count is not stated
   });
 
   it('labels segments for the breadcrumb', () => {

@@ -32,6 +32,8 @@ export interface Network extends Provenance {
   name: string;
   description: string;
   fabric: Fabric;
+  /** Where the fabric is stated, when that is not the network's own source. */
+  fabricSource?: Source;
 }
 
 export type ComponentType =
@@ -52,7 +54,8 @@ export type ComponentType =
   | 'port'
   | 'cable-cartridge'
   | 'manifold'
-  | 'bus-bar';
+  | 'bus-bar'
+  | 'battery';
 
 export interface Component extends Provenance {
   id: string;
@@ -65,6 +68,8 @@ export interface Component extends Provenance {
   function: string;
   networks: string[];
   specs: Spec[];
+  /** Extra sources for facts in description and function. */
+  textSources?: Source[];
   rearSide?: boolean;
 }
 
@@ -81,7 +86,11 @@ export interface RackLayout extends Provenance {
   order: 'top-to-bottom';
   groups: RackGroup[];
   heightsRU?: Record<string, Height>;
-  numbering?: Provenance & { scheme: 'top-to-bottom-per-type' };
+  numbering?: Provenance & {
+    scheme: 'top-to-bottom-per-type';
+    /** Types numbered differently, e.g. power shelves from the bottom up. */
+    overrides?: Record<string, Provenance & { order: 'top-to-bottom' | 'bottom-to-top' }>;
+  };
 }
 
 export type ConnectionKind = 'network' | 'not-connected' | 'nvlink' | 'power' | 'cooling';
@@ -101,6 +110,7 @@ export interface Topology {
   meta: {
     title: string;
     document: { title: string; date: string; urls: string[] };
+    serviceManual?: { title: string; date: string; urls: string[] };
     retrieved: string;
   };
   networks: Network[];

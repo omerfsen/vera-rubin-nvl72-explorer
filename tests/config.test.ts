@@ -10,6 +10,11 @@ describe('base path', () => {
     expect(normalizeBase('vera-rubin-nvl72-explorer')).toBe('/vera-rubin-nvl72-explorer/');
     expect(normalizeBase('/vera-rubin-nvl72-explorer')).toBe('/vera-rubin-nvl72-explorer/');
     expect(normalizeBase('/a/b/')).toBe('/a/b/');
+    expect(normalizeBase('//')).toBe('/');
+    expect(normalizeBase('a//b')).toBe('/a/b/');
+    expect(normalizeBase(' /x/ ')).toBe('/x/');
+    expect(normalizeBase('./')).toBe('./');
+    expect(normalizeBase('https://cdn.example.com/x')).toBe('https://cdn.example.com/x/');
   });
 });
 
