@@ -33,6 +33,12 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), publishData()],
     build: {
       sourcemap: true,
+      rollupOptions: {
+        output: {
+          // three.js changes far less often than the app; a separate chunk stays cached across releases.
+          manualChunks: (id: string) => (id.includes('/node_modules/three/') ? 'three' : undefined),
+        },
+      },
       chunkSizeWarningLimit: 1500,
     },
     test: {

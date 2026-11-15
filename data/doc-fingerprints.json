@@ -1,0 +1,17 @@
+{
+  "description": "Fingerprints of the NVIDIA documents the data was built from. scripts/check-docs.mjs compares them with what docs.nvidia.com serves now.",
+  "documents": [
+    {
+      "title": "NVIDIA DGX VR NVL72 User Guide",
+      "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf",
+      "sha256": "a80572227a6175d85a5f8209acfcf8b6ab573da3e5d50f9f29f946ec9627986e",
+      "lastModified": "Thu, 05 Nov 2026 01:37:26 GMT"
+    },
+    {
+      "title": "NVIDIA DGX VR NVL72 Service Manual",
+      "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/dgxvr-service-manual.pdf",
+      "sha256": "9e7cef3fa7ee2767f3dacc5350d393cdefe0f30045303bd23976ce380618bf50",
+      "lastModified": "Wed, 07 Oct 2026 21:04:45 GMT"
+    }
+  ]
+}

@@ -54,6 +54,13 @@ npm run e2e         # real browser tests; locally: PW_CHROMIUM_PATH=/usr/bin/chr
 must place every part inside the tray or list it in `notPlaced` with a reason;
 `tests/m3.test.ts` checks this for every layout.
 
+## When NVIDIA updates its documents
+
+`.github/workflows/doc-watch.yml` checks both PDFs every Monday against
+`data/doc-fingerprints.json` (`npm run docs:check` by hand) and opens an issue
+titled "NVIDIA documentation changed" when one differs. Read the new version,
+update the data and its sources, then update the fingerprints.
+
 ## Licensing (strict)
 
 - All 3D geometry is original. Do not trace or copy NVIDIA images, and do not

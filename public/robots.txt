@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://verarubin-nvl72.faruk.net/sitemap.xml
