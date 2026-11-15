@@ -86,6 +86,26 @@ The site is deployed on Vercel from `main` (production) and from every pull
 request (preview), using [`vercel.json`](vercel.json). Production is served at
 https://verarubin-nvl72.faruk.net. https://vr-nvl72.faruk.net redirects there.
 
+## For operators
+
+- **On the host.** Every part that appears in the guide's Table 2.4 shows its
+  PCIe bus, Linux interface and RDMA device, and search understands them:
+  type `mlx5_4`, `enP12p3s0f0np0` or `0002:81:00.0` to land on the exact OSFP
+  cage, GPU or drive. The eight OSFP cages carry NVIDIA's labels, C1/C1_1 to
+  C7/C7_2.
+- **Service procedures.** The five customer-replaceable units (PSU, power
+  shelf management module, E1.S cache drive, compute tray battery, switch
+  tray battery) have step-by-step walkthroughs from the service manual. Each
+  step highlights the part it is about on an example unit and cites its
+  section. Always follow the service manual itself and its safety notes.
+- **Sources page.** Lists both documents, every conflict between NVIDIA's
+  figures and tables, and every assumed fact with its reason, generated from
+  the data.
+- **The dataset.** The site publishes `data/nvl72-topology.json` and its schema
+  next to the app, for reuse in other tools.
+- **Share and embed.** Every view has a link; the panel copies it, or an
+  `<iframe>` snippet. `?embed=1` hides the header, network bar and footer.
+
 ## Official figures (off by default)
 
 `SHOW_OFFICIAL_FIGURES` (`src/config/flags.ts`) adds the guide's figures to
@@ -96,6 +116,11 @@ permission. To turn it on for a build:
 ```bash
 VITE_SHOW_OFFICIAL_FIGURES=true npm run build
 ```
+
+On Vercel, add the environment variable `VITE_SHOW_OFFICIAL_FIGURES` with the
+value `true` for Production and redeploy. Nothing else changes: each part
+already names its figure, the site's Content-Security-Policy already allows
+images from `docs.nvidia.com`, and the figures load with no referrer.
 
 ## Using it
 

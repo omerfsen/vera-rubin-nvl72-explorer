@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { model } from '../src/data';
 import { readUrlState, writeUrlState } from '../src/state/url';
 
-const state = (select: string, list = false) => ({ view: 'rack' as const, select, list, net: '' });
+const state = (select: string, list = false) => ({ view: 'rack' as const, select, list, net: '', proc: '', step: 0, page: '', embed: false });
 
 describe('URL state', () => {
   it('round-trips view, selection and the list pane', () => {

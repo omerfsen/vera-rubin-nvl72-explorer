@@ -11,12 +11,19 @@ export interface UrlState {
   list: boolean;
   /** Network highlighted by the overlay, or "" for none. */
   net?: string;
+  /** Service procedure in progress and its 0-based step, or "" for none. */
+  proc?: string;
+  step?: number;
+  /** "sources" shows the sources page. */
+  page?: string;
+  /** Embedded in another page: no header, network bar or footer. */
+  embed?: boolean;
 }
 
 export const DEFAULT_URL_STATE: UrlState = { view: 'rack', select: '', list: false };
 
 /** The query keys this app owns. Everything else in the query is left alone. */
-const OWN_KEYS = new Set(['view', 'select', 'list', 'net']);
+const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed']);
 
 /**
  * The rack unit whose interior can be opened for this selection, e.g.
@@ -41,7 +48,17 @@ export function readUrlState(search: string, model: Model): UrlState {
     select,
     list: params.get('list') === '1',
     net: model.getNetwork(params.get('net') ?? '') ? (params.get('net') as string) : '',
+    ...procState(params, model),
+    page: params.get('page') === 'sources' ? 'sources' : '',
+    embed: params.get('embed') === '1',
   };
+}
+
+function procState(params: URLSearchParams, model: Model): { proc: string; step: number } {
+  const proc = (model.topology.procedures ?? []).find((p) => p.id === params.get('proc'));
+  if (!proc) return { proc: '', step: 0 };
+  const step = Number(params.get('step') ?? '1') - 1;
+  return { proc: proc.id, step: Number.isInteger(step) ? Math.min(proc.steps.length - 1, Math.max(0, step)) : 0 };
 }
 
 function keyOf(piece: string): string {
@@ -66,5 +83,8 @@ export function writeUrlState(search: string, state: UrlState): string {
   if (state.select !== '') kept.push(`select=${encodeURIComponent(state.select).replace(/%2F/g, '/')}`);
   if (state.list) kept.push('list=1');
   if (state.net) kept.push(`net=${encodeURIComponent(state.net)}`);
+  if (state.proc) kept.push(`proc=${encodeURIComponent(state.proc)}`, `step=${(state.step ?? 0) + 1}`);
+  if (state.page) kept.push(`page=${encodeURIComponent(state.page)}`);
+  if (state.embed) kept.push('embed=1');
   return kept.length === 0 ? '' : `?${kept.join('&')}`;
 }

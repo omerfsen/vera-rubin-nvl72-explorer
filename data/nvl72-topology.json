@@ -684,8 +684,8 @@
       "id": "ct-port-cx9-osfp",
       "type": "port",
       "name": "ConnectX-9 OSFP port",
-      "count": null,
-      "parent": "connectx-9",
+      "count": 8,
+      "parent": "compute-tray",
       "description": "OSFP port on a ConnectX-9 I/O card.",
       "function": "Connects the tray to computenet (InfiniBand).",
       "networks": [
@@ -698,18 +698,17 @@
         }
       ],
       "source": {
-        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
-        "section": "2.3 Compute Tray Network Ports, port table",
-        "figure": "network-port-types-VRNVL72.png"
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+        "section": "2.2 Network Overview, Fig. 1 (network port locations)",
+        "figure": "network-port-numbers-VRNVL72.png"
       },
       "textSources": [
         {
-          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
-          "section": "2.2 Network Overview, Fig. 1 (network port locations)",
-          "figure": "network-port-numbers-VRNVL72.png"
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+          "section": "2.3 Compute Tray Network Ports, port table"
         }
       ],
-      "note": "The guide does not say how many OSFP ports each card has. The 2.2 figures show 8 OSFP cages per compute tray."
+      "note": "Eight per compute tray (Fig. 1 marks eight cages 5, computenet). They belong to the ConnectX-9 cards, but the guide does not say how many ports each card has, so they are listed under the tray."
     },
     {
       "id": "ct-port-bf4-left",
@@ -2394,6 +2393,17 @@
       },
       "assumed": true,
       "note": "Section 2.2 puts the power shelves' out-of-band interfaces on ipminet; the port itself is named only in the service manual."
+    },
+    {
+      "id": "cx9-card-computenet",
+      "from": "connectx-9",
+      "network": "computenet",
+      "kind": "network",
+      "description": "ConnectX-9 I/O cards to computenet (InfiniBand), through their OSFP ports.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+        "section": "2.3 Compute Tray Network Ports, port table"
+      }
     }
   ],
   "trayLayouts": {
@@ -2820,6 +2830,8 @@
         },
         {
           "component": "ct-port-cx9-osfp",
+          "index": 1,
+          "label": "C1/C1_1",
           "face": "front",
           "x": -0.45,
           "z": 0.5,
@@ -2830,6 +2842,8 @@
         },
         {
           "component": "ct-port-cx9-osfp",
+          "index": 2,
+          "label": "C1/C1_2",
           "face": "front",
           "x": -0.35000000000000003,
           "z": 0.5,
@@ -2840,6 +2854,8 @@
         },
         {
           "component": "ct-port-cx9-osfp",
+          "index": 3,
+          "label": "C3/C3_1",
           "face": "front",
           "x": -0.45,
           "z": 0.5,
@@ -2850,6 +2866,8 @@
         },
         {
           "component": "ct-port-cx9-osfp",
+          "index": 4,
+          "label": "C3/C3_2",
           "face": "front",
           "x": -0.35000000000000003,
           "z": 0.5,
@@ -2860,6 +2878,8 @@
         },
         {
           "component": "ct-port-cx9-osfp",
+          "index": 5,
+          "label": "C5/C5_1",
           "face": "front",
           "x": 0.15000000000000002,
           "z": 0.5,
@@ -2870,6 +2890,8 @@
         },
         {
           "component": "ct-port-cx9-osfp",
+          "index": 6,
+          "label": "C5/C5_2",
           "face": "front",
           "x": 0.25,
           "z": 0.5,
@@ -2880,6 +2902,8 @@
         },
         {
           "component": "ct-port-cx9-osfp",
+          "index": 7,
+          "label": "C7/C7_1",
           "face": "front",
           "x": 0.15000000000000002,
           "z": 0.5,
@@ -2890,6 +2914,8 @@
         },
         {
           "component": "ct-port-cx9-osfp",
+          "index": 8,
+          "label": "C7/C7_2",
           "face": "front",
           "x": 0.25,
           "z": 0.5,
@@ -5036,5 +5062,561 @@
         "toPart": 3
       }
     ]
-  }
+  },
+  "pcieDevices": [
+    {
+      "label": "C1/C1_1",
+      "bus": "0001:03:00.0",
+      "component": "ct-port-cx9-osfp",
+      "index": 1,
+      "interface": "enP1p3s0f0np0",
+      "rdma": "mlx5_0",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "Bay_B_L E1.s_Top",
+      "bus": "0001:06:00.0",
+      "component": "e1s-cache-drive",
+      "index": 1,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "C1/C1_2",
+      "bus": "0003:01:00.0",
+      "component": "ct-port-cx9-osfp",
+      "index": 2,
+      "interface": "enP3p1s0f0np0",
+      "rdma": "mlx5_4",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "C3/C3_1",
+      "bus": "0004:03:00.0",
+      "component": "ct-port-cx9-osfp",
+      "index": 3,
+      "interface": "enP4p3s0f0np0",
+      "rdma": "mlx5_8",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "Bay_B_L E1.s_Bottom",
+      "bus": "0004:06:00.0",
+      "component": "e1s-cache-drive",
+      "index": 2,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "C3/C3_2",
+      "bus": "0006:01:00.0",
+      "component": "ct-port-cx9-osfp",
+      "index": 4,
+      "interface": "enP6p1s0f0np0",
+      "rdma": "mlx5_14",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "C7/C7_1",
+      "bus": "0009:03:00.0",
+      "component": "ct-port-cx9-osfp",
+      "index": 7,
+      "interface": "enP9p3s0f0np0",
+      "rdma": "mlx5_18",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      },
+      "note": "Printed C7/C3_1 in the 2.2 and 2.4 figures."
+    },
+    {
+      "label": "Bay_B_R E1.s_Bottom",
+      "bus": "0009:06:00.0",
+      "component": "e1s-cache-drive",
+      "index": 4,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "C7/C7_2",
+      "bus": "000b:01:00.0",
+      "component": "ct-port-cx9-osfp",
+      "index": 8,
+      "interface": "enP11p1s0f0np0",
+      "rdma": "mlx5_22",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      },
+      "note": "Printed C7/C3_2 in the 2.2 and 2.4 figures."
+    },
+    {
+      "label": "C5/C5_1",
+      "bus": "000c:03:00.0",
+      "component": "ct-port-cx9-osfp",
+      "index": 5,
+      "interface": "enP12p3s0f0np0",
+      "rdma": "mlx5_26",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "Bay_B_R E1.s_Top",
+      "bus": "000c:06:00.0",
+      "component": "e1s-cache-drive",
+      "index": 3,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "C5/C5_2",
+      "bus": "000e:01:00.0",
+      "component": "ct-port-cx9-osfp",
+      "index": 6,
+      "interface": "enP14p1s0f0np0",
+      "rdma": "mlx5_32",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, front-view table",
+        "figure": "network-port-labels-1-VRNVL72.png"
+      }
+    },
+    {
+      "label": "HPM_L GPU_0",
+      "bus": "0002:81:00.0",
+      "component": "rubin-gpu",
+      "index": 1,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      }
+    },
+    {
+      "label": "Bay_C BMC Bridge",
+      "bus": "0002:a1:00.0",
+      "component": "host-bmc",
+      "index": 1,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      }
+    },
+    {
+      "label": "Bay_C BMC",
+      "bus": "0002:a2:00.0",
+      "component": "host-bmc",
+      "index": 1,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      }
+    },
+    {
+      "label": "HPM_L GPU_1",
+      "bus": "0002:c1:00.0",
+      "component": "rubin-gpu",
+      "index": 2,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      }
+    },
+    {
+      "label": "Bay_C USB",
+      "bus": "0002:e1:00.0",
+      "component": "compute-tray",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      }
+    },
+    {
+      "label": "COMPUTE_n_n_BF_0_MAC_ADDR1",
+      "bus": "000d:41:00.0",
+      "component": "ct-port-bf4-left",
+      "index": 1,
+      "interface": "enP13p65s0f0np0",
+      "rdma": "mlx5_30",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      },
+      "note": "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1."
+    },
+    {
+      "label": "COMPUTE_n_n_BF_0_MAC_ADDR1",
+      "bus": "0005:41:00.0",
+      "component": "ct-port-bf4-left",
+      "index": 1,
+      "interface": "enP5p65s0f0np0",
+      "rdma": "mlx5_12",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      },
+      "note": "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1."
+    },
+    {
+      "label": "HPM_R GPU_2",
+      "bus": "000a:81:00.0",
+      "component": "rubin-gpu",
+      "index": 3,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      }
+    },
+    {
+      "label": "Bay_C E1.S_Boot Drive",
+      "bus": "000a:a1:00.0",
+      "component": "e1s-boot-drive",
+      "index": 1,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      }
+    },
+    {
+      "label": "HPM_R GPU_3",
+      "bus": "000a:e1:00.0",
+      "component": "rubin-gpu",
+      "index": 4,
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      }
+    },
+    {
+      "label": "COMPUTE_n_n_BF_0_MAC_ADDR2",
+      "bus": "000d:41:00.1",
+      "component": "ct-port-bf4-right",
+      "index": 1,
+      "interface": "enP13p65s0f0np0",
+      "rdma": "mlx5_30",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      },
+      "note": "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2."
+    },
+    {
+      "label": "COMPUTE_n_n_BF_0_MAC_ADDR2",
+      "bus": "0005:41:00.1",
+      "component": "ct-port-bf4-right",
+      "index": 1,
+      "interface": "enP5p65s0f0np0",
+      "rdma": "mlx5_12",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+        "section": "2.4 Network Interface Names, top-view table",
+        "figure": "network-port-labels-2-VRNVL72.png"
+      },
+      "note": "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2."
+    }
+  ],
+  "procedures": [
+    {
+      "id": "psu",
+      "title": "Replace a power supply (PSU)",
+      "component": "psu",
+      "steps": [
+        {
+          "text": "Find the failed PSU by its amber LED.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+            "section": "Service Manual 2.2 Identify the Failed Power Supply"
+          },
+          "target": "power-shelf.1/psu.1"
+        },
+        {
+          "text": "Check redundancy first: the PSUs are N+N redundant, and one PSU can be replaced as long as at least six power supplies are fully active and healthy.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+            "section": "Service Manual 2.2 Identify the Failed Power Supply"
+          },
+          "target": "power-shelf.1"
+        },
+        {
+          "text": "Unpack the new PSU. Push the failed PSU's release tab to the left and pull the handle to eject it, then pull it all the way out.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#replace-the-power-supply",
+            "section": "Service Manual 2.3 Replace the Power Supply"
+          },
+          "target": "power-shelf.1/psu.1"
+        },
+        {
+          "text": "Insert the new PSU until it locks in place; you should hear a click.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#replace-the-power-supply",
+            "section": "Service Manual 2.3 Replace the Power Supply"
+          },
+          "target": "power-shelf.1/psu.1"
+        },
+        {
+          "text": "Confirm the LEDs power on and check with the system administrator that the fault has cleared. Tell them the replacement is done in case a firmware update is needed, and ship the old PSU back to NVIDIA Enterprise Support.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 2.4 Finalize the Replacement Procedure"
+          },
+          "target": "power-shelf.1/psu.1"
+        }
+      ]
+    },
+    {
+      "id": "pmm",
+      "title": "Replace a power shelf management module",
+      "component": "power-shelf-mgmt-module",
+      "steps": [
+        {
+          "text": "Find the failed management module by its amber LED.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#dgxvr-sm-pmm-identify",
+            "section": "Service Manual 3.2 Identify the Failed Power Shelf Management Module"
+          },
+          "target": "power-shelf.1/power-shelf-mgmt-module.1"
+        },
+        {
+          "text": "Unpack the new module and record the MAC address on the power shelf pull tab; it must match the MAC address on the new module.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#dgxvr-sm-pmm-identify",
+            "section": "Service Manual 3.2 Identify the Failed Power Shelf Management Module"
+          },
+          "target": "power-shelf.1"
+        },
+        {
+          "text": "The power supplies keep running during the replacement. Unplug the network management cable.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+            "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+          },
+          "target": "power-shelf.1/power-shelf-mgmt-module/ps-mgmt-rj45.1"
+        },
+        {
+          "text": "Push the panel above the module inward and press down on the release mechanism. Pull the module all the way out and insert the new one until it clicks.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+            "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+          },
+          "target": "power-shelf.1/power-shelf-mgmt-module.1"
+        },
+        {
+          "text": "Update the module firmware if needed, and confirm with the system administrator that it is up and running.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 3.4 Finalize the Replacement Procedure"
+          },
+          "target": "power-shelf.1/power-shelf-mgmt-module.1"
+        }
+      ]
+    },
+    {
+      "id": "cache-drive",
+      "title": "Replace an E1.S cache drive",
+      "component": "e1s-cache-drive",
+      "steps": [
+        {
+          "text": "Identify each cache drive to replace and record its PCIe bus, device and function (BDF) address. The four cache drives are in Bay B.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#dgxvr-sm-cache-identify",
+            "section": "Service Manual 4.2 Identify the Failed Cache Drive"
+          },
+          "target": "compute-tray.1/e1s-cache-drive.1"
+        },
+        {
+          "text": "Have the system administrator power off the compute tray.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#dgxvr-sm-cache-identify",
+            "section": "Service Manual 4.2 Identify the Failed Cache Drive"
+          },
+          "target": "compute-tray.1"
+        },
+        {
+          "text": "Press the smaller, leftmost tab toward the bezel; the larger tab flips open and the drive comes out slightly. Pull the drive out.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#replace-the-failed-cache-drive",
+            "section": "Service Manual 4.3 Replace the Failed Cache Drive"
+          },
+          "target": "compute-tray.1/e1s-cache-drive.1"
+        },
+        {
+          "text": "Insert the new drive and press the larger tab in until it locks into the smaller one.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#replace-the-failed-cache-drive",
+            "section": "Service Manual 4.3 Replace the Failed Cache Drive"
+          },
+          "target": "compute-tray.1/e1s-cache-drive.1"
+        },
+        {
+          "text": "Power on and log in. 'sudo nvme list' should show one boot drive and four cache drives.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 4.4 Finalize the Replacement Procedure"
+          },
+          "target": "compute-tray.1/e1s-boot-drive.1"
+        },
+        {
+          "text": "If the cache volume was locked, unlock it with 'sudo nv-disk-encrypt disable'. Re-create the cache volume and /raid with 'configure_raid_array.py -c -f', then check it with 'sudo nvsm show volumes'.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 4.4 Finalize the Replacement Procedure"
+          },
+          "target": "compute-tray.1/e1s-cache-drive"
+        }
+      ]
+    },
+    {
+      "id": "compute-battery",
+      "title": "Replace the compute tray battery",
+      "component": "compute-tray-battery",
+      "steps": [
+        {
+          "text": "The system administrator powers off all compute trays and the tray to be serviced. Let it cool for five minutes.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#remove-the-compute-tray",
+            "section": "Service Manual 5.2 Remove the Compute Tray"
+          },
+          "target": "compute-tray.1"
+        },
+        {
+          "text": "Unlatch the tray, pull it out as far as the rail allows, and with a second person unlock it from the rails and lift it onto a flat surface.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#remove-the-compute-tray",
+            "section": "Service Manual 5.2 Remove the Compute Tray"
+          },
+          "target": "compute-tray.1"
+        },
+        {
+          "text": "Check the tray's cooling-loop pressure with the toolkit gauge: continue at 1 PSI or above; below 1 PSI, contact NVIDIA Enterprise Support first.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#remove-the-compute-tray",
+            "section": "Service Manual 5.2 Remove the Compute Tray"
+          },
+          "target": "compute-tray.1/internal-manifold.1"
+        },
+        {
+          "text": "Remove the tray lid and the Bay-C module. Remove the battery assembly's top cover, replace the battery, and refit the cover.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#replace-the-battery",
+            "section": "Service Manual 5.4 Replace the Battery"
+          },
+          "target": "compute-tray.1/compute-tray-battery.1"
+        },
+        {
+          "text": "Reinstall the Bay-C module and the lid, and put the tray back with a second person. Run the CDU for 20 minutes to clear bubbles from the cooling loop.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 5.5 Finalize the Replacement Procedure"
+          },
+          "target": "compute-tray.1"
+        },
+        {
+          "text": "The system administrator runs the power-on sequence, confirms the tray comes up, updates its firmware to match the rest of the system, and checks system health.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 5.5 Finalize the Replacement Procedure"
+          },
+          "target": "compute-tray.1"
+        }
+      ]
+    },
+    {
+      "id": "switch-battery",
+      "title": "Replace the NVLink switch tray battery",
+      "component": "switch-tray-battery",
+      "steps": [
+        {
+          "text": "The system administrator powers off all compute trays, then the switch tray. Let it cool for five minutes.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#remove-the-nvlink-switch-tray",
+            "section": "Service Manual 6.2 Remove the NVLink Switch Tray"
+          },
+          "target": "switch-tray.1"
+        },
+        {
+          "text": "Unlatch the tray, pull it out on its rails, and with a second person lift it onto a flat surface. Check the cooling-loop pressure: 1 PSI or above to continue.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#remove-the-nvlink-switch-tray",
+            "section": "Service Manual 6.2 Remove the NVLink Switch Tray"
+          },
+          "target": "switch-tray.1"
+        },
+        {
+          "text": "Remove the Torx T6 screws and lift off the lid.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#remove-the-tray-lid",
+            "section": "Service Manual 6.3 Remove the Tray Lid"
+          },
+          "target": "switch-tray.1"
+        },
+        {
+          "text": "Remove the battery's top cover, slide the battery out of its holder, fit the new one and replace the cover.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#replace-the-battery",
+            "section": "Service Manual 6.4 Replace the Battery"
+          },
+          "target": "switch-tray.1/switch-tray-battery.1"
+        },
+        {
+          "text": "Refit the lid and screws, reinstall the tray with a second person, and run the CDU for 20 minutes to clear bubbles.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 6.5 Finalize the Replacement Procedure"
+          },
+          "target": "switch-tray.1"
+        },
+        {
+          "text": "The system administrator runs the power-on sequence, confirms the tray comes up, updates its firmware and checks system health.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#finalize-the-replacement-procedure",
+            "section": "Service Manual 6.5 Finalize the Replacement Procedure"
+          },
+          "target": "switch-tray.1"
+        }
+      ]
+    }
+  ]
 }

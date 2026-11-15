@@ -16,7 +16,7 @@ describe('network overlay members', () => {
   const units = (net: string) => [...model.networkMembers(net).unitTypes].sort();
 
   it('computenet: the ConnectX-9 OSFP ports of every compute tray', () => {
-    expect(ids('computenet')).toEqual(['ct-port-cx9-osfp']);
+    expect(ids('computenet')).toEqual(['connectx-9', 'ct-port-cx9-osfp']);
     expect(units('computenet')).toEqual(['compute-tray']);
   });
 

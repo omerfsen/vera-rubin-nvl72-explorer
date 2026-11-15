@@ -121,6 +121,20 @@
     },
     "rearLayout": {
       "$ref": "#/$defs/rearLayout"
+    },
+    "pcieDevices": {
+      "type": "array",
+      "description": "Table 2.4 of the guide, verbatim, mapped to parts.",
+      "items": {
+        "$ref": "#/$defs/pcieDevice"
+      }
+    },
+    "procedures": {
+      "type": "array",
+      "description": "Customer-replaceable unit procedures from the service manual.",
+      "items": {
+        "$ref": "#/$defs/procedure"
+      }
     }
   },
   "$defs": {
@@ -1046,6 +1060,92 @@
           "type": "integer",
           "minimum": 0,
           "description": "Index into rearLayout.parts this connector links to; omitted for AC whips, which leave the rack."
+        }
+      }
+    },
+    "pcieDevice": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "label",
+        "bus",
+        "component"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "bus": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{4}:[0-9a-f]{2}:[0-9a-f]{2}\\.[0-7]$"
+        },
+        "interface": {
+          "type": "string",
+          "pattern": "^en[A-Za-z0-9]+$"
+        },
+        "rdma": {
+          "type": "string",
+          "pattern": "^mlx5_[0-9]+$"
+        },
+        "component": {
+          "$ref": "#/$defs/id"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "procedure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "component",
+        "steps"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "component": {
+          "$ref": "#/$defs/id"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "source"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "pattern": "\\S"
+              },
+              "source": {
+                "$ref": "#/$defs/source"
+              },
+              "target": {
+                "type": "string",
+                "description": "Selection path to highlight for this step, on an example unit."
+              }
+            }
+          }
         }
       }
     }
