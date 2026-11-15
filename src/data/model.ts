@@ -1,0 +1,195 @@
+import type { Component, Connection, Network, Topology } from './types';
+
+/** One physical unit in the rack, e.g. compute tray 7. */
+export interface RackUnit {
+  /** Path segment, e.g. "compute-tray.7". */
+  key: string;
+  componentId: string;
+  /** 1-based number within its component type, top to bottom. */
+  index: number;
+  /** Position from the top of the stack, in rack units (0 = top edge). */
+  topRU: number;
+  heightRU: number;
+  /** Index of the layout group this unit belongs to. */
+  group: number;
+}
+
+/** One segment of a selection path: a component and, optionally, which one. */
+export interface PathSegment {
+  id: string;
+  index?: number;
+}
+
+export const ROOT_ID = 'rack';
+const DEFAULT_HEIGHT_RU = 1;
+
+export function createModel(topology: Topology) {
+  const byId = new Map<string, Component>(topology.components.map((c) => [c.id, c]));
+  const networksById = new Map<string, Network>(topology.networks.map((n) => [n.id, n]));
+
+  const childrenById = new Map<string, Component[]>();
+  for (const c of topology.components) {
+    if (c.parent === null) continue;
+    const list = childrenById.get(c.parent) ?? [];
+    list.push(c);
+    childrenById.set(c.parent, list);
+  }
+
+  function getComponent(id: string): Component | undefined {
+    return byId.get(id);
+  }
+
+  function getNetwork(id: string): Network | undefined {
+    return networksById.get(id);
+  }
+
+  function childrenOf(id: string): Component[] {
+    return childrenById.get(id) ?? [];
+  }
+
+  /** Ancestor ids from the root down, not including the component itself. */
+  function ancestorsOf(id: string): string[] {
+    const chain: string[] = [];
+    let current = byId.get(id);
+    const seen = new Set<string>();
+    while (current && current.parent !== null) {
+      if (seen.has(current.parent)) throw new Error(`Parent cycle at ${current.id}`);
+      seen.add(current.parent);
+      chain.unshift(current.parent);
+      current = byId.get(current.parent);
+    }
+    return chain;
+  }
+
+  /**
+   * How many of this component a whole rack has: the product of the counts
+   * along its parent chain. null when any count on the way is unknown.
+   */
+  function totalPerRack(id: string): number | null {
+    let total = 1;
+    for (const cid of [...ancestorsOf(id), id]) {
+      const c = byId.get(cid);
+      if (!c || c.count === null) return null;
+      total *= c.count;
+    }
+    return total;
+  }
+
+  function heightRU(componentId: string): number {
+    return topology.rackLayout.heightsRU?.[componentId]?.value ?? DEFAULT_HEIGHT_RU;
+  }
+
+  const rackUnits: RackUnit[] = [];
+  {
+    const perType = new Map<string, number>();
+    let top = 0;
+    topology.rackLayout.groups.forEach((g, groupIndex) => {
+      for (let i = 0; i < g.count; i++) {
+        const index = (perType.get(g.component) ?? 0) + 1;
+        perType.set(g.component, index);
+        const h = heightRU(g.component);
+        rackUnits.push({
+          key: `${g.component}.${index}`,
+          componentId: g.component,
+          index,
+          topRU: top,
+          heightRU: h,
+          group: groupIndex,
+        });
+        top += h;
+      }
+    });
+  }
+  const totalRU = rackUnits.reduce((sum, u) => sum + u.heightRU, 0);
+  const rackUnitByKey = new Map(rackUnits.map((u) => [u.key, u]));
+  const rackUnitCounts = new Map<string, number>();
+  for (const u of rackUnits) rackUnitCounts.set(u.componentId, (rackUnitCounts.get(u.componentId) ?? 0) + 1);
+
+  /** Components drawn as front units of the rack. */
+  function isRackUnitType(componentId: string): boolean {
+    return rackUnitCounts.has(componentId);
+  }
+
+  function connectionsOf(id: string): Connection[] {
+    return topology.connections.filter((c) => c.from === id || c.to === id);
+  }
+
+  /** Networks of a component and every part inside it, in guide order. */
+  function networksWithin(id: string): Network[] {
+    const ids = new Set<string>();
+    const visit = (cid: string) => {
+      byId.get(cid)?.networks.forEach((n) => ids.add(n));
+      childrenOf(cid).forEach((c) => visit(c.id));
+    };
+    visit(id);
+    return topology.networks.filter((n) => ids.has(n.id));
+  }
+
+  // ---- selection paths -------------------------------------------------
+  // A path names a component through its parents, below the rack:
+  //   "compute-tray.7"            compute tray 7
+  //   "compute-tray.7/rubin-gpu"  the Rubin GPUs of compute tray 7
+  //   "compute-tray/rubin-gpu.2"  GPU 2 of any compute tray
+  // An empty path is the rack itself.
+
+  function parsePath(path: string | null | undefined): PathSegment[] | null {
+    if (path === null || path === undefined || path === '') return [];
+    const segments: PathSegment[] = [];
+    let parent = ROOT_ID;
+    for (const raw of path.split('/')) {
+      const m = /^([a-z0-9]+(?:-[a-z0-9]+)*)(?:\.([1-9][0-9]*))?$/.exec(raw);
+      if (!m) return null;
+      const id = m[1]!;
+      const c = byId.get(id);
+      if (!c || c.parent !== parent) return null;
+      const segment: PathSegment = { id };
+      if (m[2] !== undefined) {
+        const index = Number(m[2]);
+        const max = parent === ROOT_ID && isRackUnitType(id) ? rackUnitCounts.get(id)! : c.count;
+        if (max === null || max === undefined || index > max) return null;
+        segment.index = index;
+      }
+      segments.push(segment);
+      parent = id;
+    }
+    return segments;
+  }
+
+  function formatPath(segments: PathSegment[]): string {
+    return segments.map((s) => (s.index === undefined ? s.id : `${s.id}.${s.index}`)).join('/');
+  }
+
+  /** Path that names a component in general (no instance numbers). */
+  function pathForComponent(id: string): string {
+    if (id === ROOT_ID) return '';
+    return [...ancestorsOf(id).filter((a) => a !== ROOT_ID), id].join('/');
+  }
+
+  function segmentLabel(segment: PathSegment): string {
+    const c = byId.get(segment.id);
+    const name = c?.name ?? segment.id;
+    return segment.index === undefined ? name : `${name} ${segment.index}`;
+  }
+
+  return {
+    topology,
+    getComponent,
+    getNetwork,
+    childrenOf,
+    ancestorsOf,
+    totalPerRack,
+    heightRU,
+    rackUnits,
+    rackUnitByKey,
+    totalRU,
+    isRackUnitType,
+    connectionsOf,
+    networksWithin,
+    parsePath,
+    formatPath,
+    pathForComponent,
+    segmentLabel,
+  };
+}
+
+export type Model = ReturnType<typeof createModel>;

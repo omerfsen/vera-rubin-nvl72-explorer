@@ -1,0 +1,41 @@
+{
+  "name": "vera-rubin-nvl72-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unofficial interactive 3D explorer of the NVIDIA DGX Vera Rubin NVL72 rack.",
+  "author": "Omer Sen",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "three": "0.187.0",
+    "zustand": "5.0.16"
+  },
+  "devDependencies": {
+    "@testing-library/react": "16.3.3",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "jsdom": "30.1.3",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  }
+}
