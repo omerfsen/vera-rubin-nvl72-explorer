@@ -9,7 +9,7 @@ import { createServer } from './server.js';
 
 export const ALLOWED_HOSTS = ['verarubin-nvl72.faruk.net', 'vr-nvl72.faruk.net', 'vera-rubin-nvl72-explorer.vercel.app', 'localhost', '127.0.0.1'];
 /** Vercel preview URLs of this project only. */
-const PREVIEW = /^vera-rubin-nvl72-explorer-[a-z0-9-]+-omerfsens-projects\.vercel\.app$/;
+const PREVIEW = /^vera-rubin-nvl72-explorer-[a-z0-9-]+-omerfsen-3850s-projects\.vercel\.app$/;
 export const MAX_BODY = 64 * 1024;
 
 /** Per-IP request limit at the edge of the handler: 60 at once, then 2 per second. */
