@@ -14,6 +14,15 @@ interface ExplorerState {
   /** Network shown by the overlay, or "" for none. */
   network: string;
   setNetwork: (id: string) => void;
+  /** Service procedure in progress ("" for none) and its 0-based step. */
+  procedure: string;
+  step: number;
+  startProcedure: (id: string) => void;
+  goToStep: (step: number) => void;
+  stopProcedure: () => void;
+  page: string;
+  setPage: (page: string) => void;
+  embed: boolean;
   toggleLayer: (layer: 'structure' | 'parts' | 'links') => void;
   select: (path: string) => void;
   setHovered: (key: string | null) => void;
@@ -43,6 +52,28 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   layers: { structure: true, parts: true, links: true },
   network: initial.net ?? '',
   setNetwork: (id) => set({ network: get().network === id ? '' : id }),
+  procedure: initial.proc ?? '',
+  step: initial.step ?? 0,
+  startProcedure: (id) => {
+    set({ procedure: id, step: 0, page: '' });
+    get().goToStep(0);
+  },
+  goToStep: (step) => {
+    const proc = (model.topology.procedures ?? []).find((p) => p.id === get().procedure);
+    if (!proc) return;
+    const n = Math.min(proc.steps.length - 1, Math.max(0, step));
+    set({ step: n });
+    // Show the part the step is about, opening its unit when it has an interior.
+    const target = proc.steps[n]!.target;
+    if (target) {
+      get().select(target);
+      if (target.includes('/') && trayKeyOf(target, model)) set({ view: 'tray' });
+    }
+  },
+  stopProcedure: () => set({ procedure: '', step: 0 }),
+  page: initial.page ?? '',
+  setPage: (page) => set({ page }),
+  embed: initial.embed ?? false,
   toggleLayer: (layer) => set({ layers: { ...get().layers, [layer]: !get().layers[layer] } }),
   select: (path) => {
     const segments = model.parsePath(path);
@@ -114,7 +145,16 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
 /** Keep the address bar in step with the store. */
 export function syncUrl(): () => void {
   const write = (s: ExplorerState) => {
-    const search = writeUrlState(window.location.search, { view: s.view, select: s.selected, list: s.listOpen, net: s.network });
+    const search = writeUrlState(window.location.search, {
+      view: s.view,
+      select: s.selected,
+      list: s.listOpen,
+      net: s.network,
+      proc: s.procedure,
+      step: s.step,
+      page: s.page,
+      embed: s.embed,
+    });
     if (search === window.location.search) return;
     window.history.replaceState(window.history.state, '', `${window.location.pathname}${search}${window.location.hash}`);
   };

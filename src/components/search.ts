@@ -42,6 +42,17 @@ export function search(model: Model, query: string, limit = 12): SearchHit[] {
       });
     }
   }
+  // Host names from Table 2.4: a PCIe bus, interface or RDMA device ("mlx5_4", "enP3p1s0f0np0", "0003:01").
+  // Only for queries that look like one: NVIDIA's labels count from 0 (GPU_2 is this app's GPU 3), so a
+  // plain "gpu 2" must not match them.
+  const hostQuery = words.some((w) => /[:_/]/.test(w) || /^(mlx5|enp)/.test(w));
+  for (const r of hostQuery ? (model.topology.pcieDevices ?? []) : []) {
+    const hay = `${r.label} ${r.bus} ${r.interface ?? ''} ${r.rdma ?? ''}`.toLowerCase();
+    if (!words.every((w) => hay.includes(w))) continue;
+    const path = model.pathForComponent(r.component) + (r.index ? `.${r.index}` : '');
+    if (model.parsePath(path) === null) continue;
+    hits.unshift({ path, label: [r.label, r.rdma, r.interface].filter(Boolean).join(' · '), detail: r.bus });
+  }
   const seen = new Set<string>();
   return hits.filter((h) => !seen.has(h.path) && seen.add(h.path)).slice(0, limit);
 }

@@ -55,7 +55,7 @@ describe('tray helpers', () => {
     const gpu = layout.slots.find((s) => s.component === 'rubin-gpu' && s.index === 2)!;
     expect(model.slotPathWithin('compute-tray', gpu)).toBe('rubin-gpu.2');
     const cage = layout.slots.find((s) => s.component === 'ct-port-cx9-osfp')!;
-    expect(model.slotPathWithin('compute-tray', cage)).toBe('connectx-9/ct-port-cx9-osfp');
+    expect(model.slotPathWithin('compute-tray', cage)).toBe('ct-port-cx9-osfp.1');
     expect(model.slotFor('compute-tray', 'rubin-gpu.2')).toBe(gpu);
   });
 

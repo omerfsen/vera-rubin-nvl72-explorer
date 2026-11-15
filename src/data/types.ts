@@ -193,6 +193,31 @@ export interface RearLayout extends Provenance {
   unitConnectors?: UnitConnector[];
 }
 
+/** One row of the guide's Table 2.4, mapped to the part it belongs to. */
+export interface PcieDevice extends Provenance {
+  label: string;
+  bus: string;
+  interface?: string;
+  rdma?: string;
+  component: string;
+  index?: number;
+}
+
+export interface ProcedureStep {
+  text: string;
+  source: Source;
+  /** Selection path to highlight for this step, on an example unit. */
+  target?: string;
+}
+
+/** A customer-replaceable unit procedure from the service manual. */
+export interface Procedure {
+  id: string;
+  title: string;
+  component: string;
+  steps: ProcedureStep[];
+}
+
 export interface Topology {
   $schema?: string;
   schemaVersion: 1;
@@ -207,5 +232,7 @@ export interface Topology {
   rackLayout: RackLayout;
   trayLayouts?: Record<string, TrayLayout>;
   rearLayout?: RearLayout;
+  pcieDevices?: PcieDevice[];
+  procedures?: Procedure[];
   connections: Connection[];
 }
