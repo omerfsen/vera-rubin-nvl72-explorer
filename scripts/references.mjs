@@ -76,6 +76,9 @@ export function computeReferences(topology) {
   for (const [id, o] of Object.entries(t.rackLayout.numbering?.overrides ?? {})) add(id, o.source);
   for (const p of t.rearLayout?.parts ?? []) add(p.component, t.rearLayout.source);
   for (const u of t.rearLayout?.unitConnectors ?? []) add(u.component, t.rearLayout.source);
+  for (const s of t.software ?? []) s.runsOn.forEach((id) => add(id, s.source));
+  for (const c of t.commands ?? []) c.appliesTo.forEach((id) => add(id, c.source));
+  for (const s of t.safety ?? []) s.components.forEach((id) => add(id, s.source));
   if (t.nvlinkFabric) {
     for (const id of [...t.nvlinkFabric.endpoints, t.nvlinkFabric.through]) {
       add(id, t.nvlinkFabric.source);
@@ -92,7 +95,9 @@ export function computeReferences(topology) {
       const key = `${doc}|${number}`;
       if (!groups.has(key)) {
         const pdf = pdfs[doc];
-        const page = pdf?.pages[number];
+        // Deep headings (6.4.1.1.2) fall back to the nearest parent with a known page.
+        let page;
+        for (let n = number; n && page === undefined; n = n.includes('.') ? n.slice(0, n.lastIndexOf('.')) : '') page = pdf?.pages[n];
         groups.set(key, {
           document: doc,
           section: sectionTitle(s.section),

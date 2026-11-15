@@ -93,7 +93,48 @@
         "ch8": 53,
         "ch9": 55,
         "ch10": 67,
-        "ch11": 69
+        "ch11": 69,
+        "6.4.1.1": 40,
+        "6.4.1.1.1": 40,
+        "6.4.1.1.2": 41,
+        "6.4.1.1.3": 41,
+        "6.4.1.1.4": 41,
+        "6.4.1.1.5": 41,
+        "6.4.1.1.6": 41,
+        "6.4.1.1.7": 42,
+        "6.4.1.1.8": 42,
+        "6.4.1.2": 42,
+        "6.4.1.2.1": 42,
+        "6.4.1.2.2": 42,
+        "6.4.1.2.3": 43,
+        "6.4.1.3": 43,
+        "6.4.1.3.1": 43,
+        "6.4.1.3.2": 43,
+        "6.4.1.3.3": 44,
+        "6.4.1.3.4": 44,
+        "6.4.1.4": 44,
+        "6.4.1.4.1": 44,
+        "6.4.1.4.2": 44,
+        "6.4.1.4.3": 45,
+        "6.4.1.5": 45,
+        "6.4.1.5.1": 45,
+        "6.4.1.5.2": 45,
+        "6.4.1.6": 46,
+        "6.4.1.6.1": 46,
+        "6.4.1.6.2": 46,
+        "6.4.1.7": 46,
+        "6.4.1.7.1": 46,
+        "6.4.1.7.2": 46,
+        "6.4.1.7.3": 47,
+        "6.4.1.7.4": 47,
+        "6.4.1.8": 47,
+        "6.4.1.8.1": 47,
+        "6.4.1.8.2": 47,
+        "6.4.1.9": 47,
+        "6.4.1.9.1": 48,
+        "6.4.1.10": 48,
+        "6.4.1.11": 48,
+        "6.4.1.11.1": 48
       },
       "pdfPagesNote": "Physical page in the PDF for each section heading, for #page= links."
     },
@@ -321,6 +362,12 @@
         },
         {
           "document": "user-guide",
+          "section": "Chapter 8. System Health Check",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/health-check.html",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=53"
+        },
+        {
+          "document": "user-guide",
           "section": "1.1 Rack Configuration",
           "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
           "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=9",
@@ -336,6 +383,42 @@
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/hardware-power-shelf-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "4.1 Mission Control Software",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#mission-control-software",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=25"
+        },
+        {
+          "document": "user-guide",
+          "section": "6.1 System Operations",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=39"
+        },
+        {
+          "document": "user-guide",
+          "section": "6.2 Operating System Updates",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#operating-system-updates",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=39"
+        },
+        {
+          "document": "user-guide",
+          "section": "7.1 Cold Reboot Sequence",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=49"
+        },
+        {
+          "document": "user-guide",
+          "section": "7.2 Warm Reboot Sequence",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#warm-reboot-sequence",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=50"
+        },
+        {
+          "document": "user-guide",
+          "section": "7.3 Post-reboot Verification",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#post-reboot-verification",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=51"
         }
       ]
     },
@@ -504,6 +587,48 @@
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-2-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "4.3 Internode Memory Exchange Service",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#internode-memory-exchange-service",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=26"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.5 Equipment Handling Practices",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#equipment-handling-practices",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=33"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.6.1 Power and Electrical Warnings",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#power-and-electrical-warnings",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=33"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.7 System Access Warnings",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#system-access-warnings",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=34"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.8 Rack Mount Warnings",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#rack-mount-warnings",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=35"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.10.4 Cooling and Airflow",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#cooling-and-airflow",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=37"
+        },
+        {
+          "document": "user-guide",
+          "section": "6.4.1.11.1 Capturing Debug Logs with NVDEBUG",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#capturing-debug-logs-with-nvdebug",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=40"
         }
       ]
     },
@@ -577,6 +702,12 @@
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-2-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "4.2 CUDA Software Platform",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#cuda-software-platform",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=26"
         }
       ]
     },
@@ -690,6 +821,24 @@
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-2-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "4.2 CUDA Software Platform",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#cuda-software-platform",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=26"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.6 NVIDIA Collective Communication Library",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-collective-communication-library",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=28"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.7 Data Center GPU Manager",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#data-center-gpu-manager",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=28"
         }
       ]
     },
@@ -768,6 +917,18 @@
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-1-VRNVL72.png",
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-2-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "4.5 DOCA Software Framework",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#doca-software-framework",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=28"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.8 NVIDIA Firmware Tools",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-firmware-tools-mft",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=29"
         }
       ],
       "note": "The guide disagrees with itself on the count. The 1.2 configuration table says 2 ConnectX-9 I/O cards. Fig. 4 (block diagram) draws 8 ConnectX-9 cards, Fig. 6 (front view) shows 2 x CX9 modules in each of the two Bay B sections, and the 2.2 figures show 8 OSFP cages. This app keeps the table's 2. See docs/OPEN_QUESTIONS.md."
@@ -869,6 +1030,18 @@
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-2-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "4.5 DOCA Software Framework",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#doca-software-framework",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=28"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.8 NVIDIA Firmware Tools",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-firmware-tools-mft",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=29"
         }
       ]
     },
@@ -946,6 +1119,12 @@
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-2-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "6.4.1.11.1 Capturing Debug Logs with NVDEBUG",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#capturing-debug-logs-with-nvdebug",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=40"
         }
       ],
       "note": "Count read from the guide's singular wording ('Host BMC with RJ45') and the single SMM in Fig. 5."
@@ -1004,6 +1183,12 @@
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/network-port-labels-2-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "6.4.1.2.1 HMC Graceful Restart",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#hmc-graceful-restart",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=40"
         }
       ],
       "note": "The text gives no count. Fig. 5 shows one SMM carrier board 'w/ BMC+HMC+TPM'."
@@ -1115,6 +1300,12 @@
           "section": "3.1 Internal Storage",
           "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/storage.html#internal-storage",
           "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=23"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.9 Electrostatic Discharge",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#electrostatic-discharge",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=35"
         },
         {
           "document": "service-manual",
@@ -1673,6 +1864,18 @@
           ]
         },
         {
+          "document": "user-guide",
+          "section": "5.9 Electrostatic Discharge",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#electrostatic-discharge",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=35"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.10.3 Battery Replacement",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#battery-replacement",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=36"
+        },
+        {
           "document": "service-manual",
           "section": "1.1 Customer-Replaceable Units",
           "html": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
@@ -2130,6 +2333,54 @@
           "section": "2.1 NVLink Networking",
           "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
           "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=17"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.4.1 NVIDIA Switch OS",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-switch-os",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=27"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.4.2 NMX-Controller",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nmx-controller",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=27"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.4.3 Fabric Manager",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#fabric-manager",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=27"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.4.4 NVLink Subnet Manager",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvlink-subnet-manager",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=27"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.4.5 NMX-Telemetry",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nmx-telemetry",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=28"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.5 Equipment Handling Practices",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#equipment-handling-practices",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=33"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.8 Rack Mount Warnings",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#rack-mount-warnings",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=35"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.10.4 Cooling and Airflow",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#cooling-and-airflow",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=37"
         }
       ]
     },
@@ -2196,6 +2447,24 @@
           "section": "2.5 NVLink Switch Network Ports",
           "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
           "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=20"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.4.3 Fabric Manager",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#fabric-manager",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=27"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.4.4 NVLink Subnet Manager",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvlink-subnet-manager",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=27"
+        },
+        {
+          "document": "user-guide",
+          "section": "4.7 Data Center GPU Manager",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#data-center-gpu-manager",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=28"
         }
       ]
     },
@@ -2536,6 +2805,18 @@
           "section": "2.5 NVLink Switch Network Ports",
           "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
           "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=20"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.9 Electrostatic Discharge",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#electrostatic-discharge",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=35"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.10.3 Battery Replacement",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#battery-replacement",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=36"
         },
         {
           "document": "service-manual",
@@ -2893,6 +3174,18 @@
           "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=17"
         },
         {
+          "document": "user-guide",
+          "section": "5.5 Equipment Handling Practices",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#equipment-handling-practices",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=33"
+        },
+        {
+          "document": "user-guide",
+          "section": "5.6.1 Power and Electrical Warnings",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#power-and-electrical-warnings",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=33"
+        },
+        {
           "document": "service-manual",
           "section": "2.2 Identify the Failed Power Supply",
           "html": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
@@ -2974,6 +3267,12 @@
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/hardware-power-shelf-VRNVL72.png"
           ]
+        },
+        {
+          "document": "user-guide",
+          "section": "5.6.1 Power and Electrical Warnings",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#power-and-electrical-warnings",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=33"
         },
         {
           "document": "service-manual",
@@ -7113,7 +7412,8 @@
           },
           "target": "power-shelf.1/psu.1"
         }
-      ]
+      ],
+      "kind": "service"
     },
     {
       "id": "pmm",
@@ -7160,7 +7460,8 @@
           },
           "target": "power-shelf.1/power-shelf-mgmt-module.1"
         }
-      ]
+      ],
+      "kind": "service"
     },
     {
       "id": "cache-drive",
@@ -7215,7 +7516,8 @@
           },
           "target": "compute-tray.1/e1s-cache-drive"
         }
-      ]
+      ],
+      "kind": "service"
     },
     {
       "id": "compute-battery",
@@ -7270,7 +7572,8 @@
           },
           "target": "compute-tray.1"
         }
-      ]
+      ],
+      "kind": "service"
     },
     {
       "id": "switch-battery",
@@ -7324,6 +7627,261 @@
             "section": "Service Manual 6.5 Finalize the Replacement Procedure"
           },
           "target": "switch-tray.1"
+        }
+      ],
+      "kind": "service"
+    },
+    {
+      "id": "bring-up",
+      "kind": "operation",
+      "title": "Bring the rack online",
+      "component": "rack",
+      "steps": [
+        {
+          "text": "Before you start: the power shelves are energized, the top-of-rack switches are active and NMX-M services are available. Check them in Base Command Manager.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
+            "section": "6.1 System Operations"
+          },
+          "target": "power-shelf"
+        },
+        {
+          "text": "Power on the NVLink switch trays first, from Base Command Manager. Each one boots with rack-specific configuration, so the NVLink fabric is up before any GPU needs it.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
+            "section": "6.1 System Operations"
+          },
+          "target": "switch-tray"
+        },
+        {
+          "text": "Then power on the compute trays. While they boot, Base Command Manager checks that the latest OS updates and configuration are installed.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
+            "section": "6.1 System Operations"
+          },
+          "target": "compute-tray"
+        },
+        {
+          "text": "A booting compute tray checks for OS updates over the network: it installs them before booting, or boots quickly from local storage if there are none.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#operating-system-updates",
+            "section": "6.2 Operating System Updates"
+          },
+          "target": "compute-tray"
+        },
+        {
+          "text": "The compute trays then connect to the switch trays, storage and the other compute trays. Power operations are orchestrated through NVIDIA Mission Control.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
+            "section": "6.1 System Operations"
+          },
+          "target": "compute-tray"
+        }
+      ]
+    },
+    {
+      "id": "cold-reboot",
+      "kind": "operation",
+      "title": "Cold reboot the rack",
+      "component": "rack",
+      "steps": [
+        {
+          "text": "Use it after the first software install, after firmware upgrades, before full rack diagnostics, and after replacing a compute tray, switch tray, trunk link or cable cartridge. NVIDIA recommends doing it through Mission Control. You need the IP addresses of all BMCs, hosts and power shelves.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+            "section": "7.1 Cold Reboot Sequence"
+          },
+          "target": ""
+        },
+        {
+          "text": "Turn off AC power to all power shelves (they can go off in parallel), then wait three to five minutes for the PSU capacitors to discharge. Skip this on the very first power-up.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+            "section": "7.1 Cold Reboot Sequence"
+          },
+          "target": "power-shelf"
+        },
+        {
+          "text": "Ping all compute and switch tray BMCs and OS addresses to make sure none of them answers.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+            "section": "7.1 Cold Reboot Sequence"
+          },
+          "target": "compute-tray"
+        },
+        {
+          "text": "Turn on AC power to all power shelves, in parallel. Wait two minutes for the compute and switch tray BMCs to power up, then ping all BMC addresses until they answer.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+            "section": "7.1 Cold Reboot Sequence"
+          },
+          "target": "power-shelf"
+        },
+        {
+          "text": "Let the switch trays boot to NVOS and wait two more minutes.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+            "section": "7.1 Cold Reboot Sequence"
+          },
+          "target": "switch-tray"
+        },
+        {
+          "text": "Provision the switch trays. For L11 diagnostics, log in to each switch tray and check its health. For a multi-node workload, repeat the cluster provisioning, then set up and start the NMX-C services and run the health checks.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+            "section": "7.1 Cold Reboot Sequence"
+          },
+          "target": "switch-tray"
+        },
+        {
+          "text": "Power on all compute nodes from the compute tray BMCs. Wait five minutes, ping the compute nodes, then run the post-reboot verification.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+            "section": "7.1 Cold Reboot Sequence"
+          },
+          "target": "compute-tray"
+        }
+      ]
+    },
+    {
+      "id": "warm-reboot",
+      "kind": "operation",
+      "title": "Warm reboot the rack",
+      "component": "rack",
+      "steps": [
+        {
+          "text": "Power off all compute trays through their BMCs (IPMI, Redfish or another supported API).",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#warm-reboot-sequence",
+            "section": "7.2 Warm Reboot Sequence"
+          },
+          "target": "compute-tray",
+          "command": "ipmitool chassis power off\nipmitool power off"
+        },
+        {
+          "text": "Stop the NMX-C service on the switch node that runs it.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#warm-reboot-sequence",
+            "section": "7.2 Warm Reboot Sequence"
+          },
+          "target": "switch-tray",
+          "command": "nv action stop cluster app nmx-controller"
+        },
+        {
+          "text": "Start NMX-C on the selected switch node. The cluster must already be enabled.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#warm-reboot-sequence",
+            "section": "7.2 Warm Reboot Sequence"
+          },
+          "target": "switch-tray",
+          "command": "nv action start cluster app nmx-controller"
+        },
+        {
+          "text": "Check that nmx-controller and nmx-telemetry are running with status ok.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#warm-reboot-sequence",
+            "section": "7.2 Warm Reboot Sequence"
+          },
+          "target": "switch-tray",
+          "command": "nv show cluster apps running"
+        },
+        {
+          "text": "Power the compute trays back on through their BMCs.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#warm-reboot-sequence",
+            "section": "7.2 Warm Reboot Sequence"
+          },
+          "target": "compute-tray",
+          "command": "ipmitool chassis power on\nipmitool power on"
+        },
+        {
+          "text": "Run the post-reboot verification on the compute trays.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#warm-reboot-sequence",
+            "section": "7.2 Warm Reboot Sequence"
+          },
+          "target": "compute-tray"
+        }
+      ]
+    },
+    {
+      "id": "post-reboot",
+      "kind": "operation",
+      "title": "Verify after a reboot",
+      "component": "rack",
+      "steps": [
+        {
+          "text": "Check that nvidia-persistenced is running and in a good state. Do this after a GPU reset, a compute tray reboot, or a cold or warm rack reboot.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#post-reboot-verification",
+            "section": "7.3 Post-reboot Verification"
+          },
+          "target": "compute-tray"
+        },
+        {
+          "text": "Check that the nvidia-imex service is active and running.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#post-reboot-verification",
+            "section": "7.3 Post-reboot Verification"
+          },
+          "target": "compute-tray"
+        },
+        {
+          "text": "Check that all NVLinks are active.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#post-reboot-verification",
+            "section": "7.3 Post-reboot Verification"
+          },
+          "target": "compute-tray/rubin-gpu"
+        },
+        {
+          "text": "Check the fabric state: every GPU shows state Completed and status Success.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#post-reboot-verification",
+            "section": "7.3 Post-reboot Verification"
+          },
+          "target": "compute-tray/rubin-gpu"
+        },
+        {
+          "text": "Check the peer-to-peer topology: every GPU shows OK. If one does not, reset that GPU and start again from the first check.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#post-reboot-verification",
+            "section": "7.3 Post-reboot Verification"
+          },
+          "target": "compute-tray/rubin-gpu"
+        }
+      ]
+    },
+    {
+      "id": "health-check",
+      "kind": "operation",
+      "title": "Check system health with NVSM",
+      "component": "rack",
+      "steps": [
+        {
+          "text": "Open an SSH connection to the rack.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/health-check.html",
+            "section": "Chapter 8. System Health Check"
+          },
+          "target": ""
+        },
+        {
+          "text": "Run the basic system check.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/health-check.html",
+            "section": "Chapter 8. System Health Check"
+          },
+          "target": "",
+          "command": "sudo nvsm show health"
+        },
+        {
+          "text": "Check that every check in the summary is Healthy and the overall system status is Healthy.",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/health-check.html",
+            "section": "Chapter 8. System Health Check"
+          },
+          "target": ""
         }
       ]
     }
@@ -7485,6 +8043,791 @@
       ],
       "kind": "gap",
       "details": "https://github.com/omerfsen/vera-rubin-nvl72-explorer/blob/main/docs/OPEN_QUESTIONS.md"
+    }
+  ],
+  "software": [
+    {
+      "id": "mission-control",
+      "name": "NVIDIA Mission Control",
+      "description": "Workload-aware orchestration with full-stack observability: job and power-profile management, topology-aware scheduling, fast checkpointing and autonomous job recovery, health checks, and leak detection through building-management integration. Power operations and firmware updates are orchestrated through it.",
+      "runsOn": [
+        "rack"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#mission-control-software",
+        "section": "4.1 Mission Control Software"
+      },
+      "note": "Cluster-level software; the guide does not say which node it runs on."
+    },
+    {
+      "id": "base-command-manager",
+      "name": "Base Command Manager (BCM)",
+      "description": "Manages all system components: powers trays on and off, manages the operating system images that compute trays boot, and reaches the out-of-band interfaces over ipminet.",
+      "runsOn": [
+        "rack"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
+        "section": "6.1 System Operations"
+      },
+      "note": "Runs on the head node outside the rack (2.2: ipminet gives Base Command Manager and the head node access to the BMCs)."
+    },
+    {
+      "id": "cuda",
+      "name": "CUDA",
+      "description": "The CUDA platform: more than 150 libraries and the tools to optimize and debug GPU-accelerated applications, which use the NVLink network to distribute work across every GPU in the rack.",
+      "runsOn": [
+        "vera-cpu",
+        "rubin-gpu"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#cuda-software-platform",
+        "section": "4.2 CUDA Software Platform"
+      }
+    },
+    {
+      "id": "imex",
+      "name": "Internode Memory Exchange (IMEX)",
+      "description": "Maps GPU memory over NVLink between GPUs across OS boundaries in an NVLink domain, using memory export and import. Started on all nodes in the domain at system startup or at CUDA job launch; communicates across nodes over the compute node network.",
+      "runsOn": [
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#internode-memory-exchange-service",
+        "section": "4.3 Internode Memory Exchange Service"
+      },
+      "note": "The guide says it runs exclusively on compute nodes."
+    },
+    {
+      "id": "nvos",
+      "name": "NVIDIA Switch OS (NVOS)",
+      "description": "The operating system of the NVLink switch tray, with a CLI and OpenAPI (Swagger) management. It includes the NVLink Subnet Manager, Fabric Manager, NMX-Controller, NMX-Telemetry and the NVSwitch firmware.",
+      "runsOn": [
+        "switch-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-switch-os",
+        "section": "4.4.1 NVIDIA Switch OS"
+      }
+    },
+    {
+      "id": "nmx-controller",
+      "name": "NMX-Controller",
+      "description": "Cluster application for fabric software-defined networking; in DGX VR racks its services are the subnet manager and Fabric Manager.",
+      "runsOn": [
+        "switch-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nmx-controller",
+        "section": "4.4.2 NMX-Controller"
+      },
+      "partOf": "nvos"
+    },
+    {
+      "id": "fabric-manager",
+      "name": "Fabric Manager",
+      "description": "Configures routing among NVSwitch ports and the GPU-side routing, coordinates with the GPU driver to initialize the GPUs, and monitors the fabric for NVLink and NVSwitch errors.",
+      "runsOn": [
+        "switch-tray",
+        "nvswitch-asic"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#fabric-manager",
+        "section": "4.4.3 Fabric Manager"
+      },
+      "partOf": "nvos"
+    },
+    {
+      "id": "nvlsm",
+      "name": "NVLink Subnet Manager (NVLSM)",
+      "description": "Discovers the NVLink topology, assigns LIDs to GPU and NVSwitch NVLink ports, programs the switch forwarding tables and the partition keys, and monitors changes in the NVLink fabric.",
+      "runsOn": [
+        "switch-tray",
+        "nvswitch-asic"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvlink-subnet-manager",
+        "section": "4.4.4 NVLink Subnet Manager"
+      },
+      "partOf": "nvos"
+    },
+    {
+      "id": "nmx-telemetry",
+      "name": "NMX-Telemetry",
+      "description": "Collects and aggregates telemetry from all the NVLink switches in an NVLink domain.",
+      "runsOn": [
+        "switch-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nmx-telemetry",
+        "section": "4.4.5 NMX-Telemetry"
+      },
+      "partOf": "nvos"
+    },
+    {
+      "id": "doca",
+      "name": "DOCA",
+      "description": "Framework for applications and services that offload, accelerate and isolate data center workloads on BlueField. DOCA-Host includes the host drivers and tools for the BlueField and ConnectX devices in the rack.",
+      "runsOn": [
+        "bluefield-4",
+        "connectx-9"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#doca-software-framework",
+        "section": "4.5 DOCA Software Framework"
+      }
+    },
+    {
+      "id": "nccl",
+      "name": "NCCL, NVSHMEM and UCX",
+      "description": "Inter-GPU communication libraries over PCIe, NVLink, NVLink Multi-node, InfiniBand and RoCE: NCCL's topology-aware collectives, NVSHMEM's partitioned global address space, and UCX's messaging and remote memory access.",
+      "runsOn": [
+        "rubin-gpu"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-collective-communication-library",
+        "section": "4.6 NVIDIA Collective Communication Library"
+      }
+    },
+    {
+      "id": "dcgm",
+      "name": "Data Center GPU Manager (DCGM)",
+      "description": "Manages and monitors data center GPUs and NVSwitches: active health monitoring, diagnostics, alerts, and power and clock policies.",
+      "runsOn": [
+        "rubin-gpu",
+        "nvswitch-asic"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#data-center-gpu-manager",
+        "section": "4.7 Data Center GPU Manager"
+      }
+    },
+    {
+      "id": "mft",
+      "name": "NVIDIA Firmware Tools (MFT)",
+      "description": "Network ASIC firmware management: build a standard or custom firmware image, query firmware information, and flash an image. Shipped with the DGX VR software release.",
+      "runsOn": [
+        "connectx-9",
+        "bluefield-4"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-firmware-tools-mft",
+        "section": "4.8 NVIDIA Firmware Tools (MFT)"
+      },
+      "note": "The guide says 'network ASIC'; which devices that covers is read as the ConnectX-9 and BlueField-4."
+    },
+    {
+      "id": "nvsm",
+      "name": "NVIDIA System Management (NVSM)",
+      "description": "Diagnostics and management: determines system health, identifies component issues and alerts, and runs stress tests. 'sudo nvsm show health' gives the overall health summary.",
+      "runsOn": [
+        "rack"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/health-check.html",
+        "section": "Chapter 8. System Health Check"
+      }
+    },
+    {
+      "id": "nvdebug",
+      "name": "NVDEBUG",
+      "description": "Collects BMC event logs, firmware versions, hardware inventory and system health data into one archive for NVIDIA support.",
+      "runsOn": [
+        "compute-tray",
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#capturing-debug-logs-with-nvdebug",
+        "section": "6.4.1.11.1 Capturing Debug Logs with NVDEBUG"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "id": "virtual-a-c-cycle",
+      "title": "Virtual A/C Cycle",
+      "group": "Power control",
+      "purpose": "Simulates a power drop (like pulling and reinserting the power cord) without physically disconnecting the power.",
+      "command": "curl -k -u \"root:openBmc\" \\\n     -H \"Content-Type: application/json\" \\\n     -X POST \\\n     -d '{\"ResetType\":\"AuxPowerCycleForce\"}' \\\n     https://${bmcip}/redfish/v1/Chassis/BMC_0/Actions/Oem/NvidiaChassis.AuxPowerReset",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#virtual-a-c-cycle",
+        "section": "6.4.1.1.1 Virtual A/C Cycle"
+      }
+    },
+    {
+      "id": "graceful-shutdown",
+      "title": "Graceful Shutdown",
+      "group": "Power control",
+      "purpose": "Initiates a clean shutdown of the host system, allowing the operating system to properly terminate all services and processes.",
+      "command": "curl -s -k -u \"root:openBmc\" \\\n     -X POST \\\n     -d '{\"ResetType\": \"GracefulShutdown\"}' \\\n     https://${bmcip}/redfish/v1/Systems/System_0/Actions/ComputerSystem.Reset",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#graceful-shutdown",
+        "section": "6.4.1.1.2 Graceful Shutdown"
+      }
+    },
+    {
+      "id": "force-power-off",
+      "title": "Force Power Off",
+      "group": "Power control",
+      "purpose": "Immediately cuts power to the host without waiting for the OS to shut down.",
+      "command": "curl -s -k -u \"root:openBmc\" \\\n     -X POST \\\n     -d '{\"ResetType\": \"ForceOff\"}' \\\n     https://${bmcip}/redfish/v1/Systems/System_0/Actions/ComputerSystem.Reset",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#force-power-off",
+        "section": "6.4.1.1.3 Force Power Off"
+      }
+    },
+    {
+      "id": "power-on-host",
+      "title": "Power On Host",
+      "group": "Power control",
+      "purpose": "Turns the host on.",
+      "command": "curl -s -k -u \"root:openBmc\" \\\n     -X POST \\\n     -d '{\"ResetType\": \"On\"}' \\\n     https://${bmcip}/redfish/v1/Systems/System_0/Actions/ComputerSystem.Reset",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#power-on-host",
+        "section": "6.4.1.1.4 Power On Host"
+      }
+    },
+    {
+      "id": "power-cycle-host",
+      "title": "Power Cycle Host",
+      "group": "Power control",
+      "purpose": "Performs a full power cycle (off and then back on).",
+      "command": "curl -s -k -u \"root:openBmc\" \\\n     -X POST \\\n     -d '{\"ResetType\": \"PowerCycle\"}' \\\n     https://${bmcip}/redfish/v1/Systems/System_0/Actions/ComputerSystem.Reset",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#power-cycle-host",
+        "section": "6.4.1.1.5 Power Cycle Host"
+      }
+    },
+    {
+      "id": "set-power-restore-policy-always-off",
+      "title": "Set Power Restore Policy: Always Off",
+      "group": "Power control",
+      "purpose": "After power loss, the system will remain off when power is restored.",
+      "command": "curl -s -k -u \"root:openBmc\" \\\n     -X PATCH \\\n     -d '{\"PowerRestorePolicy\": \"AlwaysOff\"}' \\\n     https://${bmcip}/redfish/v1/Systems/System_0",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#set-power-restore-policy-always-off",
+        "section": "6.4.1.1.6 Set Power Restore Policy: Always Off"
+      }
+    },
+    {
+      "id": "set-power-restore-policy-last-state",
+      "title": "Set Power Restore Policy: Last State",
+      "group": "Power control",
+      "purpose": "After power loss, the system will return to its previous state (on or off) when power is restored.",
+      "command": "curl -s -k -u \"root:openBmc\" \\\n     -X PATCH \\\n     -d '{\"PowerRestorePolicy\": \"LastState\"}' \\\n     https://${bmcip}/redfish/v1/Systems/System_0",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#set-power-restore-policy-last-state",
+        "section": "6.4.1.1.7 Set Power Restore Policy: Last State"
+      }
+    },
+    {
+      "id": "set-power-restore-policy-always-on",
+      "title": "Set Power Restore Policy: Always On",
+      "group": "Power control",
+      "purpose": "After power loss, the system will automatically power on when power is restored.",
+      "command": "curl -s -k -u \"root:openBmc\" \\\n     -X PATCH \\\n     -d '{\"PowerRestorePolicy\": \"AlwaysOn\"}' \\\n     https://${bmcip}/redfish/v1/Systems/System_0",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#set-power-restore-policy-always-on",
+        "section": "6.4.1.1.8 Set Power Restore Policy: Always On"
+      }
+    },
+    {
+      "id": "hmc-graceful-restart",
+      "title": "HMC Graceful Restart",
+      "group": "HMC and BMC resets",
+      "purpose": "Performs a controlled restart of the HMC, allowing it to shut down services cleanly before rebooting. This is the preferred method for most maintenance scenarios.",
+      "command": "curl -k -u \"root:openBmc\" \\\n     -X POST \\\n     -d '{\"ResetType\": \"GracefulRestart\"}' \\\n     https://${bmcip}/redfish/v1/Managers/HGX_BMC_0/Actions/Manager.Reset",
+      "appliesTo": [
+        "host-bmc",
+        "hmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#hmc-graceful-restart",
+        "section": "6.4.1.2.1 HMC Graceful Restart"
+      }
+    },
+    {
+      "id": "hmc-force-restart",
+      "title": "HMC Force Restart",
+      "group": "HMC and BMC resets",
+      "purpose": "Immediately restarts the HMC without waiting for services to shut down gracefully.",
+      "command": "curl -k -u \"root:openBmc\" \\\n     -X POST \\\n     -d '{\"ResetType\": \"ForceRestart\"}' \\\n     https://${bmcip}/redfish/v1/Managers/HGX_BMC_0/Actions/Manager.Reset",
+      "appliesTo": [
+        "host-bmc",
+        "hmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#hmc-force-restart",
+        "section": "6.4.1.2.2 HMC Force Restart"
+      },
+      "note": "Warning: This is not recommended except in emergency situations, as it may lead to a host restart or data loss."
+    },
+    {
+      "id": "bmc-reset",
+      "title": "BMC Reset",
+      "group": "HMC and BMC resets",
+      "purpose": "Performs a forced reset of the BMC. This operation is typically used after firmware updates or if the BMC becomes unresponsive.",
+      "command": "curl -k -u \"root:openBmc\" \\\n     -X POST \\\n     -d '{\"ResetType\": \"ForceRestart\"}' \\\n     https://${bmcip}/redfish/v1/Managers/BMC_0/Actions/Manager.Reset",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#bmc-reset",
+        "section": "6.4.1.2.3 BMC Reset"
+      }
+    },
+    {
+      "id": "firmware-bundle-update",
+      "title": "Firmware Bundle Update",
+      "group": "Firmware and images",
+      "purpose": "Uploads and applies a firmware bundle to the system. Set FILENAME to the path of the firmware bundle. The following command uses a multipart form upload to send the update file to the BMC.",
+      "command": "curl -k -u \"root:openBmc\" --header 'Expect:' --location --request POST \\\n     \"https://${bmcip}/redfish/v1/UpdateService/update-multipart\" \\\n     -F 'UpdateParameters={\"Targets\":[\"/redfish/v1/Chassis/HGX_Chassis_0\"],\"ForceUpdate\":true};type=application/json' \\\n     -F UpdateFile=\"@${FILENAME}\"",
+      "appliesTo": [
+        "host-bmc",
+        "hmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#firmware-bundle-update",
+        "section": "6.4.1.3.1 Firmware Bundle Update"
+      }
+    },
+    {
+      "id": "get-firmware-versions-with-expand",
+      "title": "Get Firmware Versions (with expand)",
+      "group": "Firmware and images",
+      "purpose": "Retrieves detailed firmware version information for all components, using the $expand query with $levels=1 to include nested inventory data. The dollar signs are escaped (\\$) so the shell does not treat them as variables.",
+      "command": "curl -k -u \"root:openBmc\" -X GET \\\n     \"https://${bmcip}/redfish/v1/UpdateService/FirmwareInventory?\\$expand=.(\\$levels=1)\" \\\n     | jq -r '.Members[] | [.Id, .Version] | @tsv' | column -t",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#get-firmware-versions-with-expand",
+        "section": "6.4.1.3.2 Get Firmware Versions (with expand)"
+      }
+    },
+    {
+      "id": "check-bmc-firmware-signing-type",
+      "title": "Check BMC Firmware Signing Type",
+      "group": "Firmware and images",
+      "purpose": "Checks the signing type of the BMC firmware image, which helps confirm the authenticity and security of the installed firmware.",
+      "command": "curl -k -u \"root:openBmc\" -X GET \\\n     \"https://${bmcip}/redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0/ImageSlots/<active image slot>\" \\\n     | grep SigningType",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#check-bmc-firmware-signing-type",
+        "section": "6.4.1.3.3 Check BMC Firmware Signing Type"
+      },
+      "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0 ."
+    },
+    {
+      "id": "check-hmc-firmware-signing-type",
+      "title": "Check HMC Firmware Signing Type",
+      "group": "Firmware and images",
+      "purpose": "Checks the signing type of the HMC firmware image.",
+      "command": "curl -k -u \"root:openBmc\" -X GET \\\n     \"https://${bmcip}/redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0/ImageSlots/<active image slot>\" \\\n     | grep SigningType",
+      "appliesTo": [
+        "host-bmc",
+        "hmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#check-hmc-firmware-signing-type",
+        "section": "6.4.1.3.4 Check HMC Firmware Signing Type"
+      },
+      "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0 ."
+    },
+    {
+      "id": "enabling-global-write-protect",
+      "title": "Enabling Global Write Protect",
+      "group": "Write protection",
+      "purpose": "Enables hardware write protection for the system.",
+      "command": "curl -s -k -u 'root:openBmc' -X PATCH \\\n     -d '{ \"Oem\":{\"Nvidia\":{\"HardwareWriteProtectEnable\":true}}}' \\\n     https://${bmcip}/redfish/v1/Chassis/Chassis_0",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#enabling-global-write-protect",
+        "section": "6.4.1.4.1 Enabling Global Write Protect"
+      }
+    },
+    {
+      "id": "disabling-global-write-protect",
+      "title": "Disabling Global Write Protect",
+      "group": "Write protection",
+      "purpose": "Disables hardware write protection for the system.",
+      "command": "curl -s -k -u 'root:openBmc' -X PATCH \\\n     -d '{ \"Oem\":{\"Nvidia\":{\"HardwareWriteProtectEnable\":false}}}' \\\n     https://${bmcip}/redfish/v1/Chassis/Chassis_0",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#disabling-global-write-protect",
+        "section": "6.4.1.4.2 Disabling Global Write Protect"
+      }
+    },
+    {
+      "id": "reading-global-write-protect",
+      "title": "Reading Global Write Protect",
+      "group": "Write protection",
+      "purpose": "Reads the current hardware write protection status.",
+      "command": "curl -s -k -u 'root:openBmc' -X GET \\\n     https://${bmcip}/redfish/v1/Chassis/Chassis_0 | jq '.Oem.Nvidia.HardwareWriteProtectEnable'",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#reading-global-write-protect",
+        "section": "6.4.1.4.3 Reading Global Write Protect"
+      },
+      "note": "Enabling write protection is recommended after firmware updates or configuration changes to prevent accidental or unauthorized modifications."
+    },
+    {
+      "id": "creating-a-new-account",
+      "title": "Creating a New Account",
+      "group": "Accounts",
+      "purpose": "Creates a new user account with the specified username, password, and role.",
+      "command": "curl -s -k -u \"root:openBmc\" \\\n     -X POST \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\"UserName\": \"newuser\", \"Password\": \"newPassword\", \"RoleId\": \"Operator\"}' \\\n     https://${bmcip}/redfish/v1/AccountService/Accounts",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#creating-a-new-account",
+        "section": "6.4.1.5.1 Creating a New Account"
+      },
+      "note": "You can set RoleId to Administrator , Operator , or ReadOnly based on the required access level for the user."
+    },
+    {
+      "id": "updating-password-for-an-existing-account",
+      "title": "Updating Password for an Existing Account",
+      "group": "Accounts",
+      "purpose": "Updates the password for an existing account, such as the root user.",
+      "command": "curl -k -X PATCH -H \"Content-Type: application/json\" \\\n     -u root:CURRENT_PASSWORD \\\n     https://${bmcip}/redfish/v1/AccountService/Accounts/root \\\n     --data '{\"Password\": \"NEW_PASSWORD\"}'",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#updating-password-for-an-existing-account",
+        "section": "6.4.1.5.2 Updating Password for an Existing Account"
+      },
+      "note": "Replace CURRENT_PASSWORD with the current password for the account, and NEW_PASSWORD with the desired new password."
+    },
+    {
+      "id": "clear-hmc-event-log",
+      "title": "Clear HMC Event Log",
+      "group": "Event logs",
+      "purpose": "Clears all entries from the HMC event log. Use this command after reviewing or archiving log data to maintain log clarity and free up space.",
+      "command": "curl -k -u \"root:openBmc\" -X POST \\\n     https://${bmcip}/redfish/v1/Systems/HGX_Baseboard_0/LogServices/EventLog/Actions/LogService.ClearLog",
+      "appliesTo": [
+        "host-bmc",
+        "hmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#clear-hmc-event-log",
+        "section": "6.4.1.6.1 Clear HMC Event Log"
+      }
+    },
+    {
+      "id": "clear-bmc-event-log",
+      "title": "Clear BMC Event Log",
+      "group": "Event logs",
+      "purpose": "Removes all entries from the BMC event log. This is useful for resetting the log after resolving issues or before starting new troubleshooting steps.",
+      "command": "curl -k -u \"root:openBmc\" -X POST \\\n     https://${bmcip}/redfish/v1/Systems/System_0/LogServices/EventLog/Actions/LogService.ClearLog",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#clear-bmc-event-log",
+        "section": "6.4.1.6.2 Clear BMC Event Log"
+      }
+    },
+    {
+      "id": "reset-bmc-to-factory-defaults",
+      "title": "Reset BMC to Factory Defaults",
+      "group": "Factory defaults",
+      "purpose": "Restores the BMC to its original factory settings. All user configurations and custom settings will be lost. Use this if the BMC is unresponsive or you need to clear all settings.",
+      "command": "curl -k -u \"root:openBmc\" -X POST \\\n     https://${bmcip}/redfish/v1/Managers/BMC_0/Actions/Manager.ResetToDefaults \\\n     -d '{\"ResetType\": \"ResetAll\"}'",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#reset-bmc-to-factory-defaults",
+        "section": "6.4.1.7.1 Reset BMC to Factory Defaults"
+      }
+    },
+    {
+      "id": "reset-hmc-to-factory-defaults",
+      "title": "Reset HMC to Factory Defaults",
+      "group": "Factory defaults",
+      "purpose": "Resets the Host Management Controller (HMC) to its factory default configuration. This will remove all custom settings and user data from the HMC.",
+      "command": "curl -k -u \"root:openBmc\" -X POST \\\n     https://${bmcip}/redfish/v1/Managers/HGX_BMC_0/Actions/Manager.ResetToDefaults \\\n     -d '{\"ResetType\": \"ResetAll\"}'",
+      "appliesTo": [
+        "host-bmc",
+        "hmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#reset-hmc-to-factory-defaults",
+        "section": "6.4.1.7.2 Reset HMC to Factory Defaults"
+      }
+    },
+    {
+      "id": "clear-the-emmc-this-will-clear-the-journal",
+      "title": "Clear the eMMC (This Will Clear the Journal)",
+      "group": "Factory defaults",
+      "purpose": "Securely erases the eMMC storage, including the system journal. Use this operation with caution, as it will permanently delete all data stored on the eMMC.",
+      "command": "curl -k -u \"root:openBmc\" -X POST \\\n     https://${bmcip}/redfish/v1/Managers/HGX_BMC_0/Actions/Oem/eMMC.SecureErase",
+      "appliesTo": [
+        "host-bmc",
+        "hmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#clear-the-emmc-this-will-clear-the-journal",
+        "section": "6.4.1.7.3 Clear the eMMC (This Will Clear the Journal)"
+      }
+    },
+    {
+      "id": "reset-sbios-to-defaults",
+      "title": "Reset SBIOS to Defaults",
+      "group": "Factory defaults",
+      "purpose": "Restores the system BIOS (SBIOS) settings to their factory defaults. This can help resolve configuration issues or prepare the system for a fresh deployment.",
+      "command": "curl -k -u \"root:openBmc\" -X POST \\\n     https://${bmcip}/redfish/v1/Systems/System_0/Bios/Actions/Bios.ResetBios",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#reset-sbios-to-defaults",
+        "section": "6.4.1.7.4 Reset SBIOS to Defaults"
+      }
+    },
+    {
+      "id": "ipmi-host-sol-access",
+      "title": "IPMI - Host SOL Access",
+      "group": "Console access",
+      "purpose": "Establishes a Serial Over LAN (SOL) session to the host using IPMI. This allows you to interact with the system console remotely, even if the OS is not running.",
+      "command": "ipmitool -C 17 -H ${bmcip} -U root -P OpenBmc -I lanplus sol activate",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#ipmi-host-sol-access",
+        "section": "6.4.1.8.1 IPMI - Host SOL Access"
+      }
+    },
+    {
+      "id": "ssh-host-sol-access",
+      "title": "SSH - Host SOL Access",
+      "group": "Console access",
+      "purpose": "Provides SSH access to the host’s SOL interface. This is an alternative to IPMI SOL for remote console access.",
+      "command": "ssh root@${bmcip} -p 2200",
+      "appliesTo": [
+        "host-bmc",
+        "compute-tray"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#ssh-host-sol-access",
+        "section": "6.4.1.8.2 SSH - Host SOL Access"
+      }
+    },
+    {
+      "id": "disable-ipmi",
+      "title": "Disable IPMI",
+      "group": "Network controls",
+      "purpose": "Disables the IPMI protocol on the BMC. This is recommended for enhanced security if IPMI remote management is not required.",
+      "command": "curl -s -k -u 'root:openBmc' -X PATCH \\\n     https://${bmcip}/redfish/v1/Managers/BMC_0/NetworkProtocol \\\n     -d '{ \"IPMI\": {\"ProtocolEnabled\": false} }'",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#disable-ipmi",
+        "section": "6.4.1.9.1 Disable IPMI"
+      }
+    },
+    {
+      "id": "capturing-debug-logs-with-nvdebug",
+      "title": "Capturing Debug Logs with NVDEBUG",
+      "group": "Debug logs",
+      "purpose": "Access the BMC or host system where NVDEBUG is available. Ensure you have the necessary permissions to run diagnostic tools.",
+      "command": "nvdebug --collect --output /path/to/save/debug-logs.tar.gz",
+      "appliesTo": [
+        "host-bmc"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#capturing-debug-logs-with-nvdebug",
+        "section": "6.4.1.11.1 Capturing Debug Logs with NVDEBUG"
+      },
+      "note": "NVDEBUG automatically collects a comprehensive set of logs, including BMC event logs, firmware versions, hardware inventory, and system health data. This is the recommended approach for efficient and complete log collection."
+    }
+  ],
+  "commandNotes": {
+    "usage": "Set the BMC address first (export bmcip=\"192.168.1.100\") or replace ${bmcip} by hand. The examples use example credentials; replace them with your BMC credentials.",
+    "factoryReset": "After a BMC factory reset the default username and password are admin/admin, and you are asked to change them at the first login. Change default credentials immediately.",
+    "source": {
+      "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html",
+      "section": "6.4.1 Redfish Commands for Compute Tray"
+    }
+  },
+  "safety": [
+    {
+      "id": "battery",
+      "title": "Batteries",
+      "text": "Danger of explosion if the battery is replaced incorrectly: use only the battery the manufacturer recommends. Do not recharge, disassemble or puncture it, and dispose of it according to local rules.",
+      "components": [
+        "compute-tray-battery",
+        "switch-tray-battery"
+      ],
+      "procedures": [
+        "compute-battery",
+        "switch-battery"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#battery-replacement",
+        "section": "5.10.3 Battery Replacement"
+      }
+    },
+    {
+      "id": "esd",
+      "title": "Electrostatic discharge",
+      "text": "ESD can damage drives, boards and other parts. Work at an ESD workstation or wear an antistatic wrist strap, and hold boards only by their edges.",
+      "components": [
+        "e1s-cache-drive",
+        "compute-tray-battery",
+        "switch-tray-battery"
+      ],
+      "procedures": [
+        "cache-drive",
+        "compute-battery",
+        "switch-battery"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#electrostatic-discharge",
+        "section": "5.9 Electrostatic Discharge"
+      }
+    },
+    {
+      "id": "psu",
+      "title": "Power supplies",
+      "text": "A power supply has no user-serviceable parts and hazardous voltage, current and energy inside: do not open it. When replacing a hot-plug power supply, unplug the power cord of that supply before removing it.",
+      "components": [
+        "psu"
+      ],
+      "procedures": [
+        "psu"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#power-and-electrical-warnings",
+        "section": "5.6.1 Power and Electrical Warnings"
+      }
+    },
+    {
+      "id": "standby",
+      "title": "Standby power",
+      "text": "The power button does not completely turn off AC power: standby power is active whenever the system is plugged in.",
+      "components": [
+        "power-shelf",
+        "compute-tray"
+      ],
+      "procedures": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#power-and-electrical-warnings",
+        "section": "5.6.1 Power and Electrical Warnings"
+      }
+    },
+    {
+      "id": "rack-mount",
+      "title": "Working in the rack",
+      "text": "The rack must be anchored so it cannot tip when equipment is extended. Extend only one piece of equipment from the rack at a time.",
+      "components": [
+        "compute-tray",
+        "switch-tray"
+      ],
+      "procedures": [
+        "compute-battery",
+        "switch-battery"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#rack-mount-warnings",
+        "section": "5.8 Rack Mount Warnings"
+      }
+    },
+    {
+      "id": "lifting",
+      "title": "Moving and lifting",
+      "text": "Follow local occupational health and safety rules, and use mechanical or other suitable assistance when moving and lifting equipment.",
+      "components": [
+        "compute-tray",
+        "switch-tray",
+        "power-shelf"
+      ],
+      "procedures": [
+        "compute-battery",
+        "switch-battery"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#equipment-handling-practices",
+        "section": "5.5 Equipment Handling Practices"
+      }
+    },
+    {
+      "id": "hot",
+      "title": "Hot parts",
+      "text": "If the system has been running, processors and heat sinks may be hot. Let the system cool before opening the covers.",
+      "components": [
+        "compute-tray"
+      ],
+      "procedures": [
+        "compute-battery"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#system-access-warnings",
+        "section": "5.7 System Access Warnings"
+      }
+    },
+    {
+      "id": "covers",
+      "title": "Covers and airflow",
+      "text": "Operate the system only with its covers installed, after checking that no loose tools or parts are left inside.",
+      "components": [
+        "compute-tray",
+        "switch-tray"
+      ],
+      "procedures": [
+        "compute-battery",
+        "switch-battery"
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#cooling-and-airflow",
+        "section": "5.10.4 Cooling and Airflow"
+      }
     }
   ]
 }

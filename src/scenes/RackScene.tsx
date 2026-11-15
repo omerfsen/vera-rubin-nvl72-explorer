@@ -59,6 +59,8 @@ function UnitInstances({ componentId }: { componentId: string }) {
   const network = useExplorer((s) => s.network);
   const onNetwork = useMemo(() => (network ? model.networkMembers(network).unitTypes.has(componentId) : null), [network, componentId]);
   const selectedKey = selectedUnitKey(selected);
+  // A general selection of this unit type ("power-shelf") lights up every unit of it.
+  const typeSelected = selected.split('/')[0] === componentId;
   const type = model.getComponent(componentId)?.type;
   const base = useMemo(() => new Color(TYPE_COLORS[type ?? 'rack'] ?? '#666666'), [type]);
 
@@ -69,7 +71,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
     units.forEach((u, i) => {
       const box = boxByKey.get(u.key)!;
       placeBox(mesh, i, box, u.key === selectedKey ? SLIDE_OUT : 0);
-      if (u.key === selectedKey) color.set(SELECTED_COLOR);
+      if (u.key === selectedKey || typeSelected) color.set(SELECTED_COLOR);
       else if (u.key === hovered) color.set(HOVER_COLOR);
       else if (onNetwork === true) color.set(NETWORK_COLORS[network] ?? '#ffffff');
       else if (onNetwork === false) color.set(DIM_COLOR);
@@ -80,7 +82,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     mesh.computeBoundingSphere();
     invalidate();
-  }, [units, selectedKey, hovered, base, invalidate, onNetwork, network]);
+  }, [units, selectedKey, hovered, base, invalidate, onNetwork, network, typeSelected]);
 
   useEffect(
     () => () => {
