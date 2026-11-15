@@ -26,6 +26,12 @@ export function Credits() {
           </a>
         </>
       )}
+      {author.email && (
+        <>
+          {' · '}
+          <a href={`mailto:${author.email}`}>{author.email}</a>
+        </>
+      )}
     </span>
   );
 }
