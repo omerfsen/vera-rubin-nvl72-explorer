@@ -137,9 +137,10 @@ rear. Which one the sentence means is not clear.
 
 Labelled in the guide's figures:
 
-- Compute tray (Fig. 5): 16x SOCAMM, SMM (E1.S boot drive + carrier board
-  with BMC, HMC, TPM and front IO panel), Power Distribution Board, Internal
-  Manifold, bus bar connector.
+- Compute tray (Fig. 5): the SMM itself (E1.S boot drive + carrier board with
+  BMC, HMC, TPM and front IO panel) as one part; the TPM; the bus bar
+  connector and water connections are listed as specs only. SOCAMM, the
+  Power Distribution Board and the Internal Manifold are in the data since M2.
 - Switch tray (Fig. 7): SWB w/ PDB, SSD, power connector.
 - Rear (Fig. 2): rear bezel, FD83 connectors for liquid cooling hoses,
   manifold, cable cartridge and bus bar supports.

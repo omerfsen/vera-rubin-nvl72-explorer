@@ -111,6 +111,13 @@
       "items": {
         "$ref": "#/$defs/connection"
       }
+    },
+    "trayLayouts": {
+      "type": "object",
+      "description": "Schematic interior layouts, keyed by tray component id.",
+      "additionalProperties": {
+        "$ref": "#/$defs/trayLayout"
+      }
     }
   },
   "$defs": {
@@ -319,7 +326,9 @@
         "cable-cartridge",
         "manifold",
         "bus-bar",
-        "battery"
+        "battery",
+        "memory",
+        "board"
       ]
     },
     "component": {
@@ -619,6 +628,225 @@
         },
         "description": {
           "type": "string"
+        }
+      }
+    },
+    "traySlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component",
+        "face",
+        "x",
+        "z",
+        "w",
+        "d",
+        "h"
+      ],
+      "properties": {
+        "component": {
+          "$ref": "#/$defs/id"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Which instance, 1-based. Omit for a component with no stated count."
+        },
+        "label": {
+          "type": "string",
+          "pattern": "\\S",
+          "description": "NVIDIA's name for this instance, e.g. 'GPU0 (HPM_L GPU_0)'."
+        },
+        "face": {
+          "enum": [
+            "top",
+            "front"
+          ],
+          "description": "top: lies inside the tray. front: sits in the front panel."
+        },
+        "x": {
+          "type": "number",
+          "minimum": -0.5,
+          "maximum": 0.5,
+          "description": "Left (-0.5) to right (+0.5), seen from the front."
+        },
+        "z": {
+          "type": "number",
+          "minimum": -0.5,
+          "maximum": 0.5,
+          "description": "Rear (-0.5) to front (+0.5)."
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Front-panel parts only: bottom (0) to top (1) of the tray."
+        },
+        "w": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "d": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "h": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "trayLayout": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "slots",
+        "assumed"
+      ],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "notPlaced": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "component",
+              "reason"
+            ],
+            "properties": {
+              "component": {
+                "$ref": "#/$defs/id"
+              },
+              "reason": {
+                "type": "string",
+                "pattern": "\\S"
+              }
+            }
+          }
+        },
+        "slots": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/traySlot"
+          }
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trayPoint"
+          },
+          "description": "Named spots on the tray, e.g. rear connectors, for links that end there."
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trayLink"
+          },
+          "description": "Instance-level connections inside the tray: the 'veins' layer."
+        }
+      }
+    },
+    "linkEnd": {
+      "type": "object",
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "component"
+          ]
+        },
+        {
+          "required": [
+            "point"
+          ]
+        }
+      ],
+      "properties": {
+        "component": {
+          "$ref": "#/$defs/id"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "point": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "trayLink": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "from",
+        "to"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "pcie",
+            "c2c",
+            "clink",
+            "nvlink",
+            "coolant",
+            "power"
+          ]
+        },
+        "from": {
+          "$ref": "#/$defs/linkEnd"
+        },
+        "to": {
+          "$ref": "#/$defs/linkEnd"
+        }
+      }
+    },
+    "trayPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "x",
+        "z"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "x": {
+          "type": "number",
+          "minimum": -0.5,
+          "maximum": 0.5
+        },
+        "z": {
+          "type": "number",
+          "minimum": -0.5,
+          "maximum": 0.5
         }
       }
     }

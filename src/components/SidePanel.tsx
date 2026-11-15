@@ -4,6 +4,8 @@ import type { Component, Connection, Source, Spec } from '../data/types';
 import { SHOW_OFFICIAL_FIGURES, officialFigureUrl } from '../config/flags';
 import { useExplorer } from '../state/store';
 import { ROOT_ID } from '../data/model';
+import { trayKeyOf } from '../state/url';
+import { LINK_COLORS, LINK_NAMES } from '../scenes/geometry';
 
 function SourceLink({ source }: { source: Source }) {
   return (
@@ -91,6 +93,15 @@ export function SidePanel() {
   const numbering = model.topology.rackLayout.numbering;
   const isNumberedUnit = last?.index !== undefined && segments.length === 1 && model.isRackUnitType(component.id);
   const height = model.isRackUnitType(component.id) ? model.topology.rackLayout.heightsRU?.[component.id] : undefined;
+  const view = useExplorer((s) => s.view);
+  const openTray = useExplorer((s) => s.openTray);
+  const trayKey = trayKeyOf(selected, model);
+  const trayId = trayKey?.split('.')[0] ?? null;
+  const layout = trayId ? model.trayLayout(trayId) : undefined;
+  const within = trayKey && selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
+  const slot = trayId && within ? model.slotFor(trayId, within) : undefined;
+  const notPlaced = layout?.notPlaced?.find((n) => n.component === component.id);
+  const trayLinks = trayId && within ? model.linksAt(trayId, within) : [];
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
@@ -118,6 +129,14 @@ export function SidePanel() {
           {title} {component.assumed && <Assumed note={component.note} />}
         </h2>
       </header>
+
+      {trayKey && selected === trayKey && view === 'rack' && (
+        <p>
+          <button type="button" className="open-tray" onClick={openTray}>
+            Open {title} to see its parts
+          </button>
+        </p>
+      )}
 
       <section>
         <h3>What it is</h3>
@@ -152,6 +171,20 @@ export function SidePanel() {
           </p>
         )}
       </section>
+
+      {within && layout && (
+        <section>
+          <h3>Position</h3>
+          {slot?.label && <p>NVIDIA label: {slot.label}</p>}
+          {slot && (
+            <p className="note">
+              {layout.assumed && <Assumed note={layout.note} />} {layout.note}
+            </p>
+          )}
+          {!slot && notPlaced && <p className="note">Not drawn: {notPlaced.reason}</p>}
+          {!slot && !notPlaced && <p className="muted">Not drawn on its own in the 3D view.</p>}
+        </section>
+      )}
 
       <section>
         <h3>Networks</h3>
@@ -201,6 +234,38 @@ export function SidePanel() {
               ))}
             </tbody>
           </table>
+        </section>
+      )}
+
+      {trayLinks.length > 0 && trayId && within && (
+        <section>
+          <h3>Inside the tray, connected to</h3>
+          <ul className="plain">
+            {trayLinks.map((l, i) => {
+              const fromHere = model.linkEndPath(trayId, l.from)?.replace(/\.\d+$/, '') === within.replace(/\.\d+$/, '');
+              const other = fromHere ? l.to : l.from;
+              const otherPath = model.linkEndPath(trayId, other);
+              return (
+                <li key={i}>
+                  <span className="conn-kind" style={{ borderColor: LINK_COLORS[l.kind] }}>
+                    {LINK_NAMES[l.kind] ?? l.kind}
+                  </span>{' '}
+                  {otherPath ? (
+                    <button type="button" className="link-button" onClick={() => select(`${trayKey}/${otherPath}`)}>
+                      {model.linkEndLabel(trayId, other)}
+                    </button>
+                  ) : (
+                    model.linkEndLabel(trayId, other)
+                  )}{' '}
+                  {l.assumed && <Assumed note={l.note} />}
+                  {l.note && <div className="note">{l.note}</div>}
+                  <div className="spec-source">
+                    Source: <SourceLink source={l.source} />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
 

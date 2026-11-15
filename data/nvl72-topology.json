@@ -895,6 +895,77 @@
       "note": "Count read from the manual's singular wording ('the battery')."
     },
     {
+      "id": "socamm",
+      "type": "memory",
+      "name": "SOCAMM memory module",
+      "count": 16,
+      "parent": "compute-tray",
+      "description": "SOCAMM memory module, shown around the CPUs in the top view.",
+      "function": "The guide labels them but does not describe them.",
+      "networks": [],
+      "specs": [],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
+      },
+      "note": "Count from the '16x SOCAMM' label in Fig. 5; the text does not mention SOCAMM."
+    },
+    {
+      "id": "internal-manifold",
+      "type": "manifold",
+      "name": "Internal manifold",
+      "count": 1,
+      "parent": "compute-tray",
+      "description": "Coolant manifold inside the compute tray, between the CPU and GPU area and the front bays.",
+      "function": "Part of the tray's liquid cooling. Section 1.2 says the liquid 'runs up and down the rack through the inner manifold, then through the cold plates'; this may be that manifold.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Rear connections",
+          "value": "Hot water outlet and cold water inlet at the rear of the tray",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
+      },
+      "note": "Fig. 5 labels one 'Internal Manifold'. See docs/OPEN_QUESTIONS.md item 12."
+    },
+    {
+      "id": "power-distribution-board",
+      "type": "board",
+      "name": "Power Distribution Board",
+      "count": 1,
+      "parent": "compute-tray",
+      "description": "Power distribution board inside the compute tray.",
+      "function": "The guide labels it but does not describe it. The tray takes power through the bus bar connector at its rear.",
+      "networks": [],
+      "specs": [
+        {
+          "label": "Power input",
+          "value": "Bus bar connector at the rear of the tray",
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
+      },
+      "note": "Count from the single label in Fig. 5."
+    },
+    {
       "id": "switch-tray",
       "type": "switch-tray",
       "name": "NVLink 6 switch tray",
@@ -1829,5 +1900,1015 @@
       "note": "Fig. 7 shows the tray's water connections; the guide does not say in words that they connect to these manifolds.",
       "assumed": true
     }
-  ]
+  ],
+  "trayLayouts": {
+    "compute-tray": {
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+        "figure": "hardware-compute-tray-top-VRNVL72.png"
+      },
+      "assumed": true,
+      "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: GPUs and CPUs on HPM_L (left) and HPM_R (right) as in 2.4 Fig. 4, SOCAMM around the CPUs (Fig. 5). Front half: Bay B left and right with ConnectX-9 modules and cache drives, Bay C in the middle with the BlueField-4 and the SMM (Fig. 6). The 1 GbE BMC port is drawn at the SMM's RJ45, which Table 2.3 does not confirm.",
+      "sources": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays, Fig. 6 (Compute Tray Front View)",
+          "figure": "hardware-compute-tray-front-VRNVL72.png"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+          "section": "2.4 Network Interface Names, top-view table and Fig. 4",
+          "figure": "network-port-labels-2-VRNVL72.png"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+          "section": "2.2 Network Overview, Fig. 1 (network port locations)",
+          "figure": "network-port-numbers-VRNVL72.png"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+          "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+        }
+      ],
+      "notPlaced": [
+        {
+          "component": "ct-port-lan-1gbe",
+          "reason": "Table 2.3 lists it, but no figure shows where it is (docs/OPEN_QUESTIONS.md item 4)."
+        }
+      ],
+      "slots": [
+        {
+          "component": "rubin-gpu",
+          "index": 1,
+          "label": "GPU0 (HPM_L GPU_0)",
+          "face": "top",
+          "x": -0.37,
+          "z": -0.36,
+          "w": 0.17,
+          "d": 0.17,
+          "h": 0.05
+        },
+        {
+          "component": "rubin-gpu",
+          "index": 2,
+          "label": "GPU1 (HPM_L GPU_1)",
+          "face": "top",
+          "x": -0.15,
+          "z": -0.36,
+          "w": 0.17,
+          "d": 0.17,
+          "h": 0.05
+        },
+        {
+          "component": "rubin-gpu",
+          "index": 3,
+          "label": "GPU2 (HPM_R GPU_2)",
+          "face": "top",
+          "x": 0.15,
+          "z": -0.36,
+          "w": 0.17,
+          "d": 0.17,
+          "h": 0.05
+        },
+        {
+          "component": "rubin-gpu",
+          "index": 4,
+          "label": "GPU3 (HPM_R GPU_3)",
+          "face": "top",
+          "x": 0.37,
+          "z": -0.36,
+          "w": 0.17,
+          "d": 0.17,
+          "h": 0.05
+        },
+        {
+          "component": "vera-cpu",
+          "index": 1,
+          "label": "CPU0 (HPM_L)",
+          "face": "top",
+          "x": -0.26,
+          "z": -0.1,
+          "w": 0.16,
+          "d": 0.15,
+          "h": 0.045
+        },
+        {
+          "component": "vera-cpu",
+          "index": 2,
+          "label": "CPU1 (HPM_R)",
+          "face": "top",
+          "x": 0.26,
+          "z": -0.1,
+          "w": 0.16,
+          "d": 0.15,
+          "h": 0.045
+        },
+        {
+          "component": "socamm",
+          "index": 1,
+          "face": "top",
+          "x": -0.375,
+          "z": -0.165,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 2,
+          "face": "top",
+          "x": -0.375,
+          "z": -0.123,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 3,
+          "face": "top",
+          "x": -0.375,
+          "z": -0.081,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 4,
+          "face": "top",
+          "x": -0.375,
+          "z": -0.03900000000000001,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 5,
+          "face": "top",
+          "x": -0.14500000000000002,
+          "z": -0.165,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 6,
+          "face": "top",
+          "x": -0.14500000000000002,
+          "z": -0.123,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 7,
+          "face": "top",
+          "x": -0.14500000000000002,
+          "z": -0.081,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 8,
+          "face": "top",
+          "x": -0.14500000000000002,
+          "z": -0.03900000000000001,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 9,
+          "face": "top",
+          "x": 0.14500000000000002,
+          "z": -0.165,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 10,
+          "face": "top",
+          "x": 0.14500000000000002,
+          "z": -0.123,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 11,
+          "face": "top",
+          "x": 0.14500000000000002,
+          "z": -0.081,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 12,
+          "face": "top",
+          "x": 0.14500000000000002,
+          "z": -0.03900000000000001,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 13,
+          "face": "top",
+          "x": 0.375,
+          "z": -0.165,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 14,
+          "face": "top",
+          "x": 0.375,
+          "z": -0.123,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 15,
+          "face": "top",
+          "x": 0.375,
+          "z": -0.081,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "socamm",
+          "index": 16,
+          "face": "top",
+          "x": 0.375,
+          "z": -0.03900000000000001,
+          "w": 0.03,
+          "d": 0.034,
+          "h": 0.012
+        },
+        {
+          "component": "internal-manifold",
+          "index": 1,
+          "face": "top",
+          "x": 0.0,
+          "z": -0.12,
+          "w": 0.07,
+          "d": 0.42,
+          "h": 0.04
+        },
+        {
+          "component": "connectx-9",
+          "index": 1,
+          "label": "ConnectX-9 in Bay B left",
+          "face": "top",
+          "x": -0.33,
+          "z": 0.33,
+          "w": 0.26,
+          "d": 0.24,
+          "h": 0.035
+        },
+        {
+          "component": "connectx-9",
+          "index": 2,
+          "label": "ConnectX-9 in Bay B right",
+          "face": "top",
+          "x": 0.27,
+          "z": 0.33,
+          "w": 0.26,
+          "d": 0.24,
+          "h": 0.035
+        },
+        {
+          "component": "bluefield-4",
+          "index": 1,
+          "face": "top",
+          "x": 0.0,
+          "z": 0.3,
+          "w": 0.14,
+          "d": 0.2,
+          "h": 0.03
+        },
+        {
+          "component": "power-distribution-board",
+          "index": 1,
+          "face": "top",
+          "x": 0.12,
+          "z": 0.12,
+          "w": 0.12,
+          "d": 0.12,
+          "h": 0.02
+        },
+        {
+          "component": "e1s-boot-drive",
+          "index": 1,
+          "label": "Boot drive (Bay_C E1.S_Boot Drive)",
+          "face": "top",
+          "x": -0.03,
+          "z": 0.13,
+          "w": 0.08,
+          "d": 0.05,
+          "h": 0.015
+        },
+        {
+          "component": "host-bmc",
+          "index": 1,
+          "label": "Host BMC (on the SMM)",
+          "face": "top",
+          "x": -0.045,
+          "z": 0.43,
+          "w": 0.05,
+          "d": 0.05,
+          "h": 0.012
+        },
+        {
+          "component": "hmc",
+          "label": "HMC (on the SMM)",
+          "face": "top",
+          "x": 0.02,
+          "z": 0.43,
+          "w": 0.04,
+          "d": 0.05,
+          "h": 0.012
+        },
+        {
+          "component": "compute-tray-battery",
+          "index": 1,
+          "face": "top",
+          "x": 0.075,
+          "z": 0.43,
+          "w": 0.035,
+          "d": 0.035,
+          "h": 0.015
+        },
+        {
+          "component": "e1s-cache-drive",
+          "index": 1,
+          "label": "Bay_B_L E1.s_Top",
+          "face": "front",
+          "x": -0.17,
+          "z": 0.5,
+          "w": 0.09,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.72
+        },
+        {
+          "component": "e1s-cache-drive",
+          "index": 2,
+          "label": "Bay_B_L E1.s_Bottom",
+          "face": "front",
+          "x": -0.17,
+          "z": 0.5,
+          "w": 0.09,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.3
+        },
+        {
+          "component": "e1s-cache-drive",
+          "index": 3,
+          "label": "Bay_B_R E1.s_Top",
+          "face": "front",
+          "x": 0.43,
+          "z": 0.5,
+          "w": 0.09,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.72
+        },
+        {
+          "component": "e1s-cache-drive",
+          "index": 4,
+          "label": "Bay_B_R E1.s_Bottom",
+          "face": "front",
+          "x": 0.43,
+          "z": 0.5,
+          "w": 0.09,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.3
+        },
+        {
+          "component": "ct-port-cx9-osfp",
+          "face": "front",
+          "x": -0.45,
+          "z": 0.5,
+          "w": 0.085,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.72
+        },
+        {
+          "component": "ct-port-cx9-osfp",
+          "face": "front",
+          "x": -0.35000000000000003,
+          "z": 0.5,
+          "w": 0.085,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.72
+        },
+        {
+          "component": "ct-port-cx9-osfp",
+          "face": "front",
+          "x": -0.45,
+          "z": 0.5,
+          "w": 0.085,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.3
+        },
+        {
+          "component": "ct-port-cx9-osfp",
+          "face": "front",
+          "x": -0.35000000000000003,
+          "z": 0.5,
+          "w": 0.085,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.3
+        },
+        {
+          "component": "ct-port-cx9-osfp",
+          "face": "front",
+          "x": 0.15000000000000002,
+          "z": 0.5,
+          "w": 0.085,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.72
+        },
+        {
+          "component": "ct-port-cx9-osfp",
+          "face": "front",
+          "x": 0.25,
+          "z": 0.5,
+          "w": 0.085,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.72
+        },
+        {
+          "component": "ct-port-cx9-osfp",
+          "face": "front",
+          "x": 0.15000000000000002,
+          "z": 0.5,
+          "w": 0.085,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.3
+        },
+        {
+          "component": "ct-port-cx9-osfp",
+          "face": "front",
+          "x": 0.25,
+          "z": 0.5,
+          "w": 0.085,
+          "d": 0.03,
+          "h": 0.3,
+          "y": 0.3
+        },
+        {
+          "component": "ct-port-bf4-rj45",
+          "index": 1,
+          "face": "front",
+          "x": -0.12,
+          "z": 0.5,
+          "w": 0.045,
+          "d": 0.03,
+          "h": 0.32,
+          "y": 0.4
+        },
+        {
+          "component": "ct-port-bf4-left",
+          "index": 1,
+          "face": "front",
+          "x": -0.04,
+          "z": 0.5,
+          "w": 0.065,
+          "d": 0.03,
+          "h": 0.28,
+          "y": 0.4
+        },
+        {
+          "component": "ct-port-bf4-right",
+          "index": 1,
+          "face": "front",
+          "x": 0.04,
+          "z": 0.5,
+          "w": 0.065,
+          "d": 0.03,
+          "h": 0.28,
+          "y": 0.4
+        },
+        {
+          "component": "ct-port-bmc-1gbe",
+          "index": 1,
+          "label": "1 GbE BMC port (the SMM's RJ45, assumed)",
+          "face": "front",
+          "x": 0.13,
+          "z": 0.5,
+          "w": 0.045,
+          "d": 0.03,
+          "h": 0.32,
+          "y": 0.4
+        }
+      ],
+      "points": [
+        {
+          "id": "nvlink-connectors",
+          "label": "NVLink connectors to the cable cartridge",
+          "x": 0.0,
+          "z": -0.5
+        },
+        {
+          "id": "cold-water-inlet",
+          "label": "Cold water inlet",
+          "x": 0.42,
+          "z": -0.5
+        },
+        {
+          "id": "hot-water-outlet",
+          "label": "Hot water outlet",
+          "x": -0.42,
+          "z": -0.5
+        },
+        {
+          "id": "bus-bar-connector",
+          "label": "Bus bar connector",
+          "x": 0.2,
+          "z": -0.5
+        }
+      ],
+      "links": [
+        {
+          "kind": "clink",
+          "from": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "c2c",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "c2c",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 2
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "c2c",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 3
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "c2c",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 4
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "bluefield-4",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "bluefield-4",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          }
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-boot-drive",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Fig. 4 draws the boot drive on CPU 1. Its PCIe bus (000a:a1) is in the same domain as GPU2 and GPU3 (2.4)."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "connectx-9",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 draws four ConnectX-9 pairs, two on CPU 0 and two on CPU 1, through PCIe switches. Which front bay holds which pair is not stated; this app links the left bay to CPU 0 and the right bay to CPU 1."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "connectx-9",
+            "index": 2
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 draws four ConnectX-9 pairs, two on CPU 0 and two on CPU 1, through PCIe switches. Which front bay holds which pair is not stated; this app links the left bay to CPU 0 and the right bay to CPU 1."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-cache-drive",
+            "index": 1
+          },
+          "to": {
+            "component": "connectx-9",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
+            "figure": "network-port-labels-1-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-cache-drive",
+            "index": 2
+          },
+          "to": {
+            "component": "connectx-9",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
+            "figure": "network-port-labels-1-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-cache-drive",
+            "index": 3
+          },
+          "to": {
+            "component": "connectx-9",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
+            "figure": "network-port-labels-1-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains."
+        },
+        {
+          "kind": "pcie",
+          "from": {
+            "component": "e1s-cache-drive",
+            "index": 4
+          },
+          "to": {
+            "component": "connectx-9",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+            "section": "2.4 Network Interface Names, front-view table and Fig. 3",
+            "figure": "network-port-labels-1-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 4 puts one E1.S drive on each ConnectX-9 PCIe switch group. Table 2.4 puts the Bay_B_L drives in the same PCIe domains as C1/C3 (0001, 0004) and the Bay_B_R drives with C5/C7 (000c, 0009). The drive-to-card pairing in this app follows those domains."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 1
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 2
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 3
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge."
+        },
+        {
+          "kind": "nvlink",
+          "from": {
+            "component": "rubin-gpu",
+            "index": 4
+          },
+          "to": {
+            "point": "nvlink-connectors"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+            "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+          },
+          "note": "Each GPU has NVLinks to all nine NVLink switch trays through the cable cartridge."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "vera-cpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "rubin-gpu",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "rubin-gpu",
+            "index": 2
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "rubin-gpu",
+            "index": 3
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "component": "rubin-gpu",
+            "index": 4
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays"
+          },
+          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "point": "cold-water-inlet"
+          },
+          "to": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 5 labels the cold water inlet and hot water outlet at the rear of the tray; the piping to the manifold is not shown."
+        },
+        {
+          "kind": "coolant",
+          "from": {
+            "component": "internal-manifold",
+            "index": 1
+          },
+          "to": {
+            "point": "hot-water-outlet"
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 5 labels the cold water inlet and hot water outlet at the rear of the tray; the piping to the manifold is not shown."
+        },
+        {
+          "kind": "power",
+          "from": {
+            "point": "bus-bar-connector"
+          },
+          "to": {
+            "component": "power-distribution-board",
+            "index": 1
+          },
+          "source": {
+            "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+            "section": "1.2 Compute Trays, Fig. 5 (Compute Tray Top View)",
+            "figure": "hardware-compute-tray-top-VRNVL72.png"
+          },
+          "assumed": true,
+          "note": "Fig. 5 labels a bus bar connector at the rear and a Power Distribution Board; that one feeds the other is read from their names, not stated."
+        }
+      ]
+    }
+  }
 }

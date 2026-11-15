@@ -1,6 +1,6 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, useThree, type ThreeEvent } from '@react-three/fiber';
-import { Html, OrbitControls } from '@react-three/drei';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useThree, type ThreeEvent } from '@react-three/fiber';
+import { Html } from '@react-three/drei';
 import { Color, InstancedMesh, Matrix4, Object3D } from 'three';
 import { model } from '../data';
 import { useExplorer } from '../state/store';
@@ -51,6 +51,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
   const hovered = useExplorer((s) => s.hovered);
   const select = useExplorer((s) => s.select);
   const setHovered = useExplorer((s) => s.setHovered);
+  const openTray = useExplorer((s) => s.openTray);
   const selectedKey = selectedUnitKey(selected);
   const type = model.getComponent(componentId)?.type;
   const base = useMemo(() => new Color(TYPE_COLORS[type ?? 'rack'] ?? '#666666'), [type]);
@@ -101,7 +102,17 @@ function UnitInstances({ componentId }: { componentId: string }) {
         e.stopPropagation();
         if (e.delta > DRAG_THRESHOLD) return;
         const key = keyOf(e);
-        if (key) select(key);
+        if (!key) return;
+        // A second click on the selected unit opens it, if it has an interior.
+        if (useExplorer.getState().selected === key) openTray();
+        else select(key);
+      }}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        const key = keyOf(e);
+        if (!key) return;
+        select(key);
+        openTray();
       }}
     >
       <boxGeometry args={[1, 1, 1]} />
@@ -227,64 +238,26 @@ function GroupLabels() {
  * vertical field of view: margin for a slid-out unit, plus half the depth
  * because the front face is closer to the camera than the centre.
  */
-function fitDistance(height: number, fovDeg: number): number {
+export function rackCameraDistance(fovDeg: number): number {
+  const height = frameHeight(model.totalRU);
   return ((height / 2) * 1.2) / Math.tan(((fovDeg / 2) * Math.PI) / 180) + UNIT_DEPTH / 2;
 }
 
-const FOV = 38;
-
-export default function RackScene() {
+/** The whole rack: frame, units, handles, group labels and floor. */
+export function RackScene() {
   const height = frameHeight(model.totalRU);
-  const distance = fitDistance(height, FOV);
-  const [contextLost, setContextLost] = useState(false);
   return (
-    <>
-      <Canvas
-        frameloop="demand"
-        dpr={[1, 2]}
-        camera={{ position: [distance * 0.23, 0.3, distance], fov: FOV, near: 0.05, far: 50 }}
-        role="img"
-        aria-label="3D view of the rack. Use the list view or the arrow keys to select units."
-        onPointerMissed={() => useExplorer.getState().setHovered(null)}
-        onCreated={({ gl, invalidate }) => {
-          // three.js handles context loss itself; with frameloop="demand" nothing
-          // redraws after a restore unless we ask for a frame.
-          gl.domElement.addEventListener('webglcontextlost', () => setContextLost(true));
-          gl.domElement.addEventListener('webglcontextrestored', () => {
-            setContextLost(false);
-            invalidate();
-          });
-        }}
-      >
-        <color attach="background" args={['#0e1115']} />
-        <hemisphereLight args={['#dfe7f2', '#1a1d22', 0.9]} />
-        <directionalLight position={[2.5, 3, 4]} intensity={1.6} />
-        <directionalLight position={[-3, 1, -2]} intensity={0.4} />
-        <RackFrame />
-        {unitTypes.map((id) => (
-          <UnitInstances key={id} componentId={id} />
-        ))}
-        <Handles />
-        <GroupLabels />
-        <OrbitControls
-          makeDefault
-          target={[0, 0, 0]}
-          enablePan={false}
-          enableDamping={false}
-          minDistance={1.2}
-          maxDistance={distance * 2}
-          maxPolarAngle={Math.PI * 0.85}
-        />
-        <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
-          <circleGeometry args={[2.2, 48]} />
-          <meshStandardMaterial color="#14181d" />
-        </mesh>
-      </Canvas>
-      {contextLost && (
-        <p className="notice context-lost" role="status">
-          The 3D view lost its graphics context. It comes back on its own; the list view still works.
-        </p>
-      )}
-    </>
+    <group>
+      <RackFrame />
+      {unitTypes.map((id) => (
+        <UnitInstances key={id} componentId={id} />
+      ))}
+      <Handles />
+      <GroupLabels />
+      <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
+        <circleGeometry args={[2.2, 48]} />
+        <meshStandardMaterial color="#14181d" />
+      </mesh>
+    </group>
   );
 }

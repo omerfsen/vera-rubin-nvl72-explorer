@@ -55,7 +55,9 @@ export type ComponentType =
   | 'cable-cartridge'
   | 'manifold'
   | 'bus-bar'
-  | 'battery';
+  | 'battery'
+  | 'memory'
+  | 'board';
 
 export interface Component extends Provenance {
   id: string;
@@ -104,6 +106,52 @@ export interface Connection extends Provenance {
   description: string;
 }
 
+/**
+ * A part's place in a schematic tray layout. Top parts: x/z from -0.5 to 0.5
+ * across width and depth (+z is the front), w and h as fractions of the tray
+ * width, d of its depth. Front parts: y from 0 (bottom) to 1 (top) of the
+ * tray, h as a fraction of the tray height.
+ */
+export interface TraySlot {
+  component: string;
+  index?: number;
+  label?: string;
+  face: 'top' | 'front';
+  x: number;
+  z: number;
+  y?: number;
+  w: number;
+  d: number;
+  h: number;
+}
+
+export type TrayLinkKind = 'pcie' | 'c2c' | 'clink' | 'nvlink' | 'coolant' | 'power';
+
+/** One end of a link: a part instance, or a named point on the tray. */
+export type LinkEnd = { component: string; index?: number; point?: undefined } | { point: string; component?: undefined; index?: undefined };
+
+/** An instance-level connection inside a tray: the "veins" layer. */
+export interface TrayLink extends Provenance {
+  kind: TrayLinkKind;
+  from: LinkEnd;
+  to: LinkEnd;
+}
+
+export interface TrayPoint {
+  id: string;
+  label: string;
+  x: number;
+  z: number;
+}
+
+export interface TrayLayout extends Provenance {
+  sources?: Source[];
+  notPlaced?: { component: string; reason: string }[];
+  slots: TraySlot[];
+  points?: TrayPoint[];
+  links?: TrayLink[];
+}
+
 export interface Topology {
   $schema?: string;
   schemaVersion: 1;
@@ -116,5 +164,6 @@ export interface Topology {
   networks: Network[];
   components: Component[];
   rackLayout: RackLayout;
+  trayLayouts?: Record<string, TrayLayout>;
   connections: Connection[];
 }

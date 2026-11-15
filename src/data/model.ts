@@ -1,4 +1,4 @@
-import type { Component, Connection, Network, Topology } from './types';
+import type { Component, Connection, LinkEnd, Network, Topology, TrayLink } from './types';
 
 /** One physical unit in the rack, e.g. compute tray 7. */
 export interface RackUnit {
@@ -171,8 +171,59 @@ export function createModel(topology: Topology) {
     return segment.index === undefined ? name : `${name} ${segment.index}`;
   }
 
+  // ---- tray interiors ---------------------------------------------------
+
+  function trayLayout(componentId: string) {
+    return topology.trayLayouts?.[componentId];
+  }
+
+  /** Path of a slot's part inside a tray, e.g. "connectx-9/ct-port-cx9-osfp" or "rubin-gpu.2". */
+  function slotPathWithin(trayId: string, slot: { component: string; index?: number }): string {
+    const chain = [...ancestorsOf(slot.component), slot.component];
+    const below = chain.slice(chain.indexOf(trayId) + 1);
+    const path = below.join('/');
+    return slot.index === undefined ? path : `${path}.${slot.index}`;
+  }
+
+  /** The slot drawn for a path inside a tray, if any. */
+  function slotFor(trayId: string, within: string) {
+    return trayLayout(trayId)?.slots.find((s) => slotPathWithin(trayId, s) === within);
+  }
+
+  /** Path inside a tray for a link end, or null for a named point. */
+  function linkEndPath(trayId: string, end: LinkEnd): string | null {
+    if (end.point !== undefined) return null;
+    return slotPathWithin(trayId, { component: end.component, index: end.index });
+  }
+
+  /** Links touching a path inside a tray (an instance, or every instance of a general path). */
+  function linksAt(trayId: string, within: string): TrayLink[] {
+    const general = within.replace(/\.\d+$/, '') === within;
+    const matches = (end: LinkEnd) => {
+      const p = linkEndPath(trayId, end);
+      return p !== null && (p === within || (general && p.replace(/\.\d+$/, '') === within));
+    };
+    return (trayLayout(trayId)?.links ?? []).filter((l) => matches(l.from) || matches(l.to));
+  }
+
+  /** Display name of a link end: NVIDIA's slot label, the part name and number, or the point label. */
+  function linkEndLabel(trayId: string, end: LinkEnd): string {
+    const layout = trayLayout(trayId);
+    if (end.point !== undefined) return layout?.points?.find((p) => p.id === end.point)?.label ?? end.point;
+    const slot = layout?.slots.find((s) => s.component === end.component && s.index === end.index);
+    if (slot?.label) return slot.label;
+    const name = byId.get(end.component)?.name ?? end.component;
+    return end.index === undefined ? name : `${name} ${end.index}`;
+  }
+
   return {
     topology,
+    trayLayout,
+    linkEndPath,
+    linksAt,
+    linkEndLabel,
+    slotPathWithin,
+    slotFor,
     getComponent,
     getNetwork,
     childrenOf,

@@ -25,7 +25,7 @@ Milestone 1 of 4:
 
 - [x] **M1**: rack view with clickable trays, switch trays, power shelves and
   ToR switches; side panel; breadcrumb; search; list view; URL state
-- [ ] **M2**: compute tray interior, every part clickable
+- [x] **M2**: compute tray interior, every part clickable
 - [ ] **M3**: switch tray, power shelf and rear view (cartridges, manifolds, bus bar)
 - [ ] **M4**: network overlay for the seven networks
 
@@ -100,8 +100,20 @@ VITE_SHOW_OFFICIAL_FIGURES=true npm run build
 ## Using it
 
 - Click or tap a unit to select it. Drag to rotate, scroll or pinch to zoom.
-- Up/Down arrow keys (or `j`/`k`) step through the rack. `Esc` goes up one
-  level. `/` jumps to search.
+- Click a selected compute tray again (or double-click it, press Enter, or use
+  **Open** in the panel) to open it and click any part inside: GPUs, CPUs,
+  SOCAMM, ConnectX-9, BlueField-4, drives, BMC/HMC, ports and more. The
+  interior layout is schematic (marked *assumed*): it follows the arrangement
+  in NVIDIA's top and front views but is not traced from them or to scale.
+- Inside a tray, three layers can be switched on and off, like an anatomy
+  chart: **Structure** (the bones: tray shell), **Parts** (the muscles) and
+  **Connections** (the veins: PCIe, C2C, Clink, NVLink, coolant and power,
+  from NVIDIA's block diagram and PCIe tables). Selecting a part highlights its
+  own connections. Dashed lines are inferred and marked *assumed* in the
+  panel.
+- With the 3D view focused, Up/Down step through the rack (or through the
+  parts of an open tray) and Enter opens a compute tray. `Esc` goes up one
+  level and closes an open tray.
 - **List view** shows the rack as a plain list. The app also uses it on its
   own when the browser has no WebGL.
 - The URL holds the selection and the list pane (e.g.
