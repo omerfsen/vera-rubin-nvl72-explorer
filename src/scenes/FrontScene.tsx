@@ -5,7 +5,7 @@ import { model } from '../data';
 import type { TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
 import { partColor } from './colors';
-import { LED_COLORS, NETWORK_COLORS, SLIDE_OUT, UNIT_DEPTH, UNIT_WIDTH, unitBoxes } from './geometry';
+import { ledColor, NETWORK_COLORS, SLIDE_OUT, UNIT_DEPTH, UNIT_WIDTH, unitBoxes } from './geometry';
 import { Rods, type Segment, type Vec } from './Rods';
 
 const boxes = unitBoxes(model.rackUnits, model.totalRU);
@@ -62,7 +62,7 @@ export function facePlates(selectedKey: string | null): FacePlate[] {
         out.push({
           unitKey: unit.key,
           component: `${slot.component}:led`,
-          color: LED_COLORS[led.color] ?? '#ffffff',
+          color: ledColor(led),
           position: [r.x - (r.w * 0.92) / 2 + s * (1.2 + k * 1.8), r.y + (r.h * 0.85) / 2 - s * 1.2, FRONT + 0.007 + slide],
           size: [s, s, 0.003],
         });
@@ -109,38 +109,47 @@ function FacePlates() {
  * routing and the split across the two switches are not stated, so the
  * lines end on the pair as a whole.
  */
-export function managementLinks(): Segment[] {
-  // BMC connections that end on a rack unit type (in this rack: the ToR switches).
+export function managementLinks(): { stated: Segment[]; assumed: Segment[] } {
+  // Connections that end on a rack unit type (in this rack: the ToR switches): from a BMC or DPU
+  // (stated), or from a whole unit whose BMC port is this app's reading (assumed).
   const managed = new Set(['bmc', 'dpu']);
-  const bmcLinks = model.topology.connections.filter(
-    (c) => c.to !== undefined && model.isRackUnitType(c.to) && managed.has(model.getComponent(c.from)?.type ?? ''),
+  const toUnit = model.topology.connections.filter((c) => c.to !== undefined && model.isRackUnitType(c.to));
+  const bmcLinks = toUnit.filter(
+    (c) => managed.has(model.getComponent(c.from)?.type ?? '') || (model.isRackUnitType(c.from) && model.trayLayout(c.from)),
   );
   const target = bmcLinks[0]?.to;
   const targets = model.rackUnits.filter((u) => u.componentId === target).map((u) => boxByKey.get(u.key)!);
-  if (targets.length === 0) return [];
+  if (targets.length === 0) return { stated: [], assumed: [] };
   const torY = targets.reduce((sum, b) => sum + b.position[1], 0) / targets.length;
-  const starts: Vec[] = [];
+  const starts: { at: Vec; assumed: boolean }[] = [];
   for (const c of bmcLinks) {
     const unitType = [...model.ancestorsOf(c.from), c.from].find((id) => model.isRackUnitType(id));
     const layout = unitType ? model.trayLayout(unitType) : undefined;
     if (!unitType || !layout) continue;
-    // The BMC's own front port: a front slot for a port inside the BMC (or the BMC itself).
+    const isPort = (id: string) => model.getComponent(id)?.type === 'port';
+    const inside = (id: string, owner: string) => id === owner || model.ancestorsOf(id).includes(owner);
+    // The BMC's own front port: a front slot for a port inside the BMC (or the BMC itself);
+    // for a whole unit, the front port of a BMC inside it.
     const slot = layout.slots.find(
       (s) =>
         s.face === 'front' &&
-        model.getComponent(s.component)?.type === 'port' &&
-        (s.component === c.from || model.ancestorsOf(s.component).includes(c.from)),
+        isPort(s.component) &&
+        (c.from === unitType
+          ? model.ancestorsOf(s.component).some((a) => model.getComponent(a)?.type === 'bmc')
+          : inside(s.component, c.from)),
     );
     if (!slot) continue;
+    const assumed = c.assumed === true;
     for (const unit of model.rackUnits.filter((u) => u.componentId === unitType)) {
       const r = faceRect(slot, unit.key);
-      if (r) starts.push([r.x, r.y, FRONT + 0.01]);
+      if (r) starts.push({ at: [r.x, r.y, FRONT + 0.01], assumed });
     }
   }
-  return starts.map((from, i) => ({
-    from,
-    to: [-UNIT_WIDTH / 2 + ((i + 0.5) / starts.length) * UNIT_WIDTH, torY, FRONT + 0.03],
+  const all = starts.map((s, i) => ({
+    assumed: s.assumed,
+    seg: { from: s.at, to: [-UNIT_WIDTH / 2 + ((i + 0.5) / starts.length) * UNIT_WIDTH, torY, FRONT + 0.03] as Vec },
   }));
+  return { stated: all.filter((a) => !a.assumed).map((a) => a.seg), assumed: all.filter((a) => a.assumed).map((a) => a.seg) };
 }
 
 /** Front-face detail, plus the management cabling while a ToR switch is selected or ipminet is highlighted. */
@@ -155,7 +164,10 @@ export function FrontScene() {
   return (
     <group>
       {layers.parts && <FacePlates />}
-      {showLinks && <Rods list={links} color={NETWORK_COLORS.ipminet ?? '#4dd0e1'} opacity={0.75} thickness={0.004} />}
+      {showLinks && <Rods list={links.stated} color={NETWORK_COLORS.ipminet ?? '#4dd0e1'} opacity={0.75} thickness={0.004} />}
+      {showLinks && links.assumed.length > 0 && (
+        <Rods list={links.assumed} color={NETWORK_COLORS.ipminet ?? '#4dd0e1'} opacity={0.3} thickness={0.003} />
+      )}
     </group>
   );
 }

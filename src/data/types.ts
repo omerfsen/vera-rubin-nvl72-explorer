@@ -86,6 +86,10 @@ export interface Component extends Provenance {
   /** Every section of NVIDIA's documents about this component. */
   references: Reference[];
   rearSide?: boolean;
+  /** NVIDIA's first number for these parts (0 for GPU0..GPU3); URL paths stay 1-based. */
+  numbering?: { start: number; source: Source };
+  /** Networks in `networks` that are this app's reading for this part, not stated for it. */
+  assumedNetworks?: string[];
 }
 
 export interface RackGroup {
@@ -133,7 +137,7 @@ export interface TraySlot {
   label?: string;
   face: 'top' | 'front';
   /** Status LEDs drawn on the part's front face. */
-  indicators?: { color: 'green' | 'amber'; label: string }[];
+  indicators?: { color: 'green' | 'amber'; label: string; unlit?: boolean }[];
   x: number;
   z: number;
   y?: number;
@@ -210,6 +214,8 @@ export interface PcieDevice extends Provenance {
   bus: string;
   interface?: string;
   rdma?: string;
+  /** Other spellings NVIDIA's figures print for this label. */
+  aliases?: string[];
   component: string;
   index?: number;
 }

@@ -1,3 +1,4 @@
+import { Color } from 'three';
 import display from '../../data/display.json';
 import type { RackUnit } from '../data/model';
 import type { ComponentType } from '../data/types';
@@ -102,6 +103,12 @@ export const DIM_COLOR = display.colors.dim;
 export const SLIDE_OUT = 0.12;
 /** Status LED colours. */
 export const LED_COLORS: Record<string, string> = display.colors.leds;
+
+/** An LED's colour: its own colour when lit, a dark tint of it when drawn switched off. */
+export function ledColor(led: { color: string; unlit?: boolean }): string {
+  const lit = LED_COLORS[led.color] ?? '#ffffff';
+  return led.unlit ? `#${new Color(lit).lerp(new Color('#1a1a1a'), 0.7).getHexString()}` : lit;
+}
 
 /** Rear part styling from data/display.json. */
 export const REAR_STYLE = display.rear;

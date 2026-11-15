@@ -29,9 +29,17 @@ describe('network overlay members', () => {
 
   it('storagenet: the right QSFP port, plus the left one as a conflicting reading', () => {
     const m = model.networkMembers('storagenet').members;
-    expect(m.get('ct-port-bf4-right')).toEqual({ alternative: false });
-    expect(m.get('ct-port-bf4-left')).toEqual({ alternative: true });
-    expect(model.networkMembers('dgxnet').members.get('ct-port-bf4-left')).toEqual({ alternative: false });
+    expect(m.get('ct-port-bf4-right')).toEqual({ alternative: false, assumed: false });
+    expect(m.get('ct-port-bf4-left')).toEqual({ alternative: true, assumed: false });
+    expect(model.networkMembers('dgxnet').members.get('ct-port-bf4-left')).toEqual({ alternative: false, assumed: false });
+  });
+
+  it('ipminet: the power shelf port is an assumed member within its unit, the ToR ports belong to theirs', () => {
+    const { members, memberOf } = model.networkMembers('ipminet');
+    expect(members.get('ps-mgmt-rj45')).toEqual({ alternative: false, assumed: true, within: 'power-shelf' });
+    expect(members.get('power-shelf')).toEqual({ alternative: false, assumed: false });
+    expect(memberOf('tor-rj45-port')).toBe('tor-switch');
+    expect(memberOf('rubin-gpu')).toBeUndefined();
   });
 
   it('externalnet, internalnet and failovernet reach no port in the rack', () => {
@@ -63,6 +71,13 @@ describe('network info panel', () => {
     expect(screen.getByRole('button', { name: 'BlueField-4 right port' })).toBeTruthy();
     expect(screen.getAllByText(/18 per rack/).length).toBeGreaterThan(0);
     expect(screen.getByText(/Conflict: the guide's figure puts this port on storagenet/)).toBeTruthy();
+  });
+
+  it('lists the power shelf once on ipminet, not again through its management port', () => {
+    useExplorer.setState({ network: 'ipminet' });
+    render(<NetworkInfo />);
+    expect(screen.getByRole('button', { name: 'Power shelf' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Management module RJ45 port' })).toBeNull();
   });
 
   it('says so when a network has no port in the rack', () => {

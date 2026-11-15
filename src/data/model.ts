@@ -165,10 +165,23 @@ export function createModel(topology: Topology) {
     return [...ancestorsOf(id).filter((a) => a !== ROOT_ID), id].join('/');
   }
 
+  /**
+   * The number shown for an instance. Paths count from 1; parts NVIDIA numbers
+   * from 0 (GPU0..GPU3, CPU0 and CPU1 in Fig. 4) show NVIDIA's number.
+   */
+  function displayIndex(id: string, index: number): number {
+    return index - 1 + (byId.get(id)?.numbering?.start ?? 1);
+  }
+
+  /** The path index for a number as shown (the inverse of displayIndex). */
+  function pathIndex(id: string, shown: number): number {
+    return shown + 1 - (byId.get(id)?.numbering?.start ?? 1);
+  }
+
   function segmentLabel(segment: PathSegment): string {
     const c = byId.get(segment.id);
     const name = c?.name ?? segment.id;
-    return segment.index === undefined ? name : `${name} ${segment.index}`;
+    return segment.index === undefined ? name : `${name} ${displayIndex(segment.id, segment.index)}`;
   }
 
   // ---- tray interiors ---------------------------------------------------
@@ -212,8 +225,7 @@ export function createModel(topology: Topology) {
     if (end.point !== undefined) return layout?.points?.find((p) => p.id === end.point)?.label ?? end.point;
     const slot = layout?.slots.find((s) => s.component === end.component && s.index === end.index);
     if (slot?.label) return slot.label;
-    const name = byId.get(end.component)?.name ?? end.component;
-    return end.index === undefined ? name : `${name} ${end.index}`;
+    return segmentLabel({ id: end.component, index: end.index });
   }
 
   // ---- network overlay ------------------------------------------------
@@ -221,20 +233,30 @@ export function createModel(topology: Topology) {
   /**
    * What sits on a network: the components with a connection to it (ports,
    * or a whole unit such as a power shelf), whether that reading is a
-   * conflicting alternative, and the rack unit types that contain any of them.
+   * conflicting alternative or this app's assumption, the member unit a part
+   * sits in (`within`), and the rack unit types that contain any of them.
    */
   function networkMembers(networkId: string) {
-    const members = new Map<string, { alternative: boolean }>();
+    const members = new Map<string, { alternative: boolean; assumed: boolean; within?: string }>();
     for (const c of topology.connections) {
       if (c.network !== networkId) continue;
       const prev = members.get(c.from);
-      members.set(c.from, { alternative: (prev?.alternative ?? true) && c.alternative === true });
+      members.set(c.from, {
+        alternative: (prev?.alternative ?? true) && c.alternative === true,
+        assumed: (prev?.assumed ?? true) && c.assumed === true,
+      });
+    }
+    for (const [id, m] of members) {
+      const within = [...ancestorsOf(id)].reverse().find((a) => members.has(a));
+      if (within) m.within = within;
     }
     const unitTypes = new Set<string>();
     for (const id of members.keys()) {
       for (const cid of [...ancestorsOf(id), id]) if (rackUnitCounts.has(cid)) unitTypes.add(cid);
     }
-    return { members, unitTypes };
+    /** The member a part belongs to: itself, or its nearest member ancestor (a port of a member unit). */
+    const memberOf = (id: string) => [id, ...ancestorsOf(id).reverse()].find((a) => members.has(a));
+    return { members, unitTypes, memberOf };
   }
 
   return {
@@ -262,6 +284,8 @@ export function createModel(topology: Topology) {
     formatPath,
     pathForComponent,
     segmentLabel,
+    displayIndex,
+    pathIndex,
   };
 }
 

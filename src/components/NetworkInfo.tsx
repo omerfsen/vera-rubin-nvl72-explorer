@@ -13,7 +13,8 @@ export function NetworkInfo() {
   const n = network ? model.getNetwork(network) : undefined;
   if (!n) return null;
   const { members } = model.networkMembers(n.id);
-  const items = [...members.entries()].map(([id, m]) => ({ c: model.getComponent(id)!, ...m }));
+  // A port of a member unit (the power shelf's management port) is listed once, under its unit.
+  const items = [...members.entries()].filter(([, m]) => !m.within).map(([id, m]) => ({ c: model.getComponent(id)!, ...m }));
   return (
     <section className="network-info" style={{ borderColor: NETWORK_COLORS[n.id] }} aria-label={t('network.aria', { name: n.name })}>
       <h3>
@@ -26,7 +27,7 @@ export function NetworkInfo() {
         <p className="note">{t('network.noPort', { name: n.name })}</p>
       ) : (
         <ul className="plain">
-          {items.map(({ c, alternative }) => {
+          {items.map(({ c, alternative, assumed }) => {
             const parent = c.parent && c.parent !== 'rack' ? model.getComponent(c.parent) : undefined;
             const total = model.totalPerRack(c.id);
             return (
@@ -36,6 +37,12 @@ export function NetworkInfo() {
                 </button>
                 {parent && <span className="muted">{t('network.onThe', { parent: i18n.name(parent.id) })}</span>}
                 <span className="muted"> · {total === null ? t('panel.countNotStated') : t('network.perRack', { total })}</span>
+                {assumed && (
+                  <>
+                    {' '}
+                    <span className="assumed">{t('panel.assumed')}</span>
+                  </>
+                )}
                 {alternative && (
                   <div className="note" style={{ color: CONFLICT_COLOR }}>
                     {t('network.conflict', { name: n.name })}

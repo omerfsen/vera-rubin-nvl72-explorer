@@ -63,7 +63,7 @@ export function RackList() {
           </li>
         ))}
       </ul>
-      <p className="muted small">{t('list.rearNotDrawn')}</p>
+      <p className="muted small">{t('list.only3d')}</p>
     </nav>
   );
 }

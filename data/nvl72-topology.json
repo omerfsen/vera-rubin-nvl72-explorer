@@ -16,8 +16,14 @@
       "date": "2026-11-05",
       "urls": [
         "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf",
+        "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html",
+        "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html",
         "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html",
+        "https://docs.nvidia.com/dgx/dgxvr-user-guide/health-check.html",
         "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html",
+        "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html",
+        "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html",
+        "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html",
         "https://docs.nvidia.com/dgx/dgxvr-user-guide/storage.html"
       ],
       "pdfPages": {
@@ -645,6 +651,14 @@
       "type": "cpu",
       "name": "Vera CPU",
       "count": 2,
+      "numbering": {
+        "start": 0,
+        "source": {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+          "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+        }
+      },
       "parent": "compute-tray",
       "description": "NVIDIA Vera CPU. Part of the compute node.",
       "function": "Part of the compute node, which the guide lists as 2 Vera CPUs and 4 Rubin GPUs per tray.",
@@ -724,6 +738,14 @@
       "type": "gpu",
       "name": "Rubin GPU",
       "count": 4,
+      "numbering": {
+        "start": 0,
+        "source": {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)",
+          "figure": "hardware-compute-tray-block-diagram-VRNVL72.png"
+        }
+      },
       "parent": "compute-tray",
       "description": "NVIDIA Rubin GPU. Part of the compute node.",
       "function": "Accelerator. All 72 GPUs in the rack form one NVLink domain through the NVLink switch trays.",
@@ -2120,7 +2142,7 @@
       "count": 1,
       "parent": "compute-tray",
       "description": "Cold water inlet at the rear of the compute tray.",
-      "function": "Brings coolant from the rack's manifold into the tray.",
+      "function": "Brings coolant into the tray.",
       "networks": [],
       "specs": [],
       "source": {
@@ -2156,7 +2178,7 @@
       "count": 1,
       "parent": "compute-tray",
       "description": "Hot water outlet at the rear of the compute tray.",
-      "function": "Returns coolant from the tray to the rack's manifold.",
+      "function": "Takes coolant out of the tray.",
       "networks": [],
       "specs": [],
       "source": {
@@ -2328,6 +2350,15 @@
           "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=12",
           "figures": [
             "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/hardware-nvlink-switch-tray-VRNVL72.png"
+          ]
+        },
+        {
+          "document": "user-guide",
+          "section": "1.5 Top-of-Rack Ethernet Switches",
+          "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=16",
+          "figures": [
+            "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/hardware-tor-ethernet-VRNVL72.png"
           ]
         },
         {
@@ -2509,10 +2540,7 @@
           "document": "user-guide",
           "section": "1.5 Top-of-Rack Ethernet Switches",
           "html": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
-          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=16",
-          "figures": [
-            "https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/hardware-tor-ethernet-VRNVL72.png"
-          ]
+          "pdf": "https://docs.nvidia.com/dgx/dgxvr-user-guide/dgxvr-user-guide.pdf#page=16"
         }
       ],
       "note": "Count read from the guide's singular wording ('BMC for attestation and recovery')."
@@ -2978,7 +3006,7 @@
       "count": 1,
       "parent": "switch-tray",
       "description": "Cold water inlet at the rear of the switch tray.",
-      "function": "Brings coolant from the rack's manifold into the tray.",
+      "function": "Brings coolant into the tray.",
       "networks": [],
       "specs": [],
       "source": {
@@ -3014,7 +3042,7 @@
       "count": 1,
       "parent": "switch-tray",
       "description": "Hot water outlet at the rear of the switch tray.",
-      "function": "Returns coolant from the tray to the rack's manifold.",
+      "function": "Takes coolant out of the tray.",
       "networks": [],
       "specs": [],
       "source": {
@@ -3246,8 +3274,8 @@
           }
         },
         {
-          "label": "Front LEDs",
-          "value": "Power LED and fault LED; a failed PSU shows an amber LED",
+          "label": "LEDs",
+          "value": "A failed PSU shows an amber LED",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
             "section": "Service Manual 2.2 Identify the Failed Power Supply"
@@ -3317,6 +3345,9 @@
       "description": "Management module at the front of the power shelf, with an RJ45 port for a network management cable.",
       "function": "Manages the power shelf. The power supplies keep running while it is replaced.",
       "networks": [
+        "ipminet"
+      ],
+      "assumedNetworks": [
         "ipminet"
       ],
       "specs": [
@@ -3432,6 +3463,9 @@
       "description": "RJ45 port on the power shelf management module, for its network management cable.",
       "function": "Gives the power shelf's out-of-band management interface its network connection.",
       "networks": [
+        "ipminet"
+      ],
+      "assumedNetworks": [
         "ipminet"
       ],
       "specs": [
@@ -3580,16 +3614,12 @@
         },
         {
           "label": "Connects",
-          "value": "Every BMC in the compute trays (host BMCs and BlueField-4 BMCs) and in the switch trays",
+          "value": "All BMCs in the compute trays (including BlueField-4 BMCs) and the switch trays, to the management network",
           "source": {
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
             "section": "1.5 Top-of-Rack Ethernet Switches"
-          }
-        },
-        {
-          "label": "BMC links in this rack",
-          "value": "45: 18 host BMCs, 18 BlueField-4 BMCs, 9 switch tray BMCs",
-          "note": "Computed from the counts in the data; the guide does not say how they split across the two ToR switches."
+          },
+          "note": "Wording of section 1.5. Its list of connected ports names only the compute trays' out-of-band BMC and BlueField-4 BMC ports; how many links that makes per ToR switch is not given."
         }
       ],
       "source": {
@@ -3921,7 +3951,7 @@
       "count": null,
       "parent": "rack",
       "description": "Hose connectors on the liquid cooling manifolds, labelled 'FD83 connectors for liquid cooling hoses' in Fig. 2.",
-      "function": "Connect the rack's manifolds to the facility's liquid cooling hoses.",
+      "function": "Fig. 2 labels them 'FD83 connectors for liquid cooling hoses'; where those hoses go is not stated.",
       "networks": [],
       "specs": [],
       "source": {
@@ -3978,7 +4008,7 @@
       "name": "Rear bezel",
       "count": null,
       "parent": "rack",
-      "description": "The removable cover pieces on the back of the rack, labelled 'Rear Bezel' in Fig. 2.",
+      "description": "The cover on the back of the rack, labelled 'Rear Bezel' in Fig. 2.",
       "function": "Covers the rear of the rack.",
       "networks": [],
       "specs": [],
@@ -4008,7 +4038,7 @@
       "count": null,
       "parent": "rack",
       "description": "Bracing under the rack, labelled in Fig. 1 and Fig. 2.",
-      "function": "Holds the rack in place.",
+      "function": "Labelled 'Seismic bracing' in Fig. 1 and Fig. 2; the guide does not describe it further.",
       "networks": [],
       "specs": [],
       "source": {
@@ -4265,15 +4295,17 @@
     },
     {
       "id": "st-bmc-tor",
-      "from": "switch-bmc",
+      "from": "switch-tray",
       "kind": "network",
-      "description": "Switch tray BMC to the top-of-rack switches.",
+      "description": "The top-of-rack switches connect the switch trays to the management network.",
       "source": {
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
         "section": "1.5 Top-of-Rack Ethernet Switches",
         "figure": "hardware-tor-ethernet-VRNVL72.png"
       },
-      "to": "tor-switch"
+      "to": "tor-switch",
+      "assumed": true,
+      "note": "Section 1.5 says the ToR switches connect 'the switch trays'; its port list does not name which switch tray ports, so this app links the tray rather than its BMC."
     },
     {
       "id": "ps-ipminet",
@@ -4341,7 +4373,8 @@
         "figure": "hardware-compute-tray-vrnvl72.png"
       },
       "to": "compute-tray",
-      "note": "Section 1.2's 'inner manifold' may be the tray's Internal Manifold (Fig. 5) rather than the rear manifolds."
+      "note": "Section 1.2's 'inner manifold' may be the tray's Internal Manifold (Fig. 5) rather than the rear manifolds; see the open question on the inner manifold.",
+      "assumed": true
     },
     {
       "id": "manifold-st",
@@ -4380,8 +4413,7 @@
         "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)",
         "figure": "hardware-nvlink-switch-tray-VRNVL72.png"
       },
-      "assumed": true,
-      "note": "Fig. 7 labels the switch tray's rear power connector but does not say it connects to the bus bar."
+      "note": "Section 1.4 says the 54 V DC output is 'distributed through the bus bar to the rack components', and 1.1 says the power shelves supply 'all trays and switches'. Fig. 7 labels the switch tray's rear power connector."
     },
     {
       "id": "bf4-left-storagenet-fig1",
@@ -4430,7 +4462,7 @@
         "figure": "hardware-compute-tray-top-VRNVL72.png"
       },
       "assumed": true,
-      "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: GPUs and CPUs on HPM_L (left) and HPM_R (right) as in 2.4 Fig. 4, SOCAMM around the CPUs (Fig. 5). Front half: Bay B left and right with ConnectX-9 modules and cache drives, Bay C in the middle with the BlueField-4 and the SMM (Fig. 6). The 1 GbE BMC port is drawn at the SMM's RJ45, which Table 2.3 does not confirm.",
+      "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: GPUs and CPUs on HPM_L (left) and HPM_R (right) as in 2.4 Fig. 4, SOCAMM around the CPUs (Fig. 5). Front half: Bay B left and right with ConnectX-9 modules and cache drives, Bay C in the middle with the BlueField-4 and the SMM (Fig. 6). The 1 GbE BMC port is drawn at the SMM's RJ45, which Table 2.3 does not confirm. Fig. 5 (front at the right) shows the hot water outlet at the top of the image, which is the right side seen from the front, the cold water inlet on the left, and the bus bar connector at the centre of the rear edge. Fig. 5 and Fig. 7 do not label the NVLink connectors; this app draws them beside the power connector.",
       "sources": [
         {
           "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
@@ -4990,25 +5022,25 @@
         {
           "id": "nvlink-connectors",
           "label": "NVLink connectors to the cable cartridge",
-          "x": 0,
+          "x": 0.22,
           "z": -0.5
         },
         {
           "id": "cold-water-inlet",
           "label": "Cold water inlet",
-          "x": 0.42,
+          "x": -0.42,
           "z": -0.5
         },
         {
           "id": "hot-water-outlet",
           "label": "Hot water outlet",
-          "x": -0.42,
+          "x": 0.42,
           "z": -0.5
         },
         {
           "id": "bus-bar-connector",
           "label": "Bus bar connector",
-          "x": 0.2,
+          "x": 0,
           "z": -0.5
         }
       ],
@@ -5328,7 +5360,8 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
             "section": "1.2 Compute Trays"
           },
-          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+          "note": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "assumed": true
         },
         {
           "kind": "coolant",
@@ -5344,7 +5377,8 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
             "section": "1.2 Compute Trays"
           },
-          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+          "note": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "assumed": true
         },
         {
           "kind": "coolant",
@@ -5360,7 +5394,8 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
             "section": "1.2 Compute Trays"
           },
-          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+          "note": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "assumed": true
         },
         {
           "kind": "coolant",
@@ -5376,7 +5411,8 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
             "section": "1.2 Compute Trays"
           },
-          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+          "note": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "assumed": true
         },
         {
           "kind": "coolant",
@@ -5392,7 +5428,8 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
             "section": "1.2 Compute Trays"
           },
-          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+          "note": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "assumed": true
         },
         {
           "kind": "coolant",
@@ -5408,7 +5445,8 @@
             "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
             "section": "1.2 Compute Trays"
           },
-          "note": "Section 1.2: liquid runs through the inner manifold, then through the cold plates attached to the CPUs and GPUs. The exact piping is not shown."
+          "note": "Section 1.2: liquid runs 'through the inner manifold, then through the cold plates' on the CPUs and GPUs. Whether that inner manifold is the tray's Internal Manifold (Fig. 5) is an open question, and the piping is not shown.",
+          "assumed": true
         },
         {
           "kind": "coolant",
@@ -5472,7 +5510,7 @@
       },
       "assumed": true,
       "heightRU": 1,
-      "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: four NVSwitch chips on the switch board, with the water and power connectors at the rear (Fig. 7). Front: battery and SSD, and the five RJ45 ports from left to right as in Table 2.5.",
+      "note": "A schematic arrangement, not to scale and not traced from NVIDIA's figures. Rear half: four NVSwitch chips on the switch board, with the water and power connectors at the rear (Fig. 7). Front: battery and SSD, and the five RJ45 ports from left to right as in Table 2.5. Fig. 7 (front at the right) shows the hot water outlet on the right seen from the front, the cold water inlet on the left, and the power connector at the centre of the rear edge. Fig. 5 and Fig. 7 do not label the NVLink connectors; this app draws them beside the power connector. The battery and SSD are drawn on the left, as in Fig. 7.",
       "sources": [
         {
           "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
@@ -5509,7 +5547,7 @@
         {
           "id": "nvlink-connectors",
           "label": "NVLink connectors to the cable cartridge",
-          "x": 0.2,
+          "x": 0.22,
           "z": -0.5
         },
         {
@@ -5521,13 +5559,13 @@
         {
           "id": "cold-water-inlet",
           "label": "Cold water inlet",
-          "x": 0.42,
+          "x": -0.42,
           "z": -0.5
         },
         {
           "id": "hot-water-outlet",
           "label": "Hot water outlet",
-          "x": -0.42,
+          "x": 0.42,
           "z": -0.5
         }
       ],
@@ -5586,8 +5624,8 @@
           "component": "switch-tray-battery",
           "index": 1,
           "face": "top",
-          "x": 0.12,
-          "z": 0.3,
+          "x": -0.36,
+          "z": 0.2,
           "w": 0.05,
           "d": 0.05,
           "h": 0.015
@@ -5596,8 +5634,8 @@
           "component": "switch-tray-ssd",
           "index": 1,
           "face": "top",
-          "x": 0.26,
-          "z": 0.3,
+          "x": -0.22,
+          "z": 0.24,
           "w": 0.07,
           "d": 0.06,
           "h": 0.01
@@ -5918,8 +5956,9 @@
           "y": 0.05,
           "indicators": [
             {
-              "color": "green",
-              "label": "Status"
+              "color": "amber",
+              "label": "Amber when the module has failed",
+              "unlit": true
             }
           ]
         },
@@ -5936,12 +5975,9 @@
           "y": 0.68,
           "indicators": [
             {
-              "color": "green",
-              "label": "Power"
-            },
-            {
               "color": "amber",
-              "label": "Fault"
+              "label": "Amber when the PSU has failed",
+              "unlit": true
             }
           ]
         },
@@ -5958,12 +5994,9 @@
           "y": 0.68,
           "indicators": [
             {
-              "color": "green",
-              "label": "Power"
-            },
-            {
               "color": "amber",
-              "label": "Fault"
+              "label": "Amber when the PSU has failed",
+              "unlit": true
             }
           ]
         },
@@ -5980,12 +6013,9 @@
           "y": 0.36,
           "indicators": [
             {
-              "color": "green",
-              "label": "Power"
-            },
-            {
               "color": "amber",
-              "label": "Fault"
+              "label": "Amber when the PSU has failed",
+              "unlit": true
             }
           ]
         },
@@ -6002,12 +6032,9 @@
           "y": 0.36,
           "indicators": [
             {
-              "color": "green",
-              "label": "Power"
-            },
-            {
               "color": "amber",
-              "label": "Fault"
+              "label": "Amber when the PSU has failed",
+              "unlit": true
             }
           ]
         },
@@ -6024,12 +6051,9 @@
           "y": 0.04,
           "indicators": [
             {
-              "color": "green",
-              "label": "Power"
-            },
-            {
               "color": "amber",
-              "label": "Fault"
+              "label": "Amber when the PSU has failed",
+              "unlit": true
             }
           ]
         },
@@ -6046,12 +6070,9 @@
           "y": 0.04,
           "indicators": [
             {
-              "color": "green",
-              "label": "Power"
-            },
-            {
               "color": "amber",
-              "label": "Fault"
+              "label": "Amber when the PSU has failed",
+              "unlit": true
             }
           ]
         },
@@ -6897,11 +6918,11 @@
       "figure": "hardware-rack-rear-VRNVL72.png"
     },
     "assumed": true,
-    "note": "Schematic placement behind the units, not to scale. Fig. 2 shows the cable cartridges in the middle of the rear, two liquid cooling manifolds with FD83 hose connectors, the power bus bar, their supports, the rear bezel and seismic bracing; exact positions, spans and counts are not given. Which manifold carries supply and which return is not stated.",
+    "note": "Schematic placement behind the units, not to scale. Fig. 2 is an exploded view: it shows the cable cartridges, two liquid cooling manifolds with FD83 hose connectors, the power bus bar, their supports, the rear bezel and seismic bracing, but no positions, spans or counts. This app centres the power connectors and the bus bar, as Fig. 5 and Fig. 7 put the trays' power connector at the centre of the rear edge, and puts the hot water outlets on the manifold on the right seen from the front. Which manifold carries supply and which return is not stated.",
     "parts": [
       {
         "component": "nvlink-cable-cartridge",
-        "x": 0,
+        "x": 0.22,
         "w": 0.46,
         "from": "compute-tray.1",
         "to": "compute-tray.18"
@@ -6922,7 +6943,7 @@
       },
       {
         "component": "bus-bar",
-        "x": 0.31,
+        "x": 0,
         "w": 0.05,
         "from": "top",
         "to": "bottom"
@@ -6957,7 +6978,7 @@
       },
       {
         "component": "rear-supports",
-        "x": 0,
+        "x": 0.22,
         "w": 0.95,
         "at": "top",
         "heightRU": 0.6,
@@ -6965,7 +6986,7 @@
       },
       {
         "component": "rear-supports",
-        "x": 0,
+        "x": 0.22,
         "w": 0.95,
         "at": "bottom",
         "heightRU": 0.6,
@@ -6992,22 +7013,14 @@
       {
         "unit": "compute-tray",
         "component": "ct-nvlink-connectors",
-        "x": 0,
-        "w": 0.34,
+        "x": 0.22,
+        "w": 0.26,
         "kind": "nvlink",
         "toPart": 0
       },
       {
         "unit": "compute-tray",
         "component": "ct-hot-water-outlet",
-        "x": -0.42,
-        "w": 0.06,
-        "kind": "cooling",
-        "toPart": 1
-      },
-      {
-        "unit": "compute-tray",
-        "component": "ct-cold-water-inlet",
         "x": 0.42,
         "w": 0.06,
         "kind": "cooling",
@@ -7015,8 +7028,16 @@
       },
       {
         "unit": "compute-tray",
+        "component": "ct-cold-water-inlet",
+        "x": -0.42,
+        "w": 0.06,
+        "kind": "cooling",
+        "toPart": 1
+      },
+      {
+        "unit": "compute-tray",
         "component": "ct-bus-bar-connector",
-        "x": 0.3,
+        "x": 0,
         "w": 0.05,
         "kind": "power",
         "toPart": 3
@@ -7024,22 +7045,14 @@
       {
         "unit": "switch-tray",
         "component": "st-nvlink-connectors",
-        "x": 0,
-        "w": 0.34,
+        "x": 0.22,
+        "w": 0.26,
         "kind": "nvlink",
         "toPart": 0
       },
       {
         "unit": "switch-tray",
         "component": "st-hot-water-outlet",
-        "x": -0.42,
-        "w": 0.06,
-        "kind": "cooling",
-        "toPart": 1
-      },
-      {
-        "unit": "switch-tray",
-        "component": "st-cold-water-inlet",
         "x": 0.42,
         "w": 0.06,
         "kind": "cooling",
@@ -7047,8 +7060,16 @@
       },
       {
         "unit": "switch-tray",
+        "component": "st-cold-water-inlet",
+        "x": -0.42,
+        "w": 0.06,
+        "kind": "cooling",
+        "toPart": 1
+      },
+      {
+        "unit": "switch-tray",
         "component": "st-power-connector",
-        "x": 0.3,
+        "x": 0,
         "w": 0.05,
         "kind": "power",
         "toPart": 3
@@ -7072,7 +7093,7 @@
       {
         "unit": "power-shelf",
         "component": "ps-dc-output",
-        "x": 0.3,
+        "x": 0,
         "w": 0.08,
         "kind": "power",
         "toPart": 3
@@ -7166,7 +7187,10 @@
         "section": "2.4 Network Interface Names, front-view table",
         "figure": "network-port-labels-1-VRNVL72.png"
       },
-      "note": "Printed C7/C3_1 in the 2.2 and 2.4 figures."
+      "note": "Printed C7/C3_1 in the 2.2 and 2.4 figures.",
+      "aliases": [
+        "C7/C3_1"
+      ]
     },
     {
       "label": "Bay_B_R E1.s_Bottom",
@@ -7191,7 +7215,10 @@
         "section": "2.4 Network Interface Names, front-view table",
         "figure": "network-port-labels-1-VRNVL72.png"
       },
-      "note": "Printed C7/C3_2 in the 2.2 and 2.4 figures."
+      "note": "Printed C7/C3_2 in the 2.2 and 2.4 figures.",
+      "aliases": [
+        "C7/C3_2"
+      ]
     },
     {
       "label": "C5/C5_1",
@@ -7296,7 +7323,10 @@
         "section": "2.4 Network Interface Names, top-view table",
         "figure": "network-port-labels-2-VRNVL72.png"
       },
-      "note": "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1."
+      "note": "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1.",
+      "aliases": [
+        "COMPUTE_n_n_BF_1_MAC_ADDR1"
+      ]
     },
     {
       "label": "COMPUTE_n_n_BF_0_MAC_ADDR1",
@@ -7310,7 +7340,10 @@
         "section": "2.4 Network Interface Names, top-view table",
         "figure": "network-port-labels-2-VRNVL72.png"
       },
-      "note": "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1."
+      "note": "ADDR1 is the left QSFP port (2.2 Fig. 2). The figures print this row's second entry as BF_1.",
+      "aliases": [
+        "COMPUTE_n_n_BF_1_MAC_ADDR1"
+      ]
     },
     {
       "label": "HPM_R GPU_2",
@@ -7357,7 +7390,10 @@
         "section": "2.4 Network Interface Names, top-view table",
         "figure": "network-port-labels-2-VRNVL72.png"
       },
-      "note": "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2."
+      "note": "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2.",
+      "aliases": [
+        "COMPUTE_n_n_BF_1_MAC_ADDR2"
+      ]
     },
     {
       "label": "COMPUTE_n_n_BF_0_MAC_ADDR2",
@@ -7371,7 +7407,10 @@
         "section": "2.4 Network Interface Names, top-view table",
         "figure": "network-port-labels-2-VRNVL72.png"
       },
-      "note": "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2."
+      "note": "ADDR2 is the right QSFP port (2.2 Fig. 2). The table repeats ADDR1's interface and RDMA names here; see docs/OPEN_QUESTIONS.md item 2.",
+      "aliases": [
+        "COMPUTE_n_n_BF_1_MAC_ADDR2"
+      ]
     }
   ],
   "procedures": [
@@ -8078,7 +8117,7 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
         "section": "6.1 System Operations"
       },
-      "note": "Runs on the head node outside the rack (2.2: ipminet gives Base Command Manager and the head node access to the BMCs)."
+      "note": "Section 2.2: ipminet gives Base Command Manager and the head node access to the out-of-band/BMC interfaces in the rack. Where the head node sits is not stated."
     },
     {
       "id": "cuda",
@@ -8457,7 +8496,7 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#check-bmc-firmware-signing-type",
         "section": "6.4.1.3.3 Check BMC Firmware Signing Type"
       },
-      "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0 ."
+      "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/BMC_0."
     },
     {
       "id": "check-hmc-firmware-signing-type",
@@ -8473,7 +8512,7 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#check-hmc-firmware-signing-type",
         "section": "6.4.1.3.4 Check HMC Firmware Signing Type"
       },
-      "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0 ."
+      "note": "Replace <active image slot> with the active slot ID. To find it, read the ActiveSlotId property from /redfish/v1/Chassis/HGX_ERoT_BMC_0/Oem/NvidiaRoT/RoTProtectedComponents/HGX_BMC_0."
     },
     {
       "id": "enabling-global-write-protect",
@@ -8531,7 +8570,7 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#creating-a-new-account",
         "section": "6.4.1.5.1 Creating a New Account"
       },
-      "note": "You can set RoleId to Administrator , Operator , or ReadOnly based on the required access level for the user."
+      "note": "You can set RoleId to Administrator, Operator, or ReadOnly based on the required access level for the user."
     },
     {
       "id": "updating-password-for-an-existing-account",
@@ -8684,7 +8723,7 @@
       "id": "capturing-debug-logs-with-nvdebug",
       "title": "Capturing Debug Logs with NVDEBUG",
       "group": "Debug logs",
-      "purpose": "Access the BMC or host system where NVDEBUG is available. Ensure you have the necessary permissions to run diagnostic tools.",
+      "purpose": "When troubleshooting complex issues or working with NVIDIA support, it is often necessary to collect detailed debug logs from the compute tray. The preferred method for capturing and packaging these logs is to use the NVDEBUG tool, which gathers all relevant system, firmware, and event logs into a single archive for analysis.",
       "command": "nvdebug --collect --output /path/to/save/debug-logs.tar.gz",
       "appliesTo": [
         "host-bmc"
@@ -8693,7 +8732,7 @@
         "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#capturing-debug-logs-with-nvdebug",
         "section": "6.4.1.11.1 Capturing Debug Logs with NVDEBUG"
       },
-      "note": "NVDEBUG automatically collects a comprehensive set of logs, including BMC event logs, firmware versions, hardware inventory, and system health data. This is the recommended approach for efficient and complete log collection."
+      "note": "Steps in 6.4.1.11.1: 1. Access the BMC or host system where NVDEBUG is available. Ensure you have the necessary permissions to run diagnostic tools. 2. Run the NVDEBUG tool according to your system's documentation; replace /path/to/save/debug-logs.tar.gz with your desired output location. 3. Transfer the log archive to your support contact or upload it as instructed by NVIDIA support. NVDEBUG automatically collects a comprehensive set of logs, including BMC event logs, firmware versions, hardware inventory, and system health data. This is the recommended approach for efficient and complete log collection."
     }
   ],
   "commandNotes": {

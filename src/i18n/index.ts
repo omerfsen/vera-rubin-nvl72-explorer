@@ -61,7 +61,7 @@ export function createI18n(lang: Lang) {
 
   function segmentLabel(segment: PathSegment): string {
     const name = nameOf(segment.id);
-    return segment.index === undefined ? name : `${name} ${segment.index}`;
+    return segment.index === undefined ? name : `${name} ${model.displayIndex(segment.id, segment.index)}`;
   }
 
   return {

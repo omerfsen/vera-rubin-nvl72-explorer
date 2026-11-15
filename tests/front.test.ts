@@ -8,13 +8,17 @@ describe('rack front detail', () => {
     expect([...units].sort()).toEqual(['compute-tray', 'power-shelf', 'switch-tray', 'tor-switch']);
     expect(plates.filter((p) => p.unitKey === 'tor-switch.1' && p.component === 'tor-rj45-port')).toHaveLength(48);
     expect(plates.filter((p) => p.unitKey === 'power-shelf.2' && p.component === 'psu')).toHaveLength(6);
-    expect(plates.filter((p) => p.unitKey === 'power-shelf.2' && p.component === 'psu:led')).toHaveLength(12);
+    expect(plates.filter((p) => p.unitKey === 'power-shelf.2' && p.component === 'psu:led')).toHaveLength(6);
     const slid = facePlates('compute-tray.3').find((p) => p.unitKey === 'compute-tray.3')!;
     const still = plates.find((p) => p.unitKey === 'compute-tray.3')!;
     expect(slid.position[2]).toBeGreaterThan(still.position[2]);
   });
 
-  it('draws the 45 BMC links of section 1.5 to the ToR switches', () => {
-    expect(managementLinks()).toHaveLength(18 + 18 + 9);
+  it('draws the BMC links section 1.5 lists, and the switch tray links as assumed', () => {
+    const { stated, assumed } = managementLinks();
+    // 1.5 lists the compute trays' out-of-band BMC and BlueField-4 BMC ports.
+    expect(stated).toHaveLength(18 + 18);
+    // It says the switch trays are connected but not through which port.
+    expect(assumed).toHaveLength(9);
   });
 });
