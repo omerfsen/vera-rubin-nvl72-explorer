@@ -5,6 +5,7 @@ import { SHOW_OFFICIAL_FIGURES, officialFigureUrl } from '../config/flags';
 import { useExplorer } from '../state/store';
 import { ROOT_ID } from '../data/model';
 import { trayKeyOf } from '../state/url';
+import { NetworkInfo } from './NetworkInfo';
 import { LINK_COLORS, LINK_NAMES } from '../scenes/geometry';
 
 function SourceLink({ source }: { source: Source }) {
@@ -123,6 +124,7 @@ export function SidePanel() {
       <p className="sr-only" aria-live="polite">
         Selected: {title}
       </p>
+      <NetworkInfo />
       <header className="panel-header">
         <p className="kind">{component.type.replace(/-/g, ' ')}</p>
         <h2 id="panel-title" ref={headingRef} tabIndex={-1}>

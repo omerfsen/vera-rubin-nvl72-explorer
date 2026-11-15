@@ -1,12 +1,13 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Breadcrumb } from './components/Breadcrumb';
+import { NetworkBar } from './components/NetworkBar';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RackList } from './components/RackList';
 import { Search } from './components/Search';
 import { SidePanel } from './components/SidePanel';
 import { hasWebGL } from './lib/webgl';
 import { model } from './data';
-import { LINK_COLORS, LINK_NAMES, REAR_COLORS, TYPE_COLORS } from './scenes/geometry';
+import { CONFLICT_COLOR, DIM_COLOR, LINK_COLORS, LINK_NAMES, NETWORK_COLORS, REAR_COLORS, TYPE_COLORS } from './scenes/geometry';
 import { trayLegend } from './scenes/colors';
 import { trayKeyOf } from './state/url';
 import { syncUrl, useExplorer } from './state/store';
@@ -44,6 +45,27 @@ function useKeyboard() {
 }
 
 function Legend({ trayId }: { trayId: string | null }) {
+  const network = useExplorer((s) => s.network);
+  const net = network ? model.getNetwork(network) : undefined;
+  if (net) {
+    const { members } = model.networkMembers(net.id);
+    const conflict = [...members.values()].some((m) => m.alternative);
+    const rows = [
+      { label: `On ${net.name}`, color: NETWORK_COLORS[net.id] ?? '#ffffff' },
+      ...(conflict ? [{ label: 'Conflict: figure and table disagree', color: CONFLICT_COLOR }] : []),
+      { label: 'Not on this network', color: DIM_COLOR },
+    ];
+    return (
+      <ul className="legend" aria-label="Legend">
+        {rows.map((r) => (
+          <li key={r.label}>
+            <span className="swatch" style={{ background: r.color }} aria-hidden="true" />
+            {r.label}
+          </li>
+        ))}
+      </ul>
+    );
+  }
   const rows = trayId
     ? trayLegend(trayId)
     : [...new Set(model.rackUnits.map((u) => u.componentId))].map((id) => {
@@ -176,6 +198,7 @@ export default function App() {
       </header>
 
       <Breadcrumb />
+      <NetworkBar />
 
       <main className={!webgl ? 'layout list-only' : showList ? 'layout with-list' : 'layout'}>
         {showList && (

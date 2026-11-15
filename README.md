@@ -27,7 +27,7 @@ Milestone 1 of 4:
   ToR switches; side panel; breadcrumb; search; list view; URL state
 - [x] **M2**: compute tray interior, every part clickable
 - [x] **M3**: switch tray, power shelf and rear view (cartridges, manifolds, bus bar)
-- [ ] **M4**: network overlay for the seven networks
+- [x] **M4**: network overlay for the seven networks
 
 ## Source of truth
 
@@ -110,6 +110,12 @@ VITE_SHOW_OFFICIAL_FIGURES=true npm run build
 - **Rear** shows the back of the rack: the NVLink cable cartridges, the two
   liquid cooling manifolds and the bus bar, with every unit's NVLink, coolant
   and power connection to them. Selecting a unit lights up its own.
+- **Networks** (the bar under the breadcrumb) highlights one of the seven
+  networks: in the rack, the units with a port on it; inside a tray, the exact
+  ports. The panel lists what is on it, with counts per rack. The BlueField-4
+  left port shows in orange for storagenet, because the guide's table and its
+  port figure disagree (see `docs/OPEN_QUESTIONS.md`). externalnet,
+  internalnet and failovernet reach no port in the rack.
 - Inside a tray, three layers can be switched on and off, like an anatomy
   chart: **Structure** (the bones: tray shell), **Parts** (the muscles) and
   **Connections** (the veins: PCIe, C2C, Clink, NVLink, coolant and power,

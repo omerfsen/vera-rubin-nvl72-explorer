@@ -7,7 +7,10 @@ import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
 import { isPartSelected, partColor } from './colors';
 import {
+  CONFLICT_COLOR,
+  DIM_COLOR,
   HOVER_COLOR,
+  NETWORK_COLORS,
   LINK_COLORS,
   SELECTED_COLOR,
   TYPE_COLORS,
@@ -34,7 +37,15 @@ function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: P
   const hovered = useExplorer((s) => s.hovered);
   const select = useExplorer((s) => s.select);
   const setHovered = useExplorer((s) => s.setHovered);
+  const network = useExplorer((s) => s.network);
   const base = useMemo(() => new Color(partColor(items[0]!.slot.component)), [items]);
+  // With the network overlay on, parts on the network take its colour (or the
+  // conflict colour), and everything else is dimmed.
+  const overlay = useMemo(() => {
+    if (!network) return null;
+    const m = model.networkMembers(network).members.get(items[0]!.slot.component);
+    return m ? (m.alternative ? CONFLICT_COLOR : (NETWORK_COLORS[network] ?? '#ffffff')) : DIM_COLOR;
+  }, [network, items]);
 
   useLayoutEffect(() => {
     const mesh = ref.current;
@@ -49,6 +60,7 @@ function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: P
       mesh.setMatrixAt(i, scratch.matrix);
       if (isPartSelected(it.path, selected)) color.set(SELECTED_COLOR);
       else if (it.path === hovered) color.set(HOVER_COLOR);
+      else if (overlay) color.set(overlay);
       else color.copy(base);
       mesh.setColorAt(i, color);
     });
@@ -56,7 +68,7 @@ function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: P
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     mesh.computeBoundingSphere();
     invalidate();
-  }, [items, selected, hovered, base, invalidate, trayKey, heightRU]);
+  }, [items, selected, hovered, base, invalidate, trayKey, heightRU, overlay]);
 
   useEffect(
     () => () => {
@@ -143,6 +155,7 @@ function endPosition(layout: TrayLayout, end: LinkEnd): Vec | null {
 function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout }) {
   const trayId = trayKey.split('.')[0]!;
   const selected = useExplorer((s) => s.selected);
+  const network = useExplorer((s) => s.network);
   const invalidate = useThree((s) => s.invalidate);
   const within = selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
   const active = useMemo(() => new Set(within ? model.linksAt(trayId, within) : []), [trayId, within]);
@@ -156,7 +169,7 @@ function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout })
         const lift = 0.06 + Math.hypot(a[0] - b[0], a[2] - b[2]) * 0.12;
         const mid: Vec = [(a[0] + b[0]) / 2, Math.max(a[1], b[1]) + lift, (a[2] + b[2]) / 2];
         const on = active.has(link);
-        const dim = within !== null && !on;
+        const dim = (within !== null && !on) || network !== '';
         return (
           <QuadraticBezierLine
             key={i}

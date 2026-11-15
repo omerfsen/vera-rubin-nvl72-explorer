@@ -595,6 +595,24 @@
               ]
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "alternative": {
+                "const": true
+              }
+            },
+            "required": [
+              "alternative"
+            ]
+          },
+          "then": {
+            "required": [
+              "note",
+              "network"
+            ]
+          }
         }
       ],
       "type": "object",
@@ -631,6 +649,10 @@
         },
         "description": {
           "type": "string"
+        },
+        "alternative": {
+          "type": "boolean",
+          "description": "A conflicting reading from another part of the guide; kept for the record and shown as a conflict, not as fact."
         }
       }
     },

@@ -1964,6 +1964,20 @@
       },
       "assumed": true,
       "note": "Fig. 7 labels the switch tray's rear power connector but does not say it connects to the bus bar."
+    },
+    {
+      "id": "bf4-left-storagenet-fig1",
+      "from": "ct-port-bf4-left",
+      "network": "storagenet",
+      "kind": "network",
+      "alternative": true,
+      "description": "Fig. 1 marks the BlueField-4 left QSFP port 6 (storagenet), while Table 2.3 says dgxnet.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+        "section": "2.2 Network Overview, Fig. 1 (network port locations)",
+        "figure": "network-port-numbers-VRNVL72.png"
+      },
+      "note": "An alternative reading that conflicts with Table 2.3. See docs/OPEN_QUESTIONS.md item 3."
     }
   ],
   "trayLayouts": {

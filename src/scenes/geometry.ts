@@ -132,3 +132,18 @@ export const REAR_COLORS: Record<string, string> = {
   manifold: '#2f6f9a',
   'bus-bar': '#a8743c',
 };
+
+/** Overlay colour per network (numbered 1 to 7 as in the guide). */
+export const NETWORK_COLORS: Record<string, string> = {
+  externalnet: '#9e9e9e',
+  internalnet: '#c0a0ff',
+  dgxnet: '#ffb347',
+  ipminet: '#4dd0e1',
+  computenet: '#ff5c8a',
+  storagenet: '#7bd389',
+  failovernet: '#d4d46a',
+};
+/** Ports where the guide's table and figure disagree about this network. */
+export const CONFLICT_COLOR = '#ff8c00';
+/** Everything not on the highlighted network. */
+export const DIM_COLOR = '#434a55';

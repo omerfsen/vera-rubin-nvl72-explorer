@@ -11,6 +11,9 @@ interface ExplorerState {
   listOpen: boolean;
   /** Tray view layers: structure (bones), parts (muscles), connections (veins). */
   layers: { structure: boolean; parts: boolean; links: boolean };
+  /** Network shown by the overlay, or "" for none. */
+  network: string;
+  setNetwork: (id: string) => void;
   toggleLayer: (layer: 'structure' | 'parts' | 'links') => void;
   select: (path: string) => void;
   setHovered: (key: string | null) => void;
@@ -38,6 +41,8 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   hovered: null,
   listOpen: initial.list,
   layers: { structure: true, parts: true, links: true },
+  network: initial.net ?? '',
+  setNetwork: (id) => set({ network: get().network === id ? '' : id }),
   toggleLayer: (layer) => set({ layers: { ...get().layers, [layer]: !get().layers[layer] } }),
   select: (path) => {
     const segments = model.parsePath(path);
@@ -109,7 +114,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
 /** Keep the address bar in step with the store. */
 export function syncUrl(): () => void {
   const write = (s: ExplorerState) => {
-    const search = writeUrlState(window.location.search, { view: s.view, select: s.selected, list: s.listOpen });
+    const search = writeUrlState(window.location.search, { view: s.view, select: s.selected, list: s.listOpen, net: s.network });
     if (search === window.location.search) return;
     window.history.replaceState(window.history.state, '', `${window.location.pathname}${search}${window.location.hash}`);
   };
