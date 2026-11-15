@@ -20,10 +20,7 @@ export function NetworkInfo() {
       <p>{n.description}</p>
       {n.note && <p className="note">{n.note}</p>}
       {items.length === 0 ? (
-        <p className="note">
-          No port in this rack is on {n.name} in NVIDIA's documentation. It connects head nodes and control plane nodes
-          outside the rack.
-        </p>
+        <p className="note">No port in this rack is on {n.name} in NVIDIA's documentation.</p>
       ) : (
         <ul className="plain">
           {items.map(({ c, alternative }) => {

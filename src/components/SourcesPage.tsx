@@ -61,6 +61,7 @@ export function SourcesPage() {
     select(path);
   };
   const assumed = assumedItems();
+  const questions = model.topology.openQuestions ?? [];
   const conflict = conflicts();
   return (
     <article className="sources-page" aria-labelledby="sources-title">
@@ -100,24 +101,36 @@ export function SourcesPage() {
           </li>
         )}
       </ul>
-      <h3>Conflicts in NVIDIA's documents ({conflict.length})</h3>
+      <h3>Conflicts in NVIDIA's documents ({questions.filter((q) => q.kind === 'conflict').length})</h3>
       <ul className="plain">
-        {conflict.map((c) => (
-          <li key={c.where}>
-            <button type="button" className="link-button" onClick={() => go(c.path)}>
-              {c.where}
-            </button>
-            <div className="note">{c.note}</div>
-          </li>
-        ))}
+        {questions
+          .filter((q) => q.kind === 'conflict')
+          .map((q) => (
+            <li key={q.id}>
+              <button type="button" className="link-button" onClick={() => go(model.pathForComponent(q.components[0] ?? 'rack'))}>
+                {q.title}
+              </button>
+              <div className="note">{q.summary}</div>
+            </li>
+          ))}
+      </ul>
+      <h3>Gaps: what the documents do not say ({questions.filter((q) => q.kind === 'gap').length})</h3>
+      <ul className="plain">
+        {questions
+          .filter((q) => q.kind === 'gap')
+          .map((q) => (
+            <li key={q.id}>
+              <strong>{q.title}.</strong> <span className="note">{q.summary}</span>
+            </li>
+          ))}
       </ul>
       <p className="note">
-        More gaps and disagreements (ConnectX-9 count, BlueField-4 PCIe entries, RJ45 ports, NVSwitch chips per tray)
-        are recorded on the parts themselves and in{' '}
-        <a href="https://github.com/omerfsen/vera-rubin-nvl72-explorer/blob/main/docs/OPEN_QUESTIONS.md" target="_blank" rel="noopener noreferrer">
+        The same list, with quotes from each document, is in{' '}
+        <a href={questions[0]?.details} target="_blank" rel="noopener noreferrer">
           OPEN_QUESTIONS.md
         </a>
-        .
+        . {conflict.length} conflicting reading{conflict.length === 1 ? ' is' : 's are'} also kept in the data and drawn
+        in the conflict colour in the network overlay.
       </p>
       <h3>Assumed ({assumed.length})</h3>
       <ul className="plain">

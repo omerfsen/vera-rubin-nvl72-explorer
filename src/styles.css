@@ -414,3 +414,16 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .sources-page h2 { margin: 14px 0 8px; }
 .sources-page h3 { margin: 22px 0 6px; font-size: 1rem; }
 .sources-page li { margin-bottom: 8px; }
+
+.doc-list li { font-size: 0.85rem; }
+.open-questions { border-left: 3px solid var(--warn); padding-left: 10px; }
+.gap-badge {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px solid var(--muted);
+  color: var(--muted);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}

@@ -57,9 +57,28 @@ describe('sources page', () => {
   it('lists the documents, the conflicts and every assumed fact, and links the dataset', () => {
     render(<SourcesPage />);
     expect(screen.getByText(/NVIDIA DGX VR NVL72 User Guide/)).toBeTruthy();
-    expect(screen.getByText(/Conflicts in NVIDIA's documents \(1\)/)).toBeTruthy();
+    expect(screen.getByText(/Conflicts in NVIDIA's documents \(6\)/)).toBeTruthy();
+    expect(screen.getByText(/Gaps: what the documents do not say \(7\)/)).toBeTruthy();
     expect(screen.getByText(/^Assumed \(\d+\)$/)).toBeTruthy();
     const json = screen.getByRole('link', { name: 'nvl72-topology.json' }) as HTMLAnchorElement;
     expect(json.getAttribute('href')).toMatch(/data\/nvl72-topology\.json$/);
+  });
+});
+
+describe('documents in the panel', () => {
+  it('links every section about a part to the web page, the PDF page and its figures', () => {
+    useExplorer.setState({ selected: 'power-shelf.1/psu.2' });
+    render(<SidePanel />);
+    expect(screen.getByText("In NVIDIA's documents")).toBeTruthy();
+    const pdfs = screen.getAllByRole('link', { name: /^PDF p\. \d+$/ }) as HTMLAnchorElement[];
+    expect(pdfs.length).toBeGreaterThan(3);
+    expect(pdfs.some((a) => a.href.includes('dgxvr-service-manual.pdf#page='))).toBe(true);
+    expect(screen.getAllByRole('link', { name: 'figure' }).length).toBeGreaterThan(0);
+  });
+
+  it('shows open questions on the parts they concern', () => {
+    useExplorer.setState({ selected: 'compute-tray.2/connectx-9.1' });
+    render(<SidePanel />);
+    expect(screen.getByText(/Number of ConnectX-9 cards per compute tray/)).toBeTruthy();
   });
 });

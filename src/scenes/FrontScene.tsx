@@ -110,12 +110,17 @@ function FacePlates() {
  * lines end on the pair as a whole.
  */
 export function managementLinks(): Segment[] {
-  const tors = model.rackUnits.filter((u) => u.componentId === 'tor-switch').map((u) => boxByKey.get(u.key)!);
-  if (tors.length === 0) return [];
-  const torY = tors.reduce((sum, b) => sum + b.position[1], 0) / tors.length;
+  // BMC connections that end on a rack unit type (in this rack: the ToR switches).
+  const managed = new Set(['bmc', 'dpu']);
+  const bmcLinks = model.topology.connections.filter(
+    (c) => c.to !== undefined && model.isRackUnitType(c.to) && managed.has(model.getComponent(c.from)?.type ?? ''),
+  );
+  const target = bmcLinks[0]?.to;
+  const targets = model.rackUnits.filter((u) => u.componentId === target).map((u) => boxByKey.get(u.key)!);
+  if (targets.length === 0) return [];
+  const torY = targets.reduce((sum, b) => sum + b.position[1], 0) / targets.length;
   const starts: Vec[] = [];
-  for (const c of model.topology.connections) {
-    if (c.to !== 'tor-switch') continue;
+  for (const c of bmcLinks) {
     const unitType = [...model.ancestorsOf(c.from), c.from].find((id) => model.isRackUnitType(id));
     const layout = unitType ? model.trayLayout(unitType) : undefined;
     if (!unitType || !layout) continue;
@@ -144,7 +149,8 @@ export function FrontScene() {
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
   const links = useMemo(managementLinks, []);
-  const torSelected = (selected.split('/')[0] ?? '').startsWith('tor-switch.');
+  const target = model.topology.connections.find((c) => c.to && model.isRackUnitType(c.to) && model.getComponent(c.from)?.type === 'bmc')?.to;
+  const torSelected = target !== undefined && (selected.split('/')[0] ?? '').startsWith(`${target}.`);
   const showLinks = layers.links && (torSelected || network === 'ipminet');
   return (
     <group>
