@@ -147,3 +147,33 @@ test.describe('languages', () => {
     await expect(page.getByRole('button', { name: '中文', exact: true })).toHaveAttribute('aria-pressed', 'true');
   });
 });
+
+test.describe('themes', () => {
+  test('System follows the OS colour scheme live', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.goto('/');
+    await rackReady(page);
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  });
+
+  test('Light and Dark override the OS, are remembered, and raise no errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.goto('/?select=compute-tray.7');
+    await rackReady(page);
+    await page.getByRole('button', { name: 'Light', exact: true }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    expect(bg).toBe('rgb(246, 247, 249)');
+    await page.reload();
+    await rackReady(page);
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await page.getByRole('button', { name: 'Dark', exact: true }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    expect(errors).toEqual([]);
+  });
+});

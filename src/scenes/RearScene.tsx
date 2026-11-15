@@ -1,3 +1,4 @@
+import { useSceneTheme } from './useSceneTheme';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useThree, type ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
@@ -7,7 +8,7 @@ import { model } from '../data';
 import type { RearPart } from '../data/types';
 import { useExplorer } from '../state/store';
 import { useI18n } from '../i18n';
-import { FRAME_WIDTH, HOVER_COLOR, LINK_COLORS, REAR_COLORS, REAR_STYLE, RU, SCENE_COLORS, SELECTED_COLOR, UNIT_DEPTH, UNIT_WIDTH } from './geometry';
+import { FRAME_WIDTH, HOVER_COLOR, LINK_COLORS, REAR_COLORS, REAR_STYLE, RU, SELECTED_COLOR, UNIT_DEPTH, UNIT_WIDTH } from './geometry';
 
 /** Parts drawn see-through (the rear bezel) and under the rack (seismic bracing), from data/display.json. */
 const SEE_THROUGH = REAR_STYLE.seeThrough as Record<string, number>;
@@ -311,6 +312,7 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
 /** Rear parts of the rack, the connectors on every unit's back and the connections between them. */
 export function RearScene({ showLabels }: { showLabels: boolean }) {
   const layers = useExplorer((s) => s.layers);
+  const { scene } = useSceneTheme();
   const boxes = useMemo(rearBoxes, []);
   const segments = useMemo(() => rearSegments(boxes), [boxes]);
   const connectors = useMemo(unitConnectorBoxes, []);
@@ -330,7 +332,7 @@ export function RearScene({ showLabels }: { showLabels: boolean }) {
       {bezel.map((b) => (
         <mesh key={b.path} position={b.position} raycast={() => null}>
           <boxGeometry args={b.size} />
-          <meshStandardMaterial color={SCENE_COLORS.rearBezel} transparent opacity={REAR_STYLE.seeThrough[b.part.component as keyof typeof REAR_STYLE.seeThrough] ?? 0.2} depthWrite={false} />
+          <meshStandardMaterial color={scene.rearBezel} transparent opacity={REAR_STYLE.seeThrough[b.part.component as keyof typeof REAR_STYLE.seeThrough] ?? 0.2} depthWrite={false} />
         </mesh>
       ))}
       {layers.parts && <ClickableBoxes items={connectors} colorOf={colorOfConnector} />}

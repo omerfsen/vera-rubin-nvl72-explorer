@@ -4,7 +4,10 @@
   "colors": {
     "selected": "#38bdf8",
     "hover": "#d6c89a",
-    "dim": "#434a55",
+    "dim": {
+      "dark": "#434a55",
+      "light": "#a7b0bb"
+    },
     "conflict": "#ff8c00",
     "unitTypes": {
       "compute-tray": "#8b7d5c",
@@ -53,15 +56,28 @@
       "amber": "#ffb000"
     },
     "scene": {
-      "background": "#0e1115",
-      "skyLight": "#dfe7f2",
-      "groundLight": "#1a1d22",
-      "floor": "#14181d",
-      "rackFrame": "#1c2026",
-      "handles": "#c9ced6",
-      "trayBase": "#23282f",
-      "trayWall": "#3a4049",
-      "rearBezel": "#1b1f25"
+      "dark": {
+        "background": "#0e1115",
+        "skyLight": "#dfe7f2",
+        "groundLight": "#1a1d22",
+        "floor": "#14181d",
+        "rackFrame": "#1c2026",
+        "handles": "#c9ced6",
+        "trayBase": "#23282f",
+        "trayWall": "#3a4049",
+        "rearBezel": "#1b1f25"
+      },
+      "light": {
+        "background": "#eef1f5",
+        "skyLight": "#ffffff",
+        "groundLight": "#aeb6c2",
+        "floor": "#d9dee5",
+        "rackFrame": "#3a4049",
+        "handles": "#8a939e",
+        "trayBase": "#dde2e8",
+        "trayWall": "#98a1ad",
+        "rearBezel": "#3a3f47"
+      }
     }
   },
   "links": {

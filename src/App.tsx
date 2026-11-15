@@ -9,11 +9,12 @@ import { Search } from './components/Search';
 import { SidePanel } from './components/SidePanel';
 import { hasWebGL } from './lib/webgl';
 import { model } from './data';
-import { CONFLICT_COLOR, DIM_COLOR, LINK_COLORS, NETWORK_COLORS, REAR_COLORS, TYPE_COLORS } from './scenes/geometry';
+import { CONFLICT_COLOR, DIM_COLORS, LINK_COLORS, NETWORK_COLORS, REAR_COLORS, TYPE_COLORS } from './scenes/geometry';
 import { trayLegend } from './scenes/colors';
 import { trayKeyOf } from './state/url';
-import { syncUrl, useExplorer } from './state/store';
+import { syncTheme, syncUrl, useExplorer } from './state/store';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { useI18n } from './i18n';
 
 const Scene = lazy(() => import('./scenes/Scene'));
@@ -50,6 +51,7 @@ function useKeyboard() {
 
 function Legend({ trayId }: { trayId: string | null }) {
   const network = useExplorer((s) => s.network);
+  const theme = useExplorer((s) => s.theme);
   const i18n = useI18n();
   const { t } = i18n;
   const net = network ? model.getNetwork(network) : undefined;
@@ -59,7 +61,7 @@ function Legend({ trayId }: { trayId: string | null }) {
     const rows = [
       { label: t('legend.on', { name: net.name }), color: NETWORK_COLORS[net.id] ?? '#ffffff' },
       ...(conflict ? [{ label: t('legend.conflict'), color: CONFLICT_COLOR }] : []),
-      { label: t('legend.notOn'), color: DIM_COLOR },
+      { label: t('legend.notOn'), color: DIM_COLORS[theme] },
     ];
     return (
       <ul className="legend" aria-label={t('legend.label')}>
@@ -181,6 +183,7 @@ export default function App() {
   const inTray = view === 'tray' && trayKey !== null;
   useKeyboard();
   useEffect(() => syncUrl(), []);
+  useEffect(() => syncTheme(), []);
 
   const showList = !webgl || listOpen;
 
@@ -193,6 +196,7 @@ export default function App() {
         </div>
         <Search />
         <LanguageSwitcher />
+        <ThemeSwitcher />
         <button type="button" className="toggle" aria-pressed={page === 'sources'} onClick={() => setPage(page === 'sources' ? '' : 'sources')}>
           {t('top.sources')}
         </button>

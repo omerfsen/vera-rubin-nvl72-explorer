@@ -1,3 +1,4 @@
+import { useSceneTheme } from './useSceneTheme';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useThree, type ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
@@ -9,9 +10,7 @@ import { RearScene } from './RearScene';
 import {
   FRAME_POST,
   FRAME_WIDTH,
-  DIM_COLOR,
   HOVER_COLOR,
-  SCENE_COLORS,
   SLIDE_OUT,
   NETWORK_COLORS,
   RU,
@@ -58,6 +57,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
   const setHovered = useExplorer((s) => s.setHovered);
   const openTray = useExplorer((s) => s.openTray);
   const network = useExplorer((s) => s.network);
+  const { dim } = useSceneTheme();
   const onNetwork = useMemo(() => (network ? model.networkMembers(network).unitTypes.has(componentId) : null), [network, componentId]);
   const selectedKey = selectedUnitKey(selected);
   // A general selection of this unit type ("power-shelf") lights up every unit of it.
@@ -75,7 +75,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
       if (u.key === selectedKey || typeSelected) color.set(SELECTED_COLOR);
       else if (u.key === hovered) color.set(HOVER_COLOR);
       else if (onNetwork === true) color.set(NETWORK_COLORS[network] ?? '#ffffff');
-      else if (onNetwork === false) color.set(DIM_COLOR);
+      else if (onNetwork === false) color.set(dim);
       else color.copy(base);
       mesh.setColorAt(i, color);
     });
@@ -83,7 +83,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     mesh.computeBoundingSphere();
     invalidate();
-  }, [units, selectedKey, hovered, base, invalidate, onNetwork, network, typeSelected]);
+  }, [units, selectedKey, hovered, base, invalidate, onNetwork, network, typeSelected, dim]);
 
   useEffect(
     () => () => {
@@ -135,6 +135,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
 /** Two front handles per unit. Decoration only, so it ignores the pointer. */
 function Handles() {
   const ref = useRef<InstancedMesh>(null);
+  const { scene } = useSceneTheme();
   const selected = useExplorer((s) => s.selected);
   const invalidate = useThree((s) => s.invalidate);
   const selectedKey = selectedUnitKey(selected);
@@ -160,7 +161,7 @@ function Handles() {
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, boxes.length * 2]} raycast={() => null}>
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={SCENE_COLORS.handles} metalness={0.6} roughness={0.35} />
+      <meshStandardMaterial color={scene.handles} metalness={0.6} roughness={0.35} />
     </instancedMesh>
   );
 }
@@ -168,6 +169,7 @@ function Handles() {
 /** Four corner posts plus top and bottom plates. */
 function RackFrame() {
   const ref = useRef<InstancedMesh>(null);
+  const { scene } = useSceneTheme();
   const height = frameHeight(model.totalRU);
   const halfW = FRAME_WIDTH / 2 - FRAME_POST / 2;
   const halfD = UNIT_DEPTH / 2 + 0.05;
@@ -204,7 +206,7 @@ function RackFrame() {
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, parts.length]} raycast={() => null}>
       <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={SCENE_COLORS.rackFrame} metalness={0.4} roughness={0.7} />
+      <meshStandardMaterial color={scene.rackFrame} metalness={0.4} roughness={0.7} />
     </instancedMesh>
   );
 }
@@ -257,6 +259,7 @@ export function rackCameraDistance(fovDeg: number): number {
 export function RackScene({ rear }: { rear: boolean }) {
   const height = frameHeight(model.totalRU);
   const layers = useExplorer((s) => s.layers);
+  const { scene } = useSceneTheme();
   return (
     <group>
       {layers.structure && <RackFrame />}
@@ -267,7 +270,7 @@ export function RackScene({ rear }: { rear: boolean }) {
       {!rear && <GroupLabels />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
-        <meshStandardMaterial color={SCENE_COLORS.floor} />
+        <meshStandardMaterial color={scene.floor} />
       </mesh>
     </group>
   );

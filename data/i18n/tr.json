@@ -5,6 +5,12 @@
       "label": "Dil",
       "translated": "Bu metin NVIDIA'nın İngilizce belgelerinden çevrilmiştir. Esas alınacak metin İngilizcedir."
     },
+    "theme": {
+      "label": "Renk teması",
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem"
+    },
     "site": {
       "title": "Vera Rubin NVL72 Gezgini",
       "tagline": "Her bilgi NVIDIA'nın kendi belgelerine bağlı · resmi değildir, NVIDIA ile bağlantılı değildir",

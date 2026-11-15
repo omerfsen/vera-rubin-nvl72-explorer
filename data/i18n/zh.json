@@ -5,6 +5,12 @@
       "label": "语言",
       "translated": "本文译自 NVIDIA 的英文文档，以英文原文为准。"
     },
+    "theme": {
+      "label": "颜色主题",
+      "light": "浅色",
+      "dark": "深色",
+      "system": "跟随系统"
+    },
     "site": {
       "title": "Vera Rubin NVL72 浏览器",
       "tagline": "每项事实都链接到 NVIDIA 自己的文档 · 非官方，与 NVIDIA 无关联",
