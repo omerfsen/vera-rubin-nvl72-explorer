@@ -7,9 +7,11 @@ import { SidePanel } from './components/SidePanel';
 import { hasWebGL } from './lib/webgl';
 import { model } from './data';
 import { TYPE_COLORS } from './scenes/geometry';
+import { trayLegend } from './scenes/colors';
+import { trayKeyOf } from './state/url';
 import { syncUrl, useExplorer } from './state/store';
 
-const RackScene = lazy(() => import('./scenes/RackScene'));
+const Scene = lazy(() => import('./scenes/Scene'));
 
 function isTyping(target: EventTarget | null): boolean {
   return target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
@@ -26,10 +28,14 @@ function useKeyboard() {
       const onStage = target === document.body || target?.id === 'rack-stage';
       if (onStage && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
         e.preventDefault();
-        s.stepRackUnit(e.key === 'ArrowDown' ? 1 : -1);
-      } else if (e.key === 'Escape' && s.selected !== '') {
-        const parts = s.selected.split('/');
-        s.select(parts.slice(0, -1).join('/'));
+        const delta = e.key === 'ArrowDown' ? 1 : -1;
+        if (s.view === 'tray') s.stepTrayPart(delta);
+        else s.stepRackUnit(delta);
+      } else if (onStage && e.key === 'Enter' && s.view === 'rack') {
+        e.preventDefault();
+        s.openTray();
+      } else if (e.key === 'Escape' && (s.selected !== '' || s.view !== 'rack')) {
+        s.goUp();
       }
     };
     window.addEventListener('keydown', onKey);
@@ -37,20 +43,43 @@ function useKeyboard() {
   }, []);
 }
 
-function Legend() {
-  const types = [...new Set(model.rackUnits.map((u) => u.componentId))];
-  return (
-    <ul className="legend" aria-label="Legend">
-      {types.map((id) => {
+function Legend({ trayId }: { trayId: string | null }) {
+  const rows = trayId
+    ? trayLegend(trayId)
+    : [...new Set(model.rackUnits.map((u) => u.componentId))].map((id) => {
         const c = model.getComponent(id);
-        return (
-          <li key={id}>
-            <span className="swatch" style={{ background: TYPE_COLORS[c?.type ?? 'rack'] }} aria-hidden="true" />
-            {c?.name}
-          </li>
-        );
-      })}
+        return { label: c?.name ?? id, color: TYPE_COLORS[c?.type ?? 'rack'] ?? '#666666' };
+      });
+  return (
+    <ul className={trayId ? 'legend legend-tray' : 'legend'} aria-label="Legend">
+      {rows.map((r) => (
+        <li key={r.label}>
+          <span className="swatch" style={{ background: r.color }} aria-hidden="true" />
+          {r.label}
+        </li>
+      ))}
     </ul>
+  );
+}
+
+/** "Open tray" in the rack view, "Back to rack" inside a tray. */
+function StageActions({ trayKey, view }: { trayKey: string | null; view: string }) {
+  const openTray = useExplorer((s) => s.openTray);
+  const closeTray = useExplorer((s) => s.closeTray);
+  if (!trayKey) return null;
+  const name = model.segmentLabel(model.parsePath(trayKey)![0]!);
+  return (
+    <div className="stage-actions">
+      {view === 'tray' ? (
+        <button type="button" onClick={closeTray}>
+          ← Back to rack
+        </button>
+      ) : (
+        <button type="button" onClick={openTray}>
+          Open {name}
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -59,6 +88,9 @@ export default function App() {
   const listOpen = useExplorer((s) => s.listOpen);
   const setListOpen = useExplorer((s) => s.setListOpen);
   const selected = useExplorer((s) => s.selected);
+  const view = useExplorer((s) => s.view);
+  const trayKey = trayKeyOf(selected, model);
+  const inTray = view === 'tray' && trayKey !== null;
   useKeyboard();
   useEffect(() => syncUrl(), []);
 
@@ -115,13 +147,25 @@ export default function App() {
               }
             >
               <Suspense fallback={<p className="notice">Loading 3D view…</p>}>
-                <RackScene />
+                <Scene />
               </Suspense>
             </ErrorBoundary>
-            <Legend />
+            <Legend trayId={inTray ? trayKey!.split('.')[0]! : null} />
+            <StageActions trayKey={trayKey} view={view} />
             <p className="hint" id="stage-hint">
-              <span className="hint-long">Click a unit · drag to rotate · scroll or pinch to zoom · ↑ ↓ to step · Esc to go back</span>
-              <span className="hint-short">Tap a unit · drag to rotate · pinch to zoom</span>
+              {inTray ? (
+                <>
+                  <span className="hint-long">Click a part · drag to rotate · scroll or pinch to zoom · ↑ ↓ to step · Esc to go back</span>
+                  <span className="hint-short">Tap a part · drag to rotate · pinch to zoom</span>
+                </>
+              ) : (
+                <>
+                  <span className="hint-long">
+                    Click a unit, click again to open a compute tray · drag to rotate · ↑ ↓ to step · Enter to open · Esc to go back
+                  </span>
+                  <span className="hint-short">Tap a unit, tap again to open · drag to rotate</span>
+                </>
+              )}
             </p>
           </section>
         )}

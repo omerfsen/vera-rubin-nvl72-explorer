@@ -43,3 +43,50 @@ export const TYPE_COLORS: Partial<Record<ComponentType, string>> = {
 
 export const HOVER_COLOR = '#d6c89a';
 export const SELECTED_COLOR = '#38bdf8';
+
+// ---- tray interior ------------------------------------------------------
+// The open tray is drawn larger than in the rack so its parts are easy to
+// click. Proportions follow a 1 RU, 19-inch tray; all of it is illustrative.
+export const TRAY_WIDTH = 1.2;
+export const TRAY_DEPTH = 1.9;
+export const TRAY_HEIGHT = 0.11;
+
+/** Colour per part type inside a tray. Ports are coloured by connector type. */
+export const PART_COLORS: Partial<Record<ComponentType, string>> = {
+  gpu: '#3fa796',
+  cpu: '#4f7cc9',
+  memory: '#c9b458',
+  nic: '#d08a3a',
+  dpu: '#8a6fd1',
+  drive: '#8796a6',
+  manifold: '#3aa0c4',
+  board: '#5d8a52',
+  bmc: '#b05f8a',
+  controller: '#9c6aa8',
+  battery: '#c4573f',
+};
+
+export const PORT_COLORS: Record<string, string> = {
+  OSFP: '#d8c48a',
+  QSFP: '#8fb2e6',
+  RJ45: '#6fbf5c',
+};
+
+/** Placement of one tray slot in scene units: centre and size. */
+export function slotBox(slot: { face: 'top' | 'front'; x: number; z: number; y?: number; w: number; d: number; h: number }): {
+  position: [number, number, number];
+  size: [number, number, number];
+} {
+  if (slot.face === 'front') {
+    const height = slot.h * TRAY_HEIGHT;
+    return {
+      position: [slot.x * TRAY_WIDTH, (slot.y ?? 0.5) * TRAY_HEIGHT, TRAY_DEPTH / 2 + 0.012],
+      size: [slot.w * TRAY_WIDTH, height, 0.024],
+    };
+  }
+  const height = slot.h * TRAY_WIDTH;
+  return {
+    position: [slot.x * TRAY_WIDTH, 0.01 + height / 2, slot.z * TRAY_DEPTH],
+    size: [slot.w * TRAY_WIDTH, height, slot.d * TRAY_DEPTH],
+  };
+}

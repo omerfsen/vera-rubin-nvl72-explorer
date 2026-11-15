@@ -63,6 +63,23 @@ is numbered from the top down, which is an assumption recorded in
 exceptions: power shelves are numbered from the bottom up, as in the service
 manual.
 
+## Tray interiors
+
+`trayLayouts.<tray component id>` describes a schematic interior: a list of
+`slots`, each placing one instance of a part inside the tray
+(`{ component, index?, label?, face, x, z, y?, w, d, h }`). `face: "top"`
+parts lie inside the tray (x and z run from -0.5 to 0.5 across width and
+depth, +z is the front); `face: "front"` parts sit in the front panel (y from
+0 at the bottom to 1 at the top). `label` holds NVIDIA's name for the
+instance, such as `GPU0 (HPM_L GPU_0)`. Components with no stated count are
+placed without an `index`. Parts that cannot be placed are listed in
+`notPlaced` with a reason. The whole layout carries `assumed: true`: positions
+follow the arrangement in NVIDIA's figures but are not measurements.
+
+Tests require every part inside the tray to be placed or listed in
+`notPlaced`, every instance number to be within its count, and every slot to
+resolve to a selectable path.
+
 ## Selection paths and URLs
 
 A selection is a path of component ids below the rack, each with an optional
@@ -73,6 +90,8 @@ instance number:
 - `compute-tray.7/rubin-gpu.2`: GPU 2 in compute tray 7
 
 The path goes in the URL as `?select=...` and the list pane as `list=1`. The
-view goes in as `?view=...` and is left out when it is the default (`rack`).
+view goes in as `?view=...` (`tray` while a compute tray is open) and is left
+out when it is the default (`rack`). `view=tray` without a selection inside a
+numbered compute tray falls back to the rack.
 Invalid paths fall back to the rack. Other query parameters are left exactly
 as they were.

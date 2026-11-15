@@ -255,6 +255,15 @@ button { font: inherit; color: inherit; }
   text-align: left;
 }
 .parts button:hover { border-color: var(--accent); }
+.open-tray {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--surface-2);
+  cursor: pointer;
+  font-weight: 600;
+}
 
 .official-figure { margin: 10px 0 0; }
 .official-figure img { max-width: 100%; border-radius: 6px; background: #fff; }
@@ -279,4 +288,36 @@ button { font: inherit; color: inherit; }
   .list-pane { border-right: 0; border-bottom: 1px solid var(--border); max-height: 40vh; }
   .panel { border-left: 0; border-top: 1px solid var(--border); }
   .search { max-width: none; }
+}
+
+/* ---- tray view ---- */
+.stage-actions { position: absolute; top: 10px; left: 12px; display: flex; gap: 8px; }
+.stage-actions button {
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent);
+  background: var(--surface-2);
+  cursor: pointer;
+  min-height: 32px;
+}
+.legend-tray { max-height: calc(100% - 60px); overflow-y: auto; pointer-events: auto; }
+.tray-label span, .part-tooltip span {
+  display: block;
+  white-space: nowrap;
+  font-size: 12px;
+  pointer-events: none;
+  user-select: none;
+}
+.tray-label span { color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.part-tooltip span {
+  color: var(--text);
+  background: rgb(22 26 32 / 0.92);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.tray-label, .part-tooltip { pointer-events: none; }
+@media (max-width: 760px) {
+  .stage-actions { top: auto; bottom: 8px; left: 8px; }
+  .legend-tray { max-height: 45%; }
 }

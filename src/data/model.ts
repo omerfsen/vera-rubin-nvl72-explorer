@@ -171,8 +171,30 @@ export function createModel(topology: Topology) {
     return segment.index === undefined ? name : `${name} ${segment.index}`;
   }
 
+  // ---- tray interiors ---------------------------------------------------
+
+  function trayLayout(componentId: string) {
+    return topology.trayLayouts?.[componentId];
+  }
+
+  /** Path of a slot's part inside a tray, e.g. "connectx-9/ct-port-cx9-osfp" or "rubin-gpu.2". */
+  function slotPathWithin(trayId: string, slot: { component: string; index?: number }): string {
+    const chain = [...ancestorsOf(slot.component), slot.component];
+    const below = chain.slice(chain.indexOf(trayId) + 1);
+    const path = below.join('/');
+    return slot.index === undefined ? path : `${path}.${slot.index}`;
+  }
+
+  /** The slot drawn for a path inside a tray, if any. */
+  function slotFor(trayId: string, within: string) {
+    return trayLayout(trayId)?.slots.find((s) => slotPathWithin(trayId, s) === within);
+  }
+
   return {
     topology,
+    trayLayout,
+    slotPathWithin,
+    slotFor,
     getComponent,
     getNetwork,
     childrenOf,
