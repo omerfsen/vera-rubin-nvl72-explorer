@@ -58,6 +58,7 @@ npm run dev          # http://localhost:5173/
 npm test             # schema, data integrity, model, URL and UI tests
 npm run typecheck
 npm run build        # static site in dist/
+npm run e2e          # real browser tests (Playwright, Chromium with software WebGL)
 npm run preview      # serve dist/ locally
 ```
 
