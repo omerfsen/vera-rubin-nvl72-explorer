@@ -1,0 +1,142 @@
+import { lazy, Suspense, useEffect, useState } from 'react';
+import { Breadcrumb } from './components/Breadcrumb';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { RackList } from './components/RackList';
+import { Search } from './components/Search';
+import { SidePanel } from './components/SidePanel';
+import { hasWebGL } from './lib/webgl';
+import { model } from './data';
+import { TYPE_COLORS } from './scenes/geometry';
+import { syncUrl, useExplorer } from './state/store';
+
+const RackScene = lazy(() => import('./scenes/RackScene'));
+
+function isTyping(target: EventTarget | null): boolean {
+  return target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
+}
+
+function useKeyboard() {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (isTyping(e.target) || e.altKey || e.ctrlKey || e.metaKey || e.defaultPrevented) return;
+      const s = useExplorer.getState();
+      // Arrow keys step through the rack only while the 3D view (or nothing)
+      // has focus, so they still scroll the panel and the list elsewhere.
+      const target = e.target as HTMLElement | null;
+      const onStage = target === document.body || target?.id === 'rack-stage';
+      if (onStage && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        e.preventDefault();
+        s.stepRackUnit(e.key === 'ArrowDown' ? 1 : -1);
+      } else if (e.key === 'Escape' && s.selected !== '') {
+        const parts = s.selected.split('/');
+        s.select(parts.slice(0, -1).join('/'));
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+}
+
+function Legend() {
+  const types = [...new Set(model.rackUnits.map((u) => u.componentId))];
+  return (
+    <ul className="legend" aria-label="Legend">
+      {types.map((id) => {
+        const c = model.getComponent(id);
+        return (
+          <li key={id}>
+            <span className="swatch" style={{ background: TYPE_COLORS[c?.type ?? 'rack'] }} aria-hidden="true" />
+            {c?.name}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+export default function App() {
+  const [webgl] = useState(hasWebGL);
+  const listOpen = useExplorer((s) => s.listOpen);
+  const setListOpen = useExplorer((s) => s.setListOpen);
+  const selected = useExplorer((s) => s.selected);
+  useKeyboard();
+  useEffect(() => syncUrl(), []);
+
+  const showList = !webgl || listOpen;
+
+  return (
+    <div className="app">
+      <header className="topbar">
+        <div className="brand">
+          <h1>Vera Rubin NVL72 Explorer</h1>
+          <p className="tagline">Unofficial learning tool · not affiliated with NVIDIA</p>
+        </div>
+        <Search />
+        {webgl && (
+          <button
+            type="button"
+            className="toggle"
+            aria-expanded={listOpen}
+            aria-controls="list-pane"
+            onClick={() => setListOpen(!listOpen)}
+          >
+            {listOpen ? 'Hide list' : 'List view'}
+          </button>
+        )}
+      </header>
+
+      <Breadcrumb />
+
+      <main className={!webgl ? 'layout list-only' : showList ? 'layout with-list' : 'layout'}>
+        {showList && (
+          <aside className="list-pane" id="list-pane" aria-label="Rack as a list">
+            {!webgl && (
+              <p className="notice" role="status">
+                WebGL is not available in this browser, so the rack is shown as a list.
+              </p>
+            )}
+            <RackList />
+          </aside>
+        )}
+
+        {webgl && (
+          <section
+            className="stage"
+            id="rack-stage"
+            tabIndex={0}
+            aria-label="Rack view. Use the up and down arrow keys to step through the units."
+            aria-describedby="stage-hint"
+          >
+            <ErrorBoundary
+              fallback={
+                <p className="notice" role="alert">
+                  The 3D view could not start. Use the list view instead.
+                </p>
+              }
+            >
+              <Suspense fallback={<p className="notice">Loading 3D view…</p>}>
+                <RackScene />
+              </Suspense>
+            </ErrorBoundary>
+            <Legend />
+            <p className="hint" id="stage-hint">
+              <span className="hint-long">Click a unit · drag to rotate · scroll or pinch to zoom · ↑ ↓ to step · Esc to go back</span>
+              <span className="hint-short">Tap a unit · drag to rotate · pinch to zoom</span>
+            </p>
+          </section>
+        )}
+
+        <section className={selected ? 'panel open' : 'panel'} aria-label="Details">
+          <SidePanel />
+        </section>
+      </main>
+
+      <footer className="footer">
+        Data: {model.topology.meta.document.title} ({model.topology.meta.document.date}) and{' '}
+        {model.topology.meta.serviceManual?.title} ({model.topology.meta.serviceManual?.date}). Unofficial; not affiliated
+        with or endorsed by NVIDIA. NVIDIA, DGX, Vera, Rubin, NVLink, NVSwitch, ConnectX and BlueField are trademarks
+        of NVIDIA Corporation. 3D geometry is original and illustrative.
+      </footer>
+    </div>
+  );
+}

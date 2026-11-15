@@ -1,0 +1,626 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/omerfsen/vera-rubin-nvl72-explorer/data/nvl72-topology.schema.json",
+  "title": "NVIDIA DGX Vera Rubin NVL72 topology",
+  "description": "Components, networks, rack layout and connections of a DGX VR NVL72 rack. Every fact carries a source; anything the guide does not state is marked assumed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "meta",
+    "networks",
+    "components",
+    "rackLayout",
+    "connections"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "document",
+        "retrieved"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "document": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "date",
+            "urls"
+          ],
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date"
+            },
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              },
+              "minItems": 1
+            }
+          }
+        },
+        "retrieved": {
+          "type": "string",
+          "format": "date"
+        },
+        "serviceManual": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "date",
+            "urls"
+          ],
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date"
+            },
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              },
+              "minItems": 1
+            }
+          }
+        }
+      }
+    },
+    "networks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/network"
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/component"
+      }
+    },
+    "rackLayout": {
+      "$ref": "#/$defs/rackLayout"
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/connection"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "description": "Lowercase kebab-case. Dots and slashes are reserved for instance paths (compute-tray.7/gpu.2).",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "section"
+      ],
+      "properties": {
+        "url": {
+          "description": "A page of the DGX VR NVL72 User Guide or Service Manual, with the section anchor, or one of their PDFs.",
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://docs\\.nvidia\\.com/dgx/(dgxvr-user-guide/((hardware|networking|storage)\\.html(#[a-z0-9-]+)?|dgxvr-user-guide\\.pdf)|dgxvr-service-manual/((index|introduction|psu-replacement|pmm-replacement|cache-replacement|compute-battery-replacement|switch-battery-replacement)\\.html(#[a-z0-9-]+)?|dgxvr-service-manual\\.pdf))$"
+        },
+        "section": {
+          "type": "string",
+          "pattern": "\\S",
+          "description": "Section number and title, plus table or figure."
+        },
+        "figure": {
+          "description": "One of the 13 official figure files under https://docs.nvidia.com/dgx/dgxvr-user-guide/_images/. Only hot-linked, and only when SHOW_OFFICIAL_FIGURES is on.",
+          "enum": [
+            "hardware-rack-configuration-VRNVL72.png",
+            "hardware-rack-rear-VRNVL72.png",
+            "hardware-compute-tray-vrnvl72.png",
+            "hardware-compute-tray-block-diagram-VRNVL72.png",
+            "hardware-compute-tray-top-VRNVL72.png",
+            "hardware-compute-tray-front-VRNVL72.png",
+            "hardware-nvlink-switch-tray-VRNVL72.png",
+            "hardware-power-shelf-VRNVL72.png",
+            "hardware-tor-ethernet-VRNVL72.png",
+            "network-port-numbers-VRNVL72.png",
+            "network-port-types-VRNVL72.png",
+            "network-port-labels-1-VRNVL72.png",
+            "network-port-labels-2-VRNVL72.png"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "description": "A fact needs a source. assumed=true means the guide does not state it; a note is then required.",
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "assumed": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "source"
+      ],
+      "if": {
+        "properties": {
+          "assumed": {
+            "const": true
+          }
+        },
+        "required": [
+          "assumed"
+        ]
+      },
+      "then": {
+        "required": [
+          "note"
+        ]
+      }
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "value"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "value": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "unit": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/source",
+          "description": "Overrides the component source for this one spec."
+        },
+        "assumed": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "if": {
+        "properties": {
+          "assumed": {
+            "const": true
+          }
+        },
+        "required": [
+          "assumed"
+        ]
+      },
+      "then": {
+        "required": [
+          "note"
+        ]
+      }
+    },
+    "network": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        },
+        {
+          "if": {
+            "properties": {
+              "fabric": {
+                "type": "string"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "fabricSource"
+            ]
+          }
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "id",
+        "number",
+        "name",
+        "description",
+        "fabric"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "number": {
+          "description": "Number used in the guide's network list and port figure.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "fabric": {
+          "description": "null when the guide does not name the fabric for this network.",
+          "enum": [
+            "InfiniBand",
+            "Ethernet",
+            null
+          ]
+        },
+        "fabricSource": {
+          "$ref": "#/$defs/source",
+          "description": "Where the fabric is stated, when that is not the network's own source."
+        }
+      }
+    },
+    "componentType": {
+      "enum": [
+        "rack",
+        "compute-tray",
+        "switch-tray",
+        "power-shelf",
+        "tor-switch",
+        "cpu",
+        "gpu",
+        "nic",
+        "dpu",
+        "drive",
+        "switch-asic",
+        "psu",
+        "bmc",
+        "controller",
+        "port",
+        "cable-cartridge",
+        "manifold",
+        "bus-bar",
+        "battery"
+      ]
+    },
+    "component": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "id",
+        "type",
+        "name",
+        "count",
+        "parent",
+        "description",
+        "function",
+        "networks",
+        "specs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "$ref": "#/$defs/componentType"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "count": {
+          "description": "Instances per parent instance. null when the guide does not state it.",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "parent": {
+          "description": "Parent component id, or null for the rack itself.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "function": {
+          "type": "string",
+          "minLength": 1
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "uniqueItems": true
+        },
+        "specs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/spec"
+          }
+        },
+        "rearSide": {
+          "description": "Sits at the rear of the rack.",
+          "type": "boolean"
+        },
+        "textSources": {
+          "description": "Extra sources for facts in description and function that the main source does not state.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "rackLayout": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "order",
+        "groups"
+      ],
+      "properties": {
+        "order": {
+          "const": "top-to-bottom"
+        },
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "component",
+              "count"
+            ],
+            "properties": {
+              "component": {
+                "$ref": "#/$defs/id"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "heightsRU": {
+          "description": "Height per component id in rack units. Each value carries its own provenance.",
+          "type": "object",
+          "additionalProperties": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/provenance"
+              }
+            ],
+            "type": "object",
+            "unevaluatedProperties": false,
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
+          }
+        },
+        "numbering": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/provenance"
+            }
+          ],
+          "type": "object",
+          "unevaluatedProperties": false,
+          "required": [
+            "scheme"
+          ],
+          "properties": {
+            "scheme": {
+              "const": "top-to-bottom-per-type"
+            },
+            "overrides": {
+              "type": "object",
+              "description": "Per-type numbering that differs from the default scheme.",
+              "additionalProperties": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/provenance"
+                  }
+                ],
+                "type": "object",
+                "unevaluatedProperties": false,
+                "required": [
+                  "order"
+                ],
+                "properties": {
+                  "order": {
+                    "enum": [
+                      "top-to-bottom",
+                      "bottom-to-top"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "connection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/provenance"
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "network"
+              }
+            }
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "to"
+                ]
+              },
+              {
+                "required": [
+                  "network"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "not-connected"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "to"
+                  ]
+                },
+                {
+                  "required": [
+                    "network"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "nvlink",
+                  "power",
+                  "cooling"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "to"
+            ],
+            "not": {
+              "required": [
+                "network"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": [
+        "id",
+        "from",
+        "kind",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "from": {
+          "$ref": "#/$defs/id",
+          "description": "Component id."
+        },
+        "to": {
+          "$ref": "#/$defs/id",
+          "description": "Component id. Omit for a port that the guide marks as not connected."
+        },
+        "network": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "network",
+            "not-connected",
+            "nvlink",
+            "power",
+            "cooling"
+          ]
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
