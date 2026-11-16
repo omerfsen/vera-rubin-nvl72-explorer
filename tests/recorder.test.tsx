@@ -2,7 +2,32 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Recorder } from '../src/components/Recorder';
-import { recordingName, supportedTypes } from '../src/lib/recorder';
+import { recordingName, recordingType, supportedTypes } from '../src/lib/recorder';
+
+const conv = vi.hoisted(() => ({ fail: new Set<string>(), made: [] as string[] }));
+vi.mock('mediabunny', () => {
+  class Mp4OutputFormat { kind = 'mp4'; }
+  class WebMOutputFormat { kind = 'webm'; }
+  class BufferTarget { buffer: ArrayBuffer | null = null; }
+  class Output { constructor(public o: { format: { kind: string }; target: BufferTarget }) {} }
+  class Conversion {
+    isValid = true;
+    onProgress?: (p: number) => void;
+    constructor(private out: Output) {}
+    static async init({ output }: { output: Output }) { return new Conversion(output); }
+    async execute() {
+      const kind = this.out.o.format.kind;
+      if (conv.fail.has(kind)) throw new Error('boom');
+      conv.made.push(kind);
+      this.onProgress?.(1);
+      this.out.o.target.buffer = new ArrayBuffer(4);
+    }
+  }
+  return {
+    Input: class {}, BlobSource: class {}, ALL_FORMATS: [], QUALITY_HIGH: {},
+    Mp4OutputFormat, WebMOutputFormat, BufferTarget, Output, Conversion,
+  };
+});
 
 /** A MediaRecorder that hands back one chunk on stop. */
 function fakeMedia(mp4: boolean) {
@@ -39,6 +64,8 @@ function fakeMedia(mp4: boolean) {
 }
 
 afterEach(() => {
+  conv.fail.clear();
+  conv.made.length = 0;
   cleanup();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
@@ -54,6 +81,12 @@ describe('recorder', () => {
     expect(supportedTypes(() => false)).toEqual({});
   });
 
+  it('records WebM when it can, and the browser MP4 only without WebM', () => {
+    expect(recordingType({ webm: 'video/webm', mp4: 'video/mp4' })).toEqual({ format: 'webm', mimeType: 'video/webm' });
+    expect(recordingType({ mp4: 'video/mp4' })).toEqual({ format: 'mp4', mimeType: 'video/mp4' });
+    expect(recordingType({})).toBeNull();
+  });
+
   it('names files by date and format', () => {
     expect(recordingName('mp4', new Date(2026, 10, 16, 9, 5, 7))).toBe('vr-nvl72-20261116-090507.mp4');
   });
@@ -63,27 +96,40 @@ describe('recorder', () => {
     expect(screen.queryByRole('button', { name: 'Record' })).toBeNull();
   });
 
-  it('records and saves both WebM and MP4', async () => {
+  it('records WebM, then saves a rewritten WebM and a converted MP4', async () => {
     const m = fakeMedia(true);
     render(<Recorder />);
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Record' })));
     expect(m.getDisplayMedia).toHaveBeenCalledOnce();
-    expect(m.made).toEqual(['video/webm;codecs=vp9', 'video/mp4;codecs=avc1.42E01E']);
+    expect(m.made).toEqual(['video/webm;codecs=vp9']);
     await act(async () => fireEvent.click(screen.getByRole('button', { name: /Stop and save/ })));
     expect(m.saved).toHaveLength(2);
     expect(m.saved[0]).toMatch(/^vr-nvl72-\d{8}-\d{6}\.webm$/);
     expect(m.saved[1]).toMatch(/\.mp4$/);
     expect(m.track.stop).toHaveBeenCalled();
+    expect(conv.made).toEqual(['webm', 'mp4']);
     expect(screen.getByRole('status').textContent).toBe('Saved: WEBM, MP4.');
   });
 
-  it('saves WebM only and says so when MP4 is not supported', async () => {
-    const m = fakeMedia(false);
+  it('saves WebM only and says so when the MP4 conversion fails', async () => {
+    const m = fakeMedia(true);
+    conv.fail.add('mp4');
     render(<Recorder />);
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Record' })));
     await act(async () => fireEvent.click(screen.getByRole('button', { name: /Stop and save/ })));
     expect(m.saved).toHaveLength(1);
+    expect(m.saved[0]).toMatch(/\.webm$/);
     expect(screen.getByRole('status').textContent).toContain('only WebM');
+  });
+
+  it('keeps the raw WebM when the WebM rewrite fails', async () => {
+    const m = fakeMedia(true);
+    conv.fail.add('webm');
+    render(<Recorder />);
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Record' })));
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: /Stop and save/ })));
+    expect(m.saved).toHaveLength(2);
+    expect(conv.made).toEqual(['mp4']);
   });
 
   it('reports a refused screen share', async () => {

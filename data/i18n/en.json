@@ -14,9 +14,10 @@
     "record": {
       "start": "Record",
       "stop": "Stop and save ({time})",
+      "converting": "Making MP4… {percent}%",
       "hint": "Record this tab as a video. It is saved on your computer as WebM and MP4; nothing is uploaded.",
       "saved": "Saved: {files}.",
-      "noMp4": "This browser cannot record MP4, so only WebM was saved.",
+      "noMp4": "This browser could not make the MP4, so only WebM was saved.",
       "denied": "Recording did not start: screen sharing was not allowed."
     },
     "site": {

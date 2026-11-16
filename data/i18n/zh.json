@@ -14,9 +14,10 @@
     "record": {
       "start": "录制",
       "stop": "停止并保存（{time}）",
+      "converting": "正在生成 MP4…{percent}%",
       "hint": "将此标签页录制为视频，以 WebM 和 MP4 格式保存在你的电脑上，不会上传任何内容。",
       "saved": "已保存：{files}。",
-      "noMp4": "此浏览器无法录制 MP4，因此只保存了 WebM。",
+      "noMp4": "此浏览器无法生成 MP4，因此只保存了 WebM。",
       "denied": "录制未开始：未允许屏幕共享。"
     },
     "site": {
