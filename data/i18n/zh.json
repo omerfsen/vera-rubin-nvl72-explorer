@@ -84,7 +84,9 @@
       "layers": "图层",
       "showOrHide": "显示或隐藏{hint}",
       "connectionTypes": "连接类型",
-      "dashed": "虚线：假定，详见面板"
+      "dashed": "虚线：假定，详见面板",
+      "explodedView": "爆炸视图",
+      "explodedViewHint": "按层分开显示各个部件"
     },
     "layers": {
       "structure": "结构",
