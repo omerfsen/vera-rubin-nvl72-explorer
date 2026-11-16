@@ -519,3 +519,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .command-item { margin: 8px 0 12px; font-size: 0.86rem; }
 .safety { border-left: 3px solid var(--danger); padding-left: 10px; }
 .proc-start { margin-bottom: 6px; }
+
+.recorder { display: flex; align-items: center; gap: 6px; }
+.recorder .toggle.recording { border-color: var(--danger); color: var(--danger); }
+.recorder [role='status']:empty { display: none; }

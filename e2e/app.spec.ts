@@ -47,6 +47,13 @@ test.describe('rack', () => {
 });
 
 test.describe('operator features', () => {
+  test('shows Record in the top bar, but not in an embed', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('button', { name: 'Record' })).toBeVisible();
+    await page.goto('/?embed=1');
+    await expect(page.getByRole('button', { name: 'Record' })).toHaveCount(0);
+  });
+
   test('search finds a cage by its RDMA device and shows its host names', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('combobox', { name: 'Search parts' }).fill('mlx5_4');

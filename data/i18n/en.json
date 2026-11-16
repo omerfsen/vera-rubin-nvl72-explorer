@@ -11,6 +11,14 @@
       "dark": "Dark",
       "system": "System"
     },
+    "record": {
+      "start": "Record",
+      "stop": "Stop and save ({time})",
+      "hint": "Record this tab as a video. It is saved on your computer as WebM and MP4; nothing is uploaded.",
+      "saved": "Saved: {files}.",
+      "noMp4": "This browser cannot record MP4, so only WebM was saved.",
+      "denied": "Recording did not start: screen sharing was not allowed."
+    },
     "site": {
       "title": "Vera Rubin NVL72 Explorer",
       "tagline": "Every fact linked to NVIDIA's own documentation · unofficial, not affiliated with NVIDIA",

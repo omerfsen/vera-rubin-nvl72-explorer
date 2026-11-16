@@ -11,6 +11,14 @@
       "dark": "深色",
       "system": "跟随系统"
     },
+    "record": {
+      "start": "录制",
+      "stop": "停止并保存（{time}）",
+      "hint": "将此标签页录制为视频，以 WebM 和 MP4 格式保存在你的电脑上，不会上传任何内容。",
+      "saved": "已保存：{files}。",
+      "noMp4": "此浏览器无法录制 MP4，因此只保存了 WebM。",
+      "denied": "录制未开始：未允许屏幕共享。"
+    },
     "site": {
       "title": "Vera Rubin NVL72 浏览器",
       "tagline": "每项事实都链接到 NVIDIA 自己的文档 · 非官方，与 NVIDIA 无关联",

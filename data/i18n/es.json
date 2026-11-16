@@ -11,6 +11,14 @@
       "dark": "Oscuro",
       "system": "Sistema"
     },
+    "record": {
+      "start": "Grabar",
+      "stop": "Detener y guardar ({time})",
+      "hint": "Graba esta pestaña como vídeo. Se guarda en tu ordenador en WebM y MP4; no se sube nada.",
+      "saved": "Guardado: {files}.",
+      "noMp4": "Este navegador no puede grabar MP4, así que solo se guardó WebM.",
+      "denied": "La grabación no empezó: no se permitió compartir la pantalla."
+    },
     "site": {
       "title": "Explorador Vera Rubin NVL72",
       "tagline": "Cada dato enlazado a la propia documentación de NVIDIA · no oficial, sin relación con NVIDIA",
