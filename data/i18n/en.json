@@ -290,6 +290,12 @@
       "linkCopied": "Link copied.",
       "embedCopied": "Embed code copied."
     },
+    "readAloud": {
+      "short": "Read aloud",
+      "play": "Read aloud: {name}",
+      "stopShort": "Stop",
+      "stop": "Stop reading"
+    },
     "partLink": {
       "short": "Copy link",
       "button": "Copy link to {name}",

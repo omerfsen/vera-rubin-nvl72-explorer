@@ -911,3 +911,6 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
   .first-visit { top: 70px; bottom: auto; left: 8px; right: 8px; width: auto; padding: 6px 10px; font-size: 0.76rem; z-index: 35; max-height: calc(100% - 78px); overflow-y: auto; box-sizing: border-box; }
   .first-visit ol { margin-bottom: 6px; }
 }
+.read-aloud[aria-pressed='true'] { border-color: var(--accent); }
+/* Wraps panel parts that Read aloud skips; takes no space of its own. */
+.no-read { display: contents; }

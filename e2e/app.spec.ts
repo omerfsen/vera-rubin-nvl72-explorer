@@ -99,6 +99,44 @@ test.describe('rack', () => {
 });
 
 test.describe('operator features', () => {
+  test('Read aloud speaks the side panel only after a press, and stops', async ({ page }) => {
+    // Headless Chromium has no voices, so record what the page asks the browser to say.
+    await page.addInitScript(() => {
+      const said: { text: string; lang: string }[] = [];
+      (window as unknown as { said: typeof said }).said = said;
+      class U {
+        lang = '';
+        voice: unknown = null;
+        onend: (() => void) | null = null;
+        onerror: (() => void) | null = null;
+        constructor(public text: string) {}
+      }
+      const synth = {
+        getVoices: () => [{ lang: 'en-US', name: 'Test', localService: true, default: true, voiceURI: 'test' }],
+        speak: (u: U) => said.push({ text: u.text, lang: u.lang }),
+        cancel: () => said.push({ text: '<cancel>', lang: '' }),
+        addEventListener: () => {},
+        removeEventListener: () => {},
+      };
+      Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true });
+      Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: U, configurable: true });
+    });
+    await page.goto('/?select=compute-tray.2');
+    await rackReady(page);
+    const said = () => page.evaluate(() => (window as unknown as { said: { text: string; lang: string }[] }).said);
+    expect((await said()).filter((u) => u.text !== '<cancel>')).toEqual([]);
+    await page.getByRole('button', { name: 'Read aloud: Compute tray 2' }).click();
+    const spoken = (await said()).filter((u) => u.text !== '<cancel>');
+    const text = spoken.map((u) => u.text).join(' ');
+    expect(text).toContain('Compute tray 2');
+    expect(text).toContain('What it is');
+    expect(text).not.toContain('Copy link');
+    expect(spoken.every((u) => u.lang === 'en-US')).toBe(true);
+    await page.getByRole('button', { name: 'Stop reading' }).click();
+    expect((await said()).at(-1)?.text).toBe('<cancel>');
+    await expect(page.getByRole('button', { name: 'Read aloud: Compute tray 2' })).toHaveAttribute('aria-pressed', 'false');
+  });
+
   test('collapses and expands the details panel, and remembers it', async ({ page }) => {
     await page.goto('/?select=compute-tray.7');
     const panel = page.getByRole('region', { name: 'Details' });

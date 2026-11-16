@@ -131,6 +131,13 @@ https://verarubin-nvl72.faruk.net. https://vr-nvl72.faruk.net redirects there.
   the clipboard instead, where the browser allows it. It is drawn from the
   page itself: no screen-sharing prompt, nothing uploaded. Build with
   `VITE_SHOW_SCREENSHOT=false` to remove it.
+- **Read the panel aloud.** Read aloud, next to Copy link, reads the side
+  panel for the selected part (what it is, what it does, how many, networks,
+  specs, software and connections) with the browser's own speech, in the page
+  language. It speaks only after a press; a second press, another part or
+  another language stops it. Commands, sources and the document list are not
+  read. Nothing is uploaded. It is hidden when the browser has no voice for
+  the language. Build with `VITE_SHOW_READ_ALOUD=false` to remove it.
 
 ## Official figures (off by default)
 

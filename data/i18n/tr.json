@@ -290,6 +290,12 @@
       "linkCopied": "Bağlantı kopyalandı.",
       "embedCopied": "Gömme kodu kopyalandı."
     },
+    "readAloud": {
+      "short": "Sesli oku",
+      "play": "Sesli oku: {name}",
+      "stopShort": "Durdur",
+      "stop": "Okumayı durdur"
+    },
     "partLink": {
       "short": "Bağlantıyı kopyala",
       "button": "Bağlantıyı kopyala: {name}",
