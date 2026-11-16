@@ -18,7 +18,10 @@
       "hint": "Graba esta pestaña como vídeo. Se guarda en tu ordenador en WebM y MP4; no se sube nada.",
       "saved": "Guardado: {files}.",
       "noMp4": "Este navegador no pudo crear el MP4, así que solo se guardó WebM.",
-      "denied": "La grabación no empezó: no se permitió compartir la pantalla."
+      "denied": "La grabación no empezó: no se permitió compartir la pantalla.",
+      "voice": "Voz",
+      "voiceHint": "Graba también tu voz con el micrófono. El navegador pedirá permiso.",
+      "micDenied": "No se permitió el micrófono, así que la grabación no tiene voz."
     },
     "detailsToggle": {
       "collapse": "Contraer detalles",

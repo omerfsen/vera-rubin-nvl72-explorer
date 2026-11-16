@@ -13,6 +13,7 @@ export function Recorder() {
   const [seconds, setSeconds] = useState(0);
   const [percent, setPercent] = useState(0);
   const [status, setStatus] = useState('');
+  const [voice, setVoice] = useState(false);
   const rec = useRef<Recording | null>(null);
 
   useEffect(() => {
@@ -30,19 +31,21 @@ export function Recorder() {
     setPercent(0);
     setPhase('converting');
     const raw = await current.stop();
+    const voiceNote = current.voiceDenied ? ' ' + t('record.micDenied') : '';
     const { files, mp4Failed } = await finishRecording(raw, (p) => setPercent(Math.round(p * 100)));
     const at = new Date();
     for (const { format, blob } of files) saveBlob(blob, recordingName(format, at));
     setPhase('idle');
     const names = files.map((f) => f.format.toUpperCase()).join(', ');
-    setStatus(t('record.saved', { files: names }) + (mp4Failed ? ' ' + t('record.noMp4') : ''));
+    setStatus(t('record.saved', { files: names }) + (mp4Failed ? ' ' + t('record.noMp4') : '') + voiceNote);
   };
 
   const start = async () => {
     setStatus('');
     setPhase('starting');
     try {
-      rec.current = await startRecording(() => void finish());
+      rec.current = await startRecording(() => void finish(), { voice });
+      if (rec.current.voiceDenied) setStatus(t('record.micDenied'));
       setSeconds(0);
       setPhase('recording');
     } catch {
@@ -62,6 +65,10 @@ export function Recorder() {
           {phase === 'converting' ? t('record.converting', { percent }) : t('record.start')}
         </button>
       )}
+      <label className="recorder-voice" title={t('record.voiceHint')}>
+        <input type="checkbox" checked={voice} disabled={phase !== 'idle'} onChange={(e) => setVoice(e.target.checked)} />
+        {t('record.voice')}
+      </label>
       <span className="muted small" role="status">{status}</span>
     </div>
   );

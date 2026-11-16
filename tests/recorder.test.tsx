@@ -25,6 +25,7 @@ vi.mock('mediabunny', () => {
   }
   return {
     Input: class {}, BlobSource: class {}, ALL_FORMATS: [], QUALITY_HIGH: {},
+    canEncodeAudio: async () => true,
     Mp4OutputFormat, WebMOutputFormat, BufferTarget, Output, Conversion,
   };
 });
@@ -32,13 +33,17 @@ vi.mock('mediabunny', () => {
 /** A MediaRecorder that hands back one chunk on stop. */
 function fakeMedia(mp4: boolean) {
   const made: string[] = [];
+  const recorded: string[][] = [];
   class FakeRecorder {
     static isTypeSupported = (t: string) => t.startsWith('video/webm') || (mp4 && t.startsWith('video/mp4'));
+    tracks: string[];
     state = 'inactive';
     ondataavailable: ((e: { data: Blob }) => void) | null = null;
     onstop: (() => void) | null = null;
-    constructor(_s: unknown, opts: { mimeType: string }) {
+    constructor(s: { kinds: string[] }, opts: { mimeType: string }) {
       made.push(opts.mimeType);
+      this.tracks = s.kinds;
+      recorded.push(s.kinds);
     }
     start() {
       this.state = 'recording';
@@ -49,18 +54,30 @@ function fakeMedia(mp4: boolean) {
       this.onstop?.();
     }
   }
-  const track = { stop: vi.fn(), addEventListener: vi.fn() };
+  const track = { kind: 'video', stop: vi.fn(), addEventListener: vi.fn() };
   const stream = { getTracks: () => [track], getVideoTracks: () => [track] };
+  const micTrack = { kind: 'audio', stop: vi.fn() };
+  const micStream = { getTracks: () => [micTrack], getAudioTracks: () => [micTrack] };
   const getDisplayMedia = vi.fn().mockResolvedValue(stream);
+  const getUserMedia = vi.fn().mockResolvedValue(micStream);
   vi.stubGlobal('MediaRecorder', FakeRecorder);
-  Object.defineProperty(navigator, 'mediaDevices', { value: { getDisplayMedia }, configurable: true });
+  vi.stubGlobal(
+    'MediaStream',
+    class {
+      kinds: string[];
+      constructor(tracks: { kind: string }[]) {
+        this.kinds = tracks.map((t) => t.kind);
+      }
+    },
+  );
+  Object.defineProperty(navigator, 'mediaDevices', { value: { getDisplayMedia, getUserMedia }, configurable: true });
   const saved: string[] = [];
   URL.createObjectURL = vi.fn(() => 'blob:x');
   URL.revokeObjectURL = vi.fn();
   vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) {
     saved.push(this.download);
   });
-  return { made, saved, getDisplayMedia, track };
+  return { made, recorded, saved, getDisplayMedia, getUserMedia, track, micTrack };
 }
 
 afterEach(() => {
@@ -139,5 +156,40 @@ describe('recorder', () => {
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Record' })));
     expect(screen.getByRole('status').textContent).toContain('not allowed');
     expect(screen.getByRole('button', { name: 'Record' })).toBeTruthy();
+  });
+
+  it('records without the microphone unless Voice is ticked', async () => {
+    const m = fakeMedia(true);
+    render(<Recorder />);
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Record' })));
+    expect(m.getUserMedia).not.toHaveBeenCalled();
+    expect(m.recorded[0]).toEqual(['video']);
+  });
+
+  it('adds the voice track when Voice is ticked, and stops the microphone', async () => {
+    const m = fakeMedia(true);
+    render(<Recorder />);
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Voice' }));
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Record' })));
+    expect(m.getUserMedia).toHaveBeenCalledOnce();
+    expect(m.made).toEqual(['video/webm;codecs=vp9,opus']);
+    expect(m.recorded[0]).toEqual(['video', 'audio']);
+    expect(screen.getByRole('checkbox', { name: 'Voice' })).toHaveProperty('disabled', true);
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: /Stop and save/ })));
+    expect(m.micTrack.stop).toHaveBeenCalled();
+    expect(m.saved).toHaveLength(2);
+  });
+
+  it('records the screen without sound when the microphone is refused', async () => {
+    const m = fakeMedia(true);
+    m.getUserMedia.mockRejectedValueOnce(new Error('NotAllowedError'));
+    render(<Recorder />);
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Voice' }));
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Record' })));
+    expect(m.recorded[0]).toEqual(['video']);
+    expect(screen.getByRole('status').textContent).toContain('no voice');
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: /Stop and save/ })));
+    expect(m.saved).toHaveLength(2);
+    expect(screen.getByRole('status').textContent).toContain('no voice');
   });
 });
