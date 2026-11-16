@@ -47,6 +47,21 @@ test.describe('rack', () => {
 });
 
 test.describe('operator features', () => {
+  test('collapses and expands the details panel, and remembers it', async ({ page }) => {
+    await page.goto('/?select=compute-tray.7');
+    const panel = page.getByRole('region', { name: 'Details' });
+    await expect(panel.getByRole('heading', { name: 'Compute tray 7' })).toBeVisible();
+    const wide = (await panel.boundingBox())!.width;
+    await page.getByRole('button', { name: 'Collapse details' }).click();
+    await expect(panel.getByRole('heading', { name: 'Compute tray 7' })).toBeHidden();
+    await expect.poll(async () => (await panel.boundingBox())!.width).toBeLessThan(60);
+    expect(wide).toBeGreaterThan(250);
+    await page.reload();
+    await expect(page.getByRole('button', { name: 'Expand details' })).toHaveAttribute('aria-expanded', 'false');
+    await page.getByRole('button', { name: 'Expand details' }).click();
+    await expect(panel.getByRole('heading', { name: 'Compute tray 7' })).toBeVisible();
+  });
+
   test('shows Record in the top bar, but not in an embed', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('button', { name: 'Record' })).toBeVisible();

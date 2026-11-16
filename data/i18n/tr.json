@@ -20,6 +20,10 @@
       "noMp4": "Bu tarayıcı MP4 oluşturamadı, yalnızca WebM kaydedildi.",
       "denied": "Kayıt başlamadı: ekran paylaşımına izin verilmedi."
     },
+    "detailsToggle": {
+      "collapse": "Ayrıntıları daralt",
+      "expand": "Ayrıntıları genişlet"
+    },
     "site": {
       "title": "Vera Rubin NVL72 Gezgini",
       "tagline": "Her bilgi NVIDIA'nın kendi belgelerine bağlı · resmi değildir, NVIDIA ile bağlantılı değildir",

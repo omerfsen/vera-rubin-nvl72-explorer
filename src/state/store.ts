@@ -32,6 +32,9 @@ interface ExplorerState {
   themePref: ThemePref;
   theme: Theme;
   setThemePref: (pref: ThemePref) => void;
+  /** Whether the details panel on the right is expanded; remembered per browser. */
+  panelOpen: boolean;
+  setPanelOpen: (open: boolean) => void;
   toggleLayer: (layer: 'structure' | 'parts' | 'links') => void;
   select: (path: string) => void;
   setHovered: (key: string | null) => void;
@@ -55,6 +58,25 @@ const initial =
 const initialLanguage: Lang =
   typeof window === 'undefined' ? 'en' : initialLang(initial.lang, storedLang(), window.navigator?.language);
 
+export const PANEL_STORAGE_KEY = 'nvl72-explorer.panel';
+
+function storedPanelOpen(): boolean {
+  try {
+    return typeof window === 'undefined' || window.localStorage.getItem(PANEL_STORAGE_KEY) !== 'closed';
+  } catch {
+    return true;
+  }
+}
+
+function storePanelOpen(open: boolean): void {
+  try {
+    if (open) window.localStorage.removeItem(PANEL_STORAGE_KEY);
+    else window.localStorage.setItem(PANEL_STORAGE_KEY, 'closed');
+  } catch {
+    // Private mode or blocked storage: the choice lasts for this page only.
+  }
+}
+
 const initialThemePref: ThemePref = typeof window === 'undefined' ? 'system' : storedThemePref();
 
 export const useExplorer = create<ExplorerState>((set, get) => ({
@@ -68,6 +90,11 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   selected: initial.select,
   hovered: null,
   listOpen: initial.list,
+  panelOpen: storedPanelOpen(),
+  setPanelOpen: (open) => {
+    storePanelOpen(open);
+    set({ panelOpen: open });
+  },
   layers: { structure: true, parts: true, links: true },
   network: initial.net ?? '',
   setNetwork: (id) => set({ network: get().network === id ? '' : id }),

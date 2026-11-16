@@ -20,6 +20,10 @@
       "noMp4": "Este navegador no pudo crear el MP4, así que solo se guardó WebM.",
       "denied": "La grabación no empezó: no se permitió compartir la pantalla."
     },
+    "detailsToggle": {
+      "collapse": "Contraer detalles",
+      "expand": "Expandir detalles"
+    },
     "site": {
       "title": "Explorador Vera Rubin NVL72",
       "tagline": "Cada dato enlazado a la propia documentación de NVIDIA · no oficial, sin relación con NVIDIA",
