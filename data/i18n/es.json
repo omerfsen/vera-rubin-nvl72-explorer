@@ -417,6 +417,32 @@
       "again": "Intentar de nuevo",
       "close": "Cerrar",
       "round": "Ronda {seed}: comparte el enlace de esta página para repetir las mismas preguntas."
+    },
+    "guidedTour": {
+      "start": "Empieza aquí",
+      "startHint": "Un recorrido guiado breve por el rack, una pieza cada vez",
+      "aria": "Recorrido guiado",
+      "heading": "Empieza aquí · paso {step} de {total}",
+      "back": "Atrás",
+      "next": "Siguiente",
+      "finish": "Terminar",
+      "exit": "Salir del recorrido",
+      "keys": "Las flechas izquierda y derecha cambian de paso; Escape termina el recorrido.",
+      "whole": "El rack completo",
+      "steps": {
+        "rack": "Este es el rack completo, visto de frente. Selecciona cualquier unidad para ver sus detalles en el panel.",
+        "computeTray": "Esta es una bandeja de cómputo. Sus detalles están abajo y sus piezas aparecen en el panel.",
+        "openTray": "Aquí la bandeja de cómputo está abierta, así puedes ver las piezas de dentro.",
+        "gpu": "Esta es una de las GPU dentro de la bandeja de cómputo.",
+        "cpu": "Esta es una de las CPU dentro de la bandeja de cómputo.",
+        "switchTray": "Esta es una bandeja de conmutación. Se puede abrir igual que una bandeja de cómputo.",
+        "powerShelf": "Este es un estante de alimentación.",
+        "cableCartridge": "Ahora el rack se gira para mostrar la parte trasera. Este es un cartucho de cables.",
+        "manifold": "Este es un colector de refrigeración líquida en la parte trasera.",
+        "busBar": "Esta es la barra colectora en la parte trasera.",
+        "network": "Esta capa resalta las piezas de una red. Elige otra red en la barra de arriba o desactívala.",
+        "sources": "Cada dato aquí enlaza a su sección en los documentos de NVIDIA. Esta página los reúne todos. Aquí termina el recorrido."
+      }
     }
   },
   "content": {

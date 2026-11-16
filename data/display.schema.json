@@ -298,5 +298,62 @@
         }
       }
     }
+,
+    "tour": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "steps"
+      ],
+      "description": "The \"Start here\" guided tour. Presentation only: which part each step selects and which view it shows; captions are UI strings and the facts come from the topology data.",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "view",
+              "target"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][A-Za-z0-9]*$",
+                "description": "Key of the caption under ui.guidedTour.steps."
+              },
+              "view": {
+                "type": "string",
+                "enum": [
+                  "rack",
+                  "rear",
+                  "tray"
+                ]
+              },
+              "target": {
+                "type": "string",
+                "description": "Selection path, \"\" for the rack itself."
+              },
+              "network": {
+                "type": "string",
+                "description": "Network overlay to show, by network id."
+              },
+              "page": {
+                "type": "string",
+                "enum": [
+                  "sources"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

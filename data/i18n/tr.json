@@ -417,6 +417,32 @@
       "again": "Yeniden dene",
       "close": "Kapat",
       "round": "Tur {seed}: aynı soruları yeniden açmak için bu sayfanın bağlantısını paylaşın."
+    },
+    "guidedTour": {
+      "start": "Buradan başla",
+      "startHint": "Rafın kısa rehberli turu, her seferinde bir parça",
+      "aria": "Rehberli tur",
+      "heading": "Buradan başla · adım {step} / {total}",
+      "back": "Geri",
+      "next": "İleri",
+      "finish": "Bitir",
+      "exit": "Turdan çık",
+      "keys": "Sol ve sağ ok tuşları adımlar arasında gezer; Escape turu bitirir.",
+      "whole": "Rafın tamamı",
+      "steps": {
+        "rack": "Bu, önden görülen rafın tamamı. Ayrıntılarını panelde görmek için içindeki herhangi bir birimi seçin.",
+        "computeTray": "Bu bir hesaplama tepsisi. Ayrıntıları aşağıda, parçaları panelde listelenir.",
+        "openTray": "Burada hesaplama tepsisi açıldı; içindeki parçaları görebilirsiniz.",
+        "gpu": "Bu, hesaplama tepsisinin içindeki GPU'lardan biri.",
+        "cpu": "Bu, hesaplama tepsisinin içindeki CPU'lardan biri.",
+        "switchTray": "Bu bir anahtar tepsisi. Hesaplama tepsisi gibi açılabilir.",
+        "powerShelf": "Bu bir güç rafı.",
+        "cableCartridge": "Şimdi raf, arkası görünecek şekilde çevrildi. Bu bir kablo kartuşu.",
+        "manifold": "Bu, arkadaki sıvı soğutma manifoldu.",
+        "busBar": "Bu, arkadaki bara.",
+        "network": "Bu katman tek bir ağdaki parçaları vurgular. Yukarıdaki çubuktan başka bir ağ seçin ya da kapatın.",
+        "sources": "Buradaki her bilgi NVIDIA belgelerindeki bölümüne bağlanır. Bu sayfa hepsini listeler. Tur burada biter."
+      }
     }
   },
   "content": {

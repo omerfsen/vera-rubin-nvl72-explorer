@@ -147,5 +147,22 @@
       "controller",
       "cable-cartridge"
     ]
+  },
+  "tour": {
+    "description": "Steps of the \"Start here\" tour, in order: what each step selects and which view, network overlay or page it shows. Presentation only: each caption is the UI string ui.guidedTour.steps.<id>, and the facts a step shows come from the topology data.",
+    "steps": [
+      { "id": "rack", "view": "rack", "target": "" },
+      { "id": "computeTray", "view": "rack", "target": "compute-tray.1" },
+      { "id": "openTray", "view": "tray", "target": "compute-tray.1" },
+      { "id": "gpu", "view": "tray", "target": "compute-tray.1/rubin-gpu.1" },
+      { "id": "cpu", "view": "tray", "target": "compute-tray.1/vera-cpu.1" },
+      { "id": "switchTray", "view": "rack", "target": "switch-tray.1" },
+      { "id": "powerShelf", "view": "rack", "target": "power-shelf.1" },
+      { "id": "cableCartridge", "view": "rear", "target": "nvlink-cable-cartridge" },
+      { "id": "manifold", "view": "rear", "target": "liquid-cooling-manifold" },
+      { "id": "busBar", "view": "rear", "target": "bus-bar" },
+      { "id": "network", "view": "rack", "target": "", "network": "computenet" },
+      { "id": "sources", "view": "rack", "target": "", "page": "sources" }
+    ]
   }
 }
