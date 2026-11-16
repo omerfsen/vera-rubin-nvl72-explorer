@@ -472,6 +472,56 @@ test.describe('fallbacks and layouts', () => {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
+  // A short phone, three common phones and a phone on its side.
+  for (const [width, height] of [[320, 568], [360, 740], [390, 844], [430, 932], [667, 375]] as const) {
+    test(`the legend stays clear of the network bar and stage controls at ${width}x${height}`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      const legend = page.locator('.legend');
+      /** What the legend overlaps; throws when a control that should be on screen is missing or empty. */
+      const clashes = () =>
+        page.evaluate(() => {
+          const box = (sel: string, required: boolean) => {
+            const r = document.querySelector(sel)?.getBoundingClientRect();
+            if (r && r.width > 0 && r.height > 0) return r;
+            if (required) throw new Error(`${sel} is missing or has no size`);
+            return null;
+          };
+          const own = box('.legend', true)!;
+          const stage = box('.stage', true)!;
+          const hit = ['.network-bar', '.stage-actions', '.camera-presets', '.hint', '.first-visit'].filter((sel) => {
+            const r = box(sel, sel !== '.first-visit');
+            return !!r && own.left < r.right && r.left < own.right && own.top < r.bottom && r.top < own.bottom;
+          });
+          if (own.top < stage.top || own.bottom > stage.bottom || own.left < stage.left || own.right > stage.right) hit.push('outside the stage');
+          return hit;
+        });
+      /** The legend takes keyboard focus exactly when it is long enough to scroll. */
+      const focusMatchesScroll = () =>
+        legend.evaluate((el) => (el.getAttribute('tabindex') === '0') === el.scrollHeight > el.clientHeight + 1);
+
+      // On a first visit the tips box fills the width, so the legend waits for it to close.
+      await page.goto('/');
+      await expect(page.locator('canvas')).toBeVisible({ timeout: 60_000 });
+      await expect(page.locator('.first-visit')).toBeVisible();
+      await expect(legend).toBeHidden();
+      // Escape, not the button: on a short stage the stage buttons sit over the bottom of the box.
+      await page.locator('.first-visit').press('Escape');
+      await expect(page.locator('.first-visit')).toHaveCount(0);
+
+      // The long rack legend, the language with the longest labels, a network, and a tray.
+      for (const url of ['/', '/?lang=ru', '/?net=ipminet', '/?net=ipminet&lang=ru', '/?view=tray&select=compute-tray.7']) {
+        await page.goto(url);
+        await expect(page.locator('canvas')).toBeVisible({ timeout: 60_000 });
+        await expect(legend).toBeVisible();
+        expect(await clashes(), url).toEqual([]);
+        await expect.poll(focusMatchesScroll, url).toBe(true);
+      }
+      // The long legend scrolls here, so the keyboard can reach it.
+      await page.goto('/?lang=ru');
+      await expect(legend).toHaveAttribute('tabindex', '0');
+    });
+  }
+
   test('the rack totals chart opens a part and fits a phone', async ({ page }) => {
     await page.setViewportSize({ width: 400, height: 860 });
     await page.goto('/');
