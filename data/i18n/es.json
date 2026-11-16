@@ -290,6 +290,12 @@
       "linkCopied": "Enlace copiado.",
       "embedCopied": "Código para insertar copiado."
     },
+    "readAloud": {
+      "short": "Leer en voz alta",
+      "play": "Leer en voz alta: {name}",
+      "stopShort": "Detener",
+      "stop": "Detener la lectura"
+    },
     "partLink": {
       "short": "Copiar enlace",
       "button": "Copiar enlace a {name}",

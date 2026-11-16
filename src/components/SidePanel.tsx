@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { model } from '../data';
 import type { Component, Connection, Source, Spec } from '../data/types';
-import { SHOW_OFFICIAL_FIGURES, officialFigureUrl } from '../config/flags';
+import { SHOW_OFFICIAL_FIGURES, SHOW_READ_ALOUD, officialFigureUrl } from '../config/flags';
 import { useExplorer } from '../state/store';
 import { ROOT_ID } from '../data/model';
 import { trayKeyOf } from '../state/url';
@@ -13,6 +13,7 @@ import { Share } from './Share';
 import { RackTotals } from './RackTotals';
 import { CompareBox, CompareStart } from './Compare';
 import { CopyPartLink } from './CopyPartLink';
+import { ReadAloud } from './ReadAloud';
 import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
 import { LINK_COLORS } from '../scenes/geometry';
 import { useI18n, type I18n } from '../i18n';
@@ -179,6 +180,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
   const notPlaced = layout?.notPlaced?.find((n) => n.component === component.id);
   const trayLinks = trayId && within ? model.linksAt(trayId, within) : [];
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const articleRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
 
   // After a selection made from a control that then disappears (a breadcrumb
@@ -195,7 +197,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
   }, [selected]);
 
   return (
-    <article className="panel-body" aria-labelledby="panel-title">
+    <article className="panel-body" aria-labelledby="panel-title" ref={articleRef}>
       <p className="sr-only" aria-live="polite">
         {t('panel.selected', { title })}
       </p>
@@ -217,6 +219,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
         <div className="panel-actions">
           <CompareStart />
           <CopyPartLink name={title} />
+          {SHOW_READ_ALOUD && <ReadAloud panel={articleRef} name={title} />}
         </div>
       </header>
 
@@ -251,7 +254,10 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
         ))}
         {isNumberedUnit && numbering?.overrides?.[component.id] ? (
           <p className="note">
-            {i18n.overrideNote(component.id, numbering.overrides[component.id]!.note)} {t('panel.sourceLabel')} <SourceLink source={numbering.overrides[component.id]!.source} />
+            {i18n.overrideNote(component.id, numbering.overrides[component.id]!.note)}{' '}
+            <span className="inline-source">
+              {t('panel.sourceLabel')} <SourceLink source={numbering.overrides[component.id]!.source} />
+            </span>
           </p>
         ) : (
           isNumberedUnit &&
@@ -353,15 +359,15 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
         </section>
       )}
 
-      <HostView component={component} index={last?.index} />
+      <div className="no-read" data-no-read><HostView component={component} index={last?.index} /></div>
 
-      <ProcedureStart component={component} />
+      <div className="no-read" data-no-read><ProcedureStart component={component} /></div>
 
       <SoftwareSection component={component} />
 
-      <CommandsSection component={component} />
+      <div className="no-read" data-no-read><CommandsSection component={component} /></div>
 
-      <SafetySection component={component} />
+      <div className="no-read" data-no-read><SafetySection component={component} /></div>
 
       {trayLinks.length > 0 && trayId && within && (
         <section>
@@ -418,7 +424,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
       )}
 
       {children.length > 0 && (
-        <section>
+        <section data-no-read>
           <h3>{t('panel.partsInside')}</h3>
           <ul className="parts">
             {children.map((child) => (
@@ -447,7 +453,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
         </section>
       )}
 
-      <section>
+      <section data-no-read>
         <h3>{t('panel.source')}</h3>
         <p>
           <SourceLink source={component.source} />
@@ -464,8 +470,8 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
           </figure>
         )}
       </section>
-      <Documents component={component} />
-      <Share />
+      <div className="no-read" data-no-read><Documents component={component} /></div>
+      <div className="no-read" data-no-read><Share /></div>
     </article>
   );
 }

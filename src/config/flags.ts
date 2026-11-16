@@ -24,3 +24,10 @@ export const SHOW_RECORDER: boolean = import.meta.env.VITE_SHOW_RECORDER !== 'fa
  * VITE_SHOW_SCREENSHOT=false to remove it.
  */
 export const SHOW_SCREENSHOT: boolean = import.meta.env.VITE_SHOW_SCREENSHOT !== 'false';
+
+/**
+ * SHOW_READ_ALOUD: the Read aloud button in the side panel, which reads the
+ * panel with the browser's own speech (nothing is uploaded) and only after a
+ * press. On by default; build with VITE_SHOW_READ_ALOUD=false to remove it.
+ */
+export const SHOW_READ_ALOUD: boolean = import.meta.env.VITE_SHOW_READ_ALOUD !== 'false';
