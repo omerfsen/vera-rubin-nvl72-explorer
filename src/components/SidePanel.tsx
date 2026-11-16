@@ -10,6 +10,7 @@ import { HostView } from './HostView';
 import { ProcedureBox, ProcedureStart } from './Procedure';
 import { Share } from './Share';
 import { RackTotals } from './RackTotals';
+import { CompareBox, CompareStart } from './Compare';
 import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
 import { LINK_COLORS } from '../scenes/geometry';
 import { useI18n, type I18n } from '../i18n';
@@ -198,11 +199,13 @@ export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
       )}
       <ProcedureBox />
       <NetworkInfo />
+      <CompareBox />
       <header className="panel-header">
         <p className="kind">{i18n.typeName(component.type)}</p>
         <h2 id="panel-title" ref={headingRef} tabIndex={-1}>
           {title} {component.assumed && <Assumed note={note} />}
         </h2>
+        <CompareStart />
       </header>
 
       {trayKey && selected === trayKey && view === 'rack' && (

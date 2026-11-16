@@ -142,6 +142,27 @@
       "rear": "后部",
       "only3d": "后视图和托盘内部只在 3D 视图中绘制。"
     },
+    "compare": {
+      "start": "对比",
+      "startHint": "固定{name}，再选择另一个部件进行对比",
+      "heading": "对比",
+      "aria": "{left}与{right}的对比",
+      "pickAnother": "已固定{name}。请选择另一个部件进行对比。",
+      "part": "部件",
+      "type": "类型",
+      "inRack": "整机数量",
+      "notStated": "未说明",
+      "specs": "规格",
+      "networks": "网络",
+      "source": "来源",
+      "none": "无",
+      "differs": "不同",
+      "onlyThisSide": "仅此一侧",
+      "legend": "高亮的行表示两个部件不同。",
+      "swap": "交换",
+      "clear": "清除第二个部件",
+      "stop": "停止对比"
+    },
     "panel": {
       "selected": "已选择：{title}",
       "assumed": "假定",

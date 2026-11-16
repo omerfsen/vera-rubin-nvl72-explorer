@@ -142,6 +142,27 @@
       "rear": "Rear",
       "only3d": "The rear view and the tray interiors are drawn only in the 3D view."
     },
+    "compare": {
+      "start": "Compare",
+      "startHint": "Pin {name} and pick another part to compare it with",
+      "heading": "Comparing",
+      "aria": "Comparison of {left} and {right}",
+      "pickAnother": "{name} is pinned. Select another part to compare it with.",
+      "part": "Part",
+      "type": "Type",
+      "inRack": "In the rack",
+      "notStated": "Not stated",
+      "specs": "Specifications",
+      "networks": "Networks",
+      "source": "Source",
+      "none": "None",
+      "differs": "differs",
+      "onlyThisSide": "only on this side",
+      "legend": "Highlighted rows differ between the two parts.",
+      "swap": "Swap",
+      "clear": "Clear second part",
+      "stop": "Stop comparing"
+    },
     "panel": {
       "selected": "Selected: {title}",
       "assumed": "assumed",

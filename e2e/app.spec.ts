@@ -239,6 +239,39 @@ test.describe('fallbacks and layouts', () => {
     await expect.poll(() => new URL(page.url()).searchParams.get('select')).toBe('compute-tray/rubin-gpu');
   });
 
+  test('compares two parts from a shared link, by keyboard and at phone width, without WebGL', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 400, height: 860 } });
+    await context.addInitScript(() => {
+      const original = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
+        if (type === 'webgl' || type === 'webgl2') return null;
+        return (original as (...a: unknown[]) => unknown).call(this, type, ...rest);
+      } as typeof original;
+    });
+    const page = await context.newPage();
+    // An invalid cmp is dropped from the address bar.
+    await page.goto('/?select=compute-tray.3&cmp=compute-tray.99');
+    await expect.poll(() => new URL(page.url()).searchParams.get('cmp')).toBeNull();
+    const compare = page.getByRole('button', { name: 'Compare', exact: true });
+    await compare.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByText(/is pinned/)).toBeVisible();
+    await page.getByRole('button', { name: /^NVLink 6 switch tray 1 / }).click();
+    await expect.poll(() => new URL(page.url()).searchParams.get('cmp')).toBe('compute-tray.3');
+    const region = page.getByRole('region', { name: /^Comparison of Compute tray 3 and / });
+    await expect(region.getByRole('table')).toBeVisible();
+    await expect(region.locator('tr.differs').first()).toBeVisible();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+    await region.getByRole('button', { name: 'Swap' }).click();
+    await expect.poll(() => new URL(page.url()).searchParams.get('select')).toBe('compute-tray.3');
+    // Now the switch tray is pinned on the left.
+    await expect(page.getByRole('region', { name: /^Comparison of NVLink 6 switch tray 1 and Compute tray 3$/ })).toBeVisible();
+    await page.getByRole('button', { name: 'Stop comparing' }).click();
+    await expect.poll(() => new URL(page.url()).searchParams.get('cmp')).toBeNull();
+    await context.close();
+  });
+
   test('embed mode hides the header and footer', async ({ page }) => {
     await page.goto('/?embed=1');
     await expect(page.locator('.topbar')).toBeHidden();

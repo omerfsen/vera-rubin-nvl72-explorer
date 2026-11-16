@@ -142,6 +142,27 @@
       "rear": "Trasera",
       "only3d": "La vista trasera y el interior de las bandejas solo se dibujan en la vista 3D."
     },
+    "compare": {
+      "start": "Comparar",
+      "startHint": "Fijar {name} y elegir otra pieza para compararla",
+      "heading": "Comparación",
+      "aria": "Comparación de {left} y {right}",
+      "pickAnother": "{name} está fijado. Selecciona otra pieza para compararla.",
+      "part": "Pieza",
+      "type": "Tipo",
+      "inRack": "En el rack",
+      "notStated": "No indicado",
+      "specs": "Especificaciones",
+      "networks": "Redes",
+      "source": "Fuente",
+      "none": "Ninguna",
+      "differs": "distinto",
+      "onlyThisSide": "solo en este lado",
+      "legend": "Las filas resaltadas difieren entre las dos piezas.",
+      "swap": "Intercambiar",
+      "clear": "Quitar la segunda pieza",
+      "stop": "Dejar de comparar"
+    },
     "panel": {
       "selected": "Seleccionado: {title}",
       "assumed": "supuesto",

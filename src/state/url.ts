@@ -21,12 +21,14 @@ export interface UrlState {
   embed?: boolean;
   /** Interface language; left out of the URL for English. */
   lang?: Lang;
+  /** Part pinned on the left of a comparison; left out when not comparing. */
+  cmp?: string;
 }
 
 export const DEFAULT_URL_STATE: UrlState = { view: 'rack', select: '', list: false };
 
 /** The query keys this app owns. Everything else in the query is left alone. */
-const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang']);
+const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang', 'cmp']);
 
 /**
  * The rack unit whose interior can be opened for this selection, e.g.
@@ -46,6 +48,7 @@ export function readUrlState(search: string, model: Model): UrlState {
   const selectParam = params.get('select') ?? '';
   const segments = model.parsePath(selectParam);
   const select = segments === null ? '' : model.formatPath(segments);
+  const cmp = canonicalPath(params.get('cmp'), model);
   return {
     view: view === 'tray' && trayKeyOf(select, model) === null ? 'rack' : view,
     select,
@@ -56,7 +59,14 @@ export function readUrlState(search: string, model: Model): UrlState {
     embed: params.get('embed') === '1',
     // Only a language named in the URL; the store falls back to the saved one.
     ...(isLang(params.get('lang')) ? { lang: params.get('lang') as Lang } : {}),
+    ...(cmp ? { cmp } : {}),
   };
+}
+
+/** A selection path in its canonical form, or "" when it names nothing. */
+export function canonicalPath(path: string | null | undefined, model: Model): string {
+  const segments = model.parsePath(path);
+  return segments === null ? '' : model.formatPath(segments);
 }
 
 function procState(params: URLSearchParams, model: Model): { proc: string; step: number } {
@@ -91,6 +101,7 @@ export function writeUrlState(search: string, state: UrlState): string {
   if (state.proc) kept.push(`proc=${encodeURIComponent(state.proc)}`, `step=${(state.step ?? 0) + 1}`);
   if (state.page) kept.push(`page=${encodeURIComponent(state.page)}`);
   if (state.embed) kept.push('embed=1');
+  if (state.cmp) kept.push(`cmp=${encodeURIComponent(state.cmp).replace(/%2F/g, '/')}`);
   if (state.lang && state.lang !== DEFAULT_LANG) kept.push(`lang=${encodeURIComponent(state.lang)}`);
   return kept.length === 0 ? '' : `?${kept.join('&')}`;
 }
