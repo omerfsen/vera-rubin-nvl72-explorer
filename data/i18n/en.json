@@ -417,6 +417,32 @@
       "again": "Try again",
       "close": "Close",
       "round": "Round {seed}: share this page's link to replay the same questions."
+    },
+    "guidedTour": {
+      "start": "Start here",
+      "startHint": "A short guided tour of the rack, one part at a time",
+      "aria": "Guided tour",
+      "heading": "Start here · step {step} of {total}",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "exit": "Exit tour",
+      "keys": "Left and right arrow keys move between steps; Escape ends the tour.",
+      "whole": "The whole rack",
+      "steps": {
+        "rack": "This is the whole rack, seen from the front. Select any unit in it to see its details in the panel.",
+        "computeTray": "This is a compute tray. Its details are below, and its parts are listed in the panel.",
+        "openTray": "Here the compute tray is opened, so you can see the parts inside it.",
+        "gpu": "This is one of the GPUs inside the compute tray.",
+        "cpu": "This is one of the CPUs inside the compute tray.",
+        "switchTray": "This is a switch tray. It can be opened the same way as a compute tray.",
+        "powerShelf": "This is a power shelf.",
+        "cableCartridge": "Now the rack is turned around to show the rear. This is a cable cartridge.",
+        "manifold": "This is a liquid cooling manifold at the rear.",
+        "busBar": "This is the bus bar at the rear.",
+        "network": "This overlay highlights the parts on one network. Pick another network in the bar above, or turn it off.",
+        "sources": "Every fact here links to its section of NVIDIA's documents. This page lists them all. That is the end of the tour."
+      }
     }
   },
   "content": {

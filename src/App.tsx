@@ -18,6 +18,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { Recorder } from './components/Recorder';
 import { QuizButton } from './components/Quiz';
+import { TourBox, TourButton } from './components/Tour';
 import { SHOW_RECORDER } from './config/flags';
 import { useI18n } from './i18n';
 
@@ -192,6 +193,7 @@ export default function App() {
   const setPage = useExplorer((s) => s.setPage);
   const embed = useExplorer((s) => s.embed);
   const quizOn = useExplorer((s) => s.quiz !== null);
+  const touring = useExplorer((s) => s.tour !== null);
   const { t } = useI18n();
   const trayKey = trayKeyOf(selected, model);
   const inTray = view === 'tray' && trayKey !== null;
@@ -202,7 +204,7 @@ export default function App() {
   const showList = !webgl || listOpen;
 
   return (
-    <div className={embed ? 'app embed' : 'app'}>
+    <div className={(embed ? 'app embed' : 'app') + (touring && !embed ? ' touring' : '')}>
       <header className="topbar">
         <div className="brand">
           <h1>{t('site.title')}</h1>
@@ -213,6 +215,7 @@ export default function App() {
         <LanguageSwitcher />
         <ThemeSwitcher />
         {SHOW_RECORDER && !embed && <Recorder />}
+        {!embed && <TourButton />}
         {!embed && <QuizButton />}
         <button type="button" className="toggle" aria-pressed={page === 'sources'} onClick={() => setPage(page === 'sources' ? '' : 'sources')}>
           {t('top.sources')}
@@ -320,6 +323,8 @@ export default function App() {
         </section>
       </main>
       )}
+
+      {!embed && <TourBox />}
 
       <footer className="footer">
         {t('site.footer', {

@@ -3,6 +3,7 @@ import { model } from '../data';
 import { DEFAULT_URL_STATE, canonicalPath, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
 import { NO_FILTER, filterNetworks, filterTypes, toggleIn, type ListFilter } from '../data/listFilter';
 import { answerFromSelection, generateQuiz, isValidSeed, newSeed, type QuizQuestion } from '../data/quiz';
+import { TOUR_STEPS } from '../data/tour';
 import { initialLang, storeLang, storedLang, type Lang } from '../i18n/lang';
 import { applyTheme, darkQuery, resolveTheme, storedThemePref, storeThemePref, type Theme, type ThemePref } from '../theme';
 
@@ -17,7 +18,25 @@ export interface QuizState {
   done: boolean;
 }
 
+/** What the "Start here" tour puts back when it ends. */
+export interface TourRestore {
+  view: View;
+  selected: string;
+  network: string;
+  page: string;
+  procedure: string;
+  step: number;
+  compare: string;
+}
+
 interface ExplorerState {
+  /** "Start here" tour in progress: its 0-based step and the state to put back on exit; null when off. */
+  tour: { index: number; restore: TourRestore } | null;
+  startTour: () => void;
+  /** Show a tour step; clamped to the first and last. */
+  goToTourStep: (index: number) => void;
+  /** End the tour and put back what was on screen before it started. */
+  stopTour: () => void;
   /** Quiz round in progress, or null. */
   quiz: QuizState | null;
   /** Start a round; the same seed gives the same questions. */
@@ -118,6 +137,33 @@ function storePanelOpen(open: boolean): void {
 const initialThemePref: ThemePref = typeof window === 'undefined' ? 'system' : storedThemePref();
 
 export const useExplorer = create<ExplorerState>((set, get) => ({
+  tour: null,
+  startTour: () => {
+    if (TOUR_STEPS.length === 0) return;
+    const { view, selected, network, page, procedure, step, compare } = get();
+    const restore = get().tour?.restore ?? { view, selected, network, page, procedure, step, compare };
+    set({ tour: { index: 0, restore }, quiz: null, procedure: '', step: 0, compare: '', panelOpen: true });
+    get().goToTourStep(0);
+  },
+  goToTourStep: (index) => {
+    const tour = get().tour;
+    if (!tour) return;
+    const n = Math.min(TOUR_STEPS.length - 1, Math.max(0, Math.trunc(index) || 0));
+    const s = TOUR_STEPS[n]!;
+    set({ tour: { ...tour, index: n }, page: s.page ?? '', network: s.network ?? '', hovered: null });
+    get().select(s.target);
+    // select() already moves to the rear for a rear part; open the unit when the step asks for its interior.
+    const view = s.view === 'tray' && trayKeyOf(get().selected, model) === null ? 'rack' : s.view;
+    set({ view });
+  },
+  stopTour: () => {
+    const tour = get().tour;
+    if (!tour) return;
+    const r = tour.restore;
+    set({ tour: null, page: r.page, network: r.network, procedure: r.procedure, step: r.step, compare: r.compare, hovered: null });
+    get().select(r.selected);
+    set({ view: r.view === 'tray' && trayKeyOf(get().selected, model) === null ? 'rack' : r.view });
+  },
   quiz: null,
   startQuiz: (seed) => {
     const s = isValidSeed(seed) ? seed : newSeed();
@@ -126,6 +172,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     // A fresh view so the panel does not already show an answer; the panel shows the question.
     set({
       quiz: { seed: s, questions, index: 0, score: 0, answer: null, done: false },
+      tour: null,
       procedure: '',
       step: 0,
       page: '',
@@ -173,7 +220,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   procedure: initial.proc ?? '',
   step: initial.step ?? 0,
   startProcedure: (id) => {
-    set({ procedure: id, step: 0, page: '' });
+    set({ procedure: id, step: 0, page: '', tour: null });
     get().goToStep(0);
   },
   goToStep: (step) => {

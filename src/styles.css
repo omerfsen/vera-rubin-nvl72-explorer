@@ -768,6 +768,36 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
     overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
   }
+
+/* ---- "Start here" guided tour ---- */
+.tour-box {
+  position: fixed;
+  left: max(16px, env(safe-area-inset-left, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+  box-sizing: border-box;
+  width: min(26rem, calc(100% - 32px));
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 10px 12px;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--overlay-strong);
+  color: var(--text);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.35);
+  overflow-wrap: anywhere;
+}
+.tour-box h2 { margin: 0 0 6px; font-size: 0.95rem; }
+.tour-box p { margin: 4px 0; }
+.tour-caption { font-weight: 500; }
+.tour-facts { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 6px; font-size: 0.85rem; }
+.tour-name { font-weight: 600; }
+@media (max-width: 760px) {
+  .tour-box { max-height: 42vh; font-size: 0.9rem; }
+}
+.app.touring .sources-page { padding-bottom: 50vh; }
+@media (max-width: 760px) {
+  .app.touring .panel { padding-bottom: 45vh; }
 }
 
 /* ---- command palette (Ctrl+K) ---- */

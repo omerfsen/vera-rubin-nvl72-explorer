@@ -215,6 +215,28 @@ test.describe('operator features', () => {
     await expect(page.getByText(/three to five minutes/)).toBeVisible();
   });
 
+  test('the Start here tour opens a compute tray, turns to the rear and exits back', async ({ page }) => {
+    await page.goto('/');
+    await rackReady(page);
+    await page.getByRole('button', { name: 'Start here' }).click();
+    const tour = page.getByRole('region', { name: 'Guided tour' });
+    await expect(tour.getByRole('heading')).toContainText('step 1 of');
+    await tour.getByRole('button', { name: 'Next', exact: true }).click();
+    await expect.poll(() => param(page, 'select')).toBe('compute-tray.1');
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => param(page, 'view')).toBe('tray');
+    await expect(tour.getByRole('heading')).toContainText('step 3 of');
+    for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowRight');
+    await expect.poll(() => param(page, 'view')).toBe('rear');
+    await expect.poll(() => param(page, 'select')).toBe('nvlink-cable-cartridge');
+    await page.setViewportSize({ width: 400, height: 800 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.keyboard.press('Escape');
+    await expect(tour).toHaveCount(0);
+    await expect.poll(() => param(page, 'view')).toBe(null);
+    await expect.poll(() => param(page, 'select')).toBe(null);
+  });
+
   test('the rear view and the sources page open', async ({ page }) => {
     await page.goto('/');
     await rackReady(page);
