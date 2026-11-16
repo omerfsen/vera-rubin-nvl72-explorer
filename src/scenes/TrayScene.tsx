@@ -319,10 +319,10 @@ function Labels({ placed, heightRU, amount }: { placed: Placed[]; heightRU: numb
   return (
     <>
       <Html position={[0, 0.02, TRAY_DEPTH / 2 + 0.12]} center className="tray-label" style={{ pointerEvents: 'none' }}>
-        <span>{i18n.t('scene.front')}</span>
+        <span data-label>{i18n.t('scene.front')}</span>
       </Html>
       <Html position={[0, 0.02, -TRAY_DEPTH / 2 - 0.12]} center className="tray-label" style={{ pointerEvents: 'none' }}>
-        <span>{i18n.t('scene.rear')}</span>
+        <span data-label>{i18n.t('scene.rear')}</span>
       </Html>
       {hoveredItem && box && (
         <Html
@@ -331,7 +331,9 @@ function Labels({ placed, heightRU, amount }: { placed: Placed[]; heightRU: numb
           className="part-tooltip"
           style={{ pointerEvents: 'none' }}
         >
-          <span>{partLabel(hoveredItem, i18n)}</span>
+          <span data-label data-label-pinned>
+            {partLabel(hoveredItem, i18n)}
+          </span>
         </Html>
       )}
     </>

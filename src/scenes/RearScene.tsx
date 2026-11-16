@@ -272,7 +272,7 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
   const hovered = useExplorer((s) => s.hovered);
   const i18n = useI18n();
   if (!connected) return null;
-  const labels: { text: string; position: Vec }[] = [];
+  const labels: { text: string; position: Vec; pinned?: boolean }[] = [];
   for (const target of new Set([hovered, selected])) {
     if (!target) continue;
     const box = boxes.find((b) => b.path === target) ?? connectors.find((c) => c.path === target);
@@ -280,7 +280,7 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
     const segs = model.parsePath(target) ?? [];
     const last = segs[segs.length - 1];
     const text = last ? i18n.segmentLabel(last) : target;
-    labels.push({ text, position: [box.position[0], box.position[1] + Math.min(box.size[1] / 2, 0.15) + 0.04, box.position[2] - box.size[2] / 2] });
+    labels.push({ text, pinned: true, position: [box.position[0], box.position[1] + Math.min(box.size[1] / 2, 0.15) + 0.04, box.position[2] - box.size[2] / 2] });
   }
   const unit = model.rackUnitByKey.get(selected.split('/')[0] ?? '');
   const cart = FABRIC ? boxes.find((b) => b.part.component === FABRIC.through) : undefined;
@@ -302,7 +302,9 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
     <>
       {labels.map((l) => (
         <Html key={l.text} position={l.position} center className="rear-label" style={{ pointerEvents: 'none' }} zIndexRange={[20, 10]}>
-          <span>{l.text}</span>
+          <span data-label data-label-pinned={l.pinned || undefined}>
+            {l.text}
+          </span>
         </Html>
       ))}
     </>
