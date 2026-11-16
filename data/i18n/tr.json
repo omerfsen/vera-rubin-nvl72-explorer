@@ -346,6 +346,29 @@
       "nvlink": "nvlink",
       "power": "güç",
       "cooling": "soğutma"
+    },
+    "quiz": {
+      "start": "Test",
+      "startHint": "NVIDIA'nın belgelerinden üretilen {count} soruyla kendinizi deneyin",
+      "aria": "Test",
+      "heading": "Test · soru {current} / {total}",
+      "score": "Puan: {score} / {total}",
+      "click": "3B görünümde ya da listede şunu seçin: {name}.",
+      "unit": "Şu parça hangi ünitededir: {name}? O üniteyi 3B görünümde ya da listede seçin.",
+      "count": "Kabinin tamamında bundan kaç tane var: {name}?",
+      "network": "Şu parça hangi ağdadır: {name}?",
+      "choices": "Yanıtlar",
+      "selectHint": "Bir parçaya giderken bir üniteyi açmak yanıt sayılmaz.",
+      "correct": "Doğru.",
+      "wrong": "Tam değil. Doğru yanıt: {answer}.",
+      "next": "Sonraki soru",
+      "finish": "Puanımı göster",
+      "quit": "Testten çık",
+      "done": "Test bitti",
+      "final": "Puanınız: {score} / {total}.",
+      "again": "Yeniden dene",
+      "close": "Kapat",
+      "round": "Tur {seed}: aynı soruları yeniden açmak için bu sayfanın bağlantısını paylaşın."
     }
   },
   "content": {

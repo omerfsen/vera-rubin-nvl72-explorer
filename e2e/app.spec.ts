@@ -121,6 +121,39 @@ test.describe('operator features', () => {
     await expect(page.getByRole('button', { name: 'Record' })).toHaveCount(0);
   });
 
+  test('the quiz plays a question from the list at phone width, and hides in an embed', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.setViewportSize({ width: 400, height: 860 });
+    await page.goto('/?list=1');
+    await page.getByRole('button', { name: 'Quiz', exact: true }).click();
+    const quiz = page.getByRole('region', { name: 'Quiz' });
+    await expect(quiz.getByRole('heading', { name: 'Quiz · question 1 of 10' })).toBeVisible();
+    await expect.poll(() => param(page, 'quiz')).toMatch(/^[1-9][0-9]*$/);
+    const seed = param(page, 'quiz');
+    const first = await quiz.locator('.quiz-question').textContent();
+    // A multiple-choice question is answered in the panel; any other by selecting a part in the list.
+    const choices = quiz.getByRole('group', { name: 'Answers' }).getByRole('button');
+    if ((await choices.count()) > 0) await choices.first().click();
+    else await page.getByRole('navigation').getByRole('button', { name: 'Liquid-cooled bus bar' }).click();
+    await expect(quiz.getByRole('status')).toContainText(/Correct\.|Not quite\. The answer is/);
+    await expect(quiz.getByRole('status').getByRole('link')).toHaveAttribute('href', /^https:\/\/docs\.nvidia\.com\//);
+    await expect(quiz.getByText(/^Score: [01] of 10$/)).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(quiz.getByRole('heading', { name: 'Quiz · question 2 of 10' })).toBeVisible();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+    // The same link replays the same round.
+    await page.goto(`/?list=1&quiz=${seed}`);
+    await expect(page.getByRole('region', { name: 'Quiz' }).locator('.quiz-question')).toHaveText(first ?? '');
+    await page.getByRole('button', { name: 'Quit quiz' }).click();
+    await expect(page.getByRole('region', { name: 'Quiz' })).toHaveCount(0);
+    await expect.poll(() => param(page, 'quiz')).toBeNull();
+    await page.goto('/?embed=1');
+    await expect(page.getByRole('button', { name: 'Quiz', exact: true })).toHaveCount(0);
+    expect(errors).toEqual([]);
+  });
+
   test('search finds a cage by its RDMA device and shows its host names', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('combobox', { name: 'Search parts' }).fill('mlx5_4');

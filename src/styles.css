@@ -671,3 +671,24 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .gloss-pop .gloss-src { color: var(--muted); }
 .glossary-list div { margin-bottom: 8px; }
 .glossary-list dd { margin: 2px 0 0; }
+/* ---- quiz ---- */
+.quiz { border: 2px solid var(--accent); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 14px; }
+.quiz h3 { color: var(--text); text-transform: none; letter-spacing: 0; font-size: 0.95rem; }
+.quiz-question { font-weight: 600; overflow-wrap: anywhere; }
+.quiz-score { color: var(--muted); font-size: 0.85rem; }
+.quiz-final { font-size: 1.1rem; font-weight: 600; }
+.quiz-choices { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.quiz-choice {
+  padding: 5px 10px;
+  min-height: 30px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+}
+.quiz-choice:disabled { cursor: default; }
+.quiz-choice.right { border: 2px solid var(--ok, #2e9d58); }
+.quiz-choice.wrong { border: 2px solid var(--warn); }
+.quiz-feedback { margin: 8px 0; padding: 6px 8px; border-radius: 6px; border-left: 4px solid var(--warn); background: var(--surface-2); }
+.quiz-feedback.right { border-left-color: var(--ok, #2e9d58); }
