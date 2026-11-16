@@ -543,3 +543,18 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
   .panel.closed .panel-toggle-label { writing-mode: horizontal-tb; }
 }
 .recorder-voice { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; color: var(--muted); cursor: pointer; }
+
+/* Camera presets: a small row in the stage's free corner. */
+.camera-presets { position: absolute; right: 12px; bottom: 8px; z-index: 20; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; max-width: 45%; }
+.camera-presets button {
+  padding: 3px 8px; min-height: 28px; min-width: 28px; font-size: 0.78rem;
+  border: 1px solid var(--control-border); border-radius: var(--radius);
+  background: var(--overlay-strong); color: var(--text); cursor: pointer;
+}
+.camera-presets button:hover { border-color: var(--accent); }
+.camera-presets button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hint { max-width: calc(55% - 24px); }
+@media (max-width: 760px) {
+  .camera-presets { top: 8px; bottom: auto; left: 8px; right: 8px; max-width: none; }
+  .hint { top: 44px; max-width: none; }
+}

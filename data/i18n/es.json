@@ -88,6 +88,19 @@
       "explodedView": "Vista explosionada",
       "explodedViewHint": "Separa las piezas por capas"
     },
+    "cameraView": {
+      "group": "Ángulo de cámara",
+      "reset": "Restablecer vista",
+      "resetLabel": "Cámara: restablecer vista",
+      "front": "Frente",
+      "frontLabel": "Cámara: frente",
+      "back": "Atrás",
+      "backLabel": "Cámara: atrás",
+      "top": "Arriba",
+      "topLabel": "Cámara: arriba",
+      "angle": "45°",
+      "angleLabel": "Cámara: 45° en tres cuartos"
+    },
     "layers": {
       "structure": "Estructura",
       "structureHint": "los huesos: bastidor del rack o carcasa de la bandeja",

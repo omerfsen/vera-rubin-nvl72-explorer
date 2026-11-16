@@ -88,6 +88,19 @@
       "explodedView": "爆炸视图",
       "explodedViewHint": "按层分开显示各个部件"
     },
+    "cameraView": {
+      "group": "相机角度",
+      "reset": "重置视图",
+      "resetLabel": "相机：重置视图",
+      "front": "正面",
+      "frontLabel": "相机：正面",
+      "back": "背面",
+      "backLabel": "相机：背面",
+      "top": "顶部",
+      "topLabel": "相机：顶部",
+      "angle": "45°",
+      "angleLabel": "相机：45° 斜视"
+    },
     "layers": {
       "structure": "结构",
       "structureHint": "骨骼：机柜框架或托盘外壳",
