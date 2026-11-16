@@ -2,6 +2,7 @@ import { model } from '../data';
 import type { Source } from '../data/types';
 import { useExplorer } from '../state/store';
 import { Credits } from './Credits';
+import { GlossaryList } from './Glossary';
 import { useI18n, type I18n } from '../i18n';
 import { Rich } from '../i18n/Rich';
 
@@ -77,6 +78,7 @@ function countBy(urlPart: string): number {
   t.connections.forEach((x) => add(x.source));
   t.pcieDevices?.forEach((x) => add(x.source));
   t.procedures?.forEach((p) => p.steps.forEach((s) => add(s.source)));
+  t.glossary?.forEach((g) => add(g.source));
   return seen.filter((s) => s.url.includes(urlPart)).length;
 }
 
@@ -183,6 +185,7 @@ export function SourcesPage() {
           </li>
         ))}
       </ul>
+      <GlossaryList />
       <h3>{t('sources.about')}</h3>
       <p>
         <Credits />. {t('sources.license')}

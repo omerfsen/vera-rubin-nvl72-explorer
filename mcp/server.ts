@@ -24,6 +24,7 @@ const COMPONENT_IDS = ids(topology.components);
 const NETWORK_IDS = ids(topology.networks);
 const PROCEDURE_IDS = ids(topology.procedures);
 const COMMAND_IDS = ids(topology.commands);
+const GLOSSARY_IDS = ids(topology.glossary);
 const RACK_UNIT_IDS = [...new Set(model.rackUnits.map((u) => u.componentId))] as NonEmpty;
 const PCIE_COMPONENT_IDS = [...new Set((topology.pcieDevices ?? []).map((r) => r.component))] as NonEmpty;
 
@@ -65,7 +66,15 @@ const PcieZ = z.object({
   source: SourceZ,
 });
 const CommandSummaryZ = z.object({ id: z.string(), title: z.string(), group: z.string() });
-const SafetyZ = z.object({ id: z.string(), title: z.string(), text: z.string(), source: SourceZ });
+const GlossaryZ = z.object({
+  id: z.string(),
+  term: z.string(),
+  aliases: z.array(z.string()).optional(),
+  expansion: z.string().optional(),
+  definition: z.string(),
+  source: SourceZ,
+});
+const SafetyZ =z.object({ id: z.string(), title: z.string(), text: z.string(), source: SourceZ });
 const QuestionZ = z.object({
   id: z.string(),
   kind: z.enum(['conflict', 'gap']),
@@ -490,6 +499,25 @@ export function createServer(opts: ServerOptions = {}): McpServer {
       const stop = limited();
       if (stop) return stop;
       return ok({ questions: (topology.openQuestions ?? []).filter((q) => kind === 'all' || q.kind === kind) });
+    },
+  );
+
+  server.registerTool(
+    'nvl72_glossary',
+    {
+      title: 'Glossary of terms and abbreviations',
+      description:
+        'Returns terms and abbreviations (BMC, CRU, NVLink, TOR, ...) as NVIDIA\'s documents expand or define them, each with its document section. Optionally one term by id. Terms the documents do not define are not in the list.',
+      inputSchema: z
+        .object({ id: z.enum(GLOSSARY_IDS).optional().describe('Only this term, e.g. "bmc". Leave out for all.') })
+        .strict(),
+      outputSchema: z.object({ terms: z.array(GlossaryZ) }),
+      annotations: { title: 'Glossary of terms and abbreviations', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async ({ id }) => {
+      const stop = limited();
+      if (stop) return stop;
+      return ok({ terms: (topology.glossary ?? []).filter((g) => !id || g.id === id) });
     },
   );
 

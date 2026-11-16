@@ -266,6 +266,11 @@
       "linkCopied": "Link copied.",
       "embedCopied": "Embed code copied."
     },
+    "glossary": {
+      "heading": "Glossary ({count})",
+      "intro": "Terms and abbreviations as NVIDIA's documents expand or define them, each with its source section. In the details panel, a term with a dotted underline opens its definition.",
+      "dialog": "Definition of {term}"
+    },
     "sources": {
       "back": "← Back to the rack",
       "title": "Sources and open questions",
@@ -1386,6 +1391,94 @@
     },
     "rearLayout": {
       "note": "Schematic placement behind the units, not to scale. Fig. 2 is an exploded view: it shows the cable cartridges, two liquid cooling manifolds with FD83 hose connectors, the power bus bar, their supports, the rear bezel and seismic bracing, but no positions, spans or counts. This app centres the power connectors and the bus bar, as Fig. 5 and Fig. 7 put the trays' power connector at the centre of the rear edge, and puts the hot water outlets on the manifold on the right seen from the front. Which manifold carries supply and which return is not stated."
+    },
+    "glossary": {
+      "nvl72": {
+        "definition": "An NVIDIA rack with a 72-GPU NVL domain."
+      },
+      "nvlink": {
+        "definition": "A high-speed, low-latency interconnect technology designed to overcome PCIe bandwidth limitations in multi-GPU and GPU-to-CPU communication. It enables unified memory access across GPUs and scales through NVSwitch chips."
+      },
+      "nvswitch": {
+        "definition": "Chips that act as non-blocking switches between servers, through which NVLink scales to create high-bandwidth fabrics."
+      },
+      "sharp": {
+        "definition": "In-network computing in NVSwitch that accelerates collective operations by performing computations within the network."
+      },
+      "infiniband": {
+        "definition": "The high-bandwidth, low-latency scale-out compute fabric between racks."
+      },
+      "ethernet": {
+        "definition": "Handles storage, management (in-band and out-of-band) and external connectivity."
+      },
+      "bmc": {
+        "expansion": "Board Management Controller",
+        "definition": "Together with the HMC, provides out-of-band management of the compute tray hardware resources. External access is available through standard BMC and console interfaces."
+      },
+      "hmc": {
+        "expansion": "Host Management Controller",
+        "definition": "Together with the BMC, provides out-of-band management of the compute tray hardware resources."
+      },
+      "oob": {
+        "expansion": "Out-of-band",
+        "definition": "Out-of-band management of the compute tray hardware resources is provided by the BMC and HMC microcontrollers."
+      },
+      "tor": {
+        "expansion": "Top-of-rack",
+        "definition": "Top-of-rack switches connect all BMCs in the compute trays (including BlueField-4 BMCs) and the switch trays to the management network."
+      },
+      "cru": {
+        "expansion": "Customer-replaceable unit",
+        "definition": "A component you can replace yourself: the E1.S NVMe cache drive, the compute tray battery, the NVLink Switch tray battery, the power supply unit (PSU) and the power shelf management module. An authorized NVIDIA representative must replace components that are not on this list."
+      },
+      "psu": {
+        "expansion": "Power supply unit",
+        "definition": "A customer-replaceable unit in the power shelf."
+      },
+      "esd": {
+        "expansion": "Electrostatic discharge",
+        "definition": "ESD can damage drives, boards and other parts. NVIDIA recommends doing all procedures at an ESD workstation, or else wearing an antistatic wrist strap attached to chassis ground."
+      },
+      "nvos": {
+        "expansion": "NVIDIA operating system",
+        "definition": "The operating system on the NVLink switch tray. It enables the management and configuration of NVIDIA switch system platforms through a command-line interface (CLI) and OpenAPI (Swagger), and includes NVLSM, Fabric Manager and the NVSwitch firmware."
+      },
+      "nvlsm": {
+        "expansion": "NVLink Subnet Manager",
+        "definition": "Discovers the NVLink network topology, assigns logical identifiers to GPU and NVSwitch NVLink ports, calculates and programs the switch forwarding table, programs the partition key for NVLink partitions and monitors changes in the NVLink fabric."
+      },
+      "fm": {
+        "expansion": "Fabric Manager",
+        "definition": "Configures the NVSwitch memory fabrics to form a large memory fabric among the participating GPUs and monitors the NVLinks that support the fabric."
+      },
+      "imex": {
+        "expansion": "Internode Memory Exchange/Management",
+        "definition": "A secure service that maps GPU memory over NVLink between the GPUs in an NVLink domain across the OS/node boundary, using memory export and import operations."
+      },
+      "nccl": {
+        "expansion": "NVIDIA Collective Communications Library",
+        "definition": "Provides topology-aware inter-GPU communication primitives: collective communication and point-to-point send/receive for intra- and inter-node data transfers."
+      },
+      "dcgm": {
+        "expansion": "NVIDIA Data Center GPU Manager",
+        "definition": "A suite of tools that manage and monitor NVIDIA data center GPUs and NVSwitches in cluster environments."
+      },
+      "mft": {
+        "expansion": "NVIDIA Firmware Tools",
+        "definition": "A set of network ASIC firmware management tools that generate, query and flash firmware images."
+      },
+      "bcm": {
+        "expansion": "Base Command Manager",
+        "definition": "Manages all system components; it is used to power on the NVLink switch trays first, then the compute trays."
+      },
+      "sol": {
+        "expansion": "Serial Over LAN",
+        "definition": "A session that lets you use the host system console remotely, even if the OS is not running."
+      },
+      "sbios": {
+        "expansion": "System BIOS",
+        "definition": "The system BIOS of the compute tray. Its settings can be restored to their factory defaults."
+      }
     }
   }
 }

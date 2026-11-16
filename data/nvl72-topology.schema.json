@@ -301,9 +301,57 @@
       "items": {
         "$ref": "#/$defs/safety"
       }
+    },
+    "glossary": {
+      "description": "Terms and abbreviations as NVIDIA's documents expand or define them. A term the documents do not define is left out.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/glossaryTerm"
+      }
     }
   },
   "$defs": {
+    "glossaryTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "term",
+        "definition",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "term": {
+          "description": "The term as the documents write it; matched whole-word and case-sensitively in the panel text.",
+          "type": "string",
+          "pattern": "^\\S+$"
+        },
+        "aliases": {
+          "description": "Other spellings matched the same way, such as ToR for TOR.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\S+$"
+          }
+        },
+        "expansion": {
+          "description": "What the abbreviation stands for, as the documents expand it.",
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "definition": {
+          "description": "Short definition taken from the sentence in the source section that defines the term.",
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      }
+    },
     "id": {
       "description": "Lowercase kebab-case. Dots and slashes are reserved for instance paths (compute-tray.7/gpu.2).",
       "type": "string",

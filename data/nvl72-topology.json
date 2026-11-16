@@ -8876,5 +8876,234 @@
         "section": "5.10.4 Cooling and Airflow"
       }
     }
+  ],
+  "glossary": [
+    {
+      "id": "nvl72",
+      "term": "NVL72",
+      "definition": "An NVIDIA rack with a 72-GPU NVL domain.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+        "section": "1.1 Rack Configuration"
+      }
+    },
+    {
+      "id": "nvlink",
+      "term": "NVLink",
+      "definition": "A high-speed, low-latency interconnect technology designed to overcome PCIe bandwidth limitations in multi-GPU and GPU-to-CPU communication. It enables unified memory access across GPUs and scales through NVSwitch chips.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+        "section": "2.1 NVLink Networking"
+      }
+    },
+    {
+      "id": "nvswitch",
+      "term": "NVSwitch",
+      "definition": "Chips that act as non-blocking switches between servers, through which NVLink scales to create high-bandwidth fabrics.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+        "section": "2.1 NVLink Networking"
+      }
+    },
+    {
+      "id": "sharp",
+      "term": "SHARP",
+      "definition": "In-network computing in NVSwitch that accelerates collective operations by performing computations within the network.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+        "section": "2.1 NVLink Networking"
+      }
+    },
+    {
+      "id": "infiniband",
+      "term": "InfiniBand",
+      "definition": "The high-bandwidth, low-latency scale-out compute fabric between racks.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html",
+        "section": "Chapter 2. Networking (introduction)"
+      }
+    },
+    {
+      "id": "ethernet",
+      "term": "Ethernet",
+      "definition": "Handles storage, management (in-band and out-of-band) and external connectivity.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html",
+        "section": "Chapter 2. Networking (introduction)"
+      }
+    },
+    {
+      "id": "bmc",
+      "term": "BMC",
+      "expansion": "Board Management Controller",
+      "definition": "Together with the HMC, provides out-of-band management of the compute tray hardware resources. External access is available through standard BMC and console interfaces.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays"
+      }
+    },
+    {
+      "id": "hmc",
+      "term": "HMC",
+      "expansion": "Host Management Controller",
+      "definition": "Together with the BMC, provides out-of-band management of the compute tray hardware resources.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays"
+      }
+    },
+    {
+      "id": "oob",
+      "term": "OOB",
+      "expansion": "Out-of-band",
+      "definition": "Out-of-band management of the compute tray hardware resources is provided by the BMC and HMC microcontrollers.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+        "section": "1.2 Compute Trays"
+      }
+    },
+    {
+      "id": "tor",
+      "term": "TOR",
+      "aliases": [
+        "ToR"
+      ],
+      "expansion": "Top-of-rack",
+      "definition": "Top-of-rack switches connect all BMCs in the compute trays (including BlueField-4 BMCs) and the switch trays to the management network.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+        "section": "1.5 Top-of-Rack Ethernet Switches"
+      }
+    },
+    {
+      "id": "cru",
+      "term": "CRU",
+      "expansion": "Customer-replaceable unit",
+      "definition": "A component you can replace yourself: the E1.S NVMe cache drive, the compute tray battery, the NVLink Switch tray battery, the power supply unit (PSU) and the power shelf management module. An authorized NVIDIA representative must replace components that are not on this list.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
+        "section": "Service Manual 1.1 Customer-Replaceable Units"
+      }
+    },
+    {
+      "id": "psu",
+      "term": "PSU",
+      "expansion": "Power supply unit",
+      "definition": "A customer-replaceable unit in the power shelf.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
+        "section": "Service Manual 1.1 Customer-Replaceable Units"
+      }
+    },
+    {
+      "id": "esd",
+      "term": "ESD",
+      "expansion": "Electrostatic discharge",
+      "definition": "ESD can damage drives, boards and other parts. NVIDIA recommends doing all procedures at an ESD workstation, or else wearing an antistatic wrist strap attached to chassis ground.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#electrostatic-discharge",
+        "section": "5.9 Electrostatic Discharge"
+      }
+    },
+    {
+      "id": "nvos",
+      "term": "NVOS",
+      "expansion": "NVIDIA operating system",
+      "definition": "The operating system on the NVLink switch tray. It enables the management and configuration of NVIDIA switch system platforms through a command-line interface (CLI) and OpenAPI (Swagger), and includes NVLSM, Fabric Manager and the NVSwitch firmware.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-switch-os",
+        "section": "4.4.1 NVIDIA Switch OS"
+      }
+    },
+    {
+      "id": "nvlsm",
+      "term": "NVLSM",
+      "expansion": "NVLink Subnet Manager",
+      "definition": "Discovers the NVLink network topology, assigns logical identifiers to GPU and NVSwitch NVLink ports, calculates and programs the switch forwarding table, programs the partition key for NVLink partitions and monitors changes in the NVLink fabric.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvlink-subnet-manager",
+        "section": "4.4.4 NVLink Subnet Manager"
+      }
+    },
+    {
+      "id": "fm",
+      "term": "FM",
+      "expansion": "Fabric Manager",
+      "definition": "Configures the NVSwitch memory fabrics to form a large memory fabric among the participating GPUs and monitors the NVLinks that support the fabric.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#fabric-manager",
+        "section": "4.4.3 Fabric Manager"
+      }
+    },
+    {
+      "id": "imex",
+      "term": "IMEX",
+      "expansion": "Internode Memory Exchange/Management",
+      "definition": "A secure service that maps GPU memory over NVLink between the GPUs in an NVLink domain across the OS/node boundary, using memory export and import operations.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#internode-memory-exchange-service",
+        "section": "4.3 Internode Memory Exchange Service"
+      }
+    },
+    {
+      "id": "nccl",
+      "term": "NCCL",
+      "expansion": "NVIDIA Collective Communications Library",
+      "definition": "Provides topology-aware inter-GPU communication primitives: collective communication and point-to-point send/receive for intra- and inter-node data transfers.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-collective-communication-library",
+        "section": "4.6 NVIDIA Collective Communication Library"
+      }
+    },
+    {
+      "id": "dcgm",
+      "term": "DCGM",
+      "expansion": "NVIDIA Data Center GPU Manager",
+      "definition": "A suite of tools that manage and monitor NVIDIA data center GPUs and NVSwitches in cluster environments.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#data-center-gpu-manager",
+        "section": "4.7 Data Center GPU Manager"
+      }
+    },
+    {
+      "id": "mft",
+      "term": "MFT",
+      "expansion": "NVIDIA Firmware Tools",
+      "definition": "A set of network ASIC firmware management tools that generate, query and flash firmware images.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-firmware-tools-mft",
+        "section": "4.8 NVIDIA Firmware Tools (MFT)"
+      }
+    },
+    {
+      "id": "bcm",
+      "term": "BCM",
+      "expansion": "Base Command Manager",
+      "definition": "Manages all system components; it is used to power on the NVLink switch trays first, then the compute trays.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
+        "section": "6.1 System Operations"
+      }
+    },
+    {
+      "id": "sol",
+      "term": "SOL",
+      "expansion": "Serial Over LAN",
+      "definition": "A session that lets you use the host system console remotely, even if the OS is not running.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#ipmi-host-sol-access",
+        "section": "6.4.1.8.1 IPMI - Host SOL Access"
+      }
+    },
+    {
+      "id": "sbios",
+      "term": "SBIOS",
+      "expansion": "System BIOS",
+      "definition": "The system BIOS of the compute tray. Its settings can be restored to their factory defaults.",
+      "source": {
+        "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html#reset-sbios-to-defaults",
+        "section": "6.4.1.7.4 Reset SBIOS to Defaults"
+      }
+    }
   ]
 }

@@ -266,6 +266,11 @@
       "linkCopied": "Bağlantı kopyalandı.",
       "embedCopied": "Gömme kodu kopyalandı."
     },
+    "glossary": {
+      "heading": "Sözlük ({count})",
+      "intro": "NVIDIA belgelerinin açtığı ya da tanımladığı terimler ve kısaltmalar, her biri kaynak bölümüyle. Ayrıntı panelinde altı noktalı çizili bir terim, tanımını açar.",
+      "dialog": "{term} tanımı"
+    },
     "sources": {
       "back": "← Kabine dön",
       "title": "Kaynaklar ve açık sorular",
@@ -1386,6 +1391,94 @@
     },
     "rearLayout": {
       "note": "Birimlerin arkasında şematik yerleşim, ölçekli değildir. Şekil 2 patlatılmış bir görünümdür: kablo kartuşlarını, FD83 hortum konnektörlü iki sıvı soğutma manifoldunu, güç barasını, bunların desteklerini, arka çerçeveyi ve sismik desteği gösterir, ancak konum, açıklık veya sayı vermez. Bu uygulama, Şekil 5 ve Şekil 7 tepsilerin güç konnektörünü arka kenarın ortasına koyduğu için güç konnektörlerini ve barayı ortalar, sıcak su çıkışlarını önden bakıldığında sağdaki manifolda koyar. Hangi manifoldun beslemeyi, hangisinin dönüşü taşıdığı belirtilmemiş."
+    },
+    "glossary": {
+      "nvl72": {
+        "definition": "72 GPU'luk bir NVL alanına sahip NVIDIA kabini."
+      },
+      "nvlink": {
+        "definition": "Çoklu GPU ve GPU-CPU iletişiminde PCIe bant genişliği sınırlarını aşmak için tasarlanmış yüksek hızlı, düşük gecikmeli bir ara bağlantı teknolojisi. GPU'lar arasında birleşik bellek erişimi sağlar ve NVSwitch yongaları üzerinden ölçeklenir."
+      },
+      "nvswitch": {
+        "definition": "Sunucular arasında engellemesiz anahtar görevi gören yongalar; NVLink bunlar üzerinden ölçeklenerek yüksek bant genişlikli ağ dokuları oluşturur."
+      },
+      "sharp": {
+        "definition": "NVSwitch'te, hesaplamaları ağın içinde yaparak toplu işlemleri hızlandıran ağ içi hesaplama."
+      },
+      "infiniband": {
+        "definition": "Kabinler arasındaki yüksek bant genişlikli, düşük gecikmeli yatay ölçekleme (scale-out) hesaplama dokusu."
+      },
+      "ethernet": {
+        "definition": "Depolamayı, yönetimi (bant içi ve bant dışı) ve harici bağlantıyı üstlenir."
+      },
+      "bmc": {
+        "expansion": "Kart Yönetim Denetleyicisi",
+        "definition": "HMC ile birlikte hesaplama tepsisi donanım kaynaklarının bant dışı yönetimini sağlar. Dışarıdan erişim standart BMC ve konsol arayüzleri üzerinden yapılır."
+      },
+      "hmc": {
+        "expansion": "Ana Bilgisayar Yönetim Denetleyicisi",
+        "definition": "BMC ile birlikte hesaplama tepsisi donanım kaynaklarının bant dışı yönetimini sağlar."
+      },
+      "oob": {
+        "expansion": "Bant dışı",
+        "definition": "Hesaplama tepsisi donanım kaynaklarının bant dışı yönetimi BMC ve HMC mikrodenetleyicileri tarafından sağlanır."
+      },
+      "tor": {
+        "expansion": "Kabin üstü",
+        "definition": "Kabin üstü anahtarlar, hesaplama tepsilerindeki tüm BMC'leri (BlueField-4 BMC'leri dahil) ve anahtar tepsilerini yönetim ağına bağlar."
+      },
+      "cru": {
+        "expansion": "Müşteri tarafından değiştirilebilir birim",
+        "definition": "Kendiniz değiştirebileceğiniz bir bileşen: E1.S NVMe önbellek sürücüsü, hesaplama tepsisi pili, NVLink Switch tepsisi pili, güç kaynağı birimi (PSU) ve güç rafı yönetim modülü. Bu listede olmayan bileşenleri yetkili bir NVIDIA temsilcisi değiştirmelidir."
+      },
+      "psu": {
+        "expansion": "Güç kaynağı birimi",
+        "definition": "Güç rafında bulunan, müşteri tarafından değiştirilebilir bir birim."
+      },
+      "esd": {
+        "expansion": "Elektrostatik deşarj",
+        "definition": "ESD sürücülere, kartlara ve diğer parçalara zarar verebilir. NVIDIA tüm işlemlerin bir ESD iş istasyonunda yapılmasını, bu yoksa şasi topraklamasına bağlı antistatik bileklik takılmasını önerir."
+      },
+      "nvos": {
+        "expansion": "NVIDIA işletim sistemi",
+        "definition": "NVLink anahtar tepsisindeki işletim sistemi. NVIDIA anahtar sistemi platformlarının bir komut satırı arayüzü (CLI) ve OpenAPI (Swagger) üzerinden yönetilmesini ve yapılandırılmasını sağlar; NVLSM, Fabric Manager ve NVSwitch donanım yazılımını içerir."
+      },
+      "nvlsm": {
+        "expansion": "NVLink Subnet Manager",
+        "definition": "NVLink ağ topolojisini keşfeder, GPU ve NVSwitch NVLink bağlantı noktalarına mantıksal tanımlayıcılar atar, anahtar iletim tablosunu hesaplayıp programlar, NVLink bölümleri için bölüm anahtarını programlar ve NVLink dokusundaki değişiklikleri izler."
+      },
+      "fm": {
+        "expansion": "Fabric Manager",
+        "definition": "NVSwitch bellek dokularını, katılan GPU'lar arasında büyük bir bellek dokusu oluşturacak şekilde yapılandırır ve bu dokuyu destekleyen NVLink'leri izler."
+      },
+      "imex": {
+        "expansion": "Internode Memory Exchange/Management",
+        "definition": "Bir NVLink alanındaki GPU'lar arasında, işletim sistemi/düğüm sınırının ötesinde, bellek dışa ve içe aktarma işlemleriyle GPU belleğini NVLink üzerinden eşleyen güvenli bir hizmet."
+      },
+      "nccl": {
+        "expansion": "NVIDIA Collective Communications Library",
+        "definition": "Topolojiye duyarlı GPU'lar arası iletişim temel işlemleri sağlar: düğüm içi ve düğümler arası veri aktarımları için toplu iletişim ve noktadan noktaya gönderme/alma."
+      },
+      "dcgm": {
+        "expansion": "NVIDIA Data Center GPU Manager",
+        "definition": "Küme ortamlarında NVIDIA veri merkezi GPU'larını ve NVSwitch'leri yöneten ve izleyen bir araç takımı."
+      },
+      "mft": {
+        "expansion": "NVIDIA Firmware Tools",
+        "definition": "Donanım yazılımı görüntülerini oluşturan, sorgulayan ve yazan bir ağ ASIC'i donanım yazılımı yönetim araçları kümesi."
+      },
+      "bcm": {
+        "expansion": "Base Command Manager",
+        "definition": "Tüm sistem bileşenlerini yönetir; önce NVLink anahtar tepsilerini, ardından hesaplama tepsilerini açmak için kullanılır."
+      },
+      "sol": {
+        "expansion": "Serial Over LAN",
+        "definition": "İşletim sistemi çalışmıyor olsa bile ana sistem konsolunu uzaktan kullanmanızı sağlayan bir oturum."
+      },
+      "sbios": {
+        "expansion": "Sistem BIOS'u",
+        "definition": "Hesaplama tepsisinin sistem BIOS'u. Ayarları fabrika varsayılanlarına geri yüklenebilir."
+      }
     }
   }
 }

@@ -272,6 +272,24 @@ test.describe('fallbacks and layouts', () => {
     await context.close();
   });
 
+  test('a glossary term opens its definition on tap at phone width and closes on Escape', async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 860 });
+    await page.goto('/?select=compute-tray.2');
+    const term = page.locator('.panel-body .gloss-term').first();
+    await term.scrollIntoViewIfNeeded();
+    await term.click();
+    await expect(term).toHaveAttribute('aria-expanded', 'true');
+    const pop = page.getByRole('dialog', { name: /^Definition of / });
+    await expect(pop).toBeVisible();
+    await expect(pop.getByRole('link')).toHaveAttribute('href', /^https:\/\/docs\.nvidia\.com\/dgx\/dgxvr-/);
+    const box = (await pop.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(400);
+    await page.keyboard.press('Escape');
+    await expect(pop).toBeHidden();
+    await expect(term).toBeFocused();
+  });
+
   test('embed mode hides the header and footer', async ({ page }) => {
     await page.goto('/?embed=1');
     await expect(page.locator('.topbar')).toBeHidden();

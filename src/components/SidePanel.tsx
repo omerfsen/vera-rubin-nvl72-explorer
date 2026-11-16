@@ -14,6 +14,7 @@ import { CompareBox, CompareStart } from './Compare';
 import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
 import { LINK_COLORS } from '../scenes/geometry';
 import { useI18n, type I18n } from '../i18n';
+import { GlossaryText } from './Glossary';
 
 function SourceLink({ source }: { source: Source }) {
   return (
@@ -220,12 +221,16 @@ export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
 
       <section>
         <h3>{t('panel.whatItIs')}</h3>
-        <p>{i18n.component(component, 'description')}</p>
+        <p>
+          <GlossaryText text={i18n.component(component, 'description')} />
+        </p>
       </section>
 
       <section>
         <h3>{t('panel.whatItDoes')}</h3>
-        <p>{i18n.component(component, 'function')}</p>
+        <p>
+          <GlossaryText text={i18n.component(component, 'function')} />
+        </p>
       </section>
 
       <section>
@@ -314,7 +319,7 @@ export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
                     {t('panel.networkItem', { number: n.number, name: n.name })}
                   </dt>
                   <dd>
-                    {i18n.network(n.id, 'description', n.description)}
+                    <GlossaryText text={i18n.network(n.id, 'description', n.description)} />
                     {n.note && <span className="note"> {i18n.network(n.id, 'note', n.note)}</span>}
                   </dd>
                 </div>
@@ -387,7 +392,8 @@ export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
           <ul className="plain">
             {connections.map((c) => (
               <li key={c.id}>
-                <span className="conn-kind">{t(`connectionKinds.${c.kind}`)}</span> {i18n.connection(c.id, 'description', c.description)}
+                <span className="conn-kind">{t(`connectionKinds.${c.kind}`)}</span>{' '}
+                <GlossaryText text={i18n.connection(c.id, 'description', c.description)} />
                 {connectionText(c, component.id, i18n) && <span className="muted"> ({connectionText(c, component.id, i18n)})</span>}
                 {c.assumed && <Assumed note={i18n.connection(c.id, 'note', c.note)} />}
                 {c.note && <div className="note">{i18n.connection(c.id, 'note', c.note)}</div>}
@@ -425,7 +431,7 @@ export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
         <section>
           <h3>{t('panel.note')}</h3>
           <p className="note">
-            {component.assumed && <Assumed note={note} />} {note}
+            {component.assumed && <Assumed note={note} />} <GlossaryText text={note} />
           </p>
         </section>
       )}
