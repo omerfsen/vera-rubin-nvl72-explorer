@@ -215,6 +215,10 @@ function RackFrame() {
 function GroupLabels() {
   const groups = model.topology.rackLayout.groups;
   const i18n = useI18n();
+  const selected = useExplorer((s) => s.selected);
+  const hovered = useExplorer((s) => s.hovered);
+  const groupOf = (path: string | null) => (path ? model.rackUnitByKey.get(path.split('/')[0] ?? '')?.group : undefined);
+  const active = new Set([groupOf(selected), groupOf(hovered)]);
   // drei's <Html> picks its DOM target from the connected event source. R3F
   // connects events after the children's first layout effects, so a label
   // mounted earlier would move targets mid-commit and could be lost.
@@ -237,7 +241,9 @@ function GroupLabels() {
             style={{ pointerEvents: 'none' }}
             zIndexRange={[20, 10]}
           >
-            <span>{i18n.t('scene.group', { count: g.count, name })}</span>
+            <span data-label data-label-priority={g.count} data-label-pinned={active.has(gi) || undefined}>
+              {i18n.t('scene.group', { count: g.count, name })}
+            </span>
           </Html>
         );
       })}

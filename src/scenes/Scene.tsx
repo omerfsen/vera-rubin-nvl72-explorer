@@ -10,6 +10,7 @@ import { RackScene, rackCameraDistance } from './RackScene';
 import { TrayScene } from './TrayScene';
 import { useSceneTheme } from './useSceneTheme';
 import { CAMERA_PRESETS, ease, interpolatePose, presetPose, type CameraPreset, type Pose, type Vec } from './cameraPresets';
+import { LabelDeconflict } from './LabelDeconflict';
 
 const FOV = 38;
 const RACK_DISTANCE = rackCameraDistance(FOV);
@@ -179,6 +180,7 @@ export default function Scene() {
         {trayKey ? <TrayScene key={trayKey} trayKey={trayKey} /> : <RackScene rear={view === 'rear'} />}
         <OrbitControls makeDefault enablePan={false} enableDamping={false} minDistance={0.8} maxPolarAngle={Math.PI * 0.85} />
         <CameraRig view={effectiveView} request={cameraRequest} />
+        <LabelDeconflict />
       </Canvas>
       <CameraButtons onPick={(preset) => setCameraRequest((r) => ({ preset, id: (r?.id ?? 0) + 1 }))} />
       {contextLost && (

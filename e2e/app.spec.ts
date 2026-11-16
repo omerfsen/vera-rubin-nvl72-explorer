@@ -19,6 +19,35 @@ test.describe('rack', () => {
     expect(errors).toEqual([]);
   });
 
+  test('group labels do not overlap when zoomed out', async ({ page }) => {
+    // A short window squeezes the rack, so its labels collide once zoomed out.
+    await page.setViewportSize({ width: 1280, height: 480 });
+    await page.goto('/');
+    await rackReady(page);
+    const box = (await page.locator('canvas').boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    for (let i = 0; i < 10; i++) await page.mouse.wheel(0, 400);
+    await expect
+      .poll(async () => {
+        const rects = await page.locator('.group-label span').evaluateAll((els) =>
+          els
+            .filter((el) => getComputedStyle(el).visibility !== 'hidden')
+            .map((el) => el.getBoundingClientRect())
+            .filter((r) => r.width > 0 && r.height > 0)
+            .map((r) => ({ x: r.left, y: r.top, w: r.width, h: r.height })),
+        );
+        let clashes = 0;
+        for (let i = 0; i < rects.length; i++)
+          for (let j = i + 1; j < rects.length; j++) {
+            const a = rects[i]!;
+            const b = rects[j]!;
+            if (a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h) clashes++;
+          }
+        return { clashes, visible: rects.length > 0 };
+      })
+      .toEqual({ clashes: 0, visible: true });
+  });
+
   test('a real click on the canvas selects a rack unit', async ({ page }) => {
     await page.goto('/');
     await rackReady(page);
