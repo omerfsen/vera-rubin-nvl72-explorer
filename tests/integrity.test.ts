@@ -31,6 +31,30 @@ describe('references inside the data file', () => {
     ]);
   });
 
+  it('records every dispute over a port\'s network as an alternative connection', () => {
+    // The quiz asks which network a port is on unless the port has an `alternative`
+    // connection. A conflict that names such a port must have one, or be listed here
+    // as a conflict that is not about the network.
+    const notAboutTheNetwork = new Set([
+      // How many ConnectX-9 cards a tray has; Table 2.3 and Fig. 1 agree the OSFP ports are on computenet.
+      'connectx-9-count',
+    ]);
+    const conflicts = (topology.openQuestions ?? []).filter((q) => q.kind === 'conflict');
+    const checked: string[] = [];
+    for (const q of conflicts) {
+      for (const id of q.components) {
+        if (model.getComponent(id)?.type !== 'port') continue;
+        const conns = topology.connections.filter((k) => k.from === id && k.network !== undefined);
+        if (conns.length === 0 || notAboutTheNetwork.has(q.id)) continue;
+        checked.push(q.id);
+        expect(conns.some((k) => k.alternative === true), `${q.id}: ${id} has no alternative connection`).toBe(true);
+      }
+    }
+    expect(checked).toContain('bluefield-left-port');
+    // The allowlist holds no stale ids.
+    for (const id of notAboutTheNetwork) expect(conflicts.map((q) => q.id)).toContain(id);
+  });
+
   it('points connections at real components and networks', () => {
     for (const c of topology.connections) {
       expect(ids, c.id).toContain(c.from);
