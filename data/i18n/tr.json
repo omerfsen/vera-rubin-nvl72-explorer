@@ -133,6 +133,16 @@
       "power-shelf": "güç rafı",
       "tor-switch": "kabin üstü Ethernet anahtarı"
     },
+    "listFilter": {
+      "label": "Listeyi süz",
+      "type": "Tür",
+      "network": "Ağ",
+      "byType": "Birim türüne göre süz",
+      "byNetwork": "Ağa göre süz",
+      "count": "{total} birimden {shown} tanesi",
+      "clear": "Süzgeçleri temizle",
+      "empty": "Bu süzgeçlere uyan birim yok. Bir seçimi kaldırın ya da süzgeçleri temizleyin."
+    },
     "list": {
       "label": "Kabin birimleri, yukarıdan aşağıya",
       "front": "Ön, yukarıdan aşağıya",

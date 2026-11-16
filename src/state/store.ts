@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { model } from '../data';
 import { DEFAULT_URL_STATE, canonicalPath, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
+import { NO_FILTER, filterNetworks, filterTypes, toggleIn, type ListFilter } from '../data/listFilter';
 import { answerFromSelection, generateQuiz, isValidSeed, newSeed, type QuizQuestion } from '../data/quiz';
 import { initialLang, storeLang, storedLang, type Lang } from '../i18n/lang';
 import { applyTheme, darkQuery, resolveTheme, storedThemePref, storeThemePref, type Theme, type ThemePref } from '../theme';
@@ -83,6 +84,11 @@ interface ExplorerState {
   /** Drop the right side: go back to the pinned part and pick another. */
   clearCompare: () => void;
   stopCompare: () => void;
+  /** Filter of the list view; does not touch the 3D network overlay. */
+  listFilter: ListFilter;
+  toggleListType: (type: string) => void;
+  toggleListNet: (network: string) => void;
+  clearListFilter: () => void;
 }
 
 const initial =
@@ -259,6 +265,16 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   stopCompare: () => set({ compare: '' }),
   setHovered: (key) => set({ hovered: key }),
   setListOpen: (open) => set({ listOpen: open }),
+  listFilter: { types: initial.ft ?? [], nets: initial.fn ?? [] },
+  toggleListType: (type) => {
+    const f = get().listFilter;
+    set({ listFilter: { ...f, types: toggleIn(f.types, type, filterTypes(model)) } });
+  },
+  toggleListNet: (network) => {
+    const f = get().listFilter;
+    set({ listFilter: { ...f, nets: toggleIn(f.nets, network, filterNetworks(model)) } });
+  },
+  clearListFilter: () => set({ listFilter: NO_FILTER }),
   stepRackUnit: (delta) => {
     const step = Math.trunc(delta);
     const units = model.rackUnits;
@@ -302,6 +318,8 @@ export function syncUrl(): () => void {
       lang: s.lang,
       cmp: s.compare,
       quiz: s.quiz && !s.quiz.done ? s.quiz.seed : undefined,
+      ft: s.listFilter.types,
+      fn: s.listFilter.nets,
     });
     if (document.documentElement.lang !== s.lang) document.documentElement.lang = s.lang;
     if (search === window.location.search) return;

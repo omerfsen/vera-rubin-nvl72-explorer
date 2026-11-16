@@ -1,5 +1,6 @@
 import type { Model } from '../data/model';
 import { isValidSeed } from '../data/quiz';
+import { filterNetworks, filterTypes, parseFilterList } from '../data/listFilter';
 import { DEFAULT_LANG, isLang, type Lang } from '../i18n/lang';
 
 export type View = 'rack' | 'rear' | 'tray';
@@ -26,12 +27,15 @@ export interface UrlState {
   cmp?: string;
   /** Seed of the quiz round in progress, so a round can be shared and replayed. */
   quiz?: number;
+  /** List filter: rack unit types and networks; left out when empty. */
+  ft?: string[];
+  fn?: string[];
 }
 
 export const DEFAULT_URL_STATE: UrlState = { view: 'rack', select: '', list: false };
 
 /** The query keys this app owns. Everything else in the query is left alone. */
-const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang', 'cmp', 'quiz']);
+const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang', 'cmp', 'quiz', 'ft', 'fn']);
 
 /**
  * The rack unit whose interior can be opened for this selection, e.g.
@@ -64,6 +68,7 @@ export function readUrlState(search: string, model: Model): UrlState {
     ...(isLang(params.get('lang')) ? { lang: params.get('lang') as Lang } : {}),
     ...(cmp ? { cmp } : {}),
     ...quizState(params),
+    ...filterState(params, model),
   };
 }
 
@@ -71,6 +76,12 @@ export function readUrlState(search: string, model: Model): UrlState {
 export function canonicalPath(path: string | null | undefined, model: Model): string {
   const segments = model.parsePath(path);
   return segments === null ? '' : model.formatPath(segments);
+}
+
+function filterState(params: URLSearchParams, model: Model): { ft?: string[]; fn?: string[] } {
+  const ft = parseFilterList(params.get('ft'), filterTypes(model));
+  const fn = parseFilterList(params.get('fn'), filterNetworks(model));
+  return { ...(ft.length ? { ft } : {}), ...(fn.length ? { fn } : {}) };
 }
 
 function quizState(params: URLSearchParams): { quiz?: number } {
@@ -114,6 +125,8 @@ export function writeUrlState(search: string, state: UrlState): string {
   if (state.cmp) kept.push(`cmp=${encodeURIComponent(state.cmp).replace(/%2F/g, '/')}`);
   if (state.lang && state.lang !== DEFAULT_LANG) kept.push(`lang=${encodeURIComponent(state.lang)}`);
   if (state.quiz !== undefined && isValidSeed(state.quiz)) kept.push(`quiz=${state.quiz}`);
+  if (state.ft?.length) kept.push(`ft=${state.ft.map(encodeURIComponent).join(',')}`);
+  if (state.fn?.length) kept.push(`fn=${state.fn.map(encodeURIComponent).join(',')}`);
   return kept.length === 0 ? '' : `?${kept.join('&')}`;
 }
 

@@ -133,6 +133,16 @@
       "power-shelf": "power shelves",
       "tor-switch": "top-of-rack Ethernet switches"
     },
+    "listFilter": {
+      "label": "Filter the list",
+      "type": "Type",
+      "network": "Network",
+      "byType": "Filter by unit type",
+      "byNetwork": "Filter by network",
+      "count": "{shown} of {total} units",
+      "clear": "Clear filters",
+      "empty": "No units match these filters. Remove a chip or clear the filters."
+    },
     "list": {
       "label": "Rack units, top to bottom",
       "front": "Front, top to bottom",

@@ -133,6 +133,16 @@
       "power-shelf": "电源架",
       "tor-switch": "机柜顶部以太网交换机"
     },
+    "listFilter": {
+      "label": "筛选列表",
+      "type": "类型",
+      "network": "网络",
+      "byType": "按单元类型筛选",
+      "byNetwork": "按网络筛选",
+      "count": "{total} 个单元中的 {shown} 个",
+      "clear": "清除筛选",
+      "empty": "没有符合这些筛选条件的单元。请取消某个选项或清除筛选。"
+    },
     "list": {
       "label": "机柜单元，从上到下",
       "front": "前部，从上到下",
