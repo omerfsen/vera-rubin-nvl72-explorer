@@ -305,13 +305,37 @@ test.describe('operator features', () => {
     await page.goto('/');
     await rackReady(page);
     const shot = () => page.locator('canvas').screenshot();
+    // The scene writes the camera position on the canvas as "x y z".
+    const pose = () => page.locator('canvas').getAttribute('data-camera');
+    const z = async () => Number(((await pose()) ?? '').split(' ')[2]);
     const before = await shot();
+    const home = await pose();
+    expect(home).toMatch(/^-?[\d.]+ -?[\d.]+ -?[\d.]+$/);
     const camera = page.getByRole('group', { name: 'Camera angle' });
-    await camera.getByRole('button', { name: 'Camera: top' }).click();
+    const press = (name: string) => camera.getByRole('button', { name, exact: true }).click();
+    const reset = 'Camera: reset camera to the starting angle';
+    await press('Camera: from above');
     await expect.poll(async () => (await shot()).equals(before)).toBe(false);
-    await camera.getByRole('button', { name: 'Camera: back' }).click();
-    await camera.getByRole('button', { name: 'Camera: 45° three-quarter' }).click();
-    await camera.getByRole('button', { name: 'Camera: reset view' }).click();
+    await expect.poll(pose).not.toBe(home);
+    await press('Camera: straight on, at eye level');
+    await press('Camera: from the other side, at eye level');
+    await expect.poll(z).toBeLessThan(-1);
+    await press('Camera: angled, 45° to one side');
+    await press(reset);
+    await expect.poll(pose).toBe(home);
+
+    // The presets follow the rear view and leave the view switch alone.
+    await page.getByRole('button', { name: 'Rear', exact: true }).click();
+    await expect.poll(() => param(page, 'view')).toBe('rear');
+    await expect.poll(z).toBeLessThan(-1);
+    const rear = await pose();
+    await press('Camera: straight on, at eye level');
+    await expect.poll(pose).not.toBe(rear);
+    await expect.poll(async () => Math.abs(Number(((await pose()) ?? '9').split(' ')[0]))).toBeLessThan(0.01);
+    expect(await z()).toBeLessThan(-1);
+    expect(await param(page, 'view')).toBe('rear');
+    await press(reset);
+    await expect.poll(pose).toBe(rear);
     await expect(page.getByRole('button', { name: 'Rear', exact: true })).toHaveCount(1);
     expect(errors).toEqual([]);
   });

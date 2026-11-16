@@ -104,16 +104,16 @@
     },
     "cameraView": {
       "group": "Camera angle",
-      "reset": "Reset view",
-      "resetLabel": "Camera: reset view",
-      "front": "Front",
-      "frontLabel": "Camera: front",
-      "back": "Back",
-      "backLabel": "Camera: back",
-      "top": "Top",
-      "topLabel": "Camera: top",
-      "angle": "45°",
-      "angleLabel": "Camera: 45° three-quarter"
+      "reset": "Reset camera",
+      "resetLabel": "Camera: reset camera to the starting angle",
+      "straight": "Straight on",
+      "straightLabel": "Camera: straight on, at eye level",
+      "opposite": "Other side",
+      "oppositeLabel": "Camera: from the other side, at eye level",
+      "above": "From above",
+      "aboveLabel": "Camera: from above",
+      "angled": "Angled",
+      "angledLabel": "Camera: angled, 45° to one side"
     },
     "layers": {
       "structure": "Structure",

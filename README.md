@@ -24,7 +24,8 @@ Live: https://verarubin-nvl72.faruk.net
 - **3D rack**, front and rear, with every compute tray, switch tray, power
   shelf and ToR switch clickable. Open any unit to see the parts inside,
   spread them apart with **Exploded view**, and move the camera with the
-  **Front / Back / Top / 45°** buttons or **Reset view**.
+  **Straight on / Other side / From above / Angled** buttons or **Reset
+  camera**.
 - **Networks**: highlight any of the seven networks; moving pulses show the
   path on top of the highlighted ports and links.
 - **Learn**: a **Start here** guided tour, a **Quiz**, a **Compare** view for
@@ -184,8 +185,9 @@ images from `docs.nvidia.com`, and the figures load with no referrer.
   own connections. Dashed lines are inferred and marked *assumed* in the
   panel.
 - **Exploded view** (inside an open tray) spreads the parts apart in layers so
-  each one is easy to see and click. **Front / Back / Top / 45°** and **Reset
-  view** in the corner of the 3D view move the camera; labels move aside or
+  each one is easy to see and click. **Straight on / Other side / From above /
+  Angled** and **Reset camera** in the corner of the 3D view move the camera
+  only, and leave the Front / Rear view switch as it is; labels move aside or
   fade out instead of covering each other.
 - With the 3D view focused, Up/Down step through the rack (or through the
   parts of an open tray) and Enter opens a compute tray. `Esc` goes up one

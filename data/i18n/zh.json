@@ -104,16 +104,16 @@
     },
     "cameraView": {
       "group": "相机角度",
-      "reset": "重置视图",
-      "resetLabel": "相机：重置视图",
-      "front": "正面",
-      "frontLabel": "相机：正面",
-      "back": "背面",
-      "backLabel": "相机：背面",
-      "top": "顶部",
-      "topLabel": "相机：顶部",
-      "angle": "45°",
-      "angleLabel": "相机：45° 斜视"
+      "reset": "重置相机",
+      "resetLabel": "相机：重置相机，回到初始角度",
+      "straight": "平视",
+      "straightLabel": "相机：平视正对",
+      "opposite": "另一侧",
+      "oppositeLabel": "相机：从另一侧平视",
+      "above": "俯视",
+      "aboveLabel": "相机：俯视",
+      "angled": "斜角",
+      "angledLabel": "相机：斜角，侧转 45°"
     },
     "layers": {
       "structure": "结构",
