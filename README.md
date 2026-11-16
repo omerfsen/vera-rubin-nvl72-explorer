@@ -238,4 +238,4 @@ Omer Sen
 
 ## License
 
-Apache License 2.0. See [LICENSE](LICENSE).
+Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE); anyone redistributing this project must keep the NOTICE file.
