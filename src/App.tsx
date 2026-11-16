@@ -21,6 +21,7 @@ import { QuizButton } from './components/Quiz';
 import { TourBox, TourButton } from './components/Tour';
 import { SHOW_RECORDER } from './config/flags';
 import { useI18n } from './i18n';
+import { FirstVisitHint, HintButton } from './components/FirstVisitHint';
 
 const Scene = lazy(() => import('./scenes/Scene'));
 
@@ -47,6 +48,9 @@ function useKeyboard() {
         s.openTray();
       } else if (e.key === 'Escape' && (s.selected !== '' || s.view !== 'rack')) {
         s.goUp();
+      } else if (e.key === 'Escape' && s.hintOpen) {
+        // Nothing to go back from: Escape closes the first-visit hint.
+        s.dismissHint();
       }
     };
     window.addEventListener('keydown', onKey);
@@ -217,6 +221,7 @@ export default function App() {
         {SHOW_RECORDER && !embed && <Recorder />}
         {!embed && <TourButton />}
         {!embed && <QuizButton />}
+        {webgl && !embed && <HintButton />}
         <button type="button" className="toggle" aria-pressed={page === 'sources'} onClick={() => setPage(page === 'sources' ? '' : 'sources')}>
           {t('top.sources')}
         </button>
@@ -297,6 +302,7 @@ export default function App() {
                 </>
               )}
             </p>
+            <FirstVisitHint />
           </section>
         )}
 

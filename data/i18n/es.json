@@ -443,6 +443,15 @@
         "network": "Esta capa resalta las piezas de una red. Elige otra red en la barra de arriba o desactívala.",
         "sources": "Cada dato aquí enlaza a su sección en los documentos de NVIDIA. Esta página los reúne todos. Aquí termina el recorrido."
       }
+    },
+    "firstVisit": {
+      "heading": "Consejos rápidos",
+      "select": "Seleccione una unidad del rack: haga clic o tóquela.",
+      "open": "Ábrala: selecciónela de nuevo, haga doble clic, pulse Intro o use el botón Abrir.",
+      "network": "Pruebe una red en la barra de redes para iluminar sus puertos.",
+      "done": "hecho",
+      "gotIt": "Entendido",
+      "show": "Mostrar consejos"
     }
   },
   "content": {
