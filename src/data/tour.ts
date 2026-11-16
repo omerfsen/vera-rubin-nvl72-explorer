@@ -36,6 +36,27 @@ export function tourProblems(steps: readonly TourStep[], model: Model): string[]
   return problems;
 }
 
+/**
+ * Whether the screen still shows a step: its part, view, network and page, with
+ * nothing pinned for comparison. False once the viewer has moved on to something else.
+ */
+export function showsTourStep(
+  step: TourStep,
+  shown: { view: View; selected: string; network: string; page: string; compare: string },
+  model: Model,
+): boolean {
+  const segments = model.parsePath(step.target);
+  const target = segments === null ? '' : model.formatPath(segments);
+  const view = step.view === 'tray' && trayKeyOf(target, model) === null ? 'rack' : step.view;
+  return (
+    shown.selected === target &&
+    shown.view === view &&
+    shown.network === (step.network ?? '') &&
+    shown.page === (step.page ?? '') &&
+    shown.compare === ''
+  );
+}
+
 /** The component a step is about: the last part of its target, or the rack. */
 export function tourComponentId(step: TourStep, model: Model): string {
   const segments = model.parsePath(step.target) ?? [];

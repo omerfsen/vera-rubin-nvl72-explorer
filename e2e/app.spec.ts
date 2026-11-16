@@ -287,6 +287,38 @@ test.describe('operator features', () => {
     await expect.poll(() => param(page, 'select')).toBe(null);
   });
 
+  test('a tour link opens its step, Next moves the link on and leaving drops it', async ({ page }) => {
+    await page.goto('/?tour=3');
+    const tour = page.getByRole('region', { name: 'Guided tour' });
+    await expect(tour.getByRole('heading')).toContainText('step 3 of');
+    await expect.poll(() => param(page, 'view')).toBe('tray');
+    await expect.poll(() => param(page, 'select')).toBe('compute-tray.1');
+    await tour.getByRole('button', { name: 'Next', exact: true }).click();
+    await expect(tour.getByRole('heading')).toContainText('step 4 of');
+    await expect.poll(() => param(page, 'tour')).toBe('4');
+    await expect.poll(() => param(page, 'select')).toBe('compute-tray.1/rubin-gpu.1');
+    await tour.getByRole('button', { name: 'Back', exact: true }).click();
+    await expect.poll(() => param(page, 'tour')).toBe('3');
+    await page.keyboard.press('Escape');
+    await expect(tour).toHaveCount(0);
+    await expect.poll(() => param(page, 'tour')).toBeNull();
+    await expect.poll(() => param(page, 'select')).toBeNull();
+    await page.goto('/?tour=99');
+    await rackReady(page);
+    await expect(page.getByRole('region', { name: 'Guided tour' })).toHaveCount(0);
+    await expect.poll(() => param(page, 'tour')).toBeNull();
+    // Moving off the step takes it out of the link; the next step puts it back.
+    await page.goto('/?tour=2');
+    await rackReady(page);
+    await expect.poll(() => param(page, 'tour')).toBe('2');
+    await page.getByRole('button', { name: /4 ipminet/ }).click();
+    await expect.poll(() => param(page, 'net')).toBe('ipminet');
+    await expect.poll(() => param(page, 'tour')).toBeNull();
+    await expect(page.getByRole('region', { name: 'Guided tour' }).getByRole('heading')).toContainText('step 2 of');
+    await page.getByRole('region', { name: 'Guided tour' }).getByRole('button', { name: 'Next', exact: true }).click();
+    await expect.poll(() => param(page, 'tour')).toBe('3');
+  });
+
   test('the rear view and the sources page open', async ({ page }) => {
     await page.goto('/');
     await rackReady(page);

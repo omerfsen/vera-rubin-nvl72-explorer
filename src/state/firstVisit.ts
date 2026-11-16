@@ -5,7 +5,7 @@ export const HINT_STORAGE_KEY = 'nvl72-explorer.hint';
 
 /**
  * A shared link that already shows something: a selection, another view, a
- * network, a walkthrough step, a comparison, a quiz round or the sources page.
+ * network, a walkthrough step, a comparison, a quiz round, a tour step or the sources page.
  * The viewer is being shown that, so the hint stays out of the way.
  */
 export function isDeepLink(state: UrlState): boolean {
@@ -16,7 +16,8 @@ export function isDeepLink(state: UrlState): boolean {
     !!state.proc ||
     !!state.cmp ||
     !!state.page ||
-    state.quiz !== undefined
+    state.quiz !== undefined ||
+    state.tour !== undefined
   );
 }
 

@@ -11,7 +11,7 @@ export function TourButton() {
   const { t } = useI18n();
   if (TOUR_STEPS.length === 0) return null;
   return (
-    <button type="button" className="toggle tour-start" aria-pressed={on} title={t('guidedTour.startHint')} onClick={startTour}>
+    <button type="button" className="toggle tour-start" aria-pressed={on} title={t('guidedTour.startHint')} onClick={() => startTour()}>
       {t('guidedTour.start')}
     </button>
   );

@@ -201,7 +201,7 @@ images from `docs.nvidia.com`, and the figures load with no referrer.
 - The URL holds what is on screen, so any link can be shared: `select`
   (part), `view` (`rear` or `tray`), `list`, `net` (network overlay), `proc`
   and `step` (walkthrough), `page=sources`, `cmp` (comparison), `quiz` (quiz
-  round), `ft` and `fn` (list filters) and `lang`. For example
+  round), `tour` (tour step, from 1), `ft` and `fn` (list filters) and `lang`. For example
   `?select=compute-tray.7&list=1`.
 - Power shelves are numbered 1 to 4 from the bottom up, as in NVIDIA's service
   manual. Compute and switch trays are numbered from the top down; NVIDIA does
@@ -212,7 +212,8 @@ images from `docs.nvidia.com`, and the figures load with no referrer.
 - **Start here** in the top bar runs a 12-step tour: the rack, a compute tray
   and its GPUs and CPUs, a switch tray, a power shelf, the rear, a network and
   the Sources page. The arrow keys move between steps; `Esc` ends it and puts
-  back what was on screen.
+  back what was on screen. `tour=` in the link opens the tour at that step,
+  for example `?tour=3`.
 - **Quick tips** appear on a first visit with three steps to get started. The
   **?** button in the top bar brings them back.
 - **Quiz** asks 10 questions generated from the data: find a part, which unit
