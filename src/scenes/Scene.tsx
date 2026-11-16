@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import type { Vector3 } from 'three';
 import { model } from '../data';
@@ -9,12 +9,12 @@ import { trayKeyOf } from '../state/url';
 import { RackScene, rackCameraDistance } from './RackScene';
 import { TrayScene } from './TrayScene';
 import { useSceneTheme } from './useSceneTheme';
+import { CAMERA_PRESETS, ease, interpolatePose, presetPose, type CameraPreset, type Pose, type Vec } from './cameraPresets';
 
 const FOV = 38;
 const RACK_DISTANCE = rackCameraDistance(FOV);
 
 /** Where the camera sits and looks for each view. */
-type Vec = [number, number, number];
 const CAMERAS: Record<'rack' | 'rear' | 'tray' | 'shelf', { position: Vec; target: Vec; maxDistance: number }> = {
   rack: { position: [RACK_DISTANCE * 0.23, 0.3, RACK_DISTANCE], target: [0, 0, 0], maxDistance: RACK_DISTANCE * 2 },
   rear: { position: [-RACK_DISTANCE * 0.7, 0.45, -RACK_DISTANCE * 0.75], target: [0, 0, -0.2], maxDistance: RACK_DISTANCE * 2 },
@@ -22,32 +22,119 @@ const CAMERAS: Record<'rack' | 'rear' | 'tray' | 'shelf', { position: Vec; targe
   // A shelf several units tall (the power shelf) is seen from the front, like NVIDIA's Fig. 8.
   shelf: { position: [0.5, 0.75, 2.6], target: [0, 0.15, 0.2], maxDistance: 5 },
 };
+type ViewName = keyof typeof CAMERAS;
 
 /** The parts of drei's OrbitControls this file uses. */
 interface Controls {
   target: Vector3;
   maxDistance: number;
+  maxPolarAngle: number;
   update: () => void;
+  addEventListener: (type: 'start', listener: () => void) => void;
+  removeEventListener: (type: 'start', listener: () => void) => void;
 }
 
-/** Moves the camera when the view changes; free orbiting in between. */
-function CameraRig({ view }: { view: 'rack' | 'rear' | 'tray' | 'shelf' }) {
+/** A click on a camera button; `id` changes on every click so the same preset can run twice. */
+interface CameraRequest {
+  preset: CameraPreset;
+  id: number;
+}
+
+const MOVE_MS = 700;
+
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+}
+
+/** Moves the camera when the view changes or a preset is chosen; free orbiting in between. */
+function CameraRig({ view, request }: { view: ViewName; request: CameraRequest | null }) {
   const camera = useThree((s) => s.camera);
   const controls = useThree((s) => s.controls) as unknown as Controls | null;
   const invalidate = useThree((s) => s.invalidate);
+  const move = useRef<{ from: Pose; to: Pose; start: number } | null>(null);
+
+  const apply = useCallback(
+    (pose: Pose) => {
+      camera.position.set(...pose.position);
+      if (controls) {
+        controls.target.set(...pose.target);
+        controls.update();
+      } else {
+        camera.lookAt(...pose.target);
+      }
+      invalidate();
+    },
+    [camera, controls, invalidate],
+  );
+
   useEffect(() => {
     const c = CAMERAS[view];
-    camera.position.set(c.position[0], c.position[1], c.position[2]);
-    if (controls) {
-      controls.target.set(c.target[0], c.target[1], c.target[2]);
-      controls.maxDistance = c.maxDistance;
-      controls.update();
-    } else {
-      camera.lookAt(c.target[0], c.target[1], c.target[2]);
+    move.current = null;
+    if (controls) controls.maxDistance = c.maxDistance;
+    apply(c);
+  }, [view, controls, apply]);
+
+  // Only a new request starts a move; a view change resets the camera above.
+  const latest = useRef({ view, controls, camera, apply, invalidate });
+  latest.current = { view, controls, camera, apply, invalidate };
+  useEffect(() => {
+    if (!request) return;
+    const { view: v, controls: ctl, camera: cam, apply: put, invalidate: redraw } = latest.current;
+    const to = presetPose(CAMERAS[v], request.preset, ctl?.maxPolarAngle);
+    if (prefersReducedMotion()) {
+      move.current = null;
+      put(to);
+      return;
     }
-    invalidate();
-  }, [view, camera, controls, invalidate]);
+    const t = ctl?.target;
+    const from: Pose = {
+      position: [cam.position.x, cam.position.y, cam.position.z],
+      target: t ? [t.x, t.y, t.z] : to.target,
+    };
+    move.current = { from, to, start: performance.now() };
+    redraw();
+  }, [request]);
+
+  // Dragging stops a move in progress.
+  useEffect(() => {
+    if (!controls) return;
+    const stop = () => {
+      move.current = null;
+    };
+    controls.addEventListener('start', stop);
+    return () => controls.removeEventListener('start', stop);
+  }, [controls]);
+
+  useFrame(() => {
+    const m = move.current;
+    if (!m) return;
+    const k = (performance.now() - m.start) / MOVE_MS;
+    if (k >= 1) move.current = null;
+    // apply() asks for another frame, which keeps the demand loop going until the move ends.
+    apply(interpolatePose(m.from, m.to, ease(k)));
+  });
   return null;
+}
+
+/** Reset and preset angle buttons over the stage. */
+function CameraButtons({ onPick }: { onPick: (preset: CameraPreset) => void }) {
+  const { t } = useI18n();
+  return (
+    <div className="camera-presets" role="group" aria-label={t('cameraView.group')}>
+      {CAMERA_PRESETS.map((p) => (
+        <button
+          key={p}
+          type="button"
+          aria-label={t(`cameraView.${p}Label`)}
+          title={t(`cameraView.${p}Label`)}
+          onClick={() => onPick(p)}
+        >
+          {p === 'reset' && <span aria-hidden="true">⟲ </span>}
+          {t(`cameraView.${p}`)}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 export default function Scene() {
@@ -55,11 +142,14 @@ export default function Scene() {
   const selected = useExplorer((s) => s.selected);
   const trayKey = view === 'tray' ? trayKeyOf(selected, model) : null;
   const [contextLost, setContextLost] = useState(false);
+  const [cameraRequest, setCameraRequest] = useState<CameraRequest | null>(null);
   const { t, segmentLabel } = useI18n();
   const layout = trayKey ? model.trayLayout(trayKey.split('.')[0]!) : undefined;
   // Tall shelves (PSU rows) and units that are only a front panel (the ToR switch) are seen from the front.
   const tall = layout ? (layout.heightRU ?? 1) > 1 || layout.slots.every((s) => s.face === 'front') : false;
-  const effectiveView = trayKey ? (tall ? 'shelf' : 'tray') : view === 'rear' ? 'rear' : 'rack';
+  const effectiveView: ViewName = trayKey ? (tall ? 'shelf' : 'tray') : view === 'rear' ? 'rear' : 'rack';
+  // A preset belongs to the view it was chosen in.
+  useEffect(() => setCameraRequest(null), [effectiveView, trayKey]);
   return (
     <>
       <Canvas
@@ -88,8 +178,9 @@ export default function Scene() {
         <directionalLight position={[-3, 1, -2]} intensity={0.4} />
         {trayKey ? <TrayScene key={trayKey} trayKey={trayKey} /> : <RackScene rear={view === 'rear'} />}
         <OrbitControls makeDefault enablePan={false} enableDamping={false} minDistance={0.8} maxPolarAngle={Math.PI * 0.85} />
-        <CameraRig view={effectiveView} />
+        <CameraRig view={effectiveView} request={cameraRequest} />
       </Canvas>
+      <CameraButtons onPick={(preset) => setCameraRequest((r) => ({ preset, id: (r?.id ?? 0) + 1 }))} />
       {contextLost && (
         <p className="notice context-lost" role="status">
           {t('scene.contextLost')}

@@ -88,6 +88,19 @@
       "explodedView": "Exploded view",
       "explodedViewHint": "Spread the parts apart by layer"
     },
+    "cameraView": {
+      "group": "Camera angle",
+      "reset": "Reset view",
+      "resetLabel": "Camera: reset view",
+      "front": "Front",
+      "frontLabel": "Camera: front",
+      "back": "Back",
+      "backLabel": "Camera: back",
+      "top": "Top",
+      "topLabel": "Camera: top",
+      "angle": "45°",
+      "angleLabel": "Camera: 45° three-quarter"
+    },
     "layers": {
       "structure": "Structure",
       "structureHint": "the bones: rack frame or tray shell",

@@ -146,6 +146,24 @@ test.describe('operator features', () => {
     await expect(page.getByRole('heading', { name: 'Sources and open questions' })).toBeVisible();
   });
 
+  test('camera presets move the view and Reset brings it back', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+    await page.goto('/');
+    await rackReady(page);
+    const shot = () => page.locator('canvas').screenshot();
+    const before = await shot();
+    const camera = page.getByRole('group', { name: 'Camera angle' });
+    await camera.getByRole('button', { name: 'Camera: top' }).click();
+    await expect.poll(async () => (await shot()).equals(before)).toBe(false);
+    await camera.getByRole('button', { name: 'Camera: back' }).click();
+    await camera.getByRole('button', { name: 'Camera: 45° three-quarter' }).click();
+    await camera.getByRole('button', { name: 'Camera: reset view' }).click();
+    await expect(page.getByRole('button', { name: 'Rear', exact: true })).toHaveCount(1);
+    expect(errors).toEqual([]);
+  });
+
   test('the dataset is published next to the app', async ({ request }) => {
     const res = await request.get('/data/nvl72-topology.json');
     expect(res.ok()).toBe(true);

@@ -88,6 +88,19 @@
       "explodedView": "Patlatılmış görünüm",
       "explodedViewHint": "Parçaları katmanlara göre birbirinden ayırır"
     },
+    "cameraView": {
+      "group": "Kamera açısı",
+      "reset": "Görünümü sıfırla",
+      "resetLabel": "Kamera: görünümü sıfırla",
+      "front": "Ön",
+      "frontLabel": "Kamera: ön",
+      "back": "Arka",
+      "backLabel": "Kamera: arka",
+      "top": "Üst",
+      "topLabel": "Kamera: üst",
+      "angle": "45°",
+      "angleLabel": "Kamera: 45° üç çeyrek"
+    },
     "layers": {
       "structure": "Yapı",
       "structureHint": "iskelet: kabin çerçevesi veya tepsi gövdesi",
