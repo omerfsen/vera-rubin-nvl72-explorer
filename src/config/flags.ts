@@ -11,3 +11,9 @@ export const OFFICIAL_FIGURE_BASE = 'https://docs.nvidia.com/dgx/dgxvr-user-guid
 export function officialFigureUrl(fileName: string): string {
   return OFFICIAL_FIGURE_BASE + encodeURIComponent(fileName);
 }
+
+/**
+ * SHOW_RECORDER: the Record button in the top bar. On by default; build with
+ * VITE_SHOW_RECORDER=false to remove it.
+ */
+export const SHOW_RECORDER: boolean = import.meta.env.VITE_SHOW_RECORDER !== 'false';

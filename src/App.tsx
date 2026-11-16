@@ -15,6 +15,8 @@ import { trayKeyOf } from './state/url';
 import { syncTheme, syncUrl, useExplorer } from './state/store';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
+import { Recorder } from './components/Recorder';
+import { SHOW_RECORDER } from './config/flags';
 import { useI18n } from './i18n';
 
 const Scene = lazy(() => import('./scenes/Scene'));
@@ -197,6 +199,7 @@ export default function App() {
         <Search />
         <LanguageSwitcher />
         <ThemeSwitcher />
+        {SHOW_RECORDER && !embed && <Recorder />}
         <button type="button" className="toggle" aria-pressed={page === 'sources'} onClick={() => setPage(page === 'sources' ? '' : 'sources')}>
           {t('top.sources')}
         </button>

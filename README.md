@@ -106,6 +106,10 @@ https://verarubin-nvl72.faruk.net. https://vr-nvl72.faruk.net redirects there.
   next to the app, for reuse in other tools.
 - **Share and embed.** Every view has a link; the panel copies it, or an
   `<iframe>` snippet. `?embed=1` hides the header, network bar and footer.
+- **Record a video.** Record in the top bar captures the tab and saves it on
+  your computer as WebM and MP4 (WebM only where the browser cannot encode
+  MP4, such as Firefox). Nothing is uploaded. Build with
+  `VITE_SHOW_RECORDER=false` to remove the button.
 
 ## Official figures (off by default)
 
