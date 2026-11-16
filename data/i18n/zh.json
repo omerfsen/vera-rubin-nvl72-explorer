@@ -346,6 +346,29 @@
       "nvlink": "nvlink",
       "power": "电源",
       "cooling": "冷却"
+    },
+    "quiz": {
+      "start": "测验",
+      "startHint": "用根据 NVIDIA 文档生成的 {count} 道题测试自己",
+      "aria": "测验",
+      "heading": "测验 · 第 {current} 题，共 {total} 题",
+      "score": "得分：{score} / {total}",
+      "click": "在 3D 视图或列表中选择：{name}。",
+      "unit": "{name} 位于哪个单元？请在 3D 视图或列表中选择该单元。",
+      "count": "整个机柜中有多少个 {name}？",
+      "network": "{name} 连接在哪个网络上？",
+      "choices": "选项",
+      "selectHint": "为了找到某个部件而打开单元不算作答。",
+      "correct": "正确。",
+      "wrong": "不对。正确答案是 {answer}。",
+      "next": "下一题",
+      "finish": "查看得分",
+      "quit": "退出测验",
+      "done": "测验完成",
+      "final": "你的得分是 {score} / {total}。",
+      "again": "再试一次",
+      "close": "关闭",
+      "round": "第 {seed} 轮：分享本页链接即可重做同一组题目。"
     }
   },
   "content": {

@@ -346,6 +346,29 @@
       "nvlink": "nvlink",
       "power": "energía",
       "cooling": "refrigeración"
+    },
+    "quiz": {
+      "start": "Cuestionario",
+      "startHint": "Ponte a prueba con {count} preguntas hechas a partir de los documentos de NVIDIA",
+      "aria": "Cuestionario",
+      "heading": "Cuestionario · pregunta {current} de {total}",
+      "score": "Puntuación: {score} de {total}",
+      "click": "Selecciona en la vista 3D o en la lista: {name}.",
+      "unit": "¿Qué unidad contiene esta pieza: {name}? Selecciona esa unidad en la vista 3D o en la lista.",
+      "count": "¿Cuántas de estas hay en todo el rack: {name}?",
+      "network": "¿En qué red está esta pieza: {name}?",
+      "choices": "Respuestas",
+      "selectHint": "Abrir una unidad para llegar a una pieza no cuenta como respuesta.",
+      "correct": "Correcto.",
+      "wrong": "No exactamente. La respuesta es {answer}.",
+      "next": "Siguiente pregunta",
+      "finish": "Ver mi puntuación",
+      "quit": "Salir del cuestionario",
+      "done": "Cuestionario terminado",
+      "final": "Has obtenido {score} de {total}.",
+      "again": "Intentar de nuevo",
+      "close": "Cerrar",
+      "round": "Ronda {seed}: comparte el enlace de esta página para repetir las mismas preguntas."
     }
   },
   "content": {

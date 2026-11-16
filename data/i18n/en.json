@@ -346,6 +346,29 @@
       "nvlink": "nvlink",
       "power": "power",
       "cooling": "cooling"
+    },
+    "quiz": {
+      "start": "Quiz",
+      "startHint": "Test yourself with {count} questions made from NVIDIA's documents",
+      "aria": "Quiz",
+      "heading": "Quiz · question {current} of {total}",
+      "score": "Score: {score} of {total}",
+      "click": "Find this part and select it, in the 3D view or the list: {name}.",
+      "unit": "Which unit holds the {name}? Select that unit, in the 3D view or the list.",
+      "count": "How many of these are in the whole rack: {name}?",
+      "network": "Which network is the {name} on?",
+      "choices": "Answers",
+      "selectHint": "Opening a unit on the way to a part does not count as an answer.",
+      "correct": "Correct.",
+      "wrong": "Not quite. The answer is {answer}.",
+      "next": "Next question",
+      "finish": "See my score",
+      "quit": "Quit quiz",
+      "done": "Quiz complete",
+      "final": "You scored {score} of {total}.",
+      "again": "Try again",
+      "close": "Close",
+      "round": "Round {seed}: share this page's link to replay the same questions."
     }
   },
   "content": {

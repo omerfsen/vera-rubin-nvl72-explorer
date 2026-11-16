@@ -1,10 +1,30 @@
 import { create } from 'zustand';
 import { model } from '../data';
 import { DEFAULT_URL_STATE, canonicalPath, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
+import { answerFromSelection, generateQuiz, isValidSeed, newSeed, type QuizQuestion } from '../data/quiz';
 import { initialLang, storeLang, storedLang, type Lang } from '../i18n/lang';
 import { applyTheme, darkQuery, resolveTheme, storedThemePref, storeThemePref, type Theme, type ThemePref } from '../theme';
 
+export interface QuizState {
+  seed: number;
+  questions: QuizQuestion[];
+  /** 0-based question being asked. */
+  index: number;
+  score: number;
+  /** The answer to the current question, once given: a component id, total or network id. */
+  answer: { given: string; correct: boolean } | null;
+  done: boolean;
+}
+
 interface ExplorerState {
+  /** Quiz round in progress, or null. */
+  quiz: QuizState | null;
+  /** Start a round; the same seed gives the same questions. */
+  startQuiz: (seed?: number) => void;
+  /** Answer the current question; ignored once it has an answer. */
+  answerQuiz: (given: string) => void;
+  nextQuizQuestion: () => void;
+  quitQuiz: () => void;
   view: View;
   /** Selection path, "" for the rack itself. */
   selected: string;
@@ -92,6 +112,38 @@ function storePanelOpen(open: boolean): void {
 const initialThemePref: ThemePref = typeof window === 'undefined' ? 'system' : storedThemePref();
 
 export const useExplorer = create<ExplorerState>((set, get) => ({
+  quiz: null,
+  startQuiz: (seed) => {
+    const s = isValidSeed(seed) ? seed : newSeed();
+    const questions = generateQuiz(model, s);
+    if (questions.length === 0) return;
+    // A fresh view so the panel does not already show an answer; the panel shows the question.
+    set({
+      quiz: { seed: s, questions, index: 0, score: 0, answer: null, done: false },
+      procedure: '',
+      step: 0,
+      page: '',
+      network: '',
+      selected: '',
+      view: 'rack',
+      hovered: null,
+      panelOpen: true,
+    });
+  },
+  answerQuiz: (given) => {
+    const quiz = get().quiz;
+    if (!quiz || quiz.done || quiz.answer) return;
+    const q = quiz.questions[quiz.index]!;
+    const correct = given === q.answer;
+    set({ quiz: { ...quiz, answer: { given, correct }, score: quiz.score + (correct ? 1 : 0) } });
+  },
+  nextQuizQuestion: () => {
+    const quiz = get().quiz;
+    if (!quiz || quiz.done || !quiz.answer) return;
+    const index = quiz.index + 1;
+    set({ quiz: index >= quiz.questions.length ? { ...quiz, done: true } : { ...quiz, index, answer: null } });
+  },
+  quitQuiz: () => set({ quiz: null }),
   themePref: initialThemePref,
   theme: resolveTheme(initialThemePref, darkQuery()?.matches ?? null),
   setThemePref: (pref) => {
@@ -150,6 +202,13 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     const first = segments?.[0];
     if (first && model.getComponent(first.id)?.rearSide) view = 'rear';
     set({ selected, view });
+    // While a quiz asks for a part, picking one answers it.
+    const quiz = get().quiz;
+    const q = quiz && !quiz.done && !quiz.answer ? quiz.questions[quiz.index] : undefined;
+    if (q) {
+      const given = answerFromSelection(model, q, selected);
+      if (given !== null) get().answerQuiz(given);
+    }
   },
   setSide: (side) => set({ view: side, hovered: null }),
   openTray: () => {
@@ -225,6 +284,8 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
 
 // A shared link that opens a walkthrough step also shows the part that step is about.
 if (initial.proc) useExplorer.getState().goToStep(initial.step ?? 0);
+// A shared quiz link replays the same round.
+if (initial.quiz !== undefined) useExplorer.getState().startQuiz(initial.quiz);
 
 /** Keep the address bar in step with the store. */
 export function syncUrl(): () => void {
@@ -240,6 +301,7 @@ export function syncUrl(): () => void {
       embed: s.embed,
       lang: s.lang,
       cmp: s.compare,
+      quiz: s.quiz && !s.quiz.done ? s.quiz.seed : undefined,
     });
     if (document.documentElement.lang !== s.lang) document.documentElement.lang = s.lang;
     if (search === window.location.search) return;

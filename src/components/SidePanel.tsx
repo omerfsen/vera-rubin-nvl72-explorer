@@ -8,6 +8,7 @@ import { trayKeyOf } from '../state/url';
 import { NetworkInfo } from './NetworkInfo';
 import { HostView } from './HostView';
 import { ProcedureBox, ProcedureStart } from './Procedure';
+import { QuizBox } from './Quiz';
 import { Share } from './Share';
 import { RackTotals } from './RackTotals';
 import { CompareBox, CompareStart } from './Compare';
@@ -198,6 +199,7 @@ export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
           {t('language.translated')}
         </p>
       )}
+      <QuizBox />
       <ProcedureBox />
       <NetworkInfo />
       <CompareBox />

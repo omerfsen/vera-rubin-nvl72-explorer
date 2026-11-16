@@ -1,4 +1,5 @@
 import type { Model } from '../data/model';
+import { isValidSeed } from '../data/quiz';
 import { DEFAULT_LANG, isLang, type Lang } from '../i18n/lang';
 
 export type View = 'rack' | 'rear' | 'tray';
@@ -23,12 +24,14 @@ export interface UrlState {
   lang?: Lang;
   /** Part pinned on the left of a comparison; left out when not comparing. */
   cmp?: string;
+  /** Seed of the quiz round in progress, so a round can be shared and replayed. */
+  quiz?: number;
 }
 
 export const DEFAULT_URL_STATE: UrlState = { view: 'rack', select: '', list: false };
 
 /** The query keys this app owns. Everything else in the query is left alone. */
-const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang', 'cmp']);
+const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang', 'cmp', 'quiz']);
 
 /**
  * The rack unit whose interior can be opened for this selection, e.g.
@@ -60,6 +63,7 @@ export function readUrlState(search: string, model: Model): UrlState {
     // Only a language named in the URL; the store falls back to the saved one.
     ...(isLang(params.get('lang')) ? { lang: params.get('lang') as Lang } : {}),
     ...(cmp ? { cmp } : {}),
+    ...quizState(params),
   };
 }
 
@@ -67,6 +71,12 @@ export function readUrlState(search: string, model: Model): UrlState {
 export function canonicalPath(path: string | null | undefined, model: Model): string {
   const segments = model.parsePath(path);
   return segments === null ? '' : model.formatPath(segments);
+}
+
+function quizState(params: URLSearchParams): { quiz?: number } {
+  const raw = params.get('quiz') ?? '';
+  const seed = /^[1-9][0-9]{0,9}$/.test(raw) ? Number(raw) : NaN;
+  return isValidSeed(seed) ? { quiz: seed } : {};
 }
 
 function procState(params: URLSearchParams, model: Model): { proc: string; step: number } {
@@ -103,5 +113,6 @@ export function writeUrlState(search: string, state: UrlState): string {
   if (state.embed) kept.push('embed=1');
   if (state.cmp) kept.push(`cmp=${encodeURIComponent(state.cmp).replace(/%2F/g, '/')}`);
   if (state.lang && state.lang !== DEFAULT_LANG) kept.push(`lang=${encodeURIComponent(state.lang)}`);
+  if (state.quiz !== undefined && isValidSeed(state.quiz)) kept.push(`quiz=${state.quiz}`);
   return kept.length === 0 ? '' : `?${kept.join('&')}`;
 }
