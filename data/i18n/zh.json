@@ -266,6 +266,11 @@
       "linkCopied": "链接已复制。",
       "embedCopied": "嵌入代码已复制。"
     },
+    "partLink": {
+      "short": "复制链接",
+      "button": "复制链接：{name}",
+      "manual": "无法自动复制。请选中链接并复制："
+    },
     "glossary": {
       "heading": "术语表（{count}）",
       "intro": "NVIDIA 文档中展开或定义的术语和缩写，每项均附来源章节。在详情面板中，带点状下划线的术语可打开其定义。",

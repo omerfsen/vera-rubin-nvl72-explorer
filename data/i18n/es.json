@@ -266,6 +266,11 @@
       "linkCopied": "Enlace copiado.",
       "embedCopied": "Código para insertar copiado."
     },
+    "partLink": {
+      "short": "Copiar enlace",
+      "button": "Copiar enlace a {name}",
+      "manual": "No se pudo copiar. Selecciona el enlace y cópialo:"
+    },
     "glossary": {
       "heading": "Glosario ({count})",
       "intro": "Términos y abreviaturas tal como los desarrollan o definen los documentos de NVIDIA, cada uno con su sección de origen. En el panel de detalles, un término con subrayado de puntos abre su definición.",

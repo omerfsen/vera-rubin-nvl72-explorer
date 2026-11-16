@@ -266,6 +266,11 @@
       "linkCopied": "Link copied.",
       "embedCopied": "Embed code copied."
     },
+    "partLink": {
+      "short": "Copy link",
+      "button": "Copy link to {name}",
+      "manual": "Copying was blocked. Select the link and copy it:"
+    },
     "glossary": {
       "heading": "Glossary ({count})",
       "intro": "Terms and abbreviations as NVIDIA's documents expand or define them, each with its source section. In the details panel, a term with a dotted underline opens its definition.",
