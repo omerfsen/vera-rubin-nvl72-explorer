@@ -212,6 +212,7 @@ button { font: inherit; color: inherit; }
   pointer-events: none;
 }
 .legend li { display: flex; align-items: center; gap: 6px; }
+.legend:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 /* Leave the left side to the stage buttons, whose labels run longer in some languages. */
 .legend { max-width: 36%; }
 .stage-actions { max-width: 58%; }
@@ -400,7 +401,11 @@ button { font: inherit; color: inherit; }
 .tray-label, .part-tooltip { pointer-events: none; }
 @media (max-width: 760px) {
   .stage-actions { top: auto; bottom: 8px; left: 8px; }
-  .legend-tray { max-height: 45%; }
+  /* The stage buttons take up to 60% from the left and the camera buttons and hint sit along the top.
+     The legend keeps to the bottom right corner and scrolls when it is longer. */
+  .legend { max-width: calc(40% - 22px); max-height: 45%; overflow-y: auto; pointer-events: auto; }
+  /* The first-visit box fills the width under the hint, so the legend waits until it is closed. */
+  .stage:has(.first-visit) .legend { display: none; }
 }
 
 .stage-actions { flex-direction: column; align-items: flex-start; max-width: 60%; z-index: 30; }

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type RefObject } from 'react';
 import { Breadcrumb } from './components/Breadcrumb';
 import { NetworkBar } from './components/NetworkBar';
 import { Credits } from './components/Credits';
@@ -60,11 +60,29 @@ function useKeyboard() {
   }, []);
 }
 
+/** True while the element is taller than its box, so it needs keyboard focus to be scrolled. */
+function useScrolls(ref: RefObject<HTMLElement | null>) {
+  const [scrolls, setScrolls] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => setScrolls(el.scrollHeight > el.clientHeight + 1);
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  });
+  return scrolls;
+}
+
 function Legend({ trayId }: { trayId: string | null }) {
   const network = useExplorer((s) => s.network);
   const theme = useExplorer((s) => s.theme);
   const i18n = useI18n();
   const { t } = i18n;
+  const ref = useRef<HTMLUListElement>(null);
+  const scrolls = useScrolls(ref);
   const net = network ? model.getNetwork(network) : undefined;
   if (net) {
     const { members } = model.networkMembers(net.id);
@@ -75,7 +93,7 @@ function Legend({ trayId }: { trayId: string | null }) {
       { label: t('legend.notOn'), color: DIM_COLORS[theme] },
     ];
     return (
-      <ul className="legend" aria-label={t('legend.label')}>
+      <ul className="legend" ref={ref} tabIndex={scrolls ? 0 : undefined} aria-label={t('legend.label')}>
         {rows.map((r) => (
           <li key={r.label}>
             <span className="swatch" style={{ background: r.color }} aria-hidden="true" />
@@ -97,7 +115,7 @@ function Legend({ trayId }: { trayId: string | null }) {
         }),
       );
   return (
-    <ul className={trayId ? 'legend legend-tray' : 'legend'} aria-label={t('legend.label')}>
+    <ul className={trayId ? 'legend legend-tray' : 'legend'} ref={ref} tabIndex={scrolls ? 0 : undefined} aria-label={t('legend.label')}>
       {rows.map((r) => (
         <li key={r.label}>
           <span className="swatch" style={{ background: r.color }} aria-hidden="true" />
