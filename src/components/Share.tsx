@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useI18n } from '../i18n';
+import { copyText } from './clipboard';
 
 /** Copy a link to the current view, or an embed snippet for it. */
 export function Share() {
@@ -9,12 +10,7 @@ export function Share() {
   const embedUrl = url.includes('?') ? `${url}&embed=1` : `${url}?embed=1`;
   const snippet = `<iframe src="${embedUrl}" title="${t('site.title')}" width="960" height="600" style="border:0" loading="lazy"></iframe>`;
   const copy = async (text: string, what: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(what);
-    } catch {
-      setCopied('');
-    }
+    setCopied((await copyText(text)) ? what : '');
   };
   return (
     <section>

@@ -305,6 +305,18 @@ test.describe('fallbacks and layouts', () => {
     await context.close();
   });
 
+  test('copies a clean link to the selected part from next to its heading', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ permissions: ['clipboard-read', 'clipboard-write'] });
+    const page = await context.newPage();
+    await page.goto('/?select=compute-tray.3&net=ipminet&list=1&utm=x');
+    await rackReady(page);
+    await page.getByRole('button', { name: 'Copy link to Compute tray 3' }).click();
+    await expect(page.getByRole('status').filter({ hasText: 'Link copied.' })).toBeVisible();
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    expect(copied).toBe(`${new URL(baseURL!).origin}/?select=compute-tray.3`);
+    await context.close();
+  });
+
   test('a glossary term opens its definition on tap at phone width and closes on Escape', async ({ page }) => {
     await page.setViewportSize({ width: 400, height: 860 });
     await page.goto('/?select=compute-tray.2');

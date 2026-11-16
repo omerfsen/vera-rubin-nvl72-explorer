@@ -692,3 +692,40 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .quiz-choice.wrong { border: 2px solid var(--warn); }
 .quiz-feedback { margin: 8px 0; padding: 6px 8px; border-radius: 6px; border-left: 4px solid var(--warn); background: var(--surface-2); }
 .quiz-feedback.right { border-left-color: var(--ok, #2e9d58); }
+
+/* ---- copy a link to the selected part ---- */
+.panel-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; margin-bottom: 6px; }
+.panel-actions .compare-start { margin: 0; }
+.part-link { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
+.part-link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  min-height: 30px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+}
+.part-link-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.part-link-button svg { flex: none; }
+.part-link-manual { display: flex; flex-direction: column; gap: 3px; flex-basis: 100%; font-size: 0.8rem; color: var(--muted); }
+.part-link-manual input {
+  width: 100%;
+  min-width: 0;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-family: ui-monospace, monospace;
+}
+@media (max-width: 420px) {
+  .part-link-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+}

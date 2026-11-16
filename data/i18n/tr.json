@@ -266,6 +266,11 @@
       "linkCopied": "Bağlantı kopyalandı.",
       "embedCopied": "Gömme kodu kopyalandı."
     },
+    "partLink": {
+      "short": "Bağlantıyı kopyala",
+      "button": "Bağlantıyı kopyala: {name}",
+      "manual": "Kopyalama engellendi. Bağlantıyı seçip kopyalayın:"
+    },
     "glossary": {
       "heading": "Sözlük ({count})",
       "intro": "NVIDIA belgelerinin açtığı ya da tanımladığı terimler ve kısaltmalar, her biri kaynak bölümüyle. Ayrıntı panelinde altı noktalı çizili bir terim, tanımını açar.",

@@ -116,3 +116,14 @@ export function writeUrlState(search: string, state: UrlState): string {
   if (state.quiz !== undefined && isValidSeed(state.quiz)) kept.push(`quiz=${state.quiz}`);
   return kept.length === 0 ? '' : `?${kept.join('&')}`;
 }
+
+/**
+ * A clean link to one part: only what is needed to show it (selection, the
+ * view when it is not the rack, the language when it is not English). The
+ * quiz, comparison, walkthrough, network overlay, list pane and anyone
+ * else's query parameters are left out.
+ */
+export function partUrl(base: string, state: Pick<UrlState, 'view' | 'select' | 'lang'>): string {
+  const view = state.select === '' && state.view === 'tray' ? 'rack' : state.view;
+  return `${base}${writeUrlState('', { view, select: state.select, list: false, lang: state.lang })}`;
+}
