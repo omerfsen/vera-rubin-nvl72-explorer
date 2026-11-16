@@ -276,6 +276,27 @@
           }
         }
       }
+    },
+    "rackTotals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "types"
+      ],
+      "description": "Which component types the rack totals chart shows, and in what order. Presentation only: the counts come from the topology data.",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

@@ -246,7 +246,7 @@ export default function App() {
                 {t('layout.noWebgl')}
               </p>
             )}
-            <RackList />
+            <RackList totals={!webgl} />
           </aside>
         )}
 
@@ -310,7 +310,7 @@ export default function App() {
             </button>
           )}
           <div id="panel-content" hidden={webgl && !panelOpen}>
-            <SidePanel />
+            <SidePanel totals={webgl} />
           </div>
         </section>
       </main>

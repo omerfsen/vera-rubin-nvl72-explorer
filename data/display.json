@@ -127,5 +127,25 @@
     "underRack": [
       "seismic-bracing"
     ]
+  },
+  "rackTotals": {
+    "description": "Component types charted in \"How many in the rack\", in this order. The counts come from the topology data.",
+    "types": [
+      "compute-tray",
+      "switch-tray",
+      "power-shelf",
+      "tor-switch",
+      "gpu",
+      "cpu",
+      "switch-asic",
+      "nic",
+      "dpu",
+      "memory",
+      "drive",
+      "psu",
+      "bmc",
+      "controller",
+      "cable-cartridge"
+    ]
   }
 }

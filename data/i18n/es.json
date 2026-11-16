@@ -305,6 +305,15 @@
       "power": "Energía",
       "ac": "Cables de alimentación de CA (al panel de alimentación remoto)"
     },
+    "rackTotals": {
+      "title": "Cuántos hay en el rack",
+      "caption": "Totales de todo el rack, multiplicando la cantidad por bandeja, estante o conmutador. Seleccione una pieza para abrirla.",
+      "part": "Pieza",
+      "inRack": "En el rack",
+      "source": "Fuente",
+      "notStated": "no indicado",
+      "sourceFor": "Fuente de {name}: {section}"
+    },
     "connectionKinds": {
       "network": "red",
       "not-connected": "no conectado",

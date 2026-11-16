@@ -2,12 +2,14 @@ import { model } from '../data';
 import { TYPE_COLORS } from '../scenes/geometry';
 import { useExplorer } from '../state/store';
 import { useI18n } from '../i18n';
+import { RackTotals } from './RackTotals';
 
 /**
  * The rack as a plain list, top to bottom. It is the fallback when WebGL is
  * missing, and a keyboard and screen-reader friendly way to move around.
+ * `totals` also shows the rack totals chart (when there is no 3D view).
  */
-export function RackList() {
+export function RackList({ totals = false }: { totals?: boolean } = {}) {
   const selected = useExplorer((s) => s.selected);
   const select = useExplorer((s) => s.select);
   const i18n = useI18n();
@@ -64,6 +66,7 @@ export function RackList() {
         ))}
       </ul>
       <p className="muted small">{t('list.only3d')}</p>
+      {totals && <RackTotals level={2} />}
     </nav>
   );
 }

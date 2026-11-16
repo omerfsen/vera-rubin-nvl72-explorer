@@ -305,6 +305,15 @@
       "power": "Güç",
       "ac": "AC güç kabloları (uzak güç paneline)"
     },
+    "rackTotals": {
+      "title": "Kabinde kaç tane var",
+      "caption": "Tüm kabin için toplamlar; tepsi, raf veya anahtar başına sayılar çarpılarak bulunur. Açmak için bir parça seçin.",
+      "part": "Parça",
+      "inRack": "Kabinde",
+      "source": "Kaynak",
+      "notStated": "belirtilmemiş",
+      "sourceFor": "{name} için kaynak: {section}"
+    },
     "connectionKinds": {
       "network": "ağ",
       "not-connected": "bağlı değil",

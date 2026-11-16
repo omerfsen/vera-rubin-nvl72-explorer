@@ -227,6 +227,18 @@ test.describe('fallbacks and layouts', () => {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
+  test('the rack totals chart opens a part and fits a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 860 });
+    await page.goto('/');
+    const chart = page.getByRole('table').filter({ has: page.getByRole('columnheader', { name: 'In the rack' }) });
+    await expect(chart.getByRole('row', { name: /Rubin GPU/ })).toContainText('72');
+    await expect(chart.getByText('not stated').first()).toBeAttached();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+    await chart.getByRole('button', { name: 'Rubin GPU', exact: true }).click();
+    await expect.poll(() => new URL(page.url()).searchParams.get('select')).toBe('compute-tray/rubin-gpu');
+  });
+
   test('embed mode hides the header and footer', async ({ page }) => {
     await page.goto('/?embed=1');
     await expect(page.locator('.topbar')).toBeHidden();
