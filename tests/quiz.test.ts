@@ -51,7 +51,7 @@ describe('quiz generator', () => {
     }
   });
 
-  it('only asks about stated facts: no null counts, nothing assumed or in conflict', () => {
+  it('only asks about stated facts: no null counts, no assumed or disputed fact', () => {
     const c = quizCandidates(model);
     const all = [...c.click, ...c.unit, ...c.count, ...c.network];
     expect(all.length).toBeGreaterThan(20);
@@ -61,7 +61,8 @@ describe('quiz generator', () => {
         const comp = model.getComponent(id)!;
         expect(comp.count, `${q.kind} ${q.component}`).not.toBeNull();
         expect(comp.assumed, `${q.kind} ${q.component}`).not.toBe(true);
-        expect(conflicted.has(id), `${q.kind} ${q.component}`).toBe(false);
+        // A conflict over a count does not dispute a port's network; that is an `alternative` connection, checked below.
+        if (q.kind !== 'network') expect(conflicted.has(id), `${q.kind} ${q.component}`).toBe(false);
       }
     }
     // Ports whose network is assumed or disputed are never asked.
@@ -73,6 +74,46 @@ describe('quiz generator', () => {
     expect(ids).not.toContain('hmc');
     expect(ids).not.toContain('ct-port-bf4-left');
     expect(c.network.map((q) => q.component)).not.toContain('ps-mgmt-rj45');
+  });
+
+  it('can ask about every network the data puts a port on without dispute, and no other', () => {
+    // Worked out again from the raw data: ports, their own connections, nothing assumed or alternative.
+    const supported = new Map<string, string[]>();
+    const left: Record<string, string[]> = {};
+    for (const n of topology.networks) {
+      const conns = topology.connections.filter((k) => k.network === n.id);
+      const ports = conns.filter((k) => model.getComponent(k.from)?.type === 'port');
+      const clean = ports.filter(
+        (k) => !topology.connections.some((o) => o.from === k.from && o.network && (o.alternative || o.assumed || o.network !== n.id)),
+      );
+      if (clean.length > 0) supported.set(n.id, clean.map((k) => k.from).sort());
+      else left[n.id] = [...new Set(ports.map((k) => k.from))];
+    }
+    const asked = new Map<string, string[]>();
+    for (const q of quizCandidates(model).network) asked.set(q.answer, [...(asked.get(q.answer) ?? []), q.component].sort());
+    expect(asked).toEqual(supported);
+    expect([...asked.keys()].sort()).toEqual(['computenet', 'ipminet', 'storagenet']);
+    // The rest cannot be answers: dgxnet's only port is the disputed BlueField-4 left port,
+    // and the guide connects no port to the other three.
+    expect(left).toEqual({ externalnet: [], internalnet: [], dgxnet: ['ct-port-bf4-left'], failovernet: [] });
+    // Every supported network turns up as an answer across rounds.
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= 40; seed++) for (const q of generateQuiz(model, seed)) if (q.kind === 'network') seen.add(q.answer);
+    expect(seen).toEqual(new Set(supported.keys()));
+  });
+
+  it('does not repeat one network answer through a round', () => {
+    const answers = (seed: number, length = QUIZ_LENGTH) =>
+      generateQuiz(model, seed, length).filter((q) => q.kind === 'network').map((q) => q.answer);
+    expect(answers(4242).length).toBeGreaterThan(1);
+    for (let seed = 1; seed <= 200; seed++) {
+      const a = answers(seed);
+      expect(new Set(a).size, `seed ${seed}: ${a}`).toBe(a.length);
+    }
+    // Asked to exhaustion, each network comes once before any comes again.
+    const all = answers(4242, 1000);
+    expect(all).toHaveLength(quizCandidates(model).network.length);
+    expect(new Set(all.slice(0, 3)).size).toBe(3);
   });
 
   it('offers four distinct choices with the answer among them', () => {

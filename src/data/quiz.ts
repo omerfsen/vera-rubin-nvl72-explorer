@@ -1,7 +1,10 @@
 // Quiz questions generated from the data. Nothing here is a fact of its own:
 // every question and answer is read from the topology through the model, and
-// only items whose facts are stated (no null counts, nothing assumed, nothing
-// in conflict between NVIDIA's documents) are asked about.
+// only a fact that is stated is asked about: no null counts, nothing assumed,
+// and no fact NVIDIA's documents disagree on. A count is not asked when the
+// part or anything holding it is in a conflict; a port's network is not asked
+// when the data keeps a conflicting reading of it (an `alternative`
+// connection). A port whose count is disputed can still be asked its network.
 import type { Model } from './model';
 import { ROOT_ID } from './model';
 import type { Source } from './types';
@@ -52,6 +55,24 @@ function shuffle<T>(items: readonly T[], random: () => number): T[] {
   for (let i = out.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
     [out[i], out[j]] = [out[j]!, out[i]!];
+  }
+  return out;
+}
+
+/**
+ * A shuffled order that takes the answers in turn: one question for each answer
+ * before any answer comes round again, so an answer many items share does not
+ * fill the round.
+ */
+function shuffleByAnswer<T extends { answer: string }>(items: readonly T[], random: () => number): T[] {
+  const groups = new Map<string, T[]>();
+  for (const item of shuffle(items, random)) groups.set(item.answer, [...(groups.get(item.answer) ?? []), item]);
+  const out: T[] = [];
+  while (out.length < items.length) {
+    for (const answer of shuffle([...groups.keys()], random)) {
+      const next = groups.get(answer)!.shift();
+      if (next) out.push(next);
+    }
   }
   return out;
 }
@@ -110,8 +131,11 @@ export function quizCandidates(model: Model) {
   }));
 
   // A port on exactly one network, read from stated connections, with no conflicting reading.
+  // A conflict over the network is recorded as an `alternative` connection, so that is what
+  // rules a port out here; a conflict over something else (how many there are) does not put
+  // its network in doubt.
   const network = topology.components
-    .filter((c) => c.type === 'port' && !conflicted.has(c.id) && c.assumed !== true)
+    .filter((c) => c.type === 'port' && c.assumed !== true)
     .flatMap((c) => {
       const conns = topology.connections.filter((k) => k.from === c.id && k.network !== undefined);
       if (conns.some((k) => k.alternative || k.assumed)) return [];
@@ -135,7 +159,7 @@ export function generateQuiz(model: Model, seed: number, length = QUIZ_LENGTH): 
     click: shuffle(pool.click, random),
     unit: shuffle(pool.unit, random),
     count: shuffle(pool.count, random),
-    network: shuffle(pool.network, random),
+    network: shuffleByAnswer(pool.network, random),
   };
   const order = shuffle(KINDS, random);
   const out: QuizQuestion[] = [];

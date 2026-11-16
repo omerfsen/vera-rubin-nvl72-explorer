@@ -218,7 +218,7 @@ images from `docs.nvidia.com`, and the figures load with no referrer.
   **?** button in the top bar brings them back.
 - **Quiz** asks 10 questions generated from the data: find a part, which unit
   holds a part, how many are in the rack, and which network a port is on.
-  Each answer links to its source. Nothing assumed or disputed is asked. The
+  Each answer links to its source. No assumed or disputed fact is asked. The
   `quiz=` value in the link replays the same round.
 - **Compare** pins the selected part; select another to see both side by
   side, with differing rows highlighted. `cmp=` keeps the comparison in the
