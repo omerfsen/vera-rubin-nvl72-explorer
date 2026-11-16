@@ -32,8 +32,8 @@ interface Controls {
   maxDistance: number;
   maxPolarAngle: number;
   update: () => void;
-  addEventListener: (type: 'start', listener: () => void) => void;
-  removeEventListener: (type: 'start', listener: () => void) => void;
+  addEventListener: (type: 'start' | 'change', listener: () => void) => void;
+  removeEventListener: (type: 'start' | 'change', listener: () => void) => void;
 }
 
 /** A click on a camera button; `id` changes on every click so the same preset can run twice. */
@@ -53,7 +53,19 @@ function CameraRig({ view, request }: { view: ViewName; request: CameraRequest |
   const camera = useThree((s) => s.camera);
   const controls = useThree((s) => s.controls) as unknown as Controls | null;
   const invalidate = useThree((s) => s.invalidate);
+  const canvas = useThree((s) => s.gl.domElement);
   const move = useRef<{ from: Pose; to: Pose; start: number } | null>(null);
+
+  // The camera position on the canvas (`data-camera`), for the browser tests.
+  const report = useCallback(() => {
+    canvas.dataset.camera = camera.position.toArray().map((n) => n.toFixed(3)).join(' ');
+  }, [canvas, camera]);
+  useEffect(() => {
+    report();
+    if (!controls) return;
+    controls.addEventListener('change', report);
+    return () => controls.removeEventListener('change', report);
+  }, [controls, report]);
 
   const apply = useCallback(
     (pose: Pose) => {
@@ -64,9 +76,10 @@ function CameraRig({ view, request }: { view: ViewName; request: CameraRequest |
       } else {
         camera.lookAt(...pose.target);
       }
+      report();
       invalidate();
     },
-    [camera, controls, invalidate],
+    [camera, controls, invalidate, report],
   );
 
   useEffect(() => {

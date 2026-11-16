@@ -1,4 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import en from '../data/i18n/en.json';
+import tr from '../data/i18n/tr.json';
+import zh from '../data/i18n/zh.json';
+import ru from '../data/i18n/ru.json';
+import es from '../data/i18n/es.json';
 import { CAMERA_PRESETS, ease, interpolatePose, presetPose, TOP_POLAR, type Pose, type Vec } from '../src/scenes/cameraPresets';
 
 const base: Pose = { position: [1, 0.5, 4], target: [0, 0.2, 0.3] };
@@ -18,31 +23,58 @@ describe('camera presets', () => {
     }
   });
 
-  it('front looks from +z, back from -z, top from above, 45° from the front right', () => {
+  it('straight looks from +z, opposite from -z, above from the top, angled from the right corner', () => {
     const t = base.target;
-    const front = presetPose(base, 'front').position;
-    const back = presetPose(base, 'back').position;
-    const top = presetPose(base, 'top').position;
-    const angle = presetPose(base, 'angle').position;
-    expect(front[2]).toBeGreaterThan(t[2]);
-    expect(front[0]).toBeCloseTo(t[0], 6);
-    expect(back[2]).toBeLessThan(t[2]);
-    expect(back[0]).toBeCloseTo(t[0], 6);
-    expect(polar(top, t)).toBeCloseTo(TOP_POLAR, 6);
-    expect(top[1] - t[1]).toBeGreaterThan(dist(top, t) * 0.9);
-    expect(angle[0] - t[0]).toBeCloseTo(angle[2] - t[2], 6);
-    expect(angle[0]).toBeGreaterThan(t[0]);
-    expect(angle[1]).toBeGreaterThan(front[1]);
+    const straight = presetPose(base, 'straight').position;
+    const opposite = presetPose(base, 'opposite').position;
+    const above = presetPose(base, 'above').position;
+    const angled = presetPose(base, 'angled').position;
+    expect(straight[2]).toBeGreaterThan(t[2]);
+    expect(straight[0]).toBeCloseTo(t[0], 6);
+    expect(opposite[2]).toBeLessThan(t[2]);
+    expect(opposite[0]).toBeCloseTo(t[0], 6);
+    expect(polar(above, t)).toBeCloseTo(TOP_POLAR, 6);
+    expect(above[1] - t[1]).toBeGreaterThan(dist(above, t) * 0.9);
+    expect(angled[0] - t[0]).toBeCloseTo(angled[2] - t[2], 6);
+    expect(angled[0]).toBeGreaterThan(t[0]);
+    expect(angled[1]).toBeGreaterThan(straight[1]);
+  });
+
+  it('follows the side the view looks from, so straight on in the rear view shows the rear', () => {
+    const rear: Pose = { position: [-2, 0.5, -4], target: [0, 0.2, -0.2] };
+    const t = rear.target;
+    const straight = presetPose(rear, 'straight').position;
+    const opposite = presetPose(rear, 'opposite').position;
+    const angled = presetPose(rear, 'angled').position;
+    expect(straight[2]).toBeLessThan(t[2]);
+    expect(straight[0]).toBeCloseTo(t[0], 6);
+    expect(opposite[2]).toBeGreaterThan(t[2]);
+    expect(angled[2]).toBeLessThan(t[2]);
+    expect(angled[0]).toBeLessThan(t[0]);
+    expect(angled[0] - t[0]).toBeCloseTo(angled[2] - t[2], 6);
+  });
+
+  it('every preset has its button text and accessible name in every language, and the name contains the text', () => {
+    for (const [lang, file] of Object.entries({ en, tr, zh, ru, es })) {
+      const strings = file.ui.cameraView as Record<string, string>;
+      for (const p of CAMERA_PRESETS) {
+        const text = strings[p];
+        const label = strings[`${p}Label`];
+        expect(text, `${lang} cameraView.${p}`).toBeTruthy();
+        expect(label, `${lang} cameraView.${p}Label`).toBeTruthy();
+        expect(label!.toLocaleLowerCase(lang), `${lang} cameraView.${p}Label`).toContain(text!.toLocaleLowerCase(lang));
+      }
+    }
   });
 
   it('never goes past the orbit limit', () => {
-    const pose = presetPose(base, 'front', 0.3);
+    const pose = presetPose(base, 'straight', 0.3);
     expect(polar(pose.position, pose.target)).toBeLessThanOrEqual(0.3 + 1e-9);
   });
 
   it('orbits round the target instead of cutting through it', () => {
-    const from = presetPose(base, 'front');
-    const to = presetPose(base, 'back');
+    const from = presetPose(base, 'straight');
+    const to = presetPose(base, 'opposite');
     const start = interpolatePose(from, to, 0);
     start.position.forEach((v, i) => expect(v).toBeCloseTo(from.position[i]!, 9));
     expect(interpolatePose(from, to, 1)).toEqual(to);

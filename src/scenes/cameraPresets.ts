@@ -6,8 +6,8 @@ export interface Pose {
   target: Vec;
 }
 
-export type CameraPreset = 'reset' | 'front' | 'back' | 'top' | 'angle';
-export const CAMERA_PRESETS: readonly CameraPreset[] = ['reset', 'front', 'back', 'top', 'angle'];
+export type CameraPreset = 'reset' | 'straight' | 'opposite' | 'above' | 'angled';
+export const CAMERA_PRESETS: readonly CameraPreset[] = ['reset', 'straight', 'opposite', 'above', 'angled'];
 
 /** Spherical offset from the target: radius, polar angle from +y, azimuth from +z towards +x. */
 interface Spherical {
@@ -16,7 +16,7 @@ interface Spherical {
   azimuth: number;
 }
 
-/** Keeps the top view just off vertical, where orbit controls stay stable. */
+/** Keeps the view from above just off vertical, where orbit controls stay stable. */
 export const TOP_POLAR = 0.06 * Math.PI;
 const EYE_POLAR = 0.46 * Math.PI;
 const ANGLE_POLAR = 0.32 * Math.PI;
@@ -37,18 +37,23 @@ function fromSpherical(s: Spherical, t: Vec): Vec {
 
 /**
  * The pose for a preset, built from the view's own framing (`base`): the same
- * target and distance, seen from another side. The rack's front faces +z.
+ * target and distance, from another angle. The angles are relative to the side
+ * the view itself looks from (the rack's front faces +z, the rear view looks
+ * from -z), so they say where the camera goes and never which side is shown:
+ * `straight` is level with the side the view shows, `opposite` is the other one.
  */
 export function presetPose(base: Pose, preset: CameraPreset, maxPolar = Math.PI): Pose {
   if (preset === 'reset') return { position: [...base.position], target: [...base.target] };
   const { radius } = toSpherical(base.position, base.target);
+  const side = base.position[2] < base.target[2] ? Math.PI : 0;
   const angles: Record<Exclude<CameraPreset, 'reset'>, [number, number]> = {
-    front: [EYE_POLAR, 0],
-    back: [EYE_POLAR, Math.PI],
-    top: [TOP_POLAR, 0],
-    angle: [ANGLE_POLAR, Math.PI / 4],
+    straight: [EYE_POLAR, 0],
+    opposite: [EYE_POLAR, Math.PI],
+    above: [TOP_POLAR, 0],
+    angled: [ANGLE_POLAR, Math.PI / 4],
   };
-  const [polar, azimuth] = angles[preset];
+  const [polar, turn] = angles[preset];
+  const azimuth = side + turn;
   return {
     position: fromSpherical({ radius, polar: Math.min(polar, maxPolar), azimuth }, base.target),
     target: [...base.target],

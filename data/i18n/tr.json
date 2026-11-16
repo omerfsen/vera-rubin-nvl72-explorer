@@ -104,16 +104,16 @@
     },
     "cameraView": {
       "group": "Kamera açısı",
-      "reset": "Görünümü sıfırla",
-      "resetLabel": "Kamera: görünümü sıfırla",
-      "front": "Ön",
-      "frontLabel": "Kamera: ön",
-      "back": "Arka",
-      "backLabel": "Kamera: arka",
-      "top": "Üst",
-      "topLabel": "Kamera: üst",
-      "angle": "45°",
-      "angleLabel": "Kamera: 45° üç çeyrek"
+      "reset": "Kamerayı sıfırla",
+      "resetLabel": "Kamera: kamerayı sıfırla, başlangıç açısına dön",
+      "straight": "Tam karşıdan",
+      "straightLabel": "Kamera: tam karşıdan, göz hizasında",
+      "opposite": "Öbür taraftan",
+      "oppositeLabel": "Kamera: öbür taraftan, göz hizasında",
+      "above": "Yukarıdan",
+      "aboveLabel": "Kamera: yukarıdan",
+      "angled": "Çapraz",
+      "angledLabel": "Kamera: çapraz, 45° yana dönük"
     },
     "layers": {
       "structure": "Yapı",
