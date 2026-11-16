@@ -447,6 +447,27 @@ button { font: inherit; color: inherit; }
 .totals-source a { text-decoration: none; }
 .rack-list .rack-totals { margin-top: 14px; }
 
+/* ---- list filters ---- */
+.list-filter { display: flex; flex-direction: column; gap: 6px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.list-filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.rack-list .list-filter .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  padding: 3px 10px;
+  min-height: 28px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 0.82rem;
+}
+.rack-list .list-filter .chip:hover { background: var(--surface-2); }
+.rack-list .list-filter .chip[aria-pressed='true'] { border-color: var(--net); background: color-mix(in srgb, var(--net) 22%, var(--surface)); font-weight: 600; }
+.list-filter-status { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.rack-list .list-filter-status .link-button { width: auto; min-height: 0; padding: 2px 0; }
+.list-filter-empty { margin: 8px 0; }
+
 /* ---- network overlay ---- */
 .network-bar {
   display: flex;

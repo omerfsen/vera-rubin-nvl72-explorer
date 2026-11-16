@@ -268,6 +268,29 @@ test.describe('fallbacks and layouts', () => {
     await context.close();
   });
 
+  test('the list filters by type and network, from a shared link and by keyboard', async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 860 });
+    await page.goto('/?list=1&ft=compute-tray,moon&fn=bogus');
+    await expect.poll(() => param(page, 'ft')).toBe('compute-tray');
+    expect(param(page, 'fn')).toBeNull();
+    const nav = page.getByRole('navigation', { name: 'Rack units, top to bottom' });
+    const status = nav.getByRole('status');
+    await expect(status).toHaveText(/^18 of 33 units$/);
+    await expect(nav.getByRole('button', { name: 'Switch tray 1', exact: false })).toHaveCount(0);
+    const nets = nav.getByRole('group', { name: 'Filter by network' });
+    const chip = nets.getByRole('button').first();
+    await chip.focus();
+    await page.keyboard.press('Enter');
+    await expect(chip).toHaveAttribute('aria-pressed', 'true');
+    await expect.poll(() => param(page, 'fn')).not.toBeNull();
+    expect(param(page, 'net')).toBeNull();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+    await nav.getByRole('button', { name: 'Clear filters' }).click();
+    await expect(status).toHaveText(/^33 of 33 units$/);
+    await expect.poll(() => param(page, 'ft')).toBeNull();
+  });
+
   test('works at phone width without horizontal scrolling', async ({ page }) => {
     await page.setViewportSize({ width: 400, height: 860 });
     await page.goto('/?select=compute-tray.2');

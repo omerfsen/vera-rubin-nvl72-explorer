@@ -133,6 +133,16 @@
       "power-shelf": "estantes de alimentación",
       "tor-switch": "conmutadores Ethernet de parte superior del rack"
     },
+    "listFilter": {
+      "label": "Filtrar la lista",
+      "type": "Tipo",
+      "network": "Red",
+      "byType": "Filtrar por tipo de unidad",
+      "byNetwork": "Filtrar por red",
+      "count": "{shown} de {total} unidades",
+      "clear": "Quitar filtros",
+      "empty": "Ninguna unidad coincide con estos filtros. Quite una opción o borre los filtros."
+    },
     "list": {
       "label": "Unidades del rack, de arriba abajo",
       "front": "Frontal, de arriba abajo",
