@@ -174,6 +174,8 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
 export default function App() {
   const [webgl] = useState(hasWebGL);
   const listOpen = useExplorer((s) => s.listOpen);
+  const panelOpen = useExplorer((s) => s.panelOpen);
+  const setPanelOpen = useExplorer((s) => s.setPanelOpen);
   const setListOpen = useExplorer((s) => s.setListOpen);
   const selected = useExplorer((s) => s.selected);
   const view = useExplorer((s) => s.view);
@@ -224,7 +226,12 @@ export default function App() {
           <SourcesPage />
         </main>
       ) : (
-      <main className={!webgl ? 'layout list-only' : showList ? 'layout with-list' : 'layout'}>
+      <main
+        className={
+          (!webgl ? 'layout list-only' : showList ? 'layout with-list' : 'layout') +
+          (webgl && !panelOpen ? ' panel-closed' : '')
+        }
+      >
         {showList && (
           <aside className="list-pane" id="list-pane" aria-label={t('layout.listPane')}>
             {!webgl && (
@@ -278,8 +285,26 @@ export default function App() {
           </section>
         )}
 
-        <section className={selected ? 'panel open' : 'panel'} aria-label={t('layout.details')}>
-          <SidePanel />
+        <section
+          className={(selected ? 'panel open' : 'panel') + (webgl && !panelOpen ? ' closed' : '')}
+          aria-label={t('layout.details')}
+        >
+          {webgl && (
+            <button
+              type="button"
+              className="panel-toggle"
+              aria-expanded={panelOpen}
+              aria-controls="panel-content"
+              title={panelOpen ? t('detailsToggle.collapse') : t('detailsToggle.expand')}
+              onClick={() => setPanelOpen(!panelOpen)}
+            >
+              <span aria-hidden="true">{panelOpen ? '»' : '«'}</span>
+              <span className="panel-toggle-label">{panelOpen ? t('detailsToggle.collapse') : t('detailsToggle.expand')}</span>
+            </button>
+          )}
+          <div id="panel-content" hidden={webgl && !panelOpen}>
+            <SidePanel />
+          </div>
         </section>
       </main>
       )}

@@ -20,6 +20,10 @@
       "noMp4": "This browser could not make the MP4, so only WebM was saved.",
       "denied": "Recording did not start: screen sharing was not allowed."
     },
+    "detailsToggle": {
+      "collapse": "Collapse details",
+      "expand": "Expand details"
+    },
     "site": {
       "title": "Vera Rubin NVL72 Explorer",
       "tagline": "Every fact linked to NVIDIA's own documentation · unofficial, not affiliated with NVIDIA",

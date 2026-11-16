@@ -20,6 +20,10 @@
       "noMp4": "此浏览器无法生成 MP4，因此只保存了 WebM。",
       "denied": "录制未开始：未允许屏幕共享。"
     },
+    "detailsToggle": {
+      "collapse": "收起详情",
+      "expand": "展开详情"
+    },
     "site": {
       "title": "Vera Rubin NVL72 浏览器",
       "tagline": "每项事实都链接到 NVIDIA 自己的文档 · 非官方，与 NVIDIA 无关联",
