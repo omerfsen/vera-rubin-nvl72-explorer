@@ -313,7 +313,7 @@ export default function App() {
             </button>
           )}
           <div id="panel-content" hidden={webgl && !panelOpen}>
-            <SidePanel totals={webgl} />
+            <SidePanel totals={webgl} webgl={webgl} />
           </div>
         </section>
       </main>

@@ -272,6 +272,20 @@ test.describe('fallbacks and layouts', () => {
     await expect.poll(() => new URL(page.url()).searchParams.get('select')).toBe('compute-tray/rubin-gpu');
   });
 
+  test('the empty panel prompt starts from a unit and goes away, at phone width', async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 860 });
+    await page.goto('/');
+    const prompt = page.getByRole('region', { name: 'Getting started' });
+    await expect(prompt).toContainText('Select a part in the rack, or pick one below');
+    await expect(page.getByRole('heading', { name: 'How many in the rack' })).toBeVisible();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+    await prompt.getByRole('button', { name: 'Compute tray 1', exact: true }).click();
+    await expect.poll(() => new URL(page.url()).searchParams.get('select')).toBe('compute-tray.1');
+    await expect(prompt).toHaveCount(0);
+    await expect(page.getByRole('heading', { level: 2 })).toContainText('Compute tray 1');
+  });
+
   test('compares two parts from a shared link, by keyboard and at phone width, without WebGL', async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 400, height: 860 } });
     await context.addInitScript(() => {

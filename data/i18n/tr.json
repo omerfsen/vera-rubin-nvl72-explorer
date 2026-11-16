@@ -336,6 +336,14 @@
       "power": "Güç",
       "ac": "AC güç kabloları (uzak güç paneline)"
     },
+    "emptyPanel": {
+      "label": "Başlarken",
+      "lead3d": "Ne olduğunu, kaç tane bulunduğunu ve NVIDIA'nın onu nerede belgelediğini görmek için kabinde bir parça seçin ya da aşağıdan birini seçin.",
+      "leadList": "Ne olduğunu, kaç tane bulunduğunu ve NVIDIA'nın onu nerede belgelediğini görmek için listede bir parça seçin ya da aşağıdan birini seçin.",
+      "starts": "Buradan başlayın",
+      "keys3d": "Klavye: Tab ile 3B görünüme geçin; ↑ ↓ kabinde gezinir, Enter bir birimi açar, Esc geri döner.",
+      "keysList": "Klavye: Tab ile listede gezinin ve bir birimi seçmek için Enter'a basın; Esc geri döner."
+    },
     "rackTotals": {
       "title": "Kabinde kaç tane var",
       "caption": "Tüm kabin için toplamlar; tepsi, raf veya anahtar başına sayılar çarpılarak bulunur. Açmak için bir parça seçin.",

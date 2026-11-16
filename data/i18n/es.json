@@ -336,6 +336,14 @@
       "power": "Energía",
       "ac": "Cables de alimentación de CA (al panel de alimentación remoto)"
     },
+    "emptyPanel": {
+      "label": "Para empezar",
+      "lead3d": "Seleccione una pieza en el rack, o elija una abajo, para ver qué es, cuántas hay y dónde la documenta NVIDIA.",
+      "leadList": "Seleccione una pieza en la lista, o elija una abajo, para ver qué es, cuántas hay y dónde la documenta NVIDIA.",
+      "starts": "Empiece por",
+      "keys3d": "Teclado: pulse Tab hasta la vista 3D; luego ↑ ↓ recorren el rack, Intro abre una unidad y Esc vuelve.",
+      "keysList": "Teclado: recorra la lista con Tab y pulse Intro para seleccionar una unidad; Esc vuelve."
+    },
     "rackTotals": {
       "title": "Cuántos hay en el rack",
       "caption": "Totales de todo el rack, multiplicando la cantidad por bandeja, estante o conmutador. Seleccione una pieza para abrirla.",
