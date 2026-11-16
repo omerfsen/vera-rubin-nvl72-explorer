@@ -127,6 +127,8 @@ test.describe('operator features', () => {
     await page.goto('/?select=compute-tray.2');
     await rackReady(page);
     const button = page.getByRole('button', { name: 'Screenshot', exact: true });
+    const group = page.getByRole('group', { name: 'Screenshot' });
+    const before = (await group.boundingBox())!.width;
     await button.focus();
     const [download] = await Promise.all([page.waitForEvent('download'), page.keyboard.press('Enter')]);
     expect(download.suggestedFilename()).toMatch(/^vr-nvl72-\d{8}-\d{6}\.png$/);
@@ -134,6 +136,10 @@ test.describe('operator features', () => {
     const png = Buffer.concat(bytes);
     expect(png.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a');
     await expect(page.getByRole('group', { name: 'Screenshot' }).getByRole('status')).toHaveText('Screenshot saved.');
+    // The note floats: the group does not grow, so the header cannot re-wrap (it did on macOS).
+    expect((await group.boundingBox())!.width).toBe(before);
+    // It clears itself.
+    await expect(page.locator('.screenshot-status')).toBeHidden({ timeout: 6_000 });
     // Decode it in the page: the canvas size plus a caption bar, and real pixels, not a blank frame.
     const info = await page.evaluate(async (b64) => {
       const blob = new Blob([Uint8Array.from(atob(b64), (ch) => ch.charCodeAt(0))], { type: 'image/png' });
