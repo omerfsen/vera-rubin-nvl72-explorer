@@ -6,6 +6,7 @@ import { SourcesPage } from './components/SourcesPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RackList } from './components/RackList';
 import { Search } from './components/Search';
+import { CommandPalette } from './components/CommandPalette';
 import { SidePanel } from './components/SidePanel';
 import { hasWebGL } from './lib/webgl';
 import { model } from './data';
@@ -208,6 +209,7 @@ export default function App() {
           <p className="tagline">{t('site.tagline')}</p>
         </div>
         <Search />
+        <CommandPalette webgl={webgl} />
         <LanguageSwitcher />
         <ThemeSwitcher />
         {SHOW_RECORDER && !embed && <Recorder />}
