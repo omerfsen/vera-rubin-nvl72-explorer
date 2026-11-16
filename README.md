@@ -19,15 +19,26 @@ Live: https://verarubin-nvl72.faruk.net
 > Corporation. All 3D geometry is original and only illustrative. No NVIDIA
 > images or logos are included.
 
-## Status
+## Features at a glance
 
-Milestone 1 of 4:
-
-- [x] **M1**: rack view with clickable trays, switch trays, power shelves and
-  ToR switches; side panel; breadcrumb; search; list view; URL state
-- [x] **M2**: compute tray interior, every part clickable
-- [x] **M3**: switch tray, power shelf and rear view (cartridges, manifolds, bus bar)
-- [x] **M4**: network overlay for the seven networks
+- **3D rack**, front and rear, with every compute tray, switch tray, power
+  shelf and ToR switch clickable. Open any unit to see the parts inside,
+  spread them apart with **Exploded view**, and move the camera with the
+  **Front / Back / Top / 45°** buttons or **Reset view**.
+- **Networks**: highlight any of the seven networks; moving pulses show the
+  path on top of the highlighted ports and links.
+- **Learn**: a **Start here** guided tour, a **Quiz**, a **Compare** view for
+  two parts side by side, a **How many in the rack** chart, and a **glossary**
+  of terms defined in NVIDIA's own documents.
+- **Find**: search by name, PCIe bus, Linux interface or RDMA device, a
+  **Ctrl+K** command palette, and list filters by unit type and network.
+- **Share**: every view has its own link, each part has a **Copy link**
+  button, and any view can be embedded with `?embed=1`. **Record** saves a
+  video of the tab with optional voice.
+- **For AI assistants**: a read-only MCP server over the same data.
+- Five languages (English, Turkish, Chinese, Russian, Spanish), light, dark
+  and system themes, keyboard and touch, phone width, and a plain list when
+  the browser has no WebGL.
 
 ## Source of truth
 
@@ -104,7 +115,9 @@ https://verarubin-nvl72.faruk.net. https://vr-nvl72.faruk.net redirects there.
   the data.
 - **The dataset.** The site publishes `data/nvl72-topology.json` and its schema
   next to the app, for reuse in other tools.
-- **Share and embed.** Every view has a link; the panel copies it, or an
+- **Share and embed.** Every view has a link. **Copy link** next to a part's
+  name copies a clean link to just that part (selection, view and language);
+  the Share section at the bottom of the panel copies the full link or an
   `<iframe>` snippet. `?embed=1` hides the header, network bar and footer.
 - **Record a video.** Record in the top bar captures the tab and saves it on
   your computer as WebM and MP4 (WebM only where the browser cannot encode
@@ -164,16 +177,53 @@ images from `docs.nvidia.com`, and the figures load with no referrer.
   from NVIDIA's block diagram and PCIe tables). Selecting a part highlights its
   own connections. Dashed lines are inferred and marked *assumed* in the
   panel.
+- **Exploded view** (inside an open tray) spreads the parts apart in layers so
+  each one is easy to see and click. **Front / Back / Top / 45°** and **Reset
+  view** in the corner of the 3D view move the camera; labels move aside or
+  fade out instead of covering each other.
 - With the 3D view focused, Up/Down step through the rack (or through the
   parts of an open tray) and Enter opens a compute tray. `Esc` goes up one
   level and closes an open tray.
+- **Ctrl+K** (or **Cmd+K**, or `/`) opens the command palette: find a part or
+  run an action, such as a view, a network, a walkthrough, the quiz, a
+  language or a theme.
+- The arrow (» / «) on the edge of the details panel collapses it to give the
+  3D view more room. The browser remembers the choice.
 - **List view** shows the rack as a plain list. The app also uses it on its
-  own when the browser has no WebGL.
-- The URL holds the selection and the list pane (e.g.
-  `?select=compute-tray.7&list=1`), so you can share a link to any unit.
+  own when the browser has no WebGL. Chips above it filter the units by type
+  and by network.
+- The URL holds what is on screen, so any link can be shared: `select`
+  (part), `view` (`rear` or `tray`), `list`, `net` (network overlay), `proc`
+  and `step` (walkthrough), `page=sources`, `cmp` (comparison), `quiz` (quiz
+  round), `ft` and `fn` (list filters) and `lang`. For example
+  `?select=compute-tray.7&list=1`.
 - Power shelves are numbered 1 to 4 from the bottom up, as in NVIDIA's service
   manual. Compute and switch trays are numbered from the top down; NVIDIA does
   not number them by rack position, so that numbering is marked *assumed*.
+
+## Learning
+
+- **Start here** in the top bar runs a 12-step tour: the rack, a compute tray
+  and its GPUs and CPUs, a switch tray, a power shelf, the rear, a network and
+  the Sources page. The arrow keys move between steps; `Esc` ends it and puts
+  back what was on screen.
+- **Quick tips** appear on a first visit with three steps to get started. The
+  **?** button in the top bar brings them back.
+- **Quiz** asks 10 questions generated from the data: find a part, which unit
+  holds a part, how many are in the rack, and which network a port is on.
+  Each answer links to its source. Nothing assumed or disputed is asked. The
+  `quiz=` value in the link replays the same round.
+- **Compare** pins the selected part; select another to see both side by
+  side, with differing rows highlighted. `cmp=` keeps the comparison in the
+  link.
+- **How many in the rack** (on the rack's details panel) charts the rack-wide
+  count of each kind of part, computed from the data. Counts NVIDIA does not
+  state show as *not stated*.
+- **Glossary**: terms such as NVLink, BMC, CRU or IMEX show a short definition
+  in the details text, and the Sources page lists them all. Each definition
+  comes from the sentence where NVIDIA's documents expand or define the term,
+  with a link to that section. Terms the documents never define (OSFP, E1.S,
+  DPU and others) are left out.
 
 ## Ask questions with MCP
 
@@ -227,7 +277,7 @@ mcp/               MCP server: tools (server.ts), stdio and HTTP entries
 api/               Vercel function that serves /mcp
 src/data/          types and model helpers (instances, paths, totals)
 src/scenes/        3D scenes: rack front and rear, tray, shelf and ToR interiors
-src/components/    side panel, breadcrumb, search, list view
+src/components/    side panel, search, list view, tour, quiz, compare, palette
 src/state/         Zustand store and URL sync
 src/config/        feature flags
 tests/             Vitest tests
