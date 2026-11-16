@@ -5,6 +5,7 @@ import { NO_FILTER, filterNetworks, filterTypes, toggleIn, type ListFilter } fro
 import { answerFromSelection, generateQuiz, isValidSeed, newSeed, type QuizQuestion } from '../data/quiz';
 import { TOUR_STEPS } from '../data/tour';
 import { initialLang, storeLang, storedLang, type Lang } from '../i18n/lang';
+import { initialHintOpen, storeHintSeen } from './firstVisit';
 import { applyTheme, darkQuery, resolveTheme, storedThemePref, storeThemePref, type Theme, type ThemePref } from '../theme';
 
 export interface QuizState {
@@ -108,6 +109,12 @@ interface ExplorerState {
   toggleListType: (type: string) => void;
   toggleListNet: (network: string) => void;
   clearListFilter: () => void;
+  /** The first-visit hint card over the stage is showing. */
+  hintOpen: boolean;
+  /** Bring the hint back (the "?" button). */
+  showHint: () => void;
+  /** Close the hint and remember it in this browser. */
+  dismissHint: () => void;
 }
 
 const initial =
@@ -142,7 +149,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     if (TOUR_STEPS.length === 0) return;
     const { view, selected, network, page, procedure, step, compare } = get();
     const restore = get().tour?.restore ?? { view, selected, network, page, procedure, step, compare };
-    set({ tour: { index: 0, restore }, quiz: null, procedure: '', step: 0, compare: '', panelOpen: true });
+    set({ tour: { index: 0, restore }, quiz: null, procedure: '', step: 0, compare: '', panelOpen: true, hintOpen: false });
     get().goToTourStep(0);
   },
   goToTourStep: (index) => {
@@ -310,6 +317,12 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     if (compare !== '') get().select(compare);
   },
   stopCompare: () => set({ compare: '' }),
+  hintOpen: typeof window !== 'undefined' && initialHintOpen(initial),
+  showHint: () => set({ hintOpen: true }),
+  dismissHint: () => {
+    storeHintSeen();
+    set({ hintOpen: false });
+  },
   setHovered: (key) => set({ hovered: key }),
   setListOpen: (open) => set({ listOpen: open }),
   listFilter: { types: initial.ft ?? [], nets: initial.fn ?? [] },

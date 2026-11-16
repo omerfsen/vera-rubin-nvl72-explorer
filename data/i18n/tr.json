@@ -443,6 +443,15 @@
         "network": "Bu katman tek bir ağdaki parçaları vurgular. Yukarıdaki çubuktan başka bir ağ seçin ya da kapatın.",
         "sources": "Buradaki her bilgi NVIDIA belgelerindeki bölümüne bağlanır. Bu sayfa hepsini listeler. Tur burada biter."
       }
+    },
+    "firstVisit": {
+      "heading": "Kısa ipuçları",
+      "select": "Kabinde bir üniteyi seçin: tıklayın ya da dokunun.",
+      "open": "Açın: yeniden seçin, çift tıklayın, Enter tuşuna basın ya da “aç” düğmesini kullanın.",
+      "network": "Bağlantı noktalarını görmek için ağ çubuğundan bir ağ deneyin.",
+      "done": "tamam",
+      "gotIt": "Anladım",
+      "show": "İpuçlarını göster"
     }
   },
   "content": {

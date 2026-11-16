@@ -443,6 +443,15 @@
         "network": "This overlay highlights the parts on one network. Pick another network in the bar above, or turn it off.",
         "sources": "Every fact here links to its section of NVIDIA's documents. This page lists them all. That is the end of the tour."
       }
+    },
+    "firstVisit": {
+      "heading": "Quick tips",
+      "select": "Select a unit in the rack: click or tap it.",
+      "open": "Open it: select it again, double-click it, press Enter, or use the Open button.",
+      "network": "Try a network in the network bar to light up its ports.",
+      "done": "done",
+      "gotIt": "Got it",
+      "show": "Show tips"
     }
   },
   "content": {

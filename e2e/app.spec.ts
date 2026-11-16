@@ -272,6 +272,46 @@ test.describe('operator features', () => {
   });
 });
 
+test.describe('first visit', () => {
+  test('shows the first-visit hint once, clear of the rack, and brings it back from "?"', async ({ page }) => {
+    await page.goto('/');
+    await rackReady(page);
+    const hint = page.getByRole('region', { name: 'Quick tips' });
+    await expect(hint).toBeVisible();
+    await expect(hint.getByRole('listitem')).toHaveCount(3);
+    // It does not take focus, and the middle of the stage is still the canvas.
+    expect(await hint.evaluate((el) => el.contains(document.activeElement))).toBe(false);
+    const box = (await page.locator('canvas').boundingBox())!;
+    const atCentre = await page.evaluate(([x, y]) => document.elementFromPoint(x!, y!)?.tagName, [box.x + box.width / 2, box.y + box.height / 2]);
+    expect(atCentre).toBe('CANVAS');
+    await hint.getByRole('button', { name: 'Got it' }).click();
+    await expect(hint).toHaveCount(0);
+    await page.reload();
+    await rackReady(page);
+    await expect(hint).toHaveCount(0);
+    await page.getByRole('button', { name: 'Show tips' }).click();
+    await expect(hint).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(hint).toHaveCount(0);
+    // A shared link to a part does not show it, nor does an embed, at phone width or not.
+    await page.evaluate(() => localStorage.clear());
+    await page.goto('/?select=compute-tray.2');
+    await expect(page.getByRole('heading', { name: 'Compute tray 2' })).toBeVisible();
+    await expect(hint).toHaveCount(0);
+    await page.setViewportSize({ width: 400, height: 860 });
+    await page.goto('/');
+    await expect(hint).toBeVisible();
+    const card = (await hint.boundingBox())!;
+    const stage = (await page.locator('#rack-stage').boundingBox())!;
+    expect(card.x).toBeGreaterThanOrEqual(0);
+    expect(card.x + card.width).toBeLessThanOrEqual(400);
+    expect(card.height).toBeLessThan(stage.height / 2);
+    await page.goto('/?embed=1');
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 60_000 });
+    await expect(hint).toHaveCount(0);
+  });
+});
+
 test.describe('fallbacks and layouts', () => {
   test('without WebGL the rack is shown as a list', async ({ browser }) => {
     const context = await browser.newContext();
