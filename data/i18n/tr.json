@@ -142,6 +142,27 @@
       "rear": "Arka",
       "only3d": "Arka görünüm ve tepsi içleri yalnızca 3B görünümde çizilir."
     },
+    "compare": {
+      "start": "Karşılaştır",
+      "startHint": "{name} öğesini sabitle ve karşılaştırmak için başka bir parça seç",
+      "heading": "Karşılaştırma",
+      "aria": "{left} ile {right} karşılaştırması",
+      "pickAnother": "{name} sabitlendi. Karşılaştırmak için başka bir parça seçin.",
+      "part": "Parça",
+      "type": "Tür",
+      "inRack": "Rafta",
+      "notStated": "Belirtilmemiş",
+      "specs": "Özellikler",
+      "networks": "Ağlar",
+      "source": "Kaynak",
+      "none": "Yok",
+      "differs": "farklı",
+      "onlyThisSide": "yalnızca bu tarafta",
+      "legend": "Vurgulanan satırlar iki parça arasında farklıdır.",
+      "swap": "Yer değiştir",
+      "clear": "İkinci parçayı temizle",
+      "stop": "Karşılaştırmayı bitir"
+    },
     "panel": {
       "selected": "Seçili: {title}",
       "assumed": "varsayım",

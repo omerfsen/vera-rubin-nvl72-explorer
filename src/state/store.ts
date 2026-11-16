@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { model } from '../data';
-import { DEFAULT_URL_STATE, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
+import { DEFAULT_URL_STATE, canonicalPath, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
 import { initialLang, storeLang, storedLang, type Lang } from '../i18n/lang';
 import { applyTheme, darkQuery, resolveTheme, storedThemePref, storeThemePref, type Theme, type ThemePref } from '../theme';
 
@@ -54,6 +54,15 @@ interface ExplorerState {
   goUp: () => void;
   /** Look at the rack from the front or the rear. */
   setSide: (side: 'rack' | 'rear') => void;
+  /** Part pinned on the left of a comparison, "" when not comparing; the selection is the right side. */
+  compare: string;
+  /** Pin a part (the current selection by default) as the left side. */
+  startCompare: (path?: string) => void;
+  /** Swap the pinned part and the selection. */
+  swapCompare: () => void;
+  /** Drop the right side: go back to the pinned part and pick another. */
+  clearCompare: () => void;
+  stopCompare: () => void;
 }
 
 const initial =
@@ -173,6 +182,22 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     const next = current === -1 ? (step > 0 ? 0 : paths.length - 1) : Math.min(paths.length - 1, Math.max(0, current + step));
     set({ selected: paths[next]! });
   },
+  compare: initial.cmp ?? '',
+  startCompare: (path) => {
+    const pinned = canonicalPath(path ?? get().selected, model);
+    if (pinned !== '') set({ compare: pinned });
+  },
+  swapCompare: () => {
+    const { compare, selected } = get();
+    if (compare === '' || selected === '' || compare === selected) return;
+    set({ compare: selected });
+    get().select(compare);
+  },
+  clearCompare: () => {
+    const { compare } = get();
+    if (compare !== '') get().select(compare);
+  },
+  stopCompare: () => set({ compare: '' }),
   setHovered: (key) => set({ hovered: key }),
   setListOpen: (open) => set({ listOpen: open }),
   stepRackUnit: (delta) => {
@@ -214,6 +239,7 @@ export function syncUrl(): () => void {
       page: s.page,
       embed: s.embed,
       lang: s.lang,
+      cmp: s.compare,
     });
     if (document.documentElement.lang !== s.lang) document.documentElement.lang = s.lang;
     if (search === window.location.search) return;
