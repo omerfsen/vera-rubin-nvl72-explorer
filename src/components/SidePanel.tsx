@@ -9,6 +9,7 @@ import { NetworkInfo } from './NetworkInfo';
 import { HostView } from './HostView';
 import { ProcedureBox, ProcedureStart } from './Procedure';
 import { Share } from './Share';
+import { RackTotals } from './RackTotals';
 import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
 import { LINK_COLORS } from '../scenes/geometry';
 import { useI18n, type I18n } from '../i18n';
@@ -142,7 +143,8 @@ function countText(c: Component, index: number | undefined, i18n: I18n): string[
   return lines;
 }
 
-export function SidePanel() {
+/** `totals`: show the rack totals chart when the rack is selected (the list shows it instead without WebGL). */
+export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
   const selected = useExplorer((s) => s.selected);
   const select = useExplorer((s) => s.select);
   const i18n = useI18n();
@@ -246,6 +248,8 @@ export function SidePanel() {
           </p>
         )}
       </section>
+
+      {totals && component.id === ROOT_ID && <RackTotals />}
 
       {component.rearSide && model.topology.rearLayout && (
         <section>

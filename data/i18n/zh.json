@@ -305,6 +305,15 @@
       "power": "电源",
       "ac": "交流电源线缆（到远程配电盘）"
     },
+    "rackTotals": {
+      "title": "机柜中各有多少",
+      "caption": "整个机柜的总数，由每个托盘、电源架或交换机中的数量相乘得出。选择一个部件即可打开它。",
+      "part": "部件",
+      "inRack": "机柜中",
+      "source": "来源",
+      "notStated": "未说明",
+      "sourceFor": "{name} 的来源：{section}"
+    },
     "connectionKinds": {
       "network": "网络",
       "not-connected": "未连接",

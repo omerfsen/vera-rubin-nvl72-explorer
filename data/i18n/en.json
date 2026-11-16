@@ -305,6 +305,15 @@
       "power": "Power",
       "ac": "AC power whips (to the remote power panel)"
     },
+    "rackTotals": {
+      "title": "How many in the rack",
+      "caption": "Totals for the whole rack, multiplied up from the count per tray, shelf or switch. Select a part to open it.",
+      "part": "Part",
+      "inRack": "In the rack",
+      "source": "Source",
+      "notStated": "not stated",
+      "sourceFor": "Source for {name}: {section}"
+    },
     "connectionKinds": {
       "network": "network",
       "not-connected": "not-connected",
