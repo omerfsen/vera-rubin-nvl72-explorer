@@ -8,6 +8,9 @@ import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
 import { i18nFor, useI18n, type I18n } from '../i18n';
 import { isPartSelected, partColor } from './colors';
+import { Rods, type Segment } from './Rods';
+import { FlowRods } from './FlowRods';
+import { isFlowMember, stubFrom } from './flow';
 import {
   CONFLICT_COLOR,
   HOVER_COLOR,
@@ -228,6 +231,35 @@ function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout })
   );
 }
 
+/**
+ * The shown network's path inside an open tray: a stub out of every front
+ * port that is a stated member. Where the cable goes from there is not in the
+ * guide, so the flow only leaves the port.
+ */
+export function trayFlowSegments(layout: TrayLayout, network: string): Segment[] {
+  const heightRU = layout.heightRU ?? 1;
+  return layout.slots
+    .filter((slot) => slot.face === 'front' && isFlowMember(network, slot.component))
+    .map((slot) => {
+      const box = slotBox(slot, heightRU);
+      return stubFrom([box.position[0], box.position[1], box.position[2] + box.size[2] / 2], 0.15);
+    });
+}
+
+/** Static stubs for the shown network's ports, with the moving flow on top. */
+function TrayFlow({ layout }: { layout: TrayLayout }) {
+  const network = useExplorer((s) => s.network);
+  const list = useMemo(() => trayFlowSegments(layout, network), [layout, network]);
+  if (list.length === 0) return null;
+  const color = NETWORK_COLORS[network] ?? '#ffffff';
+  return (
+    <group>
+      <Rods list={list} color={color} opacity={0.6} thickness={0.006} />
+      <FlowRods list={list} color={color} thickness={0.012} />
+    </group>
+  );
+}
+
 /** Name shown for a part instance: NVIDIA's label when the layout has one. */
 export function partLabel(item: Placed, i18n: I18n = i18nFor('en')): string {
   if (item.slot.label) return item.slot.label;
@@ -298,6 +330,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
         ))}
       {layers.parts && <Indicators layout={layout} />}
       {layers.links && <TrayLinks trayKey={trayKey} layout={layout} />}
+      {layers.links && <TrayFlow layout={layout} />}
       <Labels placed={placed} heightRU={heightRU} />
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />

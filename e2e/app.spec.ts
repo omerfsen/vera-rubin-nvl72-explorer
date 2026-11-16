@@ -84,6 +84,27 @@ test.describe('operator features', () => {
     await expect(page.getByText('Network 4: ipminet · Ethernet')).toBeVisible();
   });
 
+  test('selecting a network animates its path without page or console errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+    await page.goto('/');
+    await rackReady(page);
+    const bar = page.getByRole('group', { name: 'Highlight a network' });
+    const buttons = bar.getByRole('button');
+    // Every network in turn, so each one's flow mounts, compiles its shader and draws a few frames.
+    for (let i = 0; i < (await buttons.count()); i++) {
+      await buttons.nth(i).click();
+      await expect(buttons.nth(i)).toHaveAttribute('aria-pressed', 'true');
+      await page.waitForTimeout(300);
+    }
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await buttons.first().click();
+    await page.waitForTimeout(300);
+    await expect(page.locator('canvas')).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+
   test('the cold reboot walkthrough steps through and lights up the power shelves', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: /Walk through: Cold reboot the rack/ }).click();

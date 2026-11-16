@@ -11,6 +11,24 @@ export interface Segment {
 const scratch = new Object3D();
 const ALONG = new Vector3(0, 0, 1);
 
+/** Lays out one box instance per segment, stretched from `from` to `to` along its local z axis. */
+export function placeRods(mesh: InstancedMesh, list: Segment[], thickness: number) {
+  const dir = new Vector3();
+  const q = new Quaternion();
+  list.forEach((s, i) => {
+    dir.set(s.to[0] - s.from[0], s.to[1] - s.from[1], s.to[2] - s.from[2]);
+    const length = dir.length();
+    q.setFromUnitVectors(ALONG, dir.normalize());
+    scratch.position.set((s.from[0] + s.to[0]) / 2, (s.from[1] + s.to[1]) / 2, (s.from[2] + s.to[2]) / 2);
+    scratch.quaternion.copy(q);
+    scratch.scale.set(thickness, thickness, length);
+    scratch.updateMatrix();
+    mesh.setMatrixAt(i, scratch.matrix);
+  });
+  mesh.instanceMatrix.needsUpdate = true;
+  mesh.computeBoundingSphere();
+}
+
 /** Thin rods between point pairs, in any direction, as one InstancedMesh (WebGL lines are only 1 px wide). */
 export function Rods({ list, color, opacity, thickness = 0.012 }: { list: Segment[]; color: string; opacity: number; thickness?: number }) {
   const ref = useRef<InstancedMesh>(null);
@@ -18,20 +36,7 @@ export function Rods({ list, color, opacity, thickness = 0.012 }: { list: Segmen
   useLayoutEffect(() => {
     const mesh = ref.current;
     if (!mesh) return;
-    const dir = new Vector3();
-    const q = new Quaternion();
-    list.forEach((s, i) => {
-      dir.set(s.to[0] - s.from[0], s.to[1] - s.from[1], s.to[2] - s.from[2]);
-      const length = dir.length();
-      q.setFromUnitVectors(ALONG, dir.normalize());
-      scratch.position.set((s.from[0] + s.to[0]) / 2, (s.from[1] + s.to[1]) / 2, (s.from[2] + s.to[2]) / 2);
-      scratch.quaternion.copy(q);
-      scratch.scale.set(thickness, thickness, length);
-      scratch.updateMatrix();
-      mesh.setMatrixAt(i, scratch.matrix);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
-    mesh.computeBoundingSphere();
+    placeRods(mesh, list, thickness);
     invalidate();
   }, [list, invalidate, thickness]);
   if (list.length === 0) return null;
