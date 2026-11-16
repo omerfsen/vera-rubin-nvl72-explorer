@@ -900,6 +900,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .hint-button { min-width: 32px; font-weight: 600; }
 @media (max-width: 760px) {
   /* Under the camera buttons and the short hint; the bottom corners hold the stage buttons and legend. */
-  .first-visit { top: 70px; bottom: auto; left: 8px; right: 8px; width: auto; padding: 6px 10px; font-size: 0.76rem; }
+  /* Above the stage buttons and capped to the stage, so "Got it" can always be tapped on a short screen. */
+  .first-visit { top: 70px; bottom: auto; left: 8px; right: 8px; width: auto; padding: 6px 10px; font-size: 0.76rem; z-index: 35; max-height: calc(100% - 78px); overflow-y: auto; box-sizing: border-box; }
   .first-visit ol { margin-bottom: 6px; }
 }
