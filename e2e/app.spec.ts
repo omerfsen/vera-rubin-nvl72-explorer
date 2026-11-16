@@ -504,8 +504,8 @@ test.describe('fallbacks and layouts', () => {
       await expect(page.locator('canvas')).toBeVisible({ timeout: 60_000 });
       await expect(page.locator('.first-visit')).toBeVisible();
       await expect(legend).toBeHidden();
-      // Escape, not the button: on a short stage the stage buttons sit over the bottom of the box.
-      await page.locator('.first-visit').press('Escape');
+      // A real tap: Playwright refuses if anything (such as the stage buttons) covers "Got it".
+      await page.locator('.first-visit').getByRole('button', { name: 'Got it' }).click({ timeout: 5_000 });
       await expect(page.locator('.first-visit')).toHaveCount(0);
 
       // The long rack legend, the language with the longest labels, a network, and a tray.
