@@ -162,6 +162,22 @@ test.describe('operator features', () => {
     await expect(page.getByText('enP3p1s0f0np0').first()).toBeVisible();
   });
 
+  test('the Ctrl+K command palette highlights a network and selects a part', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('button', { name: /Commands/ })).toBeVisible();
+    await page.keyboard.press('Control+k');
+    const input = page.getByRole('dialog', { name: 'Command palette' }).getByRole('combobox', { name: 'Command or part' });
+    await expect(input).toBeFocused();
+    await input.fill('ipminet');
+    await page.keyboard.press('Enter');
+    await expect.poll(() => param(page, 'net')).toBe('ipminet');
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await page.keyboard.press('Control+k');
+    await input.fill('mlx5_4');
+    await page.keyboard.press('Enter');
+    await expect.poll(() => param(page, 'select')).toBe('compute-tray/ct-port-cx9-osfp.2');
+  });
+
   test('the network overlay highlights ipminet and lists what is on it', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: /4 ipminet/ }).click();
