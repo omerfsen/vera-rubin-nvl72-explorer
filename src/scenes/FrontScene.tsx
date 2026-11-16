@@ -7,6 +7,8 @@ import { useExplorer } from '../state/store';
 import { partColor } from './colors';
 import { ledColor, NETWORK_COLORS, SLIDE_OUT, UNIT_DEPTH, UNIT_WIDTH, unitBoxes } from './geometry';
 import { Rods, type Segment, type Vec } from './Rods';
+import { FlowRods } from './FlowRods';
+import { isFlowMember, stubFrom } from './flow';
 
 const boxes = unitBoxes(model.rackUnits, model.totalRU);
 const boxByKey = new Map(boxes.map((b) => [b.key, b]));
@@ -103,13 +105,18 @@ function FacePlates() {
   );
 }
 
+/** A management link, with the port component it starts from. */
+export interface ManagementLink extends Segment {
+  component: string;
+}
+
 /**
  * The management cabling of section 1.5: from every BMC port in the rack to
  * the top-of-rack switch pair. Ports come from each unit's layout; the
  * routing and the split across the two switches are not stated, so the
  * lines end on the pair as a whole.
  */
-export function managementLinks(): { stated: Segment[]; assumed: Segment[] } {
+export function managementLinks(): { stated: ManagementLink[]; assumed: ManagementLink[] } {
   // Connections that end on a rack unit type (in this rack: the ToR switches): from a BMC or DPU
   // (stated), or from a whole unit whose BMC port is this app's reading (assumed).
   const managed = new Set(['bmc', 'dpu']);
@@ -121,7 +128,7 @@ export function managementLinks(): { stated: Segment[]; assumed: Segment[] } {
   const targets = model.rackUnits.filter((u) => u.componentId === target).map((u) => boxByKey.get(u.key)!);
   if (targets.length === 0) return { stated: [], assumed: [] };
   const torY = targets.reduce((sum, b) => sum + b.position[1], 0) / targets.length;
-  const starts: { at: Vec; assumed: boolean }[] = [];
+  const starts: { at: Vec; assumed: boolean; component: string }[] = [];
   for (const c of bmcLinks) {
     const unitType = [...model.ancestorsOf(c.from), c.from].find((id) => model.isRackUnitType(id));
     const layout = unitType ? model.trayLayout(unitType) : undefined;
@@ -142,32 +149,70 @@ export function managementLinks(): { stated: Segment[]; assumed: Segment[] } {
     const assumed = c.assumed === true;
     for (const unit of model.rackUnits.filter((u) => u.componentId === unitType)) {
       const r = faceRect(slot, unit.key);
-      if (r) starts.push({ at: [r.x, r.y, FRONT + 0.01], assumed });
+      if (r) starts.push({ at: [r.x, r.y, FRONT + 0.01], assumed, component: slot.component });
     }
   }
   const all = starts.map((s, i) => ({
     assumed: s.assumed,
-    seg: { from: s.at, to: [-UNIT_WIDTH / 2 + ((i + 0.5) / starts.length) * UNIT_WIDTH, torY, FRONT + 0.03] as Vec },
+    seg: { component: s.component, from: s.at, to: [-UNIT_WIDTH / 2 + ((i + 0.5) / starts.length) * UNIT_WIDTH, torY, FRONT + 0.03] as Vec },
   }));
   return { stated: all.filter((a) => !a.assumed).map((a) => a.seg), assumed: all.filter((a) => a.assumed).map((a) => a.seg) };
 }
 
-/** Front-face detail, plus the management cabling while a ToR switch is selected or ipminet is highlighted. */
+/**
+ * The path of a network across the rack front: the management links that
+ * start from one of its ports, and a short stub out of every other front port
+ * that is a stated member (its cabling outside the rack is not in the guide).
+ */
+export function networkFlowSegments(network: string, selectedKey: string | null = null): { links: Segment[]; stubs: Segment[] } {
+  if (!network) return { links: [], stubs: [] };
+  const { stated, assumed } = managementLinks();
+  const linked = new Set([...stated, ...assumed].map((l) => l.component));
+  const links = stated.filter((l) => isFlowMember(network, l.component));
+  const stubs: Segment[] = [];
+  for (const unit of model.rackUnits) {
+    const slide = unit.key === selectedKey ? SLIDE_OUT : 0;
+    for (const slot of model.trayLayout(unit.componentId)?.slots ?? []) {
+      if (slot.face !== 'front' || linked.has(slot.component) || !isFlowMember(network, slot.component)) continue;
+      const r = faceRect(slot, unit.key);
+      if (r) stubs.push(stubFrom([r.x, r.y, FRONT + 0.006 + slide]));
+    }
+  }
+  return { links, stubs };
+}
+
+/** The network the management links are on: the first network one of their ports belongs to. */
+export function managementNetwork(links: ManagementLink[]): string {
+  const ports = new Set(links.map((l) => l.component));
+  return model.topology.networks.find((n) => [...ports].some((c) => model.networkMembers(n.id).members.has(c)))?.id ?? '';
+}
+
+/**
+ * Front-face detail, the management cabling while a ToR switch is selected or
+ * its network is shown, and the shown network's flow on top.
+ */
 export function FrontScene() {
   const layers = useExplorer((s) => s.layers);
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
   const links = useMemo(managementLinks, []);
+  const linkNetwork = useMemo(() => managementNetwork(links.stated), [links]);
   const target = model.topology.connections.find((c) => c.to && model.isRackUnitType(c.to) && model.getComponent(c.from)?.type === 'bmc')?.to;
-  const torSelected = target !== undefined && (selected.split('/')[0] ?? '').startsWith(`${target}.`);
-  const showLinks = layers.links && (torSelected || network === 'ipminet');
+  const first = selected.split('/')[0] ?? '';
+  const torSelected = target !== undefined && first.startsWith(`${target}.`);
+  const showLinks = layers.links && (torSelected || (network !== '' && network === linkNetwork));
+  const linkColor = NETWORK_COLORS[linkNetwork] ?? '#ffffff';
+  const selectedKey = model.rackUnitByKey.has(first) ? first : null;
+  const flow = useMemo(() => networkFlowSegments(network, selectedKey), [network, selectedKey]);
+  const flowList = useMemo(() => [...flow.links, ...flow.stubs], [flow]);
+  const flowColor = NETWORK_COLORS[network] ?? '#ffffff';
   return (
     <group>
       {layers.parts && <FacePlates />}
-      {showLinks && <Rods list={links.stated} color={NETWORK_COLORS.ipminet ?? '#4dd0e1'} opacity={0.75} thickness={0.004} />}
-      {showLinks && links.assumed.length > 0 && (
-        <Rods list={links.assumed} color={NETWORK_COLORS.ipminet ?? '#4dd0e1'} opacity={0.3} thickness={0.003} />
-      )}
+      {showLinks && <Rods list={links.stated} color={linkColor} opacity={0.75} thickness={0.004} />}
+      {showLinks && links.assumed.length > 0 && <Rods list={links.assumed} color={linkColor} opacity={0.3} thickness={0.003} />}
+      {layers.links && flow.stubs.length > 0 && <Rods list={flow.stubs} color={flowColor} opacity={0.6} thickness={0.004} />}
+      {layers.links && <FlowRods list={flowList} color={flowColor} thickness={0.008} />}
     </group>
   );
 }
