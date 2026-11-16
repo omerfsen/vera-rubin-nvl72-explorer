@@ -18,7 +18,10 @@
       "hint": "Record this tab as a video. It is saved on your computer as WebM and MP4; nothing is uploaded.",
       "saved": "Saved: {files}.",
       "noMp4": "This browser could not make the MP4, so only WebM was saved.",
-      "denied": "Recording did not start: screen sharing was not allowed."
+      "denied": "Recording did not start: screen sharing was not allowed.",
+      "voice": "Voice",
+      "voiceHint": "Also record your voice from the microphone. The browser asks for permission.",
+      "micDenied": "The microphone was not allowed, so the recording has no voice."
     },
     "detailsToggle": {
       "collapse": "Collapse details",

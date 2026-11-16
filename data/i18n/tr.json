@@ -18,7 +18,10 @@
       "hint": "Bu sekmeyi video olarak kaydedin. Video bilgisayarınıza WebM ve MP4 olarak kaydedilir; hiçbir şey yüklenmez.",
       "saved": "Kaydedildi: {files}.",
       "noMp4": "Bu tarayıcı MP4 oluşturamadı, yalnızca WebM kaydedildi.",
-      "denied": "Kayıt başlamadı: ekran paylaşımına izin verilmedi."
+      "denied": "Kayıt başlamadı: ekran paylaşımına izin verilmedi.",
+      "voice": "Ses",
+      "voiceHint": "Mikrofondan sesinizi de kaydedin. Tarayıcı izin ister.",
+      "micDenied": "Mikrofona izin verilmedi, bu yüzden kayıtta ses yok."
     },
     "detailsToggle": {
       "collapse": "Ayrıntıları daralt",

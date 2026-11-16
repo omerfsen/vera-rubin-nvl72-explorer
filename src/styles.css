@@ -542,3 +542,4 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
   .panel.closed .panel-toggle { height: auto; flex-direction: row; padding: 8px 12px; }
   .panel.closed .panel-toggle-label { writing-mode: horizontal-tb; }
 }
+.recorder-voice { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; color: var(--muted); cursor: pointer; }
