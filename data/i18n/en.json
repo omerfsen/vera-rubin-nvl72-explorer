@@ -336,6 +336,14 @@
       "power": "Power",
       "ac": "AC power whips (to the remote power panel)"
     },
+    "emptyPanel": {
+      "label": "Getting started",
+      "lead3d": "Select a part in the rack, or pick one below, to see what it is, how many there are, and where NVIDIA documents it.",
+      "leadList": "Select a part in the list, or pick one below, to see what it is, how many there are, and where NVIDIA documents it.",
+      "starts": "Start with",
+      "keys3d": "Keyboard: Tab to the 3D view, then ↑ ↓ step through the rack, Enter opens a unit and Esc goes back.",
+      "keysList": "Keyboard: Tab through the list and press Enter to select a unit; Esc goes back."
+    },
     "rackTotals": {
       "title": "How many in the rack",
       "caption": "Totals for the whole rack, multiplied up from the count per tray, shelf or switch. Select a part to open it.",

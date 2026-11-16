@@ -17,6 +17,7 @@ import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
 import { LINK_COLORS } from '../scenes/geometry';
 import { useI18n, type I18n } from '../i18n';
 import { GlossaryText } from './Glossary';
+import { EmptyPrompt } from './EmptyPrompt';
 
 function SourceLink({ source }: { source: Source }) {
   return (
@@ -147,8 +148,11 @@ function countText(c: Component, index: number | undefined, i18n: I18n): string[
   return lines;
 }
 
-/** `totals`: show the rack totals chart when the rack is selected (the list shows it instead without WebGL). */
-export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
+/**
+ * `totals`: show the rack totals chart when the rack is selected (the list shows it instead without WebGL).
+ * `webgl`: false in the list-only fallback, so the prompt does not mention the 3D rack.
+ */
+export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; webgl?: boolean } = {}) {
   const selected = useExplorer((s) => s.selected);
   const select = useExplorer((s) => s.select);
   const i18n = useI18n();
@@ -204,6 +208,7 @@ export function SidePanel({ totals = true }: { totals?: boolean } = {}) {
       <ProcedureBox />
       <NetworkInfo />
       <CompareBox />
+      <EmptyPrompt webgl={webgl} />
       <header className="panel-header">
         <p className="kind">{i18n.typeName(component.type)}</p>
         <h2 id="panel-title" ref={headingRef} tabIndex={-1}>
