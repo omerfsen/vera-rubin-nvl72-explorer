@@ -21,5 +21,6 @@ describe('site credits', () => {
     expect(screen.queryAllByRole('link', { name: 'LinkedIn' }).length).toBe(site.author.linkedin ? 1 : 0);
     expect((screen.getByRole('link', { name: 'LinkedIn' }) as HTMLAnchorElement).href).toBe('https://www.linkedin.com/in/omerfsen/');
     expect((screen.getByRole('link', { name: 'omerfsen@gmail.com' }) as HTMLAnchorElement).href).toBe('mailto:omerfsen@gmail.com');
+    expect((screen.getByRole('link', { name: 'Buy me a coffee' }) as HTMLAnchorElement).href).toBe('https://buymeacoffee.com/omerfsen');
   });
 });

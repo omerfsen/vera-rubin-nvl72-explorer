@@ -37,7 +37,8 @@
       "madeBy": "作者：{name}",
       "source": "GitHub 上的源代码",
       "github": "GitHub",
-      "linkedin": "LinkedIn"
+      "linkedin": "LinkedIn",
+      "support": "请我喝杯咖啡"
     },
     "top": {
       "sources": "来源",
