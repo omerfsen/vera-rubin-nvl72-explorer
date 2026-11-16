@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n';
-import { canRecord, recordingName, saveBlob, startRecording, type Recording } from '../lib/recorder';
+import { canRecord, finishRecording, recordingName, saveBlob, startRecording, type Recording } from '../lib/recorder';
 
-type Phase = 'idle' | 'starting' | 'recording';
+type Phase = 'idle' | 'starting' | 'recording' | 'converting';
 
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
@@ -11,6 +11,7 @@ export function Recorder() {
   const { t } = useI18n();
   const [phase, setPhase] = useState<Phase>('idle');
   const [seconds, setSeconds] = useState(0);
+  const [percent, setPercent] = useState(0);
   const [status, setStatus] = useState('');
   const rec = useRef<Recording | null>(null);
 
@@ -26,12 +27,15 @@ export function Recorder() {
     const current = rec.current;
     if (!current) return;
     rec.current = null;
-    setPhase('idle');
-    const files = await current.stop();
+    setPercent(0);
+    setPhase('converting');
+    const raw = await current.stop();
+    const { files, mp4Failed } = await finishRecording(raw, (p) => setPercent(Math.round(p * 100)));
     const at = new Date();
     for (const { format, blob } of files) saveBlob(blob, recordingName(format, at));
+    setPhase('idle');
     const names = files.map((f) => f.format.toUpperCase()).join(', ');
-    setStatus(t('record.saved', { files: names }) + (current.formats.includes('mp4') ? '' : ' ' + t('record.noMp4')));
+    setStatus(t('record.saved', { files: names }) + (mp4Failed ? ' ' + t('record.noMp4') : ''));
   };
 
   const start = async () => {
@@ -54,8 +58,8 @@ export function Recorder() {
           {t('record.stop', { time: clock(seconds) })}
         </button>
       ) : (
-        <button type="button" className="toggle" disabled={phase === 'starting'} title={t('record.hint')} onClick={() => void start()}>
-          {t('record.start')}
+        <button type="button" className="toggle" disabled={phase !== 'idle'} title={t('record.hint')} onClick={() => void start()}>
+          {phase === 'converting' ? t('record.converting', { percent }) : t('record.start')}
         </button>
       )}
       <span className="muted small" role="status">{status}</span>

@@ -14,9 +14,10 @@
     "record": {
       "start": "Grabar",
       "stop": "Detener y guardar ({time})",
+      "converting": "Creando MP4… {percent}%",
       "hint": "Graba esta pestaña como vídeo. Se guarda en tu ordenador en WebM y MP4; no se sube nada.",
       "saved": "Guardado: {files}.",
-      "noMp4": "Este navegador no puede grabar MP4, así que solo se guardó WebM.",
+      "noMp4": "Este navegador no pudo crear el MP4, así que solo se guardó WebM.",
       "denied": "La grabación no empezó: no se permitió compartir la pantalla."
     },
     "site": {
