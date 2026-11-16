@@ -124,6 +124,12 @@ https://verarubin-nvl72.faruk.net. https://vr-nvl72.faruk.net redirects there.
   MP4, such as Firefox). Tick Voice to add your voice from the microphone.
   Nothing is uploaded. Build with
   `VITE_SHOW_RECORDER=false` to remove the button.
+- **Take a screenshot.** Screenshot next to it saves a PNG of the 3D view,
+  with its labels and a caption naming the part, the view and the site
+  (`vr-nvl72-YYYYMMDD-HHMMSS.png`); the button beside it copies the image to
+  the clipboard instead, where the browser allows it. It is drawn from the
+  page itself: no screen-sharing prompt, nothing uploaded. Build with
+  `VITE_SHOW_SCREENSHOT=false` to remove it.
 
 ## Official figures (off by default)
 

@@ -581,6 +581,9 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .recorder { display: flex; align-items: center; gap: 6px; }
 .recorder .toggle.recording { border-color: var(--danger); color: var(--danger); }
 .recorder [role='status']:empty { display: none; }
+.screenshot { display: flex; align-items: center; gap: 4px; }
+.screenshot .screenshot-copy { min-width: 32px; padding-inline: 6px; }
+.screenshot [role='status']:empty { display: none; }
 
 /* Collapsible details panel. */
 .layout.panel-closed { grid-template-columns: 1fr 40px; }

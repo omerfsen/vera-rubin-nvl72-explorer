@@ -11,6 +11,20 @@
       "dark": "Koyu",
       "system": "Sistem"
     },
+    "screenshot": {
+      "group": "Ekran görüntüsü",
+      "save": "Ekran görüntüsü",
+      "hint": "3B görünümün etiketleriyle birlikte PNG'sini kaydedin. Tarayıcınızda oluşturulur; hiçbir şey yüklenmez.",
+      "copy": "Görüntüyü kopyala",
+      "saved": "Ekran görüntüsü kaydedildi.",
+      "copied": "Görüntü kopyalandı.",
+      "noCopy": "Bu tarayıcı görüntü kopyalayamıyor; PNG kaydetmek için Ekran görüntüsü'nü kullanın.",
+      "copyFailed": "Görüntü kopyalanamadı; PNG kaydetmek için Ekran görüntüsü'nü kullanın.",
+      "failed": "Ekran görüntüsü alınamadı.",
+      "viewFront": "Önden görünüm",
+      "viewRear": "Arkadan görünüm",
+      "viewTray": "Tepsi görünümü"
+    },
     "record": {
       "start": "Kaydet",
       "stop": "Durdur ve kaydet ({time})",

@@ -11,6 +11,7 @@ import { TrayScene } from './TrayScene';
 import { useSceneTheme } from './useSceneTheme';
 import { CAMERA_PRESETS, ease, interpolatePose, presetPose, type CameraPreset, type Pose, type Vec } from './cameraPresets';
 import { LabelDeconflict } from './LabelDeconflict';
+import { setCaptureSource } from '../lib/screenshot';
 
 const FOV = 38;
 const RACK_DISTANCE = rackCameraDistance(FOV);
@@ -181,6 +182,7 @@ export default function Scene() {
         <OrbitControls makeDefault enablePan={false} enableDamping={false} minDistance={0.8} maxPolarAngle={Math.PI * 0.85} />
         <CameraRig view={effectiveView} request={cameraRequest} />
         <LabelDeconflict />
+        <CaptureBridge />
       </Canvas>
       <CameraButtons onPick={(preset) => setCameraRequest((r) => ({ preset, id: (r?.id ?? 0) + 1 }))} />
       {contextLost && (
@@ -203,4 +205,27 @@ function ThemeColors() {
       <hemisphereLight key={`sky-${scene.skyLight}`} args={[scene.skyLight, scene.groundLight, 0.9]} />
     </>
   );
+}
+
+/** Lets the Screenshot button render a fresh frame and copy it in the same task. */
+function CaptureBridge() {
+  const gl = useThree((s) => s.gl);
+  const scene = useThree((s) => s.scene);
+  const camera = useThree((s) => s.camera);
+  // drei's <Html> mounts its labels in the element events are connected to.
+  const connected = useThree((s) => s.events.connected) as HTMLElement | undefined;
+  useEffect(() => {
+    const root = connected ?? gl.domElement.parentElement;
+    if (!root) return;
+    const source = {
+      root,
+      render: () => {
+        gl.render(scene, camera);
+        return gl.domElement;
+      },
+    };
+    setCaptureSource(source);
+    return () => setCaptureSource(null);
+  }, [gl, scene, camera, connected]);
+  return null;
 }

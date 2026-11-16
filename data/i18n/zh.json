@@ -11,6 +11,20 @@
       "dark": "深色",
       "system": "跟随系统"
     },
+    "screenshot": {
+      "group": "截图",
+      "save": "截图",
+      "hint": "将带标签的 3D 视图保存为 PNG。图片在浏览器中生成，不会上传任何内容。",
+      "copy": "复制图片",
+      "saved": "截图已保存。",
+      "copied": "图片已复制。",
+      "noCopy": "此浏览器无法复制图片；请使用“截图”保存 PNG。",
+      "copyFailed": "无法复制图片；请使用“截图”保存 PNG。",
+      "failed": "无法截图。",
+      "viewFront": "正面视图",
+      "viewRear": "背面视图",
+      "viewTray": "托盘视图"
+    },
     "record": {
       "start": "录制",
       "stop": "停止并保存（{time}）",

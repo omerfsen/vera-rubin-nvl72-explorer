@@ -17,3 +17,10 @@ export function officialFigureUrl(fileName: string): string {
  * VITE_SHOW_RECORDER=false to remove it.
  */
 export const SHOW_RECORDER: boolean = import.meta.env.VITE_SHOW_RECORDER !== 'false';
+
+/**
+ * SHOW_SCREENSHOT: the Screenshot button in the top bar (a PNG of the 3D
+ * view, saved or copied locally). On by default; build with
+ * VITE_SHOW_SCREENSHOT=false to remove it.
+ */
+export const SHOW_SCREENSHOT: boolean = import.meta.env.VITE_SHOW_SCREENSHOT !== 'false';

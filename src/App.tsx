@@ -17,9 +17,11 @@ import { syncTheme, syncUrl, useExplorer } from './state/store';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { Recorder } from './components/Recorder';
+import { Screenshot } from './components/Screenshot';
+import { screenshotAvailable } from './lib/screenshot';
 import { QuizButton } from './components/Quiz';
 import { TourBox, TourButton } from './components/Tour';
-import { SHOW_RECORDER } from './config/flags';
+import { SHOW_RECORDER, SHOW_SCREENSHOT } from './config/flags';
 import { useI18n } from './i18n';
 import { FirstVisitHint, HintButton } from './components/FirstVisitHint';
 
@@ -219,6 +221,7 @@ export default function App() {
         <LanguageSwitcher />
         <ThemeSwitcher />
         {SHOW_RECORDER && !embed && <Recorder />}
+        {screenshotAvailable({ flag: SHOW_SCREENSHOT, webgl, embed }) && page !== 'sources' && <Screenshot />}
         {!embed && <TourButton />}
         {!embed && <QuizButton />}
         {webgl && !embed && <HintButton />}
