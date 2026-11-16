@@ -11,6 +11,20 @@
       "dark": "Dark",
       "system": "System"
     },
+    "screenshot": {
+      "group": "Screenshot",
+      "save": "Screenshot",
+      "hint": "Save a PNG of the 3D view with its labels. It is made in your browser; nothing is uploaded.",
+      "copy": "Copy image",
+      "saved": "Screenshot saved.",
+      "copied": "Image copied.",
+      "noCopy": "This browser cannot copy images; use Screenshot to save a PNG.",
+      "copyFailed": "The image could not be copied; use Screenshot to save a PNG.",
+      "failed": "The screenshot could not be taken.",
+      "viewFront": "Front view",
+      "viewRear": "Rear view",
+      "viewTray": "Tray view"
+    },
     "record": {
       "start": "Record",
       "stop": "Stop and save ({time})",

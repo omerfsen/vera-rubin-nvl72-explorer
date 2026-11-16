@@ -11,6 +11,20 @@
       "dark": "Oscuro",
       "system": "Sistema"
     },
+    "screenshot": {
+      "group": "Captura",
+      "save": "Captura",
+      "hint": "Guarda un PNG de la vista 3D con sus etiquetas. Se crea en tu navegador; no se sube nada.",
+      "copy": "Copiar imagen",
+      "saved": "Captura guardada.",
+      "copied": "Imagen copiada.",
+      "noCopy": "Este navegador no puede copiar imágenes; usa Captura para guardar un PNG.",
+      "copyFailed": "No se pudo copiar la imagen; usa Captura para guardar un PNG.",
+      "failed": "No se pudo hacer la captura.",
+      "viewFront": "Vista frontal",
+      "viewRear": "Vista trasera",
+      "viewTray": "Vista de bandeja"
+    },
     "record": {
       "start": "Grabar",
       "stop": "Detener y guardar ({time})",

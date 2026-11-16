@@ -121,6 +121,56 @@ test.describe('operator features', () => {
     await expect(page.getByRole('button', { name: 'Record' })).toHaveCount(0);
   });
 
+  test('Screenshot saves a PNG of the 3D view with labels and a caption', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto('/?select=compute-tray.2');
+    await rackReady(page);
+    const button = page.getByRole('button', { name: 'Screenshot', exact: true });
+    await button.focus();
+    const [download] = await Promise.all([page.waitForEvent('download'), page.keyboard.press('Enter')]);
+    expect(download.suggestedFilename()).toMatch(/^vr-nvl72-\d{8}-\d{6}\.png$/);
+    const bytes = await (await download.createReadStream()).toArray();
+    const png = Buffer.concat(bytes);
+    expect(png.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a');
+    await expect(page.getByRole('group', { name: 'Screenshot' }).getByRole('status')).toHaveText('Screenshot saved.');
+    // Decode it in the page: the canvas size plus a caption bar, and real pixels, not a blank frame.
+    const info = await page.evaluate(async (b64) => {
+      const blob = new Blob([Uint8Array.from(atob(b64), (ch) => ch.charCodeAt(0))], { type: 'image/png' });
+      const img = await createImageBitmap(blob);
+      const gl = document.querySelector('canvas')!;
+      const c = document.createElement('canvas');
+      c.width = img.width;
+      c.height = img.height;
+      const ctx = c.getContext('2d')!;
+      ctx.drawImage(img, 0, 0);
+      const colours = (y0: number, y1: number) => {
+        const d = ctx.getImageData(0, y0, img.width, y1 - y0).data;
+        const seen = new Set<number>();
+        for (let i = 0; i < d.length; i += 4) seen.add((d[i]! << 16) | (d[i + 1]! << 8) | d[i + 2]!);
+        return seen.size;
+      };
+      return {
+        width: img.width,
+        height: img.height,
+        glWidth: gl.width,
+        glHeight: gl.height,
+        sceneColours: colours(0, gl.height),
+        captionColours: colours(gl.height + 2, img.height),
+      };
+    }, png.toString('base64'));
+    expect(info.width).toBe(info.glWidth);
+    expect(info.height).toBeGreaterThan(info.glHeight);
+    expect(info.height - info.glHeight).toBeLessThanOrEqual(28 * 2 + 1);
+    expect(info.sceneColours).toBeGreaterThan(50);
+    expect(info.captionColours).toBeGreaterThan(2);
+    // No screen-sharing prompt: the page never asked for one.
+    expect(errors).toEqual([]);
+    await page.goto('/?embed=1');
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByRole('button', { name: 'Screenshot', exact: true })).toHaveCount(0);
+  });
+
   test('the quiz plays a question from the list at phone width, and hides in an embed', async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', (e) => errors.push(e.message));
@@ -244,6 +294,8 @@ test.describe('operator features', () => {
     await expect.poll(() => param(page, 'view')).toBe('rear');
     await page.getByRole('button', { name: 'Sources' }).click();
     await expect(page.getByRole('heading', { name: 'Sources and open questions' })).toBeVisible();
+    // There is no 3D view on the Sources page, so there is nothing to screenshot.
+    await expect(page.getByRole('button', { name: 'Screenshot', exact: true })).toHaveCount(0);
   });
 
   test('camera presets move the view and Reset brings it back', async ({ page }) => {
@@ -325,6 +377,7 @@ test.describe('fallbacks and layouts', () => {
     const page = await context.newPage();
     await page.goto('/');
     await expect(page.getByText('WebGL is not available in this browser')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Screenshot', exact: true })).toHaveCount(0);
     await page.getByRole('button', { name: 'Compute tray 5', exact: false }).first().click();
     await expect.poll(() => new URL(page.url()).searchParams.get('select')).toBe('compute-tray.5');
     await context.close();
@@ -357,6 +410,8 @@ test.describe('fallbacks and layouts', () => {
     await page.setViewportSize({ width: 400, height: 860 });
     await page.goto('/?select=compute-tray.2');
     await expect(page.locator('canvas')).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByRole('button', { name: 'Screenshot', exact: true })).toBeInViewport();
+    await expect(page.getByRole('button', { name: 'Copy image' })).toBeInViewport();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
   });

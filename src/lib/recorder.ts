@@ -54,8 +54,8 @@ export function recordingType(types: Partial<Record<VideoFormat, string>>): { fo
   return null;
 }
 
-/** vr-nvl72-20261116-142530.webm */
-export function recordingName(format: VideoFormat, at: Date = new Date()): string {
+/** vr-nvl72-20261116-142530.webm (or .png for a screenshot) */
+export function recordingName(format: VideoFormat | 'png', at: Date = new Date()): string {
   const p = (n: number) => String(n).padStart(2, '0');
   const stamp = `${at.getFullYear()}${p(at.getMonth() + 1)}${p(at.getDate())}-${p(at.getHours())}${p(at.getMinutes())}${p(at.getSeconds())}`;
   return `vr-nvl72-${stamp}.${format}`;
