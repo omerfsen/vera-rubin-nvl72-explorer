@@ -241,6 +241,13 @@ committed.
 
 Omer Sen
 
+## Support
+
+If this explorer helped you, you can buy me a coffee:
+https://buymeacoffee.com/omerfsen
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-omerfsen-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/omerfsen)
+
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE); anyone redistributing this project must keep the NOTICE file.
