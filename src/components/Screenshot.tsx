@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useI18n } from '../i18n';
 import { useExplorer } from '../state/store';
 import { recordingName, saveBlob } from '../lib/recorder';
@@ -11,6 +11,13 @@ export function Screenshot() {
   const { t } = i18n;
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
+
+  // The note floats under the buttons and clears itself, so it never pushes the toolbar around.
+  useEffect(() => {
+    if (!status) return;
+    const id = window.setTimeout(() => setStatus(''), 3000);
+    return () => window.clearTimeout(id);
+  }, [status]);
 
   /** The composed image, made in this task, right after a fresh render. */
   const shoot = (): HTMLCanvasElement | null => {
@@ -65,7 +72,7 @@ export function Screenshot() {
       >
         <span aria-hidden="true">⧉</span>
       </button>
-      <span className="muted small" role="status">{status}</span>
+      <span className="screenshot-status small" role="status">{status}</span>
     </div>
   );
 }

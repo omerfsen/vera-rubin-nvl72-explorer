@@ -159,4 +159,18 @@ describe('screenshot', () => {
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Copy image' })));
     expect(screen.getByRole('status').textContent).toContain('could not be copied');
   });
+
+  it('clears its note after a few seconds', async () => {
+    vi.useFakeTimers();
+    try {
+      Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true });
+      render(<Screenshot />);
+      await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Copy image' })));
+      expect(screen.getByRole('status').textContent).not.toBe('');
+      act(() => vi.advanceTimersByTime(3100));
+      expect(screen.getByRole('status').textContent).toBe('');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

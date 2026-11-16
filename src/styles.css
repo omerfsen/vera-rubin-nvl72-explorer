@@ -586,7 +586,14 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .recorder { display: flex; align-items: center; gap: 6px; }
 .recorder .toggle.recording { border-color: var(--danger); color: var(--danger); }
 .recorder [role='status']:empty { display: none; }
-.screenshot { display: flex; align-items: center; gap: 4px; }
+.screenshot { position: relative; display: flex; align-items: center; gap: 4px; }
+/* Floats below the buttons instead of widening the group, which made the header wrap. */
+.screenshot .screenshot-status {
+  position: absolute; top: calc(100% + 4px); right: 0; z-index: 40;
+  padding: 2px 8px; white-space: nowrap; pointer-events: none;
+  background: var(--overlay-strong); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
 .screenshot .screenshot-copy { min-width: 32px; padding-inline: 6px; }
 .screenshot [role='status']:empty { display: none; }
 
