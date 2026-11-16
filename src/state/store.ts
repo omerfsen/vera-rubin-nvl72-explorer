@@ -3,7 +3,7 @@ import { model } from '../data';
 import { DEFAULT_URL_STATE, canonicalPath, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
 import { NO_FILTER, filterNetworks, filterTypes, toggleIn, type ListFilter } from '../data/listFilter';
 import { answerFromSelection, generateQuiz, isValidSeed, newSeed, type QuizQuestion } from '../data/quiz';
-import { TOUR_STEPS } from '../data/tour';
+import { TOUR_STEPS, showsTourStep } from '../data/tour';
 import { initialLang, storeLang, storedLang, type Lang } from '../i18n/lang';
 import { initialHintOpen, storeHintSeen } from './firstVisit';
 import { applyTheme, darkQuery, resolveTheme, storedThemePref, storeThemePref, type Theme, type ThemePref } from '../theme';
@@ -33,7 +33,8 @@ export interface TourRestore {
 interface ExplorerState {
   /** "Start here" tour in progress: its 0-based step and the state to put back on exit; null when off. */
   tour: { index: number; restore: TourRestore } | null;
-  startTour: () => void;
+  /** Start at the first step, or at `index` for a shared link; `restore` replaces what is on screen as the state to put back. */
+  startTour: (index?: number, restore?: TourRestore) => void;
   /** Show a tour step; clamped to the first and last. */
   goToTourStep: (index: number) => void;
   /** End the tour and put back what was on screen before it started. */
@@ -117,6 +118,9 @@ interface ExplorerState {
   dismissHint: () => void;
 }
 
+/** What a tour opened from a shared link puts back: the rack as it first loads. */
+export const TOUR_HOME: TourRestore = { view: DEFAULT_URL_STATE.view, selected: '', network: '', page: '', procedure: '', step: 0, compare: '' };
+
 const initial =
   typeof window === 'undefined' ? DEFAULT_URL_STATE : readUrlState(window.location.search, model);
 const initialLanguage: Lang =
@@ -145,12 +149,12 @@ const initialThemePref: ThemePref = typeof window === 'undefined' ? 'system' : s
 
 export const useExplorer = create<ExplorerState>((set, get) => ({
   tour: null,
-  startTour: () => {
+  startTour: (index = 0, restoreTo) => {
     if (TOUR_STEPS.length === 0) return;
     const { view, selected, network, page, procedure, step, compare } = get();
-    const restore = get().tour?.restore ?? { view, selected, network, page, procedure, step, compare };
+    const restore = restoreTo ?? get().tour?.restore ?? { view, selected, network, page, procedure, step, compare };
     set({ tour: { index: 0, restore }, quiz: null, procedure: '', step: 0, compare: '', panelOpen: true, hintOpen: false });
-    get().goToTourStep(0);
+    get().goToTourStep(index);
   },
   goToTourStep: (index) => {
     const tour = get().tour;
@@ -362,6 +366,9 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
 if (initial.proc) useExplorer.getState().goToStep(initial.step ?? 0);
 // A shared quiz link replays the same round.
 if (initial.quiz !== undefined) useExplorer.getState().startQuiz(initial.quiz);
+// A shared tour link opens that step. The view and selection in the link are the
+// step's own, so leaving the tour goes back to the plain rack.
+if (initial.tour !== undefined) useExplorer.getState().startTour(initial.tour, TOUR_HOME);
 
 /** Keep the address bar in step with the store. */
 export function syncUrl(): () => void {
@@ -378,6 +385,9 @@ export function syncUrl(): () => void {
       lang: s.lang,
       cmp: s.compare,
       quiz: s.quiz && !s.quiz.done ? s.quiz.seed : undefined,
+      // Only while the step is still on screen: once the viewer picks something
+      // else, a copied link shows that, not the step.
+      tour: s.tour && showsTourStep(TOUR_STEPS[s.tour.index]!, s, model) ? s.tour.index : undefined,
       ft: s.listFilter.types,
       fn: s.listFilter.nets,
     });

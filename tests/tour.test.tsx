@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { model } from '../src/data';
 import { TOUR_STEPS, tourComponentId, tourProblems, type TourStep } from '../src/data/tour';
-import { useExplorer } from '../src/state/store';
+import { syncUrl, TOUR_HOME, useExplorer } from '../src/state/store';
 import { TourBox, TourButton } from '../src/components/Tour';
 import en from '../data/i18n/en.json';
 
@@ -99,6 +99,81 @@ describe('tour in the store', () => {
     expect(useExplorer.getState().procedure).toBe('');
     useExplorer.getState().startQuiz(42);
     expect(useExplorer.getState().tour).toBeNull();
+  });
+});
+
+describe('tour in the URL', () => {
+  const tourParam = () => new URLSearchParams(window.location.search).get('tour');
+
+  it('writes the step, follows it and drops the key when the tour ends', () => {
+    window.history.replaceState(null, '', '/?utm=x');
+    const stop = syncUrl();
+    expect(tourParam()).toBeNull();
+    useExplorer.getState().startTour();
+    expect(tourParam()).toBe('1');
+    useExplorer.getState().goToTourStep(index('openTray'));
+    expect(window.location.search).toBe(`?utm=x&view=tray&select=compute-tray.1&tour=${index('openTray') + 1}`);
+    useExplorer.getState().stopTour();
+    expect(window.location.search).toBe('?utm=x');
+    useExplorer.getState().startTour();
+    useExplorer.getState().startQuiz(42);
+    expect(tourParam()).toBeNull();
+    stop();
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('leaves the step out of the link once the viewer moves off it, and puts it back on return', () => {
+    window.history.replaceState(null, '', '/');
+    const stop = syncUrl();
+    const at = index('computeTray');
+    const s = useExplorer.getState();
+    s.startTour(at);
+    expect(tourParam()).toBe(String(at + 1));
+    s.select('power-shelf.2');
+    expect(window.location.search).toBe('?select=power-shelf.2');
+    expect(useExplorer.getState().tour?.index).toBe(at);
+    s.goToTourStep(at);
+    expect(tourParam()).toBe(String(at + 1));
+    for (const off of [{ network: 'dgxnet' }, { page: 'sources' }, { compare: 'power-shelf.1' }, { view: 'rear' as const }]) {
+      useExplorer.setState(off);
+      expect(tourParam(), JSON.stringify(off)).toBeNull();
+      useExplorer.setState({ compare: '' });
+      s.goToTourStep(at);
+      expect(tourParam()).toBe(String(at + 1));
+    }
+    // Every step counts as on screen right after it is shown.
+    TOUR_STEPS.forEach((_, i) => {
+      s.goToTourStep(i);
+      expect(tourParam(), String(i)).toBe(String(i + 1));
+    });
+    s.stopTour();
+    stop();
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('a shared link starts at its step and exits to the plain rack', () => {
+    useExplorer.setState({ selected: 'compute-tray.1', view: 'tray' });
+    useExplorer.getState().startTour(index('gpu'), TOUR_HOME);
+    expect(useExplorer.getState()).toMatchObject({ view: 'tray', selected: 'compute-tray.1/rubin-gpu.1' });
+    expect(useExplorer.getState().tour?.index).toBe(index('gpu'));
+    useExplorer.getState().stopTour();
+    expect(useExplorer.getState()).toMatchObject({ tour: null, selected: '', view: 'rack', network: '', page: '' });
+  });
+
+  it('starts from the address bar when the page loads, but not in an embed', async () => {
+    const load = async (search: string) => {
+      window.history.replaceState(null, '', `/${search}`);
+      vi.resetModules();
+      return (await import('../src/state/store')).useExplorer.getState();
+    };
+    const at = await load('?tour=3');
+    expect(at.tour).toEqual({ index: 2, restore: TOUR_HOME });
+    expect(at).toMatchObject({ view: TOUR_STEPS[2]!.view, selected: TOUR_STEPS[2]!.target });
+    expect((await load('?tour=99')).tour).toBeNull();
+    expect((await load('?tour=3&embed=1')).tour).toBeNull();
+    // The step wins over a view and selection in the same link.
+    expect(await load('?select=power-shelf.2&tour=2')).toMatchObject({ selected: TOUR_STEPS[1]!.target });
+    window.history.replaceState(null, '', '/');
   });
 });
 

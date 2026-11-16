@@ -26,7 +26,7 @@ describe('first-visit hint: when it shows', () => {
   it('stays hidden in an embed and on a link that already shows something', () => {
     expect(open('?embed=1')).toBe(false);
     const net = model.topology.networks[0]!.id;
-    for (const search of [`?select=${firstUnit}`, '?view=rear', `?net=${net}`, '?quiz=12345', `?cmp=${firstUnit}`, '?page=sources'])
+    for (const search of [`?select=${firstUnit}`, '?view=rear', `?net=${net}`, '?quiz=12345', '?tour=1', `?cmp=${firstUnit}`, '?page=sources'])
       expect(open(search), search).toBe(false);
   });
 
