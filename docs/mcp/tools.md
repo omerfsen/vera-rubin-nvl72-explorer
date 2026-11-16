@@ -72,3 +72,11 @@ Lists where NVIDIA's documents contradict each other (conflict) or leave somethi
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
 | `kind` | `conflict`, `gap`, `all` | no (default "all") | "conflict", "gap" or "all". |
+
+## `nvl72_glossary`: Glossary of terms and abbreviations
+
+Returns terms and abbreviations (BMC, CRU, NVLink, TOR, ...) as NVIDIA's documents expand or define them, each with its document section. Optionally one term by id. Terms the documents do not define are not in the list.
+
+| Argument | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | one of 23 ids (see tools.json) | no | Only this term, e.g. "bmc". Leave out for all. |

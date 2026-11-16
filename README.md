@@ -196,7 +196,7 @@ https://verarubin-nvl72.faruk.net/mcp
 
 ### Check that it works
 
-1. In Claude Code, run `claude mcp list`: `vr-nvl72` should show as connected. In other clients, the server's nine `nvl72_*` tools should appear in the tool list.
+1. In Claude Code, run `claude mcp list`: `vr-nvl72` should show as connected. In other clients, the server's ten `nvl72_*` tools should appear in the tool list.
 2. Ask: "How many GPUs are in a Vera Rubin NVL72 rack?" The answer should be 72 (18 compute trays with 4 GPUs each), from `nvl72_overview` and `nvl72_get_component`, citing section 1.2 of the User Guide.
 3. Ask: "Which physical port is enP1p3s0f0np0?" It should find C1/C1_1 on bus `0001:03:00.0` with `nvl72_search`.
 4. Ask: "Where is compute tray 7 in the rack?" `nvl72_rack_layout` places it 14 RU from the top.

@@ -36,7 +36,7 @@ const call = async (client: Client, name: string, args: Record<string, unknown> 
   (await client.callTool({ name, arguments: args })) as { isError?: boolean; structuredContent?: any; content: { type: string; text: string }[] };
 
 describe('MCP tool surface', () => {
-  it('lists nine read-only tools in a fixed order with full metadata', async () => {
+  it('lists ten read-only tools in a fixed order with full metadata', async () => {
     const client = await connect();
     const { tools } = await client.listTools();
     expect(tools.map((t) => t.name)).toEqual([
@@ -49,6 +49,7 @@ describe('MCP tool surface', () => {
       'nvl72_get_command',
       'nvl72_pcie_devices',
       'nvl72_open_questions',
+      'nvl72_glossary',
     ]);
     for (const t of tools) {
       expect(t.name.length).toBeLessThanOrEqual(64);
@@ -122,6 +123,15 @@ describe('MCP tool surface', () => {
     const q = await call(client, 'nvl72_open_questions', { kind: 'conflict' });
     expect(q.structuredContent.questions.every((x: { kind: string }) => x.kind === 'conflict')).toBe(true);
   });
+
+  it('glossary lists every term with its source, or one by id', async () => {
+    const client = await connect();
+    const all = await call(client, 'nvl72_glossary');
+    expect(all.structuredContent.terms).toHaveLength(topology.glossary!.length);
+    for (const g of all.structuredContent.terms) expect(g.source.url).toMatch(/^https:\/\/docs\.nvidia\.com\/dgx\/dgxvr-/);
+    const bmc = await call(client, 'nvl72_glossary', { id: 'bmc' });
+    expect(bmc.structuredContent.terms).toEqual([expect.objectContaining({ term: 'BMC', expansion: 'Board Management Controller' })]);
+  });
 });
 
 describe('hostile arguments are refused before any handler runs', () => {
@@ -135,6 +145,8 @@ describe('hostile arguments are refused before any handler runs', () => {
     ['nvl72_get_network', { network: 'internet' }],
     ['nvl72_open_questions', { kind: 'everything' }],
     ['nvl72_overview', { anything: true }],
+    ['nvl72_glossary', { id: 'not-a-term' }],
+    ['nvl72_glossary', { id: 'bmc', definition: 'x' }],
   ])('%s %j', async (name, args) => {
     const client = await connect();
     const r = await call(client, name, args);

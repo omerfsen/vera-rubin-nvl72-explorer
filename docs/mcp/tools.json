@@ -1617,6 +1617,116 @@
         "idempotentHint": true,
         "openWorldHint": false
       }
+    },
+    {
+      "name": "nvl72_glossary",
+      "title": "Glossary of terms and abbreviations",
+      "description": "Returns terms and abbreviations (BMC, CRU, NVLink, TOR, ...) as NVIDIA's documents expand or define them, each with its document section. Optionally one term by id. Terms the documents do not define are not in the list.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Only this term, e.g. \"bmc\". Leave out for all.",
+            "type": "string",
+            "enum": [
+              "nvl72",
+              "nvlink",
+              "nvswitch",
+              "sharp",
+              "infiniband",
+              "ethernet",
+              "bmc",
+              "hmc",
+              "oob",
+              "tor",
+              "cru",
+              "psu",
+              "esd",
+              "nvos",
+              "nvlsm",
+              "fm",
+              "imex",
+              "nccl",
+              "dcgm",
+              "mft",
+              "bcm",
+              "sol",
+              "sbios"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "terms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "term": {
+                  "type": "string"
+                },
+                "aliases": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "expansion": {
+                  "type": "string"
+                },
+                "definition": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "section": {
+                      "type": "string"
+                    },
+                    "figure": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "section"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "id",
+                "term",
+                "definition",
+                "source"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "terms"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Glossary of terms and abbreviations",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     }
   ]
 }

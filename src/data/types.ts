@@ -270,6 +270,16 @@ export interface SafetyNote {
   source: Source;
 }
 
+/** A term or abbreviation as NVIDIA's documents expand or define it. */
+export interface GlossaryTerm {
+  id: string;
+  term: string;
+  aliases?: string[];
+  expansion?: string;
+  definition: string;
+  source: Source;
+}
+
 export interface Topology {
   $schema?: string;
   schemaVersion: 1;
@@ -290,6 +300,7 @@ export interface Topology {
   commands?: Command[];
   commandNotes?: { usage: string; factoryReset: string; source: Source };
   safety?: SafetyNote[];
+  glossary?: GlossaryTerm[];
   procedures?: Procedure[];
   /** Which two unit types the NVLink fabric joins, and through which rear part. */
   nvlinkFabric?: Provenance & { endpoints: [string, string]; through: string; description: string; textSources?: Source[] };

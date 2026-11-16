@@ -43,6 +43,7 @@ side panel are all generated from this file.
 | `software` | The software stack of chapter 4 and where each piece runs. |
 | `commands`, `commandNotes` | The Redfish and IPMI commands of section 6.4.1, verbatim, and the notes around them. |
 | `safety` | Safety notices from the guide and manual, tied to parts and procedures. |
+| `glossary` | Terms and abbreviations as the documents expand or define them (`term`, optional `aliases` and `expansion`, `definition`, `source`). A term the documents do not define is left out. The details panel marks the first whole-word, case-sensitive match of each term in a block of text and opens its definition in a popover; the Sources page lists them all. |
 
 ## Component
 

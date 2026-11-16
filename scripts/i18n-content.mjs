@@ -124,6 +124,20 @@ export function computeContent(topology) {
   put(out, 'trayLayouts', trays);
 
   if (t.rearLayout?.note) out.rearLayout = { note: t.rearLayout.note };
+
+  // The term itself (BMC, NVLink) stays as it is; its expansion and definition are translated.
+  put(
+    out,
+    'glossary',
+    Object.fromEntries(
+      (t.glossary ?? []).map((g) => {
+        const e = {};
+        put(e, 'expansion', g.expansion);
+        put(e, 'definition', g.definition);
+        return [g.id, e];
+      }),
+    ),
+  );
   return out;
 }
 

@@ -95,6 +95,7 @@ export function createI18n(lang: Lang) {
     linkNote: <T extends string | undefined>(trayId: string, linkIndex: number, fallback: T) => c(['trayLayouts', trayId, 'links', linkIndex], fallback),
     pointLabel: (trayId: string, pointId: string, fallback: string) => c(['trayLayouts', trayId, 'points', pointId], fallback),
     rearNote: <T extends string | undefined>(fallback: T) => c(['rearLayout', 'note'], fallback),
+    glossary: <T extends string | undefined>(id: string, field: 'expansion' | 'definition', fallback: T) => c(['glossary', id, field], fallback),
     /** "Compute tray 7", translated. */
     segmentLabel,
     /** Kind shown above the panel title: "compute tray", "gpu", ... */

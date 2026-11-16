@@ -266,6 +266,11 @@
       "linkCopied": "Enlace copiado.",
       "embedCopied": "Código para insertar copiado."
     },
+    "glossary": {
+      "heading": "Glosario ({count})",
+      "intro": "Términos y abreviaturas tal como los desarrollan o definen los documentos de NVIDIA, cada uno con su sección de origen. En el panel de detalles, un término con subrayado de puntos abre su definición.",
+      "dialog": "Definición de {term}"
+    },
     "sources": {
       "back": "← Volver al rack",
       "title": "Fuentes y preguntas abiertas",
@@ -1386,6 +1391,94 @@
     },
     "rearLayout": {
       "note": "Colocación esquemática detrás de las unidades, no a escala. La fig. 2 es una vista despiezada: muestra los cartuchos de cables, dos colectores de refrigeración líquida con conectores de manguera FD83, la barra colectora de alimentación, sus soportes, el bisel trasero y el arriostramiento sísmico, pero sin posiciones, extensiones ni cantidades. Esta aplicación centra los conectores de alimentación y la barra colectora, ya que la fig. 5 y la fig. 7 ponen el conector de alimentación de las bandejas en el centro del borde trasero, y pone las salidas de agua caliente en el colector de la derecha visto de frente. No se indica qué colector es de impulsión y cuál de retorno."
+    },
+    "glossary": {
+      "nvl72": {
+        "definition": "Un rack de NVIDIA con un dominio NVL de 72 GPU."
+      },
+      "nvlink": {
+        "definition": "Una tecnología de interconexión de alta velocidad y baja latencia diseñada para superar las limitaciones de ancho de banda de PCIe en la comunicación entre varias GPU y entre GPU y CPU. Permite el acceso unificado a la memoria de las GPU y escala mediante chips NVSwitch."
+      },
+      "nvswitch": {
+        "definition": "Chips que actúan como conmutadores sin bloqueo entre servidores, a través de los cuales NVLink escala para crear tejidos de gran ancho de banda."
+      },
+      "sharp": {
+        "definition": "Computación en red en NVSwitch que acelera las operaciones colectivas realizando cálculos dentro de la red."
+      },
+      "infiniband": {
+        "definition": "El tejido de cómputo de escalado horizontal (scale-out) de gran ancho de banda y baja latencia entre racks."
+      },
+      "ethernet": {
+        "definition": "Se encarga del almacenamiento, la gestión (en banda y fuera de banda) y la conectividad externa."
+      },
+      "bmc": {
+        "expansion": "Controlador de gestión de placa",
+        "definition": "Junto con el HMC, proporciona la gestión fuera de banda de los recursos de hardware de la bandeja de cómputo. El acceso externo está disponible mediante las interfaces estándar de BMC y de consola."
+      },
+      "hmc": {
+        "expansion": "Controlador de gestión del host",
+        "definition": "Junto con el BMC, proporciona la gestión fuera de banda de los recursos de hardware de la bandeja de cómputo."
+      },
+      "oob": {
+        "expansion": "Fuera de banda",
+        "definition": "La gestión fuera de banda de los recursos de hardware de la bandeja de cómputo la proporcionan los microcontroladores BMC y HMC."
+      },
+      "tor": {
+        "expansion": "Parte superior del rack",
+        "definition": "Los conmutadores de la parte superior del rack conectan a la red de gestión todos los BMC de las bandejas de cómputo (incluidos los BMC de BlueField-4) y las bandejas de conmutación."
+      },
+      "cru": {
+        "expansion": "Unidad reemplazable por el cliente",
+        "definition": "Un componente que puede sustituir usted mismo: la unidad de caché E1.S NVMe, la batería de la bandeja de cómputo, la batería de la bandeja NVLink Switch, la unidad de fuente de alimentación (PSU) y el módulo de gestión del estante de alimentación. Un representante autorizado de NVIDIA debe sustituir los componentes que no están en esta lista."
+      },
+      "psu": {
+        "expansion": "Unidad de fuente de alimentación",
+        "definition": "Una unidad reemplazable por el cliente del estante de alimentación."
+      },
+      "esd": {
+        "expansion": "Descarga electrostática",
+        "definition": "La ESD puede dañar unidades, placas y otras piezas. NVIDIA recomienda realizar todos los procedimientos en una estación de trabajo con protección ESD o, si no la hay, llevar una muñequera antiestática conectada a la tierra del chasis."
+      },
+      "nvos": {
+        "expansion": "Sistema operativo de NVIDIA",
+        "definition": "El sistema operativo de la bandeja de conmutación NVLink. Permite gestionar y configurar las plataformas de conmutación de NVIDIA mediante una interfaz de línea de comandos (CLI) y OpenAPI (Swagger), e incluye NVLSM, Fabric Manager y el firmware de NVSwitch."
+      },
+      "nvlsm": {
+        "expansion": "NVLink Subnet Manager",
+        "definition": "Descubre la topología de la red NVLink, asigna identificadores lógicos a los puertos NVLink de las GPU y de los NVSwitch, calcula y programa la tabla de reenvío del conmutador, programa la clave de partición de las particiones NVLink y supervisa los cambios en el tejido NVLink."
+      },
+      "fm": {
+        "expansion": "Fabric Manager",
+        "definition": "Configura los tejidos de memoria de NVSwitch para formar un gran tejido de memoria entre las GPU participantes y supervisa los NVLink que lo sostienen."
+      },
+      "imex": {
+        "expansion": "Internode Memory Exchange/Management",
+        "definition": "Un servicio seguro que asigna memoria de GPU a través de NVLink entre las GPU de un dominio NVLink, más allá del límite del SO o del nodo, mediante operaciones de exportación e importación de memoria."
+      },
+      "nccl": {
+        "expansion": "NVIDIA Collective Communications Library",
+        "definition": "Proporciona primitivas de comunicación entre GPU que tienen en cuenta la topología: comunicación colectiva y envío/recepción punto a punto para transferencias de datos dentro de un nodo y entre nodos."
+      },
+      "dcgm": {
+        "expansion": "NVIDIA Data Center GPU Manager",
+        "definition": "Un conjunto de herramientas que gestionan y supervisan las GPU de centro de datos de NVIDIA y los NVSwitch en entornos de clúster."
+      },
+      "mft": {
+        "expansion": "NVIDIA Firmware Tools",
+        "definition": "Un conjunto de herramientas de gestión de firmware de ASIC de red que generan, consultan y graban imágenes de firmware."
+      },
+      "bcm": {
+        "expansion": "Base Command Manager",
+        "definition": "Gestiona todos los componentes del sistema; se usa para encender primero las bandejas de conmutación NVLink y después las bandejas de cómputo."
+      },
+      "sol": {
+        "expansion": "Serial Over LAN",
+        "definition": "Una sesión que permite usar de forma remota la consola del sistema host, aunque el SO no esté en marcha."
+      },
+      "sbios": {
+        "expansion": "BIOS del sistema",
+        "definition": "El BIOS del sistema de la bandeja de cómputo. Su configuración puede restablecerse a los valores de fábrica."
+      }
     }
   }
 }
