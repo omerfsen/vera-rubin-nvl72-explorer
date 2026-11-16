@@ -1,8 +1,8 @@
 import { useSceneTheme } from './useSceneTheme';
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
-import { useThree, type ThreeEvent } from '@react-three/fiber';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { Html, QuadraticBezierLine } from '@react-three/drei';
-import { Color, InstancedMesh, Object3D } from 'three';
+import { Color, Group, InstancedMesh, Object3D } from 'three';
 import { model } from '../data';
 import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
@@ -24,18 +24,26 @@ import {
   TRAY_WIDTH,
   slotBox,
 } from './geometry';
+import { explodeOffsets, prefersReducedMotion, scaleOffset, stepExplode } from './explode';
 
 /** Pointer travel (px) above which a click counts as a drag. */
 const DRAG_THRESHOLD = 6;
 const scratch = new Object3D();
 
+type Vec = [number, number, number];
+
 interface Placed {
   slot: TraySlot;
   path: string;
+  /** Offset of the part when the tray is fully exploded. */
+  offset: Vec;
 }
 
+/** How far the tray is exploded right now: 0 assembled, 1 exploded; changes every frame while animating. */
+type Amount = MutableRefObject<number>;
+
 /** All slots of one component inside the open tray, as one InstancedMesh. */
-function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: Placed[]; heightRU: number }) {
+function PartInstances({ trayKey, items, heightRU, amount }: { trayKey: string; items: Placed[]; heightRU: number; amount: Amount }) {
   const ref = useRef<InstancedMesh>(null);
   const invalidate = useThree((s) => s.invalidate);
   const selected = useExplorer((s) => s.selected);
@@ -59,28 +67,46 @@ function PartInstances({ trayKey, items, heightRU }: { trayKey: string; items: P
     return members.get(id)!.alternative ? CONFLICT_COLOR : color;
   }, [network, items, dim]);
 
+  const written = useRef(-1);
+  const place = useCallback(
+    (a: number) => {
+      const mesh = ref.current;
+      if (!mesh) return;
+      items.forEach((it, i) => {
+        const box = slotBox(it.slot, heightRU);
+        const lift = isPartSelected(it.path, selected) && it.slot.face === 'top' ? 0.03 : 0;
+        const [dx, dy, dz] = scaleOffset(it.offset, a);
+        scratch.position.set(box.position[0] + dx, box.position[1] + lift + dy, box.position[2] + dz);
+        scratch.scale.set(...box.size);
+        scratch.updateMatrix();
+        mesh.setMatrixAt(i, scratch.matrix);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.computeBoundingSphere();
+      written.current = a;
+    },
+    [items, heightRU, selected],
+  );
+  // Follow the explode animation; the scene driver keeps frames coming until it settles.
+  useFrame(() => {
+    if (written.current !== amount.current) place(amount.current);
+  });
+
   useLayoutEffect(() => {
     const mesh = ref.current;
     if (!mesh) return;
+    place(amount.current);
     const color = new Color();
     items.forEach((it, i) => {
-      const box = slotBox(it.slot, heightRU);
-      const lift = isPartSelected(it.path, selected) && it.slot.face === 'top' ? 0.03 : 0;
-      scratch.position.set(box.position[0], box.position[1] + lift, box.position[2]);
-      scratch.scale.set(...box.size);
-      scratch.updateMatrix();
-      mesh.setMatrixAt(i, scratch.matrix);
       if (isPartSelected(it.path, selected)) color.set(SELECTED_COLOR);
       else if (it.path === hovered) color.set(HOVER_COLOR);
       else if (overlay) color.set(overlay);
       else color.copy(base);
       mesh.setColorAt(i, color);
     });
-    mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-    mesh.computeBoundingSphere();
     invalidate();
-  }, [items, selected, hovered, base, invalidate, trayKey, heightRU, overlay]);
+  }, [items, selected, hovered, base, invalidate, trayKey, overlay, place, amount]);
 
   useEffect(
     () => () => {
@@ -145,12 +171,22 @@ function TrayShell({ heightRU, frontColor }: { heightRU: number; frontColor: str
   );
 }
 
-type Vec = [number, number, number];
-
 /** Status LEDs on the front face of parts that have them (PSUs, the management module). */
-function Indicators({ layout }: { layout: TrayLayout }) {
+function Indicators({ layout, offsets, amount }: { layout: TrayLayout; offsets: Vec[]; amount: Amount }) {
   const heightRU = layout.heightRU ?? 1;
-  const leds = layout.slots.flatMap((slot) =>
+  const ref = useRef<Group>(null);
+  const written = useRef(-1);
+  useFrame(() => {
+    const group = ref.current;
+    if (!group || written.current === amount.current) return;
+    for (const child of group.children) {
+      const [dx, dy, dz] = scaleOffset(child.userData.offset as Vec, amount.current);
+      const base = child.userData.base as Vec;
+      child.position.set(base[0] + dx, base[1] + dy, base[2] + dz);
+    }
+    written.current = amount.current;
+  });
+  const leds = layout.slots.flatMap((slot, i) =>
     (slot.indicators ?? []).map((led, k) => {
       const box = slotBox(slot, heightRU);
       const s = Math.min(0.02, box.size[1] * 0.18);
@@ -159,13 +195,18 @@ function Indicators({ layout }: { layout: TrayLayout }) {
         box.position[1] + box.size[1] / 2 - s * 1.4,
         box.position[2] + box.size[2] / 2 + 0.003,
       ];
-      return { key: `${slot.component}.${slot.index ?? 0}.${k}`, position, s, color: ledColor(led) };
+      return { key: `${slot.component}.${slot.index ?? 0}.${k}`, position, offset: offsets[i]!, s, color: ledColor(led) };
     }),
   );
   return (
-    <group>
+    <group ref={ref}>
       {leds.map((l) => (
-        <mesh key={l.key} position={l.position} raycast={() => null}>
+        <mesh
+          key={l.key}
+          position={l.position.map((v, j) => v + l.offset[j]! * amount.current) as Vec}
+          userData={{ base: l.position, offset: l.offset }}
+          raycast={() => null}
+        >
           <boxGeometry args={[l.s, l.s, 0.004]} />
           <meshBasicMaterial color={l.color} />
         </mesh>
@@ -175,16 +216,17 @@ function Indicators({ layout }: { layout: TrayLayout }) {
 }
 
 /** Where a link attaches: the top centre of a part, or a named point on the tray floor. */
-function endPosition(layout: TrayLayout, end: LinkEnd): Vec | null {
+function endPosition(layout: TrayLayout, end: LinkEnd, offsets: Vec[], amount: number): Vec | null {
   const heightRU = layout.heightRU ?? 1;
   if (end.point !== undefined) {
     const p = layout.points?.find((pt) => pt.id === end.point);
     return p ? [p.x * TRAY_WIDTH, 0.03, p.z * TRAY_DEPTH] : null;
   }
-  const slot = layout.slots.find((s) => s.component === end.component && s.index === end.index);
-  if (!slot) return null;
-  const box = slotBox(slot, heightRU);
-  return [box.position[0], box.position[1] + box.size[1] / 2 + 0.005, box.position[2]];
+  const i = layout.slots.findIndex((s) => s.component === end.component && s.index === end.index);
+  if (i === -1) return null;
+  const box = slotBox(layout.slots[i]!, heightRU);
+  const [dx, dy, dz] = scaleOffset(offsets[i], amount);
+  return [box.position[0] + dx, box.position[1] + box.size[1] / 2 + 0.005 + dy, box.position[2] + dz];
 }
 
 /**
@@ -192,7 +234,7 @@ function endPosition(layout: TrayLayout, end: LinkEnd): Vec | null {
  * selected part are drawn bright and thick; the rest fade while something
  * inside the tray is selected.
  */
-function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout }) {
+function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layout: TrayLayout; offsets: Vec[]; amount: number }) {
   const trayId = trayKey.split('.')[0]!;
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
@@ -203,8 +245,8 @@ function TrayLinks({ trayKey, layout }: { trayKey: string; layout: TrayLayout })
   return (
     <group>
       {(layout.links ?? []).map((link, i) => {
-        const a = endPosition(layout, link.from);
-        const b = endPosition(layout, link.to);
+        const a = endPosition(layout, link.from, offsets, amount);
+        const b = endPosition(layout, link.to, offsets, amount);
         if (!a || !b) return null;
         const lift = 0.06 + Math.hypot(a[0] - b[0], a[2] - b[2]) * 0.12;
         const mid: Vec = [(a[0] + b[0]) / 2, Math.max(a[1], b[1]) + lift, (a[2] + b[2]) / 2];
@@ -266,13 +308,14 @@ export function partLabel(item: Placed, i18n: I18n = i18nFor('en')): string {
   return i18n.segmentLabel({ id: item.slot.component, index: item.slot.index });
 }
 
-function Labels({ placed, heightRU }: { placed: Placed[]; heightRU: number }) {
+function Labels({ placed, heightRU, amount }: { placed: Placed[]; heightRU: number; amount: number }) {
   const connected = useThree((s) => s.events.connected);
   const hovered = useExplorer((s) => s.hovered);
   const i18n = useI18n();
   if (!connected) return null;
   const hoveredItem = placed.find((p) => p.path === hovered);
   const box = hoveredItem ? slotBox(hoveredItem.slot, heightRU) : null;
+  const [dx, dy, dz] = scaleOffset(hoveredItem?.offset, amount);
   return (
     <>
       <Html position={[0, 0.02, TRAY_DEPTH / 2 + 0.12]} center className="tray-label" style={{ pointerEvents: 'none' }}>
@@ -283,7 +326,7 @@ function Labels({ placed, heightRU }: { placed: Placed[]; heightRU: number }) {
       </Html>
       {hoveredItem && box && (
         <Html
-          position={[box.position[0], box.position[1] + box.size[1] / 2 + 0.04, box.position[2]]}
+          position={[box.position[0] + dx, box.position[1] + box.size[1] / 2 + 0.04 + dy, box.position[2] + dz]}
           center
           className="part-tooltip"
           style={{ pointerEvents: 'none' }}
@@ -302,21 +345,46 @@ function Labels({ placed, heightRU }: { placed: Placed[]; heightRU: number }) {
 export function TrayScene({ trayKey }: { trayKey: string }) {
   const trayId = trayKey.split('.')[0]!;
   const layout = model.trayLayout(trayId);
+  // Exploded view: layers come from the part types (and rows) in the layout.
+  const offsets = useMemo(
+    () => (layout ? explodeOffsets(layout, (id) => model.getComponent(id)?.type ?? id) : []),
+    [layout],
+  );
   const groups = useMemo(() => {
     const byComponent = new Map<string, Placed[]>();
-    for (const slot of layout?.slots ?? []) {
+    (layout?.slots ?? []).forEach((slot, i) => {
       const list = byComponent.get(slot.component) ?? [];
-      list.push({ slot, path: `${trayKey}/${model.slotPathWithin(trayId, slot)}` });
+      list.push({ slot, path: `${trayKey}/${model.slotPathWithin(trayId, slot)}`, offset: offsets[i]! });
       byComponent.set(slot.component, list);
-    }
+    });
     return [...byComponent.entries()];
-  }, [layout, trayKey, trayId]);
+  }, [layout, trayKey, trayId, offsets]);
   const placed = useMemo(() => groups.flatMap(([, items]) => items), [groups]);
   const layers = useExplorer((s) => s.layers);
   const floor = useSceneTheme().scene.floor;
   const heightRU = layout?.heightRU ?? 1;
   const invalidate = useThree((s) => s.invalidate);
   useEffect(() => invalidate(), [layers, invalidate]);
+  const exploded = useExplorer((s) => s.exploded);
+  const target = exploded ? 1 : 0;
+  const amount = useRef(target);
+  // The amount links and labels are drawn at; links hide while parts move.
+  const [settled, setSettled] = useState(target);
+  useEffect(() => invalidate(), [target, invalidate]);
+  const animating = useRef(false);
+  useFrame((_, delta) => {
+    if (amount.current === target) {
+      animating.current = false;
+      return;
+    }
+    // The first frame after an idle canvas reports the whole idle time as its
+    // delta, so it takes one short step; later frames follow the real clock.
+    const dt = animating.current ? Math.min(delta, 0.1) : 1 / 60;
+    animating.current = true;
+    amount.current = prefersReducedMotion() ? target : stepExplode(amount.current, target, dt);
+    invalidate();
+    if (amount.current === target) setSettled(target);
+  });
   if (!layout) return null;
   return (
     <group>
@@ -326,12 +394,15 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
       {/* Unmounted rather than hidden: three.js still hit-tests invisible meshes. */}
       {layers.parts &&
         groups.map(([component, items]) => (
-          <PartInstances key={component} trayKey={trayKey} items={items} heightRU={heightRU} />
+          <PartInstances key={component} trayKey={trayKey} items={items} heightRU={heightRU} amount={amount} />
         ))}
-      {layers.parts && <Indicators layout={layout} />}
-      {layers.links && <TrayLinks trayKey={trayKey} layout={layout} />}
-      {layers.links && <TrayFlow layout={layout} />}
-      <Labels placed={placed} heightRU={heightRU} />
+      {layers.parts && <Indicators layout={layout} offsets={offsets} amount={amount} />}
+      {layers.links && settled === target && (
+        <TrayLinks trayKey={trayKey} layout={layout} offsets={offsets} amount={settled} />
+      )}
+      {/* The flow stubs sit at the parts' normal places, so they only show when the tray is not exploded. */}
+      {layers.links && settled === 0 && target === 0 && <TrayFlow layout={layout} />}
+      <Labels placed={placed} heightRU={heightRU} amount={settled} />
       <mesh position={[0, -0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
         <meshStandardMaterial color={floor} />

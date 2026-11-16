@@ -44,6 +44,29 @@ test.describe('rack', () => {
     await page.keyboard.press('Escape');
     await expect.poll(() => param(page, 'view')).toBeNull();
   });
+
+  test('the exploded view spreads the tray parts and keeps them selectable', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto('/?select=compute-tray.4&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    const toggle = page.getByRole('button', { name: 'Exploded view' });
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    await toggle.click();
+    await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+    await page.locator('#rack-stage').focus();
+    await page.keyboard.press('ArrowDown');
+    await expect.poll(() => param(page, 'select')).toBe('compute-tray.4/rubin-gpu.1');
+    // A real click on the exploded scene still selects a part.
+    const box = (await page.locator('canvas').boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await expect.poll(() => param(page, 'select')).toMatch(/^compute-tray\.4(\/|$)/);
+    await toggle.click();
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    await page.getByRole('button', { name: '← Back to rack' }).click();
+    await expect(page.getByRole('button', { name: 'Exploded view' })).toHaveCount(0);
+    expect(errors).toEqual([]);
+  });
 });
 
 test.describe('operator features', () => {

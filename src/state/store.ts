@@ -13,6 +13,9 @@ interface ExplorerState {
   listOpen: boolean;
   /** Tray view layers: structure (bones), parts (muscles), connections (veins). */
   layers: { structure: boolean; parts: boolean; links: boolean };
+  /** Tray view: parts spread apart by layer so each can be seen and clicked. */
+  exploded: boolean;
+  toggleExploded: () => void;
   /** Network shown by the overlay, or "" for none. */
   network: string;
   setNetwork: (id: string) => void;
@@ -96,6 +99,8 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     set({ panelOpen: open });
   },
   layers: { structure: true, parts: true, links: true },
+  exploded: false,
+  toggleExploded: () => set({ exploded: !get().exploded }),
   network: initial.net ?? '',
   setNetwork: (id) => set({ network: get().network === id ? '' : id }),
   procedure: initial.proc ?? '',

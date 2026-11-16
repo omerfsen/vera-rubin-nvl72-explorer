@@ -84,7 +84,9 @@
       "layers": "Capas",
       "showOrHide": "Mostrar u ocultar {hint}",
       "connectionTypes": "Tipos de conexión",
-      "dashed": "Discontinua: supuesto, ver el panel"
+      "dashed": "Discontinua: supuesto, ver el panel",
+      "explodedView": "Vista explosionada",
+      "explodedViewHint": "Separa las piezas por capas"
     },
     "layers": {
       "structure": "Estructura",

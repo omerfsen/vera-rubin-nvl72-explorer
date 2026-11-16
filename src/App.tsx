@@ -108,6 +108,8 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
   const setSide = useExplorer((s) => s.setSide);
   const layers = useExplorer((s) => s.layers);
   const toggleLayer = useExplorer((s) => s.toggleLayer);
+  const exploded = useExplorer((s) => s.exploded);
+  const toggleExploded = useExplorer((s) => s.toggleExploded);
   const i18n = useI18n();
   const { t } = i18n;
   const inTray = view === 'tray' && trayKey !== null;
@@ -155,6 +157,11 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
             {t(`layers.${l}`)}
           </button>
         ))}
+        {inTray && (
+          <button type="button" aria-pressed={exploded} title={t('stage.explodedViewHint')} onClick={toggleExploded}>
+            {t('stage.explodedView')}
+          </button>
+        )}
       </div>
       {layers.links && (inTray || view === 'rear') && (
         <ul className="link-legend" aria-label={t('stage.connectionTypes')}>

@@ -84,7 +84,9 @@
       "layers": "Katmanlar",
       "showOrHide": "Göster veya gizle: {hint}",
       "connectionTypes": "Bağlantı türleri",
-      "dashed": "Kesikli: varsayım, panele bakın"
+      "dashed": "Kesikli: varsayım, panele bakın",
+      "explodedView": "Patlatılmış görünüm",
+      "explodedViewHint": "Parçaları katmanlara göre birbirinden ayırır"
     },
     "layers": {
       "structure": "Yapı",

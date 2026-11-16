@@ -84,7 +84,9 @@
       "layers": "Layers",
       "showOrHide": "Show or hide {hint}",
       "connectionTypes": "Connection types",
-      "dashed": "Dashed: assumed, see the panel"
+      "dashed": "Dashed: assumed, see the panel",
+      "explodedView": "Exploded view",
+      "explodedViewHint": "Spread the parts apart by layer"
     },
     "layers": {
       "structure": "Structure",
