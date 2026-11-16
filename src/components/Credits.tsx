@@ -34,6 +34,14 @@ export function Credits() {
           <a href={`mailto:${author.email}`}>{author.email}</a>
         </>
       )}
+      {author.support && (
+        <>
+          {' · '}
+          <a href={author.support} target="_blank" rel="noopener noreferrer">
+            {t('credits.support')}
+          </a>
+        </>
+      )}
     </span>
   );
 }

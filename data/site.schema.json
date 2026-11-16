@@ -48,6 +48,11 @@
           "description": "Contact address shown on the page, or empty to leave it out.",
           "type": "string",
           "pattern": "^($|[^@\\s]+@[^@\\s]+\\.[^@\\s]+)$"
+        },
+        "support": {
+          "description": "Tip or sponsor page URL, or empty to leave the link out.",
+          "type": "string",
+          "pattern": "^($|https://)"
         }
       }
     },

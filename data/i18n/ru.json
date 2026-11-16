@@ -37,7 +37,8 @@
       "madeBy": "Автор: {name}",
       "source": "Исходный код на GitHub",
       "github": "GitHub",
-      "linkedin": "LinkedIn"
+      "linkedin": "LinkedIn",
+      "support": "Угостить меня кофе"
     },
     "top": {
       "sources": "Источники",
