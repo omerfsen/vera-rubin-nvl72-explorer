@@ -76,6 +76,29 @@ test.describe('rack', () => {
     });
   }
 
+  test('hovering a tray part names it', async ({ page }) => {
+    await page.goto('/?select=compute-tray.3&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    // Connections sit over some parts and show their own card, so hide them for this sweep.
+    await page.getByRole('button', { name: 'Connections', exact: true }).click();
+    const box = (await page.locator('canvas').boundingBox())!;
+    const label = page.locator('.part-tooltip span');
+    let found = false;
+    for (const fy of [0.5, 0.45, 0.55, 0.4, 0.6]) {
+      for (const fx of [0.5, 0.4, 0.6, 0.3, 0.7]) {
+        await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+        if (await label.waitFor({ state: 'attached', timeout: 800 }).then(() => true, () => false)) {
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+    await expect(label).toHaveText(/\S/);
+    await page.mouse.move(box.x + 5, box.y + 5);
+    await expect(page.locator('.part-tooltip')).toHaveCount(0);
+  });
+
   test('keyboard steps through the rack and opens a compute tray', async ({ page }) => {
     await page.goto('/?select=compute-tray.3');
     await rackReady(page);

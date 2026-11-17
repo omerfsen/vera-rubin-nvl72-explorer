@@ -460,6 +460,7 @@ function Labels({ placed, heightRU, amount }: { placed: Placed[]; heightRU: numb
           center
           className="part-tooltip"
           style={{ pointerEvents: 'none' }}
+          zIndexRange={[20, 10]}
         >
           <span data-label data-label-pinned>
             {partLabel(hoveredItem, i18n)}
