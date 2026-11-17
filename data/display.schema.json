@@ -23,6 +23,7 @@
         "selected",
         "hover",
         "dim",
+        "linkHalo",
         "conflict",
         "unitTypes",
         "partTypes",
@@ -59,6 +60,25 @@
               "pattern": "^#[0-9a-f]{6}$"
             }
           }
+        },
+        "linkHalo": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dark",
+            "light"
+          ],
+          "properties": {
+            "dark": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            },
+            "light": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}$"
+            }
+          },
+          "description": "Thin outline behind every connection tube, per theme, so a tube reads over any part colour."
         },
         "conflict": {
           "type": "string",
@@ -232,15 +252,39 @@
         "additionalProperties": false,
         "required": [
           "name",
-          "color"
+          "color",
+          "shape"
         ],
         "properties": {
           "name": {
             "type": "string"
           },
           "color": {
-            "type": "string",
-            "pattern": "^#[0-9a-f]{6}$"
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "dark",
+              "light"
+            ],
+            "properties": {
+              "dark": {
+                "type": "string",
+                "pattern": "^#[0-9a-f]{6}$"
+              },
+              "light": {
+                "type": "string",
+                "pattern": "^#[0-9a-f]{6}$"
+              }
+            },
+            "description": "Colour per theme; kept clear of the part colours, the selection colour and the colours in NVIDIA figures."
+          },
+          "shape": {
+            "enum": [
+              "signal",
+              "pipe",
+              "ribbon"
+            ],
+            "description": "signal: thin glowing tube; pipe: thicker matte tube (coolant); ribbon: square tube (power)."
           }
         }
       }
@@ -297,8 +341,7 @@
           }
         }
       }
-    }
-,
+    },
     "tour": {
       "type": "object",
       "additionalProperties": false,

@@ -8,6 +8,10 @@
       "dark": "#434a55",
       "light": "#a7b0bb"
     },
+    "linkHalo": {
+      "dark": "#eef1f5",
+      "light": "#0e1115"
+    },
     "conflict": "#ff8c00",
     "unitTypes": {
       "compute-tray": "#8b7d5c",
@@ -83,35 +87,43 @@
   "links": {
     "pcie": {
       "name": "PCIe",
-      "color": "#b58cf0"
+      "color": { "dark": "#e08cff", "light": "#8a1fb8" },
+      "shape": "signal"
     },
     "c2c": {
       "name": "C2C (CPU to GPU)",
-      "color": "#5fd3c4"
+      "color": { "dark": "#f4f4f4", "light": "#3d4654" },
+      "shape": "signal"
     },
     "clink": {
       "name": "Clink (CPU to CPU)",
-      "color": "#f0a35f"
+      "color": { "dark": "#ff5fa8", "light": "#c2185b" },
+      "shape": "signal"
     },
     "nvlink": {
       "name": "NVLink (to the cable cartridge)",
-      "color": "#e8e86a"
+      "color": { "dark": "#f5f05a", "light": "#5c5000" },
+      "shape": "signal"
     },
     "coolant": {
       "name": "Coolant",
-      "color": "#4aa8ff"
+      "color": { "dark": "#00e5d0", "light": "#00366b" },
+      "shape": "pipe"
     },
     "cooling": {
       "name": "Coolant",
-      "color": "#4aa8ff"
+      "color": { "dark": "#00e5d0", "light": "#00366b" },
+      "shape": "pipe"
     },
     "power": {
       "name": "Power",
-      "color": "#ff6b6b"
+      "color": { "dark": "#ff3b30", "light": "#c4001a" },
+      "shape": "ribbon"
     },
     "ac": {
       "name": "AC power whips (to the remote power panel)",
-      "color": "#ff9f43"
+      "color": { "dark": "#ff9e80", "light": "#6b3a00" },
+      "shape": "ribbon"
     }
   },
   "rear": {

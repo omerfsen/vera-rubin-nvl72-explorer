@@ -452,6 +452,9 @@ button { font: inherit; color: inherit; }
 }
 .link-legend li { display: flex; align-items: center; gap: 6px; }
 .line-swatch { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
+/* Same shapes as the tubes: coolant is a thick pipe, power a flat ribbon. */
+.line-swatch.shape-pipe { height: 5px; border-radius: 3px; }
+.line-swatch.shape-ribbon { height: 4px; border-radius: 0; }
 .link-button {
   background: none;
   border: 0;

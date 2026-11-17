@@ -20,4 +20,32 @@ describe('data/display.json', () => {
     ]);
     for (const k of kinds) expect(display.links, k).toHaveProperty(k);
   });
+
+  it('gives every link kind a colour per theme that stands out from the tray floor', () => {
+    const lum = (h: string) => {
+      const [r, g, b] = [1, 3, 5].map((i) => {
+        const c = parseInt(h.slice(i, i + 2), 16) / 255;
+        return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
+    };
+    const contrast = (a: string, b: string) => {
+      const [x, y] = [lum(a), lum(b)];
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+    };
+    for (const [kind, link] of Object.entries(display.links)) {
+      for (const theme of ['dark', 'light'] as const) {
+        const color = link.color[theme];
+        expect(contrast(color, display.colors.scene[theme].trayBase), `${kind} ${theme}`).toBeGreaterThanOrEqual(3);
+        // Never the selection or hover colour, and never NVIDIA's callout green from its figures.
+        expect([display.colors.selected, display.colors.hover, '#88b634', '#96be4b'], `${kind} ${theme}`).not.toContain(color);
+      }
+    }
+  });
+
+  it('draws coolant as a pipe and power as a ribbon', () => {
+    expect(display.links.coolant.shape).toBe('pipe');
+    expect(display.links.power.shape).toBe('ribbon');
+    for (const k of ['pcie', 'c2c', 'clink', 'nvlink'] as const) expect(display.links[k].shape).toBe('signal');
+  });
 });

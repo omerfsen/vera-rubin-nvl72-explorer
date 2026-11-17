@@ -8,7 +8,7 @@ import { model } from '../data';
 import type { RearPart } from '../data/types';
 import { useExplorer } from '../state/store';
 import { useI18n } from '../i18n';
-import { FRAME_WIDTH, HOVER_COLOR, LINK_COLORS, REAR_COLORS, REAR_STYLE, RU, SELECTED_COLOR, UNIT_DEPTH, UNIT_WIDTH } from './geometry';
+import { FRAME_WIDTH, HOVER_COLOR, REAR_COLORS, REAR_STYLE, RU, SELECTED_COLOR, UNIT_DEPTH, UNIT_WIDTH } from './geometry';
 
 /** Parts drawn see-through (the rear bezel) and under the rack (seismic bracing), from data/display.json. */
 const SEE_THROUGH = REAR_STYLE.seeThrough as Record<string, number>;
@@ -242,6 +242,7 @@ function RearLinks({ segments, boxes }: { segments: RearSegment[]; boxes: RearBo
   const first = selected.split('/')[0] ?? '';
   const kinds = useMemo(() => [...new Set(segments.map((s) => s.kind))], [segments]);
   const fabric = useMemo(() => fabricSegments(first, boxes), [first, boxes]);
+  const { links } = useSceneTheme();
   return (
     <group>
       {kinds.flatMap((kind) =>
@@ -251,12 +252,12 @@ function RearLinks({ segments, boxes }: { segments: RearSegment[]; boxes: RearBo
             list={segments.filter(
               (s) => s.kind === kind && (selected === '' || s.unitKey === first || s.rearPath === selected) === active,
             )}
-            color={LINK_COLORS[kind] ?? '#ffffff'}
+            color={links[kind] ?? '#ffffff'}
             opacity={active ? 0.95 : 0.3}
           />
         )),
       )}
-      <Rods list={fabric} color={LINK_COLORS.nvlink ?? '#ffff66'} opacity={0.95} thickness={0.008} />
+      <Rods list={fabric} color={links.nvlink ?? '#ffff66'} opacity={0.95} thickness={0.008} />
     </group>
   );
 }
@@ -314,7 +315,7 @@ function RearLabels({ boxes, connectors }: { boxes: RearBox[]; connectors: UnitC
 /** Rear parts of the rack, the connectors on every unit's back and the connections between them. */
 export function RearScene({ showLabels }: { showLabels: boolean }) {
   const layers = useExplorer((s) => s.layers);
-  const { scene } = useSceneTheme();
+  const { scene, links } = useSceneTheme();
   const boxes = useMemo(rearBoxes, []);
   const segments = useMemo(() => rearSegments(boxes), [boxes]);
   const connectors = useMemo(unitConnectorBoxes, []);
@@ -327,7 +328,7 @@ export function RearScene({ showLabels }: { showLabels: boolean }) {
     () => (i: number) => REAR_COLORS[model.getComponent(solid[i]!.part.component)?.type ?? ''] ?? '#666666',
     [solid],
   );
-  const colorOfConnector = useMemo(() => (i: number) => LINK_COLORS[connectors[i]!.kind] ?? '#999999', [connectors]);
+  const colorOfConnector = useMemo(() => (i: number) => links[connectors[i]!.kind] ?? '#999999', [connectors, links]);
   return (
     <group>
       <ClickableBoxes items={solid} colorOf={colorOfPart} />

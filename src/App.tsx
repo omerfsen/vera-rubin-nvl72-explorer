@@ -11,7 +11,7 @@ import { CommandPalette } from './components/CommandPalette';
 import { SidePanel } from './components/SidePanel';
 import { hasWebGL } from './lib/webgl';
 import { model } from './data';
-import { CONFLICT_COLOR, DIM_COLORS, LINK_COLORS, NETWORK_COLORS, REAR_COLORS, TYPE_COLORS } from './scenes/geometry';
+import { CONFLICT_COLOR, DIM_COLORS, LINK_THEME_COLORS, NETWORK_COLORS, REAR_COLORS, TYPE_COLORS, linkShape } from './scenes/geometry';
 import { trayLegend } from './scenes/colors';
 import { trayKeyOf } from './state/url';
 import { syncTheme, syncUrl, useExplorer } from './state/store';
@@ -138,6 +138,7 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
   const toggleLayer = useExplorer((s) => s.toggleLayer);
   const exploded = useExplorer((s) => s.exploded);
   const toggleExploded = useExplorer((s) => s.toggleExploded);
+  const theme = useExplorer((s) => s.theme);
   const i18n = useI18n();
   const { t } = i18n;
   const inTray = view === 'tray' && trayKey !== null;
@@ -195,7 +196,7 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
         <ul className="link-legend" aria-label={t('stage.connectionTypes')}>
           {kinds.map((k) => (
             <li key={k}>
-              <span className="line-swatch" style={{ background: LINK_COLORS[k] }} aria-hidden="true" />
+              <span className={`line-swatch shape-${linkShape(k)}`} style={{ background: LINK_THEME_COLORS[theme][k] }} aria-hidden="true" />
               {i18n.linkName(k)}
             </li>
           ))}

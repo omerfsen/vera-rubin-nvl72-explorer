@@ -15,7 +15,7 @@ import { CompareBox, CompareStart } from './Compare';
 import { CopyPartLink } from './CopyPartLink';
 import { ReadAloud } from './ReadAloud';
 import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
-import { LINK_COLORS } from '../scenes/geometry';
+import { LINK_THEME_COLORS } from '../scenes/geometry';
 import { useI18n, type I18n } from '../i18n';
 import { GlossaryText } from './Glossary';
 import { EmptyPrompt } from './EmptyPrompt';
@@ -171,6 +171,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
   const isNumberedUnit = last?.index !== undefined && segments.length === 1 && model.isRackUnitType(component.id);
   const height = model.isRackUnitType(component.id) ? model.topology.rackLayout.heightsRU?.[component.id] : undefined;
   const view = useExplorer((s) => s.view);
+  const theme = useExplorer((s) => s.theme);
   const openTray = useExplorer((s) => s.openTray);
   const trayKey = trayKeyOf(selected, model);
   const trayId = trayKey?.split('.')[0] ?? null;
@@ -381,7 +382,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
               const otherPath = model.linkEndPath(trayId, other);
               return (
                 <li key={i}>
-                  <span className="conn-kind" style={{ borderColor: LINK_COLORS[l.kind] }}>
+                  <span className="conn-kind" style={{ borderColor: LINK_THEME_COLORS[theme][l.kind] }}>
                     {i18n.linkName(l.kind)}
                   </span>{' '}
                   {otherPath ? (

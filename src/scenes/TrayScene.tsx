@@ -3,6 +3,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import {
+  BackSide,
   Color,
   DataTexture,
   Group,
@@ -28,8 +29,9 @@ import {
   HOVER_COLOR,
   ledColor,
   NETWORK_COLORS,
-  LINK_COLORS,
   SELECTED_COLOR,
+  linkShape,
+  type LinkShape,
   TYPE_COLORS,
   TRAY_DEPTH,
   TRAY_HEIGHT,
@@ -271,26 +273,46 @@ export function linkEndLabel(layout: TrayLayout, trayId: string, end: LinkEnd, i
   return i18n.segmentLabel({ id: end.component, index: end.index });
 }
 
+/** Tube radius for a link: coolant pipes are thicker than signal links. */
+export function linkRadius(shape: LinkShape, base: number): number {
+  return shape === 'pipe' ? base * 1.6 : base;
+}
+
+/** Extra radius of the outline drawn behind every tube. */
+const HALO = 0.002;
+
 function LinkTube({
   curve,
   color,
+  halo,
+  haloOpacity,
+  shape,
   assumed,
   radius,
   opacity,
   glow,
   onOver,
   onOut,
+  onClick,
 }: {
   curve: QuadraticBezierCurve3;
   color: string;
+  halo: string;
+  haloOpacity: number;
+  shape: LinkShape;
   assumed: boolean;
   radius: number;
   opacity: number;
   glow: boolean;
   onOver: (e: ThreeEvent<PointerEvent>) => void;
   onOut: () => void;
+  onClick?: (e: ThreeEvent<MouseEvent>) => void;
 }) {
-  const geometry = useMemo(() => new TubeGeometry(curve, 48, radius, 8, false), [curve, radius]);
+  // Power is a square ribbon, so the shape says what a link carries even without its colour.
+  const sides = shape === 'ribbon' ? 4 : 8;
+  const r = linkRadius(shape, radius);
+  const geometry = useMemo(() => new TubeGeometry(curve, 48, r, sides, false), [curve, r, sides]);
+  const outline = useMemo(() => new TubeGeometry(curve, 48, r + HALO, sides, false), [curve, r, sides]);
   const stripes = useMemo(() => {
     if (!assumed) return null;
     const t = STRIPES.clone();
@@ -299,21 +321,30 @@ function LinkTube({
     return t;
   }, [assumed, curve]);
   useEffect(() => () => geometry.dispose(), [geometry]);
+  useEffect(() => () => outline.dispose(), [outline]);
   useEffect(() => () => stripes?.dispose(), [stripes]);
+  const pipe = shape === 'pipe';
+  // Hover only brightens the link's own colour; it never takes the hover or selection colour.
+  const emissive = pipe ? (glow ? 0.35 : 0) : glow ? 0.9 : 0.25;
   return (
-    <mesh geometry={geometry} onPointerOver={onOver} onPointerOut={onOut}>
-      <meshStandardMaterial
-        color={color}
-        emissive={color}
-        emissiveIntensity={glow ? 0.9 : 0.25}
-        roughness={0.4}
-        metalness={0.1}
-        transparent
-        opacity={assumed ? opacity * 0.75 : opacity}
-        alphaMap={stripes}
-        depthWrite={!assumed && opacity > 0.5}
-      />
-    </mesh>
+    <group>
+      <mesh geometry={outline} raycast={() => null}>
+        <meshBasicMaterial color={halo} side={BackSide} transparent opacity={haloOpacity * opacity} depthWrite={false} />
+      </mesh>
+      <mesh geometry={geometry} onPointerOver={onOver} onPointerOut={onOut} onClick={onClick}>
+        <meshStandardMaterial
+          color={color}
+          emissive={color}
+          emissiveIntensity={emissive}
+          roughness={pipe ? 0.8 : 0.4}
+          metalness={pipe ? 0 : 0.1}
+          transparent
+          opacity={assumed ? opacity * 0.75 : opacity}
+          alphaMap={stripes}
+          depthWrite={!assumed && opacity > 0.5}
+        />
+      </mesh>
+    </group>
   );
 }
 
@@ -330,6 +361,7 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
   const invalidate = useThree((s) => s.invalidate);
   const connected = useThree((s) => s.events.connected);
   const i18n = useI18n();
+  const { links: colors, halo, theme } = useSceneTheme();
   const [hover, setHover] = useState<number | null>(null);
   const within = selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
   const active = useMemo(() => new Set(within ? model.linksAt(trayId, within) : []), [trayId, within]);
@@ -364,7 +396,10 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
           <LinkTube
             key={i}
             curve={curve}
-            color={LINK_COLORS[link.kind] ?? '#ffffff'}
+            color={colors[link.kind] ?? '#ffffff'}
+            halo={halo}
+            haloOpacity={theme === 'dark' ? 0.4 : 0.85}
+            shape={linkShape(link.kind)}
             assumed={link.assumed === true}
             radius={on || hover === i ? 0.009 : 0.0055}
             opacity={dim ? 0.15 : 0.95}
@@ -385,7 +420,7 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
         <Html position={shownCurve.getPoint(0.5).toArray()} center className="link-card" style={{ pointerEvents: 'none' }} zIndexRange={[36, 31]}>
           <div data-label data-label-pinned role="tooltip">
             <strong>
-              <span className="link-swatch" style={{ background: LINK_COLORS[shown.kind] ?? '#ffffff' }} aria-hidden="true" />
+              <span className="link-swatch" style={{ background: colors[shown.kind] ?? '#ffffff' }} aria-hidden="true" />
               {i18n.linkName(shown.kind)}
               {shown.assumed && <span className="assumed">{i18n.t('panel.assumed')}</span>}
             </strong>
