@@ -67,7 +67,8 @@ test.describe('rack', () => {
       // From the rear, rear parts stand in front of some trays: sweep across until the pointer is on a unit.
       for (const f of [0.5, 0.55, 0.6, 0.45, 0.65]) {
         await page.mouse.move(box.x + box.width * f, box.y + box.height / 2);
-        if (await label.count()) break;
+        // The tag mounts a frame or two after the move, so wait briefly at each position.
+        if (await label.waitFor({ state: 'attached', timeout: 1500 }).then(() => true, () => false)) break;
       }
       await expect(label).toHaveText(/^(Compute tray|NVLink 6 switch tray|Power shelf|Top-of-rack Ethernet switch) \d+$/);
       await page.mouse.move(box.x + 5, box.y + 5);

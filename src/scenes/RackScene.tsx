@@ -255,7 +255,8 @@ function GroupLabels() {
  * The name of the rack unit under the pointer, on the face the camera looks
  * at: the group labels only say "18 x Compute tray", not which one.
  */
-function UnitHoverLabel({ rear }: { rear: boolean }) {
+function UnitHoverLabel() {
+  const camera = useThree((s) => s.camera);
   const hovered = useExplorer((s) => s.hovered);
   const selected = useExplorer((s) => s.selected);
   const i18n = useI18n();
@@ -265,7 +266,8 @@ function UnitHoverLabel({ rear }: { rear: boolean }) {
   const box = boxByKey.get(hovered);
   if (!unit || !box) return null;
   const slide = hovered === selectedUnitKey(selected) ? SLIDE_OUT : 0;
-  const z = (rear ? -UNIT_DEPTH / 2 : UNIT_DEPTH / 2) + slide;
+  // The face the camera is on, so an orbit behind the rack in the front view still tags the near face.
+  const z = (camera.position.z < 0 ? -UNIT_DEPTH / 2 : UNIT_DEPTH / 2) + slide;
   return (
     <Html
       position={[box.position[0], box.position[1] + box.size[1] / 2 + 0.03, z]}
@@ -304,7 +306,7 @@ export function RackScene({ rear }: { rear: boolean }) {
       <RearScene showLabels={rear} />
       <FrontScene />
       {!rear && <GroupLabels />}
-      {layers.parts && <UnitHoverLabel rear={rear} />}
+      {layers.parts && <UnitHoverLabel />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
         <meshStandardMaterial color={scene.floor} />
