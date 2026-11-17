@@ -141,7 +141,8 @@
       "front": "Front",
       "rear": "Rear",
       "group": "{count} × {name}",
-      "nvlinkFanout": "NVLink: {unit} to all {count} {peers}"
+      "nvlinkFanout": "NVLink: {unit} to all {count} {peers}",
+      "partInUnit": "{part} · {unit}"
     },
     "unitPlural": {
       "compute-tray": "compute trays",

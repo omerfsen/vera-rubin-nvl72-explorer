@@ -23,7 +23,8 @@ import {
   type UnitBox,
 } from './geometry';
 
-import { FrontScene } from './FrontScene';
+import { FrontScene, facePartTagPosition, isFacePart } from './FrontScene';
+import { hoverTagText } from './faceHover';
 /** Pointer travel (px) above which a click counts as a drag. */
 const DRAG_THRESHOLD = 6;
 
@@ -60,6 +61,8 @@ function UnitInstances({ componentId }: { componentId: string }) {
   const { dim } = useSceneTheme();
   const onNetwork = useMemo(() => (network ? model.networkMembers(network).unitTypes.has(componentId) : null), [network, componentId]);
   const selectedKey = selectedUnitKey(selected);
+  // A part on a unit's front face keeps its unit lit.
+  const hoveredKey = isFacePart(hovered) ? (hovered!.split('/')[0] ?? null) : hovered;
   // A general selection of this unit type ("power-shelf") lights up every unit of it.
   const typeSelected = selected.split('/')[0] === componentId;
   const type = model.getComponent(componentId)?.type;
@@ -73,7 +76,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
       const box = boxByKey.get(u.key)!;
       placeBox(mesh, i, box, u.key === selectedKey ? SLIDE_OUT : 0);
       if (u.key === selectedKey || typeSelected) color.set(SELECTED_COLOR);
-      else if (u.key === hovered) color.set(HOVER_COLOR);
+      else if (u.key === hoveredKey) color.set(HOVER_COLOR);
       else if (onNetwork === true) color.set(NETWORK_COLORS[network] ?? '#ffffff');
       else if (onNetwork === false) color.set(dim);
       else color.copy(base);
@@ -83,7 +86,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     mesh.computeBoundingSphere();
     invalidate();
-  }, [units, selectedKey, hovered, base, invalidate, onNetwork, network, typeSelected, dim]);
+  }, [units, selectedKey, hoveredKey, base, invalidate, onNetwork, network, typeSelected, dim]);
 
   useEffect(
     () => () => {
@@ -253,31 +256,34 @@ function GroupLabels() {
 
 /**
  * The name of the rack unit under the pointer, on the face the camera looks
- * at: the group labels only say "18 x Compute tray", not which one.
+ * at: the group labels only say "18 x Compute tray", not which one. On a
+ * port, drive or PSU of its front face, the part's name and its unit's.
  */
-function UnitHoverLabel() {
+function UnitHoverLabel({ rear }: { rear: boolean }) {
   const camera = useThree((s) => s.camera);
   const hovered = useExplorer((s) => s.hovered);
   const selected = useExplorer((s) => s.selected);
   const i18n = useI18n();
   const connected = useThree((s) => s.events.connected);
   if (!connected || !hovered) return null;
-  const unit = model.rackUnitByKey.get(hovered);
-  const box = boxByKey.get(hovered);
-  if (!unit || !box) return null;
-  const slide = hovered === selectedUnitKey(selected) ? SLIDE_OUT : 0;
-  // The face the camera is on, so an orbit behind the rack in the front view still tags the near face.
-  const z = (camera.position.z < 0 ? -UNIT_DEPTH / 2 : UNIT_DEPTH / 2) + slide;
+  let position: [number, number, number] | null = null;
+  if (model.rackUnitByKey.has(hovered)) {
+    const box = boxByKey.get(hovered);
+    if (!box) return null;
+    const slide = hovered === selectedUnitKey(selected) ? SLIDE_OUT : 0;
+    // The face the camera is on, so an orbit behind the rack in the front view still tags the near face.
+    const z = (camera.position.z < 0 ? -UNIT_DEPTH / 2 : UNIT_DEPTH / 2) + slide;
+    position = [box.position[0], box.position[1] + box.size[1] / 2 + 0.03, z];
+  } else if (!rear) {
+    // From the rear, the rear parts carry their own tags.
+    position = facePartTagPosition(hovered, selectedUnitKey(selected));
+  }
+  const text = position ? hoverTagText(hovered, i18n) : null;
+  if (!position || !text) return null;
   return (
-    <Html
-      position={[box.position[0], box.position[1] + box.size[1] / 2 + 0.03, z]}
-      center
-      className="rear-label unit-hover-label"
-      style={{ pointerEvents: 'none' }}
-      zIndexRange={[20, 10]}
-    >
+    <Html position={position} center className="rear-label unit-hover-label" style={{ pointerEvents: 'none' }} zIndexRange={[20, 10]}>
       <span data-label data-label-pinned>
-        {i18n.segmentLabel({ id: unit.componentId, index: unit.index })}
+        {text}
       </span>
     </Html>
   );
@@ -306,7 +312,7 @@ export function RackScene({ rear }: { rear: boolean }) {
       <RearScene showLabels={rear} />
       <FrontScene />
       {!rear && <GroupLabels />}
-      {layers.parts && <UnitHoverLabel />}
+      {layers.parts && <UnitHoverLabel rear={rear} />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
         <meshStandardMaterial color={scene.floor} />

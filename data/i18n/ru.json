@@ -141,7 +141,8 @@
       "front": "Спереди",
       "rear": "Сзади",
       "group": "{count} × {name}",
-      "nvlinkFanout": "NVLink: {unit} ко всем {count} {peers}"
+      "nvlinkFanout": "NVLink: {unit} ко всем {count} {peers}",
+      "partInUnit": "{part} · {unit}"
     },
     "unitPlural": {
       "compute-tray": "вычислительным лоткам",

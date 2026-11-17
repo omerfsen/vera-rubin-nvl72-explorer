@@ -70,7 +70,8 @@ test.describe('rack', () => {
         // The tag mounts a frame or two after the move, so wait briefly at each position.
         if (await label.waitFor({ state: 'attached', timeout: 1500 }).then(() => true, () => false)) break;
       }
-      await expect(label).toHaveText(/^(Compute tray|NVLink 6 switch tray|Power shelf|Top-of-rack Ethernet switch) \d+$/);
+      // The pointer may land on a port of the unit's front face, which names the port first.
+      await expect(label).toHaveText(/^(.+ · )?(Compute tray|NVLink 6 switch tray|Power shelf|Top-of-rack Ethernet switch) \d+$/);
       await page.mouse.move(box.x + 5, box.y + 5);
       await expect(page.locator('.unit-hover-label')).toHaveCount(0);
     });
@@ -268,6 +269,27 @@ test.describe('rack', () => {
     const onTop = await page.evaluate(([x, y]) => document.elementFromPoint(x!, y!)?.closest('button')?.textContent ?? '', [b.x + b.width / 2, b.y + b.height / 2]);
     expect(onTop).toContain('Back to rack');
     await expect(page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true })).toBeVisible();
+  });
+
+  test('hovering a part on a unit front names the part and its unit', async ({ page }) => {
+    await page.goto('/');
+    await rackReady(page);
+    const box = (await page.locator('canvas').boundingBox())!;
+    const label = page.locator('.unit-hover-label span');
+    // Sweep the middle of the rack until the pointer is on a port, drive or PSU face.
+    let found = false;
+    for (let fy = 0.3; fy <= 0.7 && !found; fy += 0.01) {
+      for (let fx = 0.4; fx <= 0.6 && !found; fx += 0.01) {
+        await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+        const text = await label.textContent({ timeout: 300 }).catch(() => null);
+        found = text !== null && text.includes(' · ');
+      }
+    }
+    expect(found).toBe(true);
+    await expect(label).toHaveText(/^.+ · (Compute tray|NVLink 6 switch tray|Power shelf|Top-of-rack Ethernet switch) \d+$/);
+    // Moving off the rack clears the tag.
+    await page.mouse.move(box.x + 5, box.y + 5);
+    await expect(page.locator('.unit-hover-label')).toHaveCount(0);
   });
 
   test('keyboard steps through the rack and opens a compute tray', async ({ page }) => {

@@ -1,22 +1,31 @@
-import { useLayoutEffect, useMemo, useRef } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useThree, type ThreeEvent } from '@react-three/fiber';
 import { Color, InstancedMesh, Object3D } from 'three';
 import { model } from '../data';
 import type { TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
 import { partColor } from './colors';
-import { ledColor, NETWORK_COLORS, SLIDE_OUT, UNIT_DEPTH, UNIT_WIDTH, unitBoxes } from './geometry';
+import { HOVER_COLOR, ledColor, NETWORK_COLORS, SELECTED_COLOR, SLIDE_OUT, UNIT_DEPTH, UNIT_WIDTH, unitBoxes } from './geometry';
 import { Rods, type Segment, type Vec } from './Rods';
 import { FlowRods } from './FlowRods';
 import { isFlowMember, stubFrom } from './flow';
+import { faceClickAction, facePartPath } from './faceHover';
+
+/** Pointer travel (px) above which a click counts as a drag. */
+const DRAG_THRESHOLD = 6;
 
 const boxes = unitBoxes(model.rackUnits, model.totalRU);
 const boxByKey = new Map(boxes.map((b) => [b.key, b]));
 const FRONT = UNIT_DEPTH / 2;
 const scratch = new Object3D();
+const noRaycast = () => null;
 
 export interface FacePlate {
   unitKey: string;
+  /** Path of the part the plate shows (a status LED shares its part's path). */
+  path: string;
+  /** A status LED, not the part's own face. */
+  led: boolean;
   component: string;
   color: string;
   position: Vec;
@@ -52,8 +61,11 @@ export function facePlates(selectedKey: string | null): FacePlate[] {
     for (const slot of layout.slots) {
       const r = faceRect(slot, unit.key);
       if (!r) continue;
+      const path = facePartPath(unit.key, unit.componentId, slot);
       out.push({
         unitKey: unit.key,
+        path,
+        led: false,
         component: slot.component,
         color: partColor(slot.component),
         position: [r.x, r.y, FRONT + 0.003 + slide],
@@ -63,6 +75,8 @@ export function facePlates(selectedKey: string | null): FacePlate[] {
         const s = Math.min(0.006, r.h * 0.25);
         out.push({
           unitKey: unit.key,
+          path,
+          led: true,
           component: `${slot.component}:led`,
           color: ledColor(led),
           position: [r.x - (r.w * 0.92) / 2 + s * (1.2 + k * 1.8), r.y + (r.h * 0.85) / 2 - s * 1.2, FRONT + 0.007 + slide],
@@ -74,10 +88,31 @@ export function facePlates(selectedKey: string | null): FacePlate[] {
   return out;
 }
 
+/** The face plate (not an LED) of every front part, by path, with the unit in its rack place. */
+const plateByPath = new Map(facePlates(null).filter((p) => !p.led).map((p) => [p.path, p]));
+
+/** Whether a path is a part drawn on a rack unit's front face. */
+export function isFacePart(path: string | null): boolean {
+  return path !== null && plateByPath.has(path);
+}
+
+/** Where to hang a front part's name tag: above its plate, on the front face, slid out with its unit. */
+export function facePartTagPosition(path: string, selectedKey: string | null): Vec | null {
+  const p = plateByPath.get(path);
+  if (!p) return null;
+  const slide = p.unitKey === selectedKey ? SLIDE_OUT : 0;
+  return [p.position[0], p.position[1] + p.size[1] / 2 + 0.02, p.position[2] + slide];
+}
+
 function FacePlates() {
   const ref = useRef<InstancedMesh>(null);
   const invalidate = useThree((s) => s.invalidate);
   const selected = useExplorer((s) => s.selected);
+  const hovered = useExplorer((s) => s.hovered);
+  const rear = useExplorer((s) => s.view === 'rear');
+  const select = useExplorer((s) => s.select);
+  const setHovered = useExplorer((s) => s.setHovered);
+  const openTray = useExplorer((s) => s.openTray);
   const first = selected.split('/')[0] ?? '';
   const selectedKey = model.rackUnitByKey.has(first) ? first : null;
   const plates = useMemo(() => facePlates(selectedKey), [selectedKey]);
@@ -90,15 +125,63 @@ function FacePlates() {
       scratch.scale.set(...p.size);
       scratch.updateMatrix();
       mesh.setMatrixAt(i, scratch.matrix);
-      mesh.setColorAt(i, color.set(p.color));
+      if (!p.led && p.path === selected) color.set(SELECTED_COLOR);
+      else if (!p.led && p.path === hovered) color.set(HOVER_COLOR);
+      else color.set(p.color);
+      mesh.setColorAt(i, color);
     });
     mesh.count = plates.length;
     mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    // The selected unit's plates slide out; a stale bounding sphere would miss them.
+    mesh.computeBoundingSphere();
     invalidate();
-  }, [plates, invalidate]);
+  }, [plates, invalidate, selected, hovered]);
+
+  useEffect(
+    () => () => {
+      document.body.style.cursor = '';
+    },
+    [],
+  );
+
+  const pathOf = (e: ThreeEvent<PointerEvent | MouseEvent>) =>
+    e.instanceId === undefined ? null : (plates[e.instanceId]?.path ?? null);
+
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, plates.length]} raycast={() => null}>
+    <instancedMesh
+      ref={ref}
+      args={[undefined, undefined, plates.length]}
+      // From the rear the parts there have their own tags; the front faces stay decoration.
+      raycast={rear ? noRaycast : InstancedMesh.prototype.raycast}
+      onPointerMove={(e) => {
+        // Stop first: R3F then sends the unit behind its pointer-out (which clears the hover) before this sets it.
+        e.stopPropagation();
+        const path = pathOf(e);
+        if (path !== useExplorer.getState().hovered) setHovered(path);
+        document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={() => {
+        setHovered(null);
+        document.body.style.cursor = '';
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (e.delta > DRAG_THRESHOLD) return;
+        const path = pathOf(e);
+        if (!path) return;
+        const action = faceClickAction(path, useExplorer.getState().selected);
+        if (action === 'tray') openTray();
+        else select(action === 'unit' ? path.split('/')[0]! : path);
+      }}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        const path = pathOf(e);
+        if (!path) return;
+        select(path);
+        openTray();
+      }}
+    >
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.6} />
     </instancedMesh>

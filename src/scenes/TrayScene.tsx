@@ -524,8 +524,7 @@ function TrayFlow({ layout }: { layout: TrayLayout }) {
 
 /** Name shown for a part instance: NVIDIA's label when the layout has one. */
 export function partLabel(item: Placed, i18n: I18n = i18nFor('en')): string {
-  if (item.slot.label) return item.slot.label;
-  return i18n.segmentLabel({ id: item.slot.component, index: item.slot.index });
+  return i18n.slotLabel(item.slot);
 }
 
 function Labels({ placed, heightRU, amount }: { placed: Placed[]; heightRU: number; amount: number }) {

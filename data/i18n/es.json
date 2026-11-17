@@ -141,7 +141,8 @@
       "front": "Frontal",
       "rear": "Trasera",
       "group": "{count} × {name}",
-      "nvlinkFanout": "NVLink: {unit} a las {count} {peers}"
+      "nvlinkFanout": "NVLink: {unit} a las {count} {peers}",
+      "partInUnit": "{part} · {unit}"
     },
     "unitPlural": {
       "compute-tray": "bandejas de cómputo",
