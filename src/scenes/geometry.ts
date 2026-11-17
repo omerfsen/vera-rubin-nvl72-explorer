@@ -40,6 +40,9 @@ export const TYPE_COLORS: Partial<Record<ComponentType, string>> = display.color
 
 export const HOVER_COLOR = display.colors.hover;
 export const SELECTED_COLOR = display.colors.selected;
+/** Highlights for a part on a unit's front face, which sits on a unit lit in HOVER_COLOR or SELECTED_COLOR. */
+export const PART_SELECTED_COLOR = display.colors.partSelected;
+export const PART_HOVER_COLOR = display.colors.partHover;
 
 // ---- tray interior ------------------------------------------------------
 // The open tray is drawn larger than in the rack so its parts are easy to

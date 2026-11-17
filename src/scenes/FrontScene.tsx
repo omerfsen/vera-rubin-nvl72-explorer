@@ -5,7 +5,7 @@ import { model } from '../data';
 import type { TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
 import { partColor } from './colors';
-import { HOVER_COLOR, ledColor, NETWORK_COLORS, SELECTED_COLOR, SLIDE_OUT, UNIT_DEPTH, UNIT_WIDTH, unitBoxes } from './geometry';
+import { ledColor, NETWORK_COLORS, PART_HOVER_COLOR, PART_SELECTED_COLOR, SLIDE_OUT, UNIT_DEPTH, UNIT_WIDTH, unitBoxes } from './geometry';
 import { Rods, type Segment, type Vec } from './Rods';
 import { FlowRods } from './FlowRods';
 import { isFlowMember, stubFrom } from './flow';
@@ -96,6 +96,23 @@ export function isFacePart(path: string | null): boolean {
   return path !== null && plateByPath.has(path);
 }
 
+/**
+ * Colour of a front-face plate. A hovered or selected part takes a darker
+ * highlight than its unit, which is lit at the same time, so the part stands
+ * out on the face instead of blending into it.
+ */
+export function facePlateColor(plate: FacePlate, selected: string, hovered: string | null): string {
+  if (plate.led) return plate.color;
+  if (plate.path === selected) return PART_SELECTED_COLOR;
+  if (plate.path === hovered) return PART_HOVER_COLOR;
+  return plate.color;
+}
+
+/** The rack unit a hover lights: the unit itself, or the unit holding a hovered front part. */
+export function hoveredUnitKey(hovered: string | null): string | null {
+  return isFacePart(hovered) ? (hovered!.split('/')[0] ?? null) : hovered;
+}
+
 /** Where to hang a front part's name tag: above its plate, on the front face, slid out with its unit. */
 export function facePartTagPosition(path: string, selectedKey: string | null): Vec | null {
   const p = plateByPath.get(path);
@@ -125,10 +142,7 @@ function FacePlates() {
       scratch.scale.set(...p.size);
       scratch.updateMatrix();
       mesh.setMatrixAt(i, scratch.matrix);
-      if (!p.led && p.path === selected) color.set(SELECTED_COLOR);
-      else if (!p.led && p.path === hovered) color.set(HOVER_COLOR);
-      else color.set(p.color);
-      mesh.setColorAt(i, color);
+      mesh.setColorAt(i, color.set(facePlateColor(p, selected, hovered)));
     });
     mesh.count = plates.length;
     mesh.instanceMatrix.needsUpdate = true;
@@ -170,9 +184,12 @@ function FacePlates() {
         if (e.delta > DRAG_THRESHOLD) return;
         const path = pathOf(e);
         if (!path) return;
-        const action = faceClickAction(path, useExplorer.getState().selected);
-        if (action === 'tray') openTray();
-        else select(action === 'unit' ? path.split('/')[0]! : path);
+        if (faceClickAction(path, useExplorer.getState().selected) === 'unit') {
+          select(path.split('/')[0]!);
+          return;
+        }
+        select(path);
+        openTray();
       }}
       onDoubleClick={(e) => {
         e.stopPropagation();

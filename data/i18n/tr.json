@@ -141,8 +141,7 @@
       "front": "Ön",
       "rear": "Arka",
       "group": "{count} × {name}",
-      "nvlinkFanout": "NVLink: {unit} → tüm {count} {peers}",
-      "partInUnit": "{part} · {unit}"
+      "nvlinkFanout": "NVLink: {unit} → tüm {count} {peers}"
     },
     "unitPlural": {
       "compute-tray": "hesaplama tepsisi",

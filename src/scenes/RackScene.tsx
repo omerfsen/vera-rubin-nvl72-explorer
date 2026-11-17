@@ -23,8 +23,8 @@ import {
   type UnitBox,
 } from './geometry';
 
-import { FrontScene, facePartTagPosition, isFacePart } from './FrontScene';
-import { hoverTagText } from './faceHover';
+import { FrontScene, facePartTagPosition, hoveredUnitKey } from './FrontScene';
+import { hoverTag } from './faceHover';
 /** Pointer travel (px) above which a click counts as a drag. */
 const DRAG_THRESHOLD = 6;
 
@@ -62,7 +62,7 @@ function UnitInstances({ componentId }: { componentId: string }) {
   const onNetwork = useMemo(() => (network ? model.networkMembers(network).unitTypes.has(componentId) : null), [network, componentId]);
   const selectedKey = selectedUnitKey(selected);
   // A part on a unit's front face keeps its unit lit.
-  const hoveredKey = isFacePart(hovered) ? (hovered!.split('/')[0] ?? null) : hovered;
+  const hoveredKey = hoveredUnitKey(hovered);
   // A general selection of this unit type ("power-shelf") lights up every unit of it.
   const typeSelected = selected.split('/')[0] === componentId;
   const type = model.getComponent(componentId)?.type;
@@ -278,12 +278,13 @@ function UnitHoverLabel({ rear }: { rear: boolean }) {
     // From the rear, the rear parts carry their own tags.
     position = facePartTagPosition(hovered, selectedUnitKey(selected));
   }
-  const text = position ? hoverTagText(hovered, i18n) : null;
-  if (!position || !text) return null;
+  const tag = position ? hoverTag(hovered, i18n) : null;
+  if (!position || !tag) return null;
   return (
     <Html position={position} center className="rear-label unit-hover-label" style={{ pointerEvents: 'none' }} zIndexRange={[20, 10]}>
       <span data-label data-label-pinned>
-        {text}
+        {tag.part !== null && <span className="hover-tag-part">{tag.part}</span>}
+        <span className="hover-tag-unit">{tag.unit}</span>
       </span>
     </Html>
   );

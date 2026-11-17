@@ -141,8 +141,7 @@
       "front": "前部",
       "rear": "后部",
       "group": "{count} × {name}",
-      "nvlinkFanout": "NVLink：{unit} 连接全部 {count} 个{peers}",
-      "partInUnit": "{part} · {unit}"
+      "nvlinkFanout": "NVLink：{unit} 连接全部 {count} 个{peers}"
     },
     "unitPlural": {
       "compute-tray": "计算托盘",

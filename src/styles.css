@@ -551,6 +551,10 @@ button { font: inherit; color: inherit; }
   user-select: none;
 }
 .rear-label { pointer-events: none; }
+/* A front part's tag names the part over its unit, and wraps rather than run past a phone's canvas. */
+.unit-hover-label [data-label] { white-space: normal; max-width: min(64vw, 240px); width: max-content; text-align: center; }
+.unit-hover-label [data-label] > span { display: block; border: 0; background: none; padding: 0; border-radius: 0; }
+.unit-hover-label .hover-tag-part { font-weight: 600; }
 
 /* ---- operator view, procedures, sources ---- */
 .table-scroll { overflow-x: auto; }
