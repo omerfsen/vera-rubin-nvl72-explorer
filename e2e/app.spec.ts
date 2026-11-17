@@ -565,6 +565,99 @@ test.describe('fallbacks and layouts', () => {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
+  // Short medium-width windows (a phone on its side, a small laptop window), the 760px boundary, a desktop and a phone.
+  for (const [width, height] of [[844, 390], [900, 500], [1000, 600], [760, 390], [1280, 800], [390, 844]] as const) {
+    test(`the 3D view keeps a usable height at ${width}x${height}`, async ({ page }) => {
+      await page.setViewportSize({ width, height });
+      await page.goto('/');
+      await expect(page.locator('canvas')).toBeVisible({ timeout: 60_000 });
+      await expect(page.locator('.stage')).toBeVisible();
+      const stage = (await page.locator('.stage').boundingBox())!;
+      // At least 60% of the window or 240px, whichever is smaller; the page scrolls when that does not fit.
+      expect(stage.height).toBeGreaterThanOrEqual(Math.min(0.6 * height, 240) - 1);
+      // The canvas fills it once the renderer has sized itself.
+      await expect.poll(async () => (await page.locator('.stage canvas').boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(stage.height - 1);
+      // The tips box stays inside the stage and "Got it" can be tapped.
+      await expect(page.locator('.first-visit')).toBeVisible();
+      const tips = (await page.locator('.first-visit').boundingBox())!;
+      expect(tips.y).toBeGreaterThanOrEqual(stage.y - 1);
+      expect(tips.y + tips.height).toBeLessThanOrEqual(stage.y + stage.height + 1);
+      await page.locator('.first-visit').getByRole('button', { name: 'Got it' }).click({ timeout: 5_000 });
+      await expect(page.locator('.first-visit')).toHaveCount(0);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(overflow).toBeLessThanOrEqual(0);
+      // The whole stage can be scrolled into the window.
+      const inView = await page.locator('.stage').evaluate((el) => {
+        el.scrollIntoView({ block: 'end' });
+        const r = el.getBoundingClientRect();
+        return r.top >= -1 && r.bottom <= window.innerHeight + 1;
+      });
+      expect(inView).toBe(true);
+    });
+  }
+
+  test('the 3D view keeps a usable height in a short embed', async ({ page }) => {
+    await page.setViewportSize({ width: 844, height: 390 });
+    await page.goto('/?embed=1');
+    await expect(page.locator('canvas')).toBeVisible({ timeout: 60_000 });
+    await expect(page.locator('.stage')).toBeVisible();
+    const stage = (await page.locator('.stage').boundingBox())!;
+    expect(stage.height).toBeGreaterThanOrEqual(0.6 * 390 - 1);
+  });
+
+  for (const which of ['sources', 'changes'] as const) {
+    for (const [width, height] of [[761, 390], [844, 390]] as const) {
+      test(`the ${which} page can be read and scrolled at ${width}x${height}`, async ({ page }) => {
+        await page.setViewportSize({ width, height });
+        await page.goto(`/?page=${which}`);
+        const main = page.locator('.layout-page');
+        await expect(main).toBeVisible();
+        const box = (await main.boundingBox())!;
+        expect(box.height).toBeGreaterThanOrEqual(0.6 * height - 1);
+        // The page scrolls it into the window, and it scrolls to its own end.
+        const reached = await main.evaluate((el) => {
+          el.scrollIntoView({ block: 'end' });
+          el.scrollTop = el.scrollHeight;
+          const r = el.getBoundingClientRect();
+          const atEnd = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+          return atEnd && el.scrollTop > 0 && r.top >= -1 && r.bottom <= window.innerHeight + 1;
+        });
+        expect(reached).toBe(true);
+      });
+    }
+  }
+
+  test('the tour card stays above the tips box and "?" waits for the tour to end', async ({ page }) => {
+    await page.goto('/');
+    await rackReady(page);
+    await page.getByRole('button', { name: 'Start here' }).click();
+    const tour = page.getByRole('region', { name: 'Guided tour' });
+    await expect(tour).toBeVisible();
+    await page.getByRole('button', { name: 'Show tips' }).click();
+    await expect(page.locator('.first-visit')).toHaveCount(0);
+    await tour.getByRole('button', { name: 'Next', exact: true }).click({ timeout: 5_000 });
+    await expect(tour.getByRole('heading')).toContainText('step 2 of');
+    const z = (sel: string) => page.evaluate((s) => Number(getComputedStyle(document.querySelector(s)!).zIndex), sel);
+    await page.keyboard.press('Escape');
+    await expect(tour).toHaveCount(0);
+    await page.getByRole('button', { name: 'Show tips' }).click();
+    await expect(page.locator('.first-visit')).toBeVisible();
+    await page.goto('/?tour=1');
+    await expect(tour).toBeVisible();
+    expect(await z('.tour-box')).toBeGreaterThan(35);
+    expect(await z('.tour-box')).toBeLessThan(100);
+  });
+
+  test('the desktop page does not scroll past the footer', async ({ page }) => {
+    await page.goto('/');
+    await rackReady(page);
+    const extra = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+    expect(extra).toBeLessThanOrEqual(0);
+    await page.goto('/?select=compute-tray.7');
+    await expect(page.locator('.panel-body')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight)).toBeLessThanOrEqual(0);
+  });
+
   // A short phone, three common phones and a phone on its side.
   for (const [width, height] of [[320, 568], [360, 740], [390, 844], [430, 932], [667, 375]] as const) {
     test(`the legend stays clear of the network bar and stage controls at ${width}x${height}`, async ({ page }) => {

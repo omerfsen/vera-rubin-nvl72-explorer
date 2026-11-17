@@ -108,4 +108,20 @@ describe('first-visit hint: the card', () => {
     fireEvent.click(button);
     expect(screen.queryByRole('region', { name: 'Quick tips' })).toBeNull();
   });
+
+  it('the "?" button does nothing during a tour, so the tips never cover the tour card', () => {
+    useExplorer.getState().startTour();
+    render(
+      <>
+        <HintButton />
+        <FirstVisitHint />
+      </>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Show tips' }));
+    expect(useExplorer.getState().hintOpen).toBe(false);
+    expect(screen.queryByRole('region', { name: 'Quick tips' })).toBeNull();
+    act(() => useExplorer.getState().stopTour());
+    fireEvent.click(screen.getByRole('button', { name: 'Show tips' }));
+    expect(screen.getByRole('region', { name: 'Quick tips' })).toBeTruthy();
+  });
 });
