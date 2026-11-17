@@ -211,6 +211,26 @@ test.describe('rack', () => {
     });
   }
 
+  test('at 390px a tray with a pinned connection does not scroll sideways and the card stays under the stage buttons', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/?select=compute-tray.3/vera-cpu.1&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    await page.getByRole('button', { name: 'Show in 3D' }).first().click();
+    await expect(page.locator('.pinned-connection')).toBeVisible();
+    const card = page.locator('.link-card.pinned');
+    await expect(card).toBeVisible();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+    // The stage buttons draw above the card wherever the two meet.
+    const back = page.getByRole('button', { name: '← Back to rack' });
+    await back.scrollIntoViewIfNeeded();
+    const b = (await back.boundingBox())!;
+    const onTop = await page.evaluate(([x, y]) => document.elementFromPoint(x!, y!)?.closest('button')?.textContent ?? '', [b.x + b.width / 2, b.y + b.height / 2]);
+    expect(onTop).toContain('Back to rack');
+    await expect(page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true })).toBeVisible();
+  });
+
   test('keyboard steps through the rack and opens a compute tray', async ({ page }) => {
     await page.goto('/?select=compute-tray.3');
     await rackReady(page);
