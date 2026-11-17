@@ -252,6 +252,38 @@ function GroupLabels() {
 }
 
 /**
+ * The name of the rack unit under the pointer, on the face the camera looks
+ * at: the group labels only say "18 x Compute tray", not which one.
+ */
+function UnitHoverLabel() {
+  const camera = useThree((s) => s.camera);
+  const hovered = useExplorer((s) => s.hovered);
+  const selected = useExplorer((s) => s.selected);
+  const i18n = useI18n();
+  const connected = useThree((s) => s.events.connected);
+  if (!connected || !hovered) return null;
+  const unit = model.rackUnitByKey.get(hovered);
+  const box = boxByKey.get(hovered);
+  if (!unit || !box) return null;
+  const slide = hovered === selectedUnitKey(selected) ? SLIDE_OUT : 0;
+  // The face the camera is on, so an orbit behind the rack in the front view still tags the near face.
+  const z = (camera.position.z < 0 ? -UNIT_DEPTH / 2 : UNIT_DEPTH / 2) + slide;
+  return (
+    <Html
+      position={[box.position[0], box.position[1] + box.size[1] / 2 + 0.03, z]}
+      center
+      className="rear-label unit-hover-label"
+      style={{ pointerEvents: 'none' }}
+      zIndexRange={[20, 10]}
+    >
+      <span data-label data-label-pinned>
+        {i18n.segmentLabel({ id: unit.componentId, index: unit.index })}
+      </span>
+    </Html>
+  );
+}
+
+/**
  * Camera distance from the rack centre at which the whole frame fits the
  * vertical field of view: margin for a slid-out unit, plus half the depth
  * because the front face is closer to the camera than the centre.
@@ -274,6 +306,7 @@ export function RackScene({ rear }: { rear: boolean }) {
       <RearScene showLabels={rear} />
       <FrontScene />
       {!rear && <GroupLabels />}
+      {layers.parts && <UnitHoverLabel />}
       <mesh position={[0, -height / 2 - 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
         <circleGeometry args={[2.2, 48]} />
         <meshStandardMaterial color={scene.floor} />
