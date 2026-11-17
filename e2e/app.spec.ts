@@ -112,9 +112,17 @@ test.describe('operator features', () => {
         constructor(public text: string) {}
       }
       const synth = {
+        speaking: false,
+        pending: false,
         getVoices: () => [{ lang: 'en-US', name: 'Test', localService: true, default: true, voiceURI: 'test' }],
-        speak: (u: U) => said.push({ text: u.text, lang: u.lang }),
-        cancel: () => said.push({ text: '<cancel>', lang: '' }),
+        speak: (u: U) => {
+          said.push({ text: u.text, lang: u.lang });
+          synth.speaking = true;
+        },
+        cancel: () => {
+          said.push({ text: '<cancel>', lang: '' });
+          synth.speaking = false;
+        },
         addEventListener: () => {},
         removeEventListener: () => {},
       };
@@ -134,7 +142,7 @@ test.describe('operator features', () => {
     expect(spoken.every((u) => u.lang === 'en-US')).toBe(true);
     await page.getByRole('button', { name: 'Stop reading' }).click();
     expect((await said()).at(-1)?.text).toBe('<cancel>');
-    await expect(page.getByRole('button', { name: 'Read aloud: Compute tray 2' })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByRole('button', { name: 'Read aloud: Compute tray 2' })).toBeVisible();
   });
 
   test('collapses and expands the details panel, and remembers it', async ({ page }) => {

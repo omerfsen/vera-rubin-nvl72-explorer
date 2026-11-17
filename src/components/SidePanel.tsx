@@ -324,7 +324,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
           </ul>
         )}
         {networks.some((n) => !ownNetworks.has(n.id)) && (
-          <p className="muted small">{t('panel.dashedChips')}</p>
+          <p className="muted small" data-no-read>{t('panel.dashedChips')}</p>
         )}
         {networks.length > 0 && (
           <details className="net-details">
