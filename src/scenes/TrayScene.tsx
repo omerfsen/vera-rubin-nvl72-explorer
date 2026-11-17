@@ -382,7 +382,7 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
         );
       })}
       {connected && shown && shownCurve && (
-        <Html position={shownCurve.getPoint(0.5).toArray()} center className="link-card" style={{ pointerEvents: 'none' }} zIndexRange={[30, 20]}>
+        <Html position={shownCurve.getPoint(0.5).toArray()} center className="link-card" style={{ pointerEvents: 'none' }} zIndexRange={[36, 31]}>
           <div data-label data-label-pinned role="tooltip">
             <strong>
               <span className="link-swatch" style={{ background: LINK_COLORS[shown.kind] ?? '#ffffff' }} aria-hidden="true" />
