@@ -211,7 +211,7 @@ test.describe('rack', () => {
     });
   }
 
-  test('at 390px a tray with a pinned connection does not scroll sideways and the card stays under the stage buttons', async ({ page }) => {
+  test('at 390px a tray with a pinned connection does not scroll sideways and the stage buttons stay usable', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/?select=compute-tray.3/vera-cpu.1&view=tray');
@@ -222,7 +222,7 @@ test.describe('rack', () => {
     await expect(card).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
-    // The stage buttons draw above the card wherever the two meet.
+    // The card lets pointer events through, so the stage buttons stay clickable wherever the two meet.
     const back = page.getByRole('button', { name: '← Back to rack' });
     await back.scrollIntoViewIfNeeded();
     const b = (await back.boundingBox())!;

@@ -281,7 +281,7 @@ export function linkRadius(shape: LinkShape, base: number): number {
 }
 
 /** Extra radius of the outline drawn behind every tube. */
-const HALO = 0.002;
+const HALO = 0.0012;
 
 function LinkTube({
   curve,
@@ -330,7 +330,7 @@ function LinkTube({
   const emissive = pipe ? (glow ? 0.35 : 0) : glow ? 0.9 : 0.25;
   return (
     <group>
-      <mesh geometry={outline} raycast={() => null}>
+      <mesh geometry={outline} raycast={() => null} visible={haloOpacity > 0}>
         <meshBasicMaterial color={halo} side={BackSide} transparent opacity={haloOpacity * opacity} depthWrite={false} />
       </mesh>
       <mesh geometry={geometry} onPointerOver={onOver} onPointerOut={onOut} onClick={onClick}>
@@ -434,7 +434,7 @@ function TrayLinks({
             curve={curve}
             color={colors[link.kind] ?? '#ffffff'}
             halo={halo}
-            haloOpacity={theme === 'dark' ? 0.4 : 0.85}
+            haloOpacity={dim ? 0 : theme === 'dark' ? 0.3 : 0.45}
             shape={linkShape(link.kind)}
             assumed={link.assumed === true}
             radius={on || lit ? 0.009 : 0.0055}
