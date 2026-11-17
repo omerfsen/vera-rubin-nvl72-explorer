@@ -322,7 +322,10 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   },
   stopCompare: () => set({ compare: '' }),
   hintOpen: typeof window !== 'undefined' && initialHintOpen(initial),
-  showHint: () => set({ hintOpen: true }),
+  // The tour card and the tips box share the bottom left corner, so the tips wait until the tour ends.
+  showHint: () => {
+    if (get().tour === null) set({ hintOpen: true });
+  },
   dismissHint: () => {
     storeHintSeen();
     set({ hintOpen: false });
