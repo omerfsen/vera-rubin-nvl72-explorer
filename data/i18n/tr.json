@@ -225,7 +225,9 @@
       "openQuestions": "NVIDIA belgelerinde açık sorular",
       "pinnedConnection": "Sabitlenen bağlantı",
       "unpin": "Sabitlemeyi kaldır",
-      "showLink": "3B görünümde göster"
+      "showLink": "3B görünümde göster",
+      "showLinkFor": "3B görünümde göster: {end} ile {kind}",
+      "pinnedAnnounce": "Sabitlenen bağlantı: {kind}, {from} → {to}"
     },
     "docs": {
       "user-guide": "Kullanım Kılavuzu",

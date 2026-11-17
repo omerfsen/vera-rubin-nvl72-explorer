@@ -70,9 +70,12 @@ describe('side panel accessibility and wording', () => {
   it('announces only the selected title, not the whole panel', () => {
     useExplorer.setState({ selected: 'switch-tray.2' });
     const { container } = render(<SidePanel />);
-    const live = container.querySelectorAll('[aria-live]');
-    expect(live.length).toBe(1);
-    expect(live[0]!.textContent).toBe('Selected: NVLink 6 switch tray 2');
+    // Live regions are short hidden lines; the pin one stays empty until a connection is pinned.
+    const live = [...container.querySelectorAll('[aria-live]')];
+    for (const r of live) expect(r.classList.contains('sr-only')).toBe(true);
+    const spoken = live.filter((r) => r.textContent !== '');
+    expect(spoken).toHaveLength(1);
+    expect(spoken[0]!.textContent).toBe('Selected: NVLink 6 switch tray 2');
   });
 
   it('shows no empty brackets for a port that is not connected', () => {
@@ -99,7 +102,10 @@ describe('focus on page load', () => {
 });
 
 describe('pinned connection', () => {
-  afterEach(() => useExplorer.setState({ pinnedLink: null, view: 'rack' }));
+  afterEach(() =>
+    useExplorer.setState({ pinnedLink: null, view: 'rack', hiddenLinkKinds: [], layers: { structure: true, parts: true, links: true } }),
+  );
+  const SHOW = /^Show in 3D/;
   const layout = model.trayLayout('compute-tray')!;
   const i18n = i18nFor('en');
 
@@ -127,13 +133,75 @@ describe('pinned connection', () => {
   it('pins a row from "Inside the tray" with Show in 3D, only with WebGL', () => {
     useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray' });
     const { unmount } = render(<SidePanel />);
-    const buttons = screen.getAllByRole('button', { name: 'Show in 3D' });
+    const buttons = screen.getAllByRole('button', { name: SHOW });
     expect(buttons[0]!.getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(buttons[0]!);
     expect(useExplorer.getState().pinnedLink).toEqual({ tray: 'compute-tray.3', index: 0 });
-    expect(screen.getAllByRole('button', { name: 'Show in 3D' })[0]!.getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getAllByRole('button', { name: SHOW })[0]!.getAttribute('aria-pressed')).toBe('true');
     unmount();
     render(<SidePanel webgl={false} />);
-    expect(screen.queryAllByRole('button', { name: 'Show in 3D' })).toHaveLength(0);
+    expect(screen.queryAllByRole('button', { name: SHOW })).toHaveLength(0);
+  });
+
+  it('names each Show in 3D button after its kind and other end', () => {
+    useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray' });
+    render(<SidePanel />);
+    const names = screen.getAllByRole('button', { name: SHOW }).map((b) => b.getAttribute('aria-label'));
+    expect(names[0]).toBe(`Show in 3D: Clink (CPU to CPU) to ${i18n.linkEndLabel('compute-tray', layout.links![0]!.to)}`);
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  it('a pin of a hidden kind shows its kind again, so the panel never reports a link the scene does not draw', () => {
+    useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray', hiddenLinkKinds: ['clink'], layers: { structure: true, parts: true, links: false } });
+    const { container } = render(<SidePanel />);
+    fireEvent.click(screen.getAllByRole('button', { name: SHOW })[0]!);
+    const s = useExplorer.getState();
+    expect(s.hiddenLinkKinds).not.toContain('clink');
+    expect(s.layers.links).toBe(true);
+    expect(container.querySelector('.pinned-connection')).not.toBeNull();
+  });
+
+  it('shows nothing for a pin the scene does not draw', () => {
+    for (const state of [{ hiddenLinkKinds: ['pcie'] }, { layers: { structure: true, parts: true, links: false } }]) {
+      useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.2', view: 'tray', pinnedLink: { tray: 'compute-tray.3', index: 7 }, ...state });
+      const { container, unmount } = render(<SidePanel />);
+      expect(container.querySelector('.pinned-connection')).toBeNull();
+      expect(container.querySelector('.show-link[aria-pressed="true"]')).toBeNull();
+      unmount();
+      useExplorer.setState({ hiddenLinkKinds: [], layers: { structure: true, parts: true, links: true } });
+    }
+  });
+
+  it('announces a pin through a live region that is there before it', () => {
+    useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray' });
+    const { container } = render(<SidePanel />);
+    const regions = [...container.querySelectorAll('[aria-live="polite"]')];
+    const region = regions.find((r) => r.textContent === '')!;
+    expect(region).toBeDefined();
+    fireEvent.click(screen.getAllByRole('button', { name: SHOW })[0]!);
+    const link = layout.links![0]!;
+    expect(region.textContent).toBe(
+      `Pinned connection: Clink (CPU to CPU), ${i18n.linkEndLabel('compute-tray', link.from)} to ${i18n.linkEndLabel('compute-tray', link.to)}`,
+    );
+    expect(container.querySelector('.pinned-connection')!.hasAttribute('aria-live')).toBe(false);
+  });
+
+  it('Unpin keeps focus in the panel, on the row that pinned it', () => {
+    useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray', pinnedLink: { tray: 'compute-tray.3', index: 0 } });
+    const { container } = render(<SidePanel />);
+    const unpin = screen.getByRole('button', { name: 'Unpin' });
+    unpin.focus();
+    fireEvent.click(unpin);
+    expect(useExplorer.getState().pinnedLink).toBeNull();
+    expect(document.activeElement).toBe(container.querySelector('.show-link[data-link-index="0"]'));
+  });
+
+  it('Unpin moves focus to the heading when no row matches', () => {
+    useExplorer.setState({ selected: 'compute-tray.3', view: 'tray', pinnedLink: { tray: 'compute-tray.3', index: 7 } });
+    render(<SidePanel />);
+    const unpin = screen.getByRole('button', { name: 'Unpin' });
+    unpin.focus();
+    fireEvent.click(unpin);
+    expect(document.activeElement?.id).toBe('panel-title');
   });
 });

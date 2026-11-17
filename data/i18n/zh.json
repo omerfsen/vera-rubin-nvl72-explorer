@@ -225,7 +225,9 @@
       "openQuestions": "NVIDIA 文档中的未决问题",
       "pinnedConnection": "已固定的连接",
       "unpin": "取消固定",
-      "showLink": "在 3D 中显示"
+      "showLink": "在 3D 中显示",
+      "showLinkFor": "在 3D 中显示：{kind}，连接 {end}",
+      "pinnedAnnounce": "已固定的连接：{kind}，{from} → {to}"
     },
     "docs": {
       "user-guide": "用户指南",

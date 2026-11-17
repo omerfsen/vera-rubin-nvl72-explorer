@@ -37,10 +37,34 @@ describe('data/display.json', () => {
       for (const theme of ['dark', 'light'] as const) {
         const color = link.color[theme];
         expect(contrast(color, display.colors.scene[theme].trayBase), `${kind} ${theme}`).toBeGreaterThanOrEqual(3);
-        // Never the selection or hover colour, and never NVIDIA's callout green from its figures.
-        expect([display.colors.selected, display.colors.hover, '#88b634', '#96be4b'], `${kind} ${theme}`).not.toContain(color);
       }
     }
+  });
+
+  // RGB distance, not string equality: one step off a colour looks the same.
+  const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const distance = (a: string, b: string) => Math.hypot(...rgb(a).map((v, i) => v - rgb(b)[i]!));
+  const MIN_DISTANCE = 60;
+  /** Colours a connection must not look like: selection, hover, every part, and NVIDIA's callout greens from its figures. */
+  const avoid = (): [string, string][] => [
+    ['selected', display.colors.selected],
+    ['hover', display.colors.hover],
+    ['NVIDIA figure green', '#88b634'],
+    ['NVIDIA figure green (light)', '#96be4b'],
+    ...Object.entries(display.colors.partTypes).map(([k, v]): [string, string] => [`part ${k}`, v]),
+  ];
+
+  it('keeps every link colour clear of the part, selection, hover and NVIDIA figure colours', () => {
+    for (const [kind, link] of Object.entries(display.links))
+      for (const theme of ['dark', 'light'] as const)
+        for (const [name, other] of avoid())
+          expect(distance(link.color[theme], other), `${kind} ${theme} vs ${name}`).toBeGreaterThan(MIN_DISTANCE);
+  });
+
+  it('the colour distance check fails for a colour one step from another', () => {
+    expect(distance('#88b635', '#88b634')).toBeLessThan(MIN_DISTANCE);
+    expect(distance('#38bdf9', display.colors.selected)).toBeLessThan(MIN_DISTANCE);
+    expect(distance('#3aa0c5', display.colors.partTypes.manifold)).toBeLessThan(MIN_DISTANCE);
   });
 
   it('draws coolant as a pipe and power as a ribbon', () => {

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
-import { syncUrl, useExplorer } from '../src/state/store';
+import { shownPin, syncUrl, useExplorer } from '../src/state/store';
 
 const step = (from: string, delta: number) => {
   useExplorer.setState({ selected: from });
@@ -73,7 +73,7 @@ describe('pinned connection', () => {
   const pin = { tray: 'compute-tray.3', index: 4 };
   beforeEach(() => useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray', pinnedLink: pin }));
 
-  it('is let go by select, goUp, setSide, openTray, stepping parts and the kind filter', () => {
+  it('is let go by select, goUp, setSide, openTray, stepping parts, a quiz, hiding its kind and turning connections off', () => {
     useExplorer.getState().select('compute-tray.3/rubin-gpu.1');
     expect(useExplorer.getState().pinnedLink).toBeNull();
     for (const act of [
@@ -81,12 +81,55 @@ describe('pinned connection', () => {
       () => useExplorer.getState().setSide('rear'),
       () => useExplorer.getState().openTray(),
       () => useExplorer.getState().stepTrayPart(1),
-      () => useExplorer.getState().toggleLinkKind('pcie'),
+      () => useExplorer.getState().toggleLinkKind('c2c'),
+      () => useExplorer.getState().toggleLayer('links'),
+      () => useExplorer.getState().startQuiz(1),
     ]) {
-      useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray', pinnedLink: pin, hiddenLinkKinds: [] });
+      useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray', pinnedLink: pin, hiddenLinkKinds: [], quiz: null });
+      useExplorer.setState({ layers: { structure: true, parts: true, links: true } });
       act();
       expect(useExplorer.getState().pinnedLink).toBeNull();
     }
+    useExplorer.setState({ hiddenLinkKinds: [], quiz: null, layers: { structure: true, parts: true, links: true } });
+  });
+
+  it('stays pinned when another kind is hidden or connections come back on', () => {
+    useExplorer.getState().toggleLinkKind('pcie');
+    expect(useExplorer.getState().pinnedLink).toEqual(pin);
+    expect(shownPin(useExplorer.getState())).toEqual(pin);
+    useExplorer.getState().toggleLinkKind('pcie');
+    expect(useExplorer.getState().pinnedLink).toEqual(pin);
+  });
+
+  it('pinning shows the link: its kind comes back and the connections layer turns on', () => {
+    useExplorer.setState({ pinnedLink: null, hiddenLinkKinds: ['clink', 'pcie'], layers: { structure: true, parts: true, links: false } });
+    useExplorer.getState().pinLink({ tray: 'compute-tray.3', index: 0 });
+    const s = useExplorer.getState();
+    expect(s.pinnedLink).toEqual({ tray: 'compute-tray.3', index: 0 });
+    expect(s.hiddenLinkKinds).toEqual(['pcie']);
+    expect(s.layers.links).toBe(true);
+    expect(shownPin(s)).toEqual({ tray: 'compute-tray.3', index: 0 });
+    // A pin that names no link is ignored.
+    useExplorer.getState().pinLink({ tray: 'compute-tray.3', index: 9999 });
+    expect(useExplorer.getState().pinnedLink).toEqual({ tray: 'compute-tray.3', index: 0 });
     useExplorer.setState({ hiddenLinkKinds: [] });
+  });
+
+  it('counts a pin as shown only while its kind is shown and connections are on', () => {
+    const on = { structure: true, parts: true, links: true };
+    expect(shownPin({ pinnedLink: pin, hiddenLinkKinds: [], layers: on })).toEqual(pin);
+    expect(shownPin({ pinnedLink: pin, hiddenLinkKinds: ['c2c'], layers: on })).toBeNull();
+    expect(shownPin({ pinnedLink: pin, hiddenLinkKinds: [], layers: { ...on, links: false } })).toBeNull();
+    expect(shownPin({ pinnedLink: null, hiddenLinkKinds: [], layers: on })).toBeNull();
+  });
+});
+
+describe('hovered part', () => {
+  it('is let go when the Parts layer turns off in a tray, so its name tag goes too', () => {
+    useExplorer.setState({ selected: 'compute-tray.3', view: 'tray', hovered: 'compute-tray.3/vera-cpu.1', layers: { structure: true, parts: true, links: true } });
+    useExplorer.getState().toggleLayer('parts');
+    expect(useExplorer.getState().hovered).toBeNull();
+    useExplorer.getState().toggleLayer('parts');
+    expect(useExplorer.getState().layers.parts).toBe(true);
   });
 });

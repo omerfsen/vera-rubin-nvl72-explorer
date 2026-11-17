@@ -201,6 +201,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
       selected: '',
       view: 'rack',
       hovered: null,
+      pinnedLink: null,
       panelOpen: true,
     });
   },
@@ -238,11 +239,28 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   toggleLinkKind: (kind) => {
     const all = trayLinkKinds(model);
     if (!all.includes(kind)) return;
-    set({ hiddenLinkKinds: toggleIn(get().hiddenLinkKinds, kind, all), pinnedLink: null });
+    const hiddenLinkKinds = toggleIn(get().hiddenLinkKinds, kind, all);
+    // Hiding the pinned connection's kind lets go of it; any other toggle keeps it.
+    const pinned = get().pinnedLink;
+    const pinnedKind = pinned ? pinnedLinkOf(pinned)?.kind : undefined;
+    set({ hiddenLinkKinds, pinnedLink: pinnedKind && hiddenLinkKinds.includes(pinnedKind) ? null : pinned });
   },
   showAllLinkKinds: () => set({ hiddenLinkKinds: [] }),
   pinnedLink: null,
-  pinLink: (link) => set({ pinnedLink: link }),
+  pinLink: (pin) => {
+    if (!pin) {
+      set({ pinnedLink: null });
+      return;
+    }
+    const link = pinnedLinkOf(pin);
+    if (!link) return;
+    // A pin is always drawn: show its kind and the connections layer again if they were off.
+    set({
+      pinnedLink: pin,
+      hiddenLinkKinds: get().hiddenLinkKinds.filter((k) => k !== link.kind),
+      layers: { ...get().layers, links: true },
+    });
+  },
   exploded: false,
   toggleExploded: () => set({ exploded: !get().exploded }),
   network: initial.net ?? '',
@@ -274,7 +292,14 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     storeLang(lang);
     set({ lang });
   },
-  toggleLayer: (layer) => set({ layers: { ...get().layers, [layer]: !get().layers[layer] } }),
+  toggleLayer: (layer) => {
+    const on = !get().layers[layer];
+    const layers = { ...get().layers, [layer]: on };
+    // Turning a layer off removes what it drew: the pinned connection, or the hovered part's name tag.
+    if (!on && layer === 'links') set({ layers, pinnedLink: null });
+    else if (!on && layer === 'parts' && get().view === 'tray') set({ layers, hovered: null });
+    else set({ layers });
+  },
   select: (path) => {
     const segments = model.parsePath(path);
     const selected = segments === null ? '' : model.formatPath(segments);
@@ -393,6 +418,22 @@ if (initial.quiz !== undefined) useExplorer.getState().startQuiz(initial.quiz);
 if (initial.tour !== undefined) useExplorer.getState().startTour(initial.tour, TOUR_HOME);
 
 /** Keep the address bar in step with the store. */
+/** The tray link a pin points at, or undefined when the pin names no link. */
+function pinnedLinkOf(pin: { tray: string; index: number }) {
+  return model.trayLayout(pin.tray.split('.')[0]!)?.links?.[pin.index];
+}
+
+/**
+ * The pinned connection when the tray view draws it (its kind shown and the
+ * connections layer on), else null. The scene, the panel and Escape all use it.
+ */
+export function shownPin(s: Pick<ExplorerState, 'pinnedLink' | 'hiddenLinkKinds' | 'layers'>): { tray: string; index: number } | null {
+  const pin = s.pinnedLink;
+  if (!pin || !s.layers.links) return null;
+  const link = pinnedLinkOf(pin);
+  return link && !s.hiddenLinkKinds.includes(link.kind) ? pin : null;
+}
+
 export function syncUrl(): () => void {
   const write = (s: ExplorerState) => {
     const search = writeUrlState(window.location.search, {

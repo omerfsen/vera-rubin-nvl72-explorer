@@ -455,7 +455,9 @@ button { font: inherit; color: inherit; }
   display: flex; align-items: center; gap: 6px; width: 100%;
   background: none; border: 0; padding: 2px 0; font: inherit; color: inherit; cursor: pointer; text-align: start;
 }
-.link-legend .link-kind[aria-pressed="false"] { opacity: 0.45; text-decoration: line-through; }
+.link-legend .link-kind[aria-pressed="false"] { color: var(--muted); text-decoration: line-through; }
+/* Only the swatch fades for a hidden kind: the label must stay readable to turn it back on. */
+.link-legend .link-kind[aria-pressed="false"] .line-swatch { opacity: 0.35; }
 .link-legend .link-kind:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .line-swatch { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
 /* Same shapes as the tubes: coolant is a thick pipe, power a flat ribbon. */
@@ -971,4 +973,9 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
   font: inherit; font-size: 0.85em; padding: 1px 6px; cursor: pointer;
 }
 .show-link { margin-inline-start: 6px; }
+/* Touch targets of at least 24 by 24 px on phones and touch screens. */
+@media (max-width: 760px), (pointer: coarse) {
+  .link-legend .link-kind { min-height: 28px; padding-block: 4px; }
+  .show-link, .pinned-connection .unpin { min-height: 28px; min-width: 28px; padding: 4px 8px; }
+}
 .show-link[aria-pressed="true"] { font-weight: 600; }

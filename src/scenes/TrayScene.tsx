@@ -18,7 +18,7 @@ import {
 } from 'three';
 import { model } from '../data';
 import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
-import { useExplorer } from '../state/store';
+import { shownPin, useExplorer } from '../state/store';
 import { visibleLinks } from '../data/linkFilter';
 import { i18nFor, useI18n, type I18n } from '../i18n';
 import { isPartSelected, partColor } from './colors';
@@ -124,11 +124,15 @@ function PartInstances({ trayKey, items, heightRU, amount }: { trayKey: string; 
     invalidate();
   }, [items, selected, hovered, base, invalidate, trayKey, overlay, place, amount]);
 
+  // Unmounted under the pointer (the Parts layer turned off by keyboard), the mesh gets no
+  // pointerout, so let go of the hover here too or its name tag would stay on screen.
   useEffect(
     () => () => {
       document.body.style.cursor = '';
+      const hovered = useExplorer.getState().hovered;
+      if (hovered !== null && items.some((it) => it.path === hovered)) useExplorer.getState().setHovered(null);
     },
-    [],
+    [items],
   );
 
   const pathOf = (e: ThreeEvent<PointerEvent | MouseEvent>) =>
@@ -374,7 +378,7 @@ function TrayLinks({
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
   const hiddenKinds = useExplorer((s) => s.hiddenLinkKinds);
-  const pinnedLink = useExplorer((s) => s.pinnedLink);
+  const pin = useExplorer(shownPin);
   const pinLink = useExplorer((s) => s.pinLink);
   const invalidate = useThree((s) => s.invalidate);
   const connected = useThree((s) => s.events.connected);
@@ -394,9 +398,17 @@ function TrayLinks({
     [links, layout, offsets, amount],
   );
   const visible = useMemo(() => visibleLinks(links, hiddenKinds), [links, hiddenKinds]);
-  const pinned = pinnedLink && pinnedLink.tray === trayKey && visible.some((v) => v.index === pinnedLink.index) ? pinnedLink.index : null;
+  const pinned = pin && pin.tray === trayKey ? pin.index : null;
   useEffect(() => invalidate(), [active, hover, visible, pinned, invalidate]);
-  useEffect(() => setHover(null), [trayKey, hiddenKinds]);
+  // A hovered tube that goes away (another tray, or its kind hidden from the legend by keyboard) never
+  // gets a pointerout, so drop the hover and its pointer cursor here.
+  const hoverRef = useRef(hover);
+  hoverRef.current = hover;
+  useEffect(() => {
+    if (hoverRef.current === null) return;
+    setHover(null);
+    document.body.style.cursor = '';
+  }, [trayKey, hiddenKinds]);
   useEffect(
     () => () => {
       document.body.style.cursor = '';
@@ -519,9 +531,11 @@ export function partLabel(item: Placed, i18n: I18n = i18nFor('en')): string {
 function Labels({ placed, heightRU, amount }: { placed: Placed[]; heightRU: number; amount: number }) {
   const connected = useThree((s) => s.events.connected);
   const hovered = useExplorer((s) => s.hovered);
+  const partsShown = useExplorer((s) => s.layers.parts);
   const i18n = useI18n();
   if (!connected) return null;
-  const hoveredItem = placed.find((p) => p.path === hovered);
+  // Only name a part that is drawn.
+  const hoveredItem = partsShown ? placed.find((p) => p.path === hovered) : undefined;
   const box = hoveredItem ? slotBox(hoveredItem.slot, heightRU) : null;
   const [dx, dy, dz] = scaleOffset(hoveredItem?.offset, amount);
   return (

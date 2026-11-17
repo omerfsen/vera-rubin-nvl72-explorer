@@ -225,7 +225,9 @@
       "openQuestions": "Preguntas abiertas en los documentos de NVIDIA",
       "pinnedConnection": "Conexión fijada",
       "unpin": "Soltar",
-      "showLink": "Mostrar en 3D"
+      "showLink": "Mostrar en 3D",
+      "showLinkFor": "Mostrar en 3D: {kind} hacia {end}",
+      "pinnedAnnounce": "Conexión fijada: {kind}, de {from} a {to}"
     },
     "docs": {
       "user-guide": "User Guide",

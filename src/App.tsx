@@ -14,7 +14,7 @@ import { model } from './data';
 import { CONFLICT_COLOR, DIM_COLORS, LINK_THEME_COLORS, NETWORK_COLORS, REAR_COLORS, TYPE_COLORS, linkShape } from './scenes/geometry';
 import { trayLegend } from './scenes/colors';
 import { trayKeyOf } from './state/url';
-import { syncTheme, syncUrl, useExplorer } from './state/store';
+import { shownPin, syncTheme, syncUrl, useExplorer } from './state/store';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { Recorder } from './components/Recorder';
@@ -49,7 +49,7 @@ function useKeyboard() {
       } else if (onStage && e.key === 'Enter' && s.view === 'rack') {
         e.preventDefault();
         s.openTray();
-      } else if (e.key === 'Escape' && s.pinnedLink) {
+      } else if (e.key === 'Escape' && shownPin(s)) {
         // The first Escape lets go of a pinned connection; the next goes up a level.
         s.pinLink(null);
       } else if (e.key === 'Escape' && (s.selected !== '' || s.view !== 'rack')) {

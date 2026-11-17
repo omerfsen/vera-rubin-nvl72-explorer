@@ -225,7 +225,9 @@
       "openQuestions": "Открытые вопросы в документах NVIDIA",
       "pinnedConnection": "Закреплённое соединение",
       "unpin": "Открепить",
-      "showLink": "Показать в 3D"
+      "showLink": "Показать в 3D",
+      "showLinkFor": "Показать в 3D: {kind} к {end}",
+      "pinnedAnnounce": "Закреплённое соединение: {kind}, {from} → {to}"
     },
     "docs": {
       "user-guide": "User Guide",

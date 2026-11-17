@@ -101,6 +101,45 @@ test.describe('rack', () => {
     await expect(page.locator('.part-tooltip')).toHaveCount(0);
   });
 
+  test('a part name tag goes when the Parts layer is turned off by keyboard under the pointer', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/?select=compute-tray.3&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    await page.getByRole('button', { name: 'Connections', exact: true }).click();
+    const box = (await page.locator('canvas').boundingBox())!;
+    const label = page.locator('.part-tooltip span');
+    let found = false;
+    for (const fy of [0.5, 0.45, 0.55, 0.4, 0.6]) {
+      for (const fx of [0.5, 0.4, 0.6, 0.3, 0.7]) {
+        await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+        if (await label.waitFor({ state: 'attached', timeout: 800 }).then(() => true, () => false)) {
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+    expect(found).toBe(true);
+    // The pointer stays where it is; only the keyboard turns the layer off.
+    await page.getByRole('button', { name: 'Parts', exact: true }).focus();
+    await page.keyboard.press('Space');
+    await expect(page.getByRole('button', { name: 'Parts', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('.part-tooltip')).toHaveCount(0);
+  });
+
+  test('Show in 3D on a hidden kind shows that kind again and draws the pin', async ({ page }) => {
+    await page.goto('/?select=compute-tray.3/vera-cpu.1&view=tray&lk=clink');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    const clink = page.locator('.link-legend').getByRole('button', { name: 'Clink (CPU to CPU)', exact: true });
+    await expect(clink).toHaveAttribute('aria-pressed', 'false');
+    const show = page.getByRole('button', { name: /^Show in 3D: Clink/ }).first();
+    await show.click();
+    await expect(show).toHaveAttribute('aria-pressed', 'true');
+    await expect(clink).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.link-card.pinned')).toBeVisible();
+    await expect.poll(() => param(page, 'lk')).toBeNull();
+  });
+
   test('the legend hides and shows connection kinds and keeps it in the URL', async ({ page }) => {
     await page.goto('/?select=compute-tray.3&view=tray');
     await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
