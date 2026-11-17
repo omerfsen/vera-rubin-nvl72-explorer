@@ -100,7 +100,9 @@
       "connectionTypes": "Tipos de conexión",
       "dashed": "Discontinua: supuesto, ver el panel",
       "explodedView": "Vista explosionada",
-      "explodedViewHint": "Separa las piezas por capas"
+      "explodedViewHint": "Separa las piezas por capas",
+      "linkKindHint": "Mostrar u ocultar las conexiones {kind}",
+      "showAllKinds": "Mostrar todas"
     },
     "cameraView": {
       "group": "Ángulo de cámara",

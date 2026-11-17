@@ -99,6 +99,21 @@ test.describe('rack', () => {
     await expect(page.locator('.part-tooltip')).toHaveCount(0);
   });
 
+  test('the legend hides and shows connection kinds and keeps it in the URL', async ({ page }) => {
+    await page.goto('/?select=compute-tray.3&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    const pcie = page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true });
+    await expect(pcie).toHaveAttribute('aria-pressed', 'true');
+    await pcie.click();
+    await expect(pcie).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(() => param(page, 'lk')).toBe('pcie');
+    await page.reload();
+    await expect(page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    await page.locator('.link-legend').getByRole('button', { name: 'Show all' }).click();
+    await expect.poll(() => param(page, 'lk')).toBeNull();
+    await expect(page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  });
+
   test('keyboard steps through the rack and opens a compute tray', async ({ page }) => {
     await page.goto('/?select=compute-tray.3');
     await rackReady(page);

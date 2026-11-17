@@ -451,6 +451,12 @@ button { font: inherit; color: inherit; }
   border-radius: var(--radius);
 }
 .link-legend li { display: flex; align-items: center; gap: 6px; }
+.link-legend .link-kind {
+  display: flex; align-items: center; gap: 6px; width: 100%;
+  background: none; border: 0; padding: 2px 0; font: inherit; color: inherit; cursor: pointer; text-align: start;
+}
+.link-legend .link-kind[aria-pressed="false"] { opacity: 0.45; text-decoration: line-through; }
+.link-legend .link-kind:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .line-swatch { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
 /* Same shapes as the tubes: coolant is a thick pipe, power a flat ribbon. */
 .line-swatch.shape-pipe { height: 5px; border-radius: 3px; }

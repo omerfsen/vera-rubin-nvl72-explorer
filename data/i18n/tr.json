@@ -100,7 +100,9 @@
       "connectionTypes": "Bağlantı türleri",
       "dashed": "Kesikli: varsayım, panele bakın",
       "explodedView": "Patlatılmış görünüm",
-      "explodedViewHint": "Parçaları katmanlara göre birbirinden ayırır"
+      "explodedViewHint": "Parçaları katmanlara göre birbirinden ayırır",
+      "linkKindHint": "{kind} bağlantılarını göster veya gizle",
+      "showAllKinds": "Tümünü göster"
     },
     "cameraView": {
       "group": "Kamera açısı",

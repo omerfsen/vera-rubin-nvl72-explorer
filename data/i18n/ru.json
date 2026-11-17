@@ -100,7 +100,9 @@
       "connectionTypes": "Типы соединений",
       "dashed": "Пунктир: предположение, см. панель",
       "explodedView": "Разнесённый вид",
-      "explodedViewHint": "Раздвинуть детали по слоям"
+      "explodedViewHint": "Раздвинуть детали по слоям",
+      "linkKindHint": "Показать или скрыть соединения {kind}",
+      "showAllKinds": "Показать все"
     },
     "cameraView": {
       "group": "Ракурс камеры",

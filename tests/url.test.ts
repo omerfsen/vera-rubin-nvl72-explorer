@@ -54,3 +54,15 @@ describe('URL state', () => {
     expect(readUrlState('?tour=1&tour=3', model).tour).toBe(0);
   });
 });
+
+describe('hidden connection kinds (lk)', () => {
+  it('round-trips, drops unknown kinds and leaves an empty list out', () => {
+    const s = { ...state('compute-tray.3'), lk: ['pcie', 'coolant'] };
+    const search = writeUrlState('', s);
+    expect(search).toBe('?select=compute-tray.3&lk=pcie,coolant');
+    expect(readUrlState(search, model).lk).toEqual(['pcie', 'coolant']);
+    expect(readUrlState('?lk=moon,power,power', model).lk).toEqual(['power']);
+    expect(readUrlState('?lk=moon', model)).not.toHaveProperty('lk');
+    expect(writeUrlState('', { ...state(''), lk: [] })).toBe('');
+  });
+});

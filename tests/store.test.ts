@@ -51,3 +51,20 @@ describe('syncUrl', () => {
     stop();
   });
 });
+
+describe('connection kind filter', () => {
+  beforeEach(() => useExplorer.setState({ hiddenLinkKinds: [] }));
+
+  it('hides a kind, shows it again, and ignores kinds no tray draws', () => {
+    const s = useExplorer.getState();
+    s.toggleLinkKind('pcie');
+    s.toggleLinkKind('power');
+    expect(useExplorer.getState().hiddenLinkKinds.sort()).toEqual(['pcie', 'power']);
+    s.toggleLinkKind('pcie');
+    expect(useExplorer.getState().hiddenLinkKinds).toEqual(['power']);
+    s.toggleLinkKind('moon');
+    expect(useExplorer.getState().hiddenLinkKinds).toEqual(['power']);
+    s.showAllLinkKinds();
+    expect(useExplorer.getState().hiddenLinkKinds).toEqual([]);
+  });
+});

@@ -100,7 +100,9 @@
       "connectionTypes": "Connection types",
       "dashed": "Dashed: assumed, see the panel",
       "explodedView": "Exploded view",
-      "explodedViewHint": "Spread the parts apart by layer"
+      "explodedViewHint": "Spread the parts apart by layer",
+      "linkKindHint": "Show or hide {kind} connections",
+      "showAllKinds": "Show all"
     },
     "cameraView": {
       "group": "Camera angle",

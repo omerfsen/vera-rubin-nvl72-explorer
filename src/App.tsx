@@ -139,6 +139,9 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
   const exploded = useExplorer((s) => s.exploded);
   const toggleExploded = useExplorer((s) => s.toggleExploded);
   const theme = useExplorer((s) => s.theme);
+  const hiddenLinkKinds = useExplorer((s) => s.hiddenLinkKinds);
+  const toggleLinkKind = useExplorer((s) => s.toggleLinkKind);
+  const showAllLinkKinds = useExplorer((s) => s.showAllLinkKinds);
   const i18n = useI18n();
   const { t } = i18n;
   const inTray = view === 'tray' && trayKey !== null;
@@ -194,12 +197,38 @@ function StageActions({ trayKey, view }: { trayKey: string | null; view: string 
       </div>
       {layers.links && (inTray || view === 'rear') && (
         <ul className="link-legend" aria-label={t('stage.connectionTypes')}>
-          {kinds.map((k) => (
-            <li key={k}>
-              <span className={`line-swatch shape-${linkShape(k)}`} style={{ background: LINK_THEME_COLORS[theme][k] }} aria-hidden="true" />
-              {i18n.linkName(k)}
+          {kinds.map((k) => {
+            const swatch = <span className={`line-swatch shape-${linkShape(k)}`} style={{ background: LINK_THEME_COLORS[theme][k] }} aria-hidden="true" />;
+            // In a tray each kind is a toggle; at the rear the legend only names the colours.
+            return (
+              <li key={k}>
+                {inTray ? (
+                  <button
+                    type="button"
+                    className="link-kind"
+                    aria-pressed={!hiddenLinkKinds.includes(k)}
+                    title={t('stage.linkKindHint', { kind: i18n.linkName(k) })}
+                    onClick={() => toggleLinkKind(k)}
+                  >
+                    {swatch}
+                    {i18n.linkName(k)}
+                  </button>
+                ) : (
+                  <>
+                    {swatch}
+                    {i18n.linkName(k)}
+                  </>
+                )}
+              </li>
+            );
+          })}
+          {inTray && kinds.some((k) => hiddenLinkKinds.includes(k)) && (
+            <li>
+              <button type="button" className="link-kind" onClick={showAllLinkKinds}>
+                {t('stage.showAllKinds')}
+              </button>
             </li>
-          ))}
+          )}
           {inTray && <li className="muted">{t('stage.dashed')}</li>}
         </ul>
       )}

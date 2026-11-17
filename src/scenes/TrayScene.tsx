@@ -19,6 +19,7 @@ import {
 import { model } from '../data';
 import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
+import { visibleLinks } from '../data/linkFilter';
 import { i18nFor, useI18n, type I18n } from '../i18n';
 import { isPartSelected, partColor } from './colors';
 import { Rods, type Segment } from './Rods';
@@ -358,6 +359,7 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
   const trayId = trayKey.split('.')[0]!;
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
+  const hiddenKinds = useExplorer((s) => s.hiddenLinkKinds);
   const invalidate = useThree((s) => s.invalidate);
   const connected = useThree((s) => s.events.connected);
   const i18n = useI18n();
@@ -375,8 +377,9 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
       }),
     [links, layout, offsets, amount],
   );
-  useEffect(() => invalidate(), [active, hover, invalidate]);
-  useEffect(() => setHover(null), [trayKey]);
+  const visible = useMemo(() => visibleLinks(links, hiddenKinds), [links, hiddenKinds]);
+  useEffect(() => invalidate(), [active, hover, visible, invalidate]);
+  useEffect(() => setHover(null), [trayKey, hiddenKinds]);
   useEffect(
     () => () => {
       document.body.style.cursor = '';
@@ -387,7 +390,7 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
   const shownCurve = hover !== null ? curves[hover] : null;
   return (
     <group>
-      {links.map((link, i) => {
+      {visible.map(({ link, index: i }) => {
         const curve = curves[i];
         if (!curve) return null;
         const on = active.has(link);

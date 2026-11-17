@@ -100,7 +100,9 @@
       "connectionTypes": "连接类型",
       "dashed": "虚线：假定，详见面板",
       "explodedView": "爆炸视图",
-      "explodedViewHint": "按层分开显示各个部件"
+      "explodedViewHint": "按层分开显示各个部件",
+      "linkKindHint": "显示或隐藏 {kind} 连接",
+      "showAllKinds": "全部显示"
     },
     "cameraView": {
       "group": "相机角度",

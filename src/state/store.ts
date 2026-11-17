@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { model } from '../data';
 import { DEFAULT_URL_STATE, canonicalPath, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
+import { trayLinkKinds } from '../data/linkFilter';
 import { NO_FILTER, filterNetworks, filterTypes, toggleIn, type ListFilter } from '../data/listFilter';
 import { answerFromSelection, generateQuiz, isValidSeed, newSeed, type QuizQuestion } from '../data/quiz';
 import { TOUR_STEPS, showsTourStep } from '../data/tour';
@@ -55,6 +56,12 @@ interface ExplorerState {
   listOpen: boolean;
   /** Tray view layers: structure (bones), parts (muscles), connections (veins). */
   layers: { structure: boolean; parts: boolean; links: boolean };
+  /** Connection kinds hidden in the tray view; empty shows every kind. */
+  hiddenLinkKinds: string[];
+  /** Hide a connection kind, or show it again. */
+  toggleLinkKind: (kind: string) => void;
+  /** Show every connection kind again. */
+  showAllLinkKinds: () => void;
   /** Tray view: parts spread apart by layer so each can be seen and clicked. */
   exploded: boolean;
   toggleExploded: () => void;
@@ -224,6 +231,13 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     set({ panelOpen: open });
   },
   layers: { structure: true, parts: true, links: true },
+  hiddenLinkKinds: initial.lk ?? [],
+  toggleLinkKind: (kind) => {
+    const all = trayLinkKinds(model);
+    if (!all.includes(kind)) return;
+    set({ hiddenLinkKinds: toggleIn(get().hiddenLinkKinds, kind, all) });
+  },
+  showAllLinkKinds: () => set({ hiddenLinkKinds: [] }),
   exploded: false,
   toggleExploded: () => set({ exploded: !get().exploded }),
   network: initial.net ?? '',
@@ -393,6 +407,7 @@ export function syncUrl(): () => void {
       tour: s.tour && showsTourStep(TOUR_STEPS[s.tour.index]!, s, model) ? s.tour.index : undefined,
       ft: s.listFilter.types,
       fn: s.listFilter.nets,
+      lk: s.hiddenLinkKinds,
     });
     if (document.documentElement.lang !== s.lang) document.documentElement.lang = s.lang;
     if (search === window.location.search) return;
