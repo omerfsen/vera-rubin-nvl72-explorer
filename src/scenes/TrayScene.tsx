@@ -23,8 +23,9 @@ import { visibleLinks } from '../data/linkFilter';
 import { i18nFor, useI18n, type I18n } from '../i18n';
 import { isPartSelected, partColor } from './colors';
 import { Rods, type Segment } from './Rods';
-import { FlowRods } from './FlowRods';
-import { isFlowMember, stubFrom } from './flow';
+import { FlowRods, useMotionState } from './FlowRods';
+import { isFlowMember, linkFlowShouldRun, stubFrom } from './flow';
+import { LinkFlow, type FlowLink } from './LinkFlow';
 import {
   CONFLICT_COLOR,
   HOVER_COLOR,
@@ -355,7 +356,20 @@ function LinkTube({
  * thicker; the rest fade while something inside the tray is selected.
  * Hovering a tube shows what it is, its two ends and where NVIDIA states it.
  */
-function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layout: TrayLayout; offsets: Vec[]; amount: number }) {
+function TrayLinks({
+  trayKey,
+  layout,
+  offsets,
+  amount,
+  flow,
+}: {
+  trayKey: string;
+  layout: TrayLayout;
+  offsets: Vec[];
+  amount: number;
+  /** Move dots along the links that are not faded. */
+  flow: boolean;
+}) {
   const trayId = trayKey.split('.')[0]!;
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
@@ -391,6 +405,19 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
   );
   // The card shows the tube under the pointer, or else the pinned one.
   const shownIndex = hover ?? pinned;
+  const focus = shownIndex;
+  const isDim = (i: number) => (focus !== null ? focus !== i : (within !== null && !active.has(links[i]!)) || network !== '');
+  const flowLinks = useMemo<FlowLink[]>(
+    () =>
+      flow
+        ? visible.flatMap(({ link, index }) => {
+            const curve = curves[index];
+            return curve && !isDim(index) ? [{ curve, color: colors[link.kind] ?? '#ffffff' }] : [];
+          })
+        : [],
+    // isDim reads focus, within, active, links and network.
+    [flow, visible, curves, colors, focus, within, active, network],
+  );
   const shown = shownIndex !== null ? links[shownIndex] : undefined;
   const shownCurve = shownIndex !== null ? curves[shownIndex] : null;
   return (
@@ -400,8 +427,7 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
         if (!curve) return null;
         const on = active.has(link);
         const lit = hover === i || pinned === i;
-        const focus = hover ?? pinned;
-        const dim = focus !== null ? focus !== i : (within !== null && !on) || network !== '';
+        const dim = isDim(i);
         return (
           <LinkTube
             key={i}
@@ -432,6 +458,7 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
           />
         );
       })}
+      <LinkFlow links={flowLinks} />
       {connected && shown && shownCurve && (
         <Html position={shownCurve.getPoint(0.5).toArray()} center className={hover === null ? 'link-card pinned' : 'link-card'} style={{ pointerEvents: 'none' }} zIndexRange={[36, 31]}>
           <div data-label data-label-pinned role="tooltip">
@@ -555,6 +582,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
   // The amount links and labels are drawn at; links hide while parts move.
   const [settled, setSettled] = useState(target);
   useEffect(() => invalidate(), [target, invalidate]);
+  const flow = linkFlowShouldRun({ links: layers.links, settled, target, ...useMotionState() });
   const animating = useRef(false);
   useFrame((_, delta) => {
     if (amount.current === target) {
@@ -582,7 +610,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
         ))}
       {layers.parts && <Indicators layout={layout} offsets={offsets} amount={amount} />}
       {layers.links && settled === target && (
-        <TrayLinks trayKey={trayKey} layout={layout} offsets={offsets} amount={settled} />
+        <TrayLinks trayKey={trayKey} layout={layout} offsets={offsets} amount={settled} flow={flow} />
       )}
       {/* The flow stubs sit at the parts' normal places, so they only show when the tray is not exploded. */}
       {layers.links && settled === 0 && target === 0 && <TrayFlow layout={layout} />}

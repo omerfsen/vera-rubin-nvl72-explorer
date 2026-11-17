@@ -34,3 +34,23 @@ export function isFlowMember(networkId: string, componentId: string): boolean {
 export function stubFrom(at: Vec, length = STUB_LENGTH): Segment {
   return { from: at, to: [at[0], at[1], at[2] + length] };
 }
+
+/**
+ * Dots move along the tray's connections only while the connections layer is
+ * on, the parts are not moving (exploding or folding back), the tab is visible
+ * and the viewer has not asked for reduced motion.
+ */
+export function linkFlowShouldRun(o: { links: boolean; settled: number; target: number; reducedMotion: boolean; hidden: boolean }): boolean {
+  return o.links && o.settled === o.target && !o.reducedMotion && !o.hidden;
+}
+
+/**
+ * Where dot `k` of `n` sits along a link, as a fraction of its length, at time
+ * `t` (s) for a speed in metres per second. The data gives no direction for a
+ * link (from and to are only the order the ends are listed in), so odd dots
+ * run the other way: the dots show that the link carries something, not which way.
+ */
+export function dotFraction(t: number, k: number, n: number, speed: number, length: number): number {
+  const u = (((t * speed) / Math.max(length, 1e-6) + k / n) % 1 + 1) % 1;
+  return k % 2 === 1 ? 1 - u : u;
+}

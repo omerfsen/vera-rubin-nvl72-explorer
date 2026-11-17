@@ -148,3 +148,12 @@ Labelled in the guide's figures:
 
 Not explained anywhere: what "HPM" and "ERoT" stand for. HPM_L and HPM_R are
 "HPM Left" and "HPM Right" (2.4 Fig. 4).
+
+## 14. Direction along tray connections
+
+The data lists each tray connection with a `from` and a `to` end, but that is
+only the order the ends are written in. The guide does not state a signal or
+flow direction for PCIe, C2C, Clink, NVLink or power inside a tray, and for
+coolant it names the cold inlet and hot outlet (Fig. 5) but not the path
+between them. The moving dots in the tray view therefore run both ways along
+every connection: they show that a link carries something, not which way.

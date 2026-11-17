@@ -77,6 +77,8 @@ test.describe('rack', () => {
   }
 
   test('hovering a tray part names it', async ({ page }) => {
+    // No moving dots: the software renderer in CI then answers each pointer move quickly.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/?select=compute-tray.3&view=tray');
     await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
     // Connections sit over some parts and show their own card, so hide them for this sweep.
@@ -115,6 +117,8 @@ test.describe('rack', () => {
   });
 
   test('hovering a connection shows its card, and a click pins it in the panel', async ({ page }) => {
+    // No moving dots: the software renderer in CI then answers each pointer move quickly.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/?select=compute-tray.3&view=tray');
     await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
     // Only coolant left, drawn as thick pipes, so the sweep finds one quickly.
@@ -165,6 +169,47 @@ test.describe('rack', () => {
     await page.keyboard.press('Escape');
     await expect.poll(() => param(page, 'select')).toBe('compute-tray.3');
   });
+
+  for (const reduced of [false, true]) {
+    test(`dots move along the tray connections ${reduced ? 'not at all with reduced motion' : 'while idle'}`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on('pageerror', (e) => errors.push(e.message));
+      // Count draw calls: the canvas only redraws while something animates (frameloop="demand").
+      await page.addInitScript(() => {
+        const w = window as unknown as { __draws: number };
+        w.__draws = 0;
+        for (const proto of [WebGL2RenderingContext.prototype, WebGLRenderingContext.prototype]) {
+          for (const name of ['drawElements', 'drawArrays', 'drawElementsInstanced', 'drawArraysInstanced'] as const) {
+            const original = (proto as unknown as Record<string, (...a: unknown[]) => unknown>)[name];
+            if (!original) continue;
+            (proto as unknown as Record<string, unknown>)[name] = function (this: unknown, ...a: unknown[]) {
+              w.__draws++;
+              return original.apply(this, a);
+            };
+          }
+        }
+      });
+      if (reduced) await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.goto('/?select=compute-tray.3&view=tray');
+      await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+      await page.waitForTimeout(1500);
+      const draws = () => page.evaluate(() => (window as unknown as { __draws: number }).__draws);
+      const before = await draws();
+      await page.waitForTimeout(1000);
+      const grew = (await draws()) - before;
+      if (reduced) expect(grew).toBe(0);
+      else expect(grew).toBeGreaterThan(0);
+      // Turning the connections off stops the dots too.
+      if (!reduced) {
+        await page.getByRole('button', { name: 'Connections', exact: true }).click();
+        await page.waitForTimeout(500);
+        const off = await draws();
+        await page.waitForTimeout(1000);
+        expect((await draws()) - off).toBe(0);
+      }
+      expect(errors).toEqual([]);
+    });
+  }
 
   test('keyboard steps through the rack and opens a compute tray', async ({ page }) => {
     await page.goto('/?select=compute-tray.3');
