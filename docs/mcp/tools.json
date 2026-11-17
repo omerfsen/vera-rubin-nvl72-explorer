@@ -1727,6 +1727,170 @@
         "idempotentHint": true,
         "openWorldHint": false
       }
+    },
+    {
+      "name": "nvl72_changes",
+      "title": "What changed in the data",
+      "description": "Lists the changes to this dataset, newest first: the day, the NVIDIA document it followed (\"app-data\" when it follows no single document), the document dates it reflects, the sections touched and a short summary. Also returns the date of each NVIDIA document the data is built from. Use it to say how current the data is.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "document": {
+            "description": "Only changes that followed this document. Leave out for all.",
+            "type": "string",
+            "enum": [
+              "user-guide",
+              "service-manual",
+              "app-data"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "document": {
+                  "type": "string",
+                  "enum": [
+                    "user-guide",
+                    "service-manual"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "document",
+                "title",
+                "date"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "changes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "document": {
+                  "type": "string",
+                  "enum": [
+                    "user-guide",
+                    "service-manual",
+                    "app-data"
+                  ]
+                },
+                "reflects": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "document": {
+                        "type": "string",
+                        "enum": [
+                          "user-guide",
+                          "service-manual"
+                        ]
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "sha256": {
+                        "type": "string"
+                      },
+                      "note": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "document",
+                      "date"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "sections": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "section": {
+                        "type": "string"
+                      },
+                      "figure": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "section"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "commit": {
+                  "type": "string"
+                },
+                "pr": {
+                  "type": "number"
+                },
+                "issue": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "date",
+                "document",
+                "reflects",
+                "sections",
+                "summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "page": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "documents",
+          "changes",
+          "page"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "What changed in the data",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     }
   ]
 }

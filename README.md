@@ -114,6 +114,10 @@ https://verarubin-nvl72.faruk.net. https://vr-nvl72.faruk.net redirects there.
 - **Sources page.** Lists both documents, every conflict between NVIDIA's
   figures and tables, and every assumed fact with its reason, generated from
   the data.
+- **What changed page.** Lists each change to the data, newest first: the
+  document and version it follows, the NVIDIA sections it touched and the
+  commit. It also shows the fingerprint of each PDF the data was built from.
+  Open it from the footer, the Sources page or `?page=changes`.
 - **The dataset.** The site publishes `data/nvl72-topology.json` and its schema
   next to the app, for reuse in other tools.
 - **Share and embed.** Every view has a link. **Copy link** next to a part's
@@ -209,7 +213,7 @@ images from `docs.nvidia.com`, and the figures load with no referrer.
   and by network.
 - The URL holds what is on screen, so any link can be shared: `select`
   (part), `view` (`rear` or `tray`), `list`, `net` (network overlay), `proc`
-  and `step` (walkthrough), `page=sources`, `cmp` (comparison), `quiz` (quiz
+  and `step` (walkthrough), `page` (`sources` or `changes`), `cmp` (comparison), `quiz` (quiz
   round), `tour` (tour step, from 1), `ft` and `fn` (list filters) and `lang`. For example
   `?select=compute-tray.7&list=1`.
 - Power shelves are numbered 1 to 4 from the bottom up, as in NVIDIA's service
@@ -262,7 +266,7 @@ https://verarubin-nvl72.faruk.net/mcp
 
 ### Check that it works
 
-1. In Claude Code, run `claude mcp list`: `vr-nvl72` should show as connected. In other clients, the server's ten `nvl72_*` tools should appear in the tool list.
+1. In Claude Code, run `claude mcp list`: `vr-nvl72` should show as connected. In other clients, the server's eleven `nvl72_*` tools should appear in the tool list.
 2. Ask: "How many GPUs are in a Vera Rubin NVL72 rack?" The answer should be 72 (18 compute trays with 4 GPUs each), from `nvl72_overview` and `nvl72_get_component`, citing section 1.2 of the User Guide.
 3. Ask: "Which physical port is enP1p3s0f0np0?" It should find C1/C1_1 on bus `0001:03:00.0` with `nvl72_search`.
 4. Ask: "Where is compute tray 7 in the rack?" `nvl72_rack_layout` places it 14 RU from the top.

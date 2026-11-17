@@ -34,5 +34,7 @@ for (const c of changed) {
   console.log(`  - before: last modified ${c.lastModified}, sha256 \`${c.sha256}\``);
   console.log(`  - now: last modified ${c.newLastModified || 'unknown'}, sha256 \`${c.newSha256}\``);
 }
-console.log('\nRead the new version, update data/nvl72-topology.json and its sources, then update data/doc-fingerprints.json.');
+console.log(
+  '\nRead the new version, update data/nvl72-topology.json and its sources, add a `changelog` entry there (the document, its new date and SHA-256, the sections touched, a short summary and this issue\'s number), then update data/doc-fingerprints.json. `npm test` fails until the changelog matches the new fingerprint; the entry is what the What changed page (`?page=changes`) shows.',
+);
 process.exit(1);

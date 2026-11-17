@@ -3,6 +3,7 @@ import { Breadcrumb } from './components/Breadcrumb';
 import { NetworkBar } from './components/NetworkBar';
 import { Credits } from './components/Credits';
 import { SourcesPage } from './components/SourcesPage';
+import { ChangesPage } from './components/ChangesPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RackList } from './components/RackList';
 import { Search } from './components/Search';
@@ -239,7 +240,7 @@ export default function App() {
         <LanguageSwitcher />
         <ThemeSwitcher />
         {SHOW_RECORDER && !embed && <Recorder />}
-        {screenshotAvailable({ flag: SHOW_SCREENSHOT, webgl, embed }) && page !== 'sources' && <Screenshot />}
+        {screenshotAvailable({ flag: SHOW_SCREENSHOT, webgl, embed }) && page === '' && <Screenshot />}
         {!embed && <TourButton />}
         {!embed && <QuizButton />}
         {webgl && !embed && <HintButton />}
@@ -262,10 +263,8 @@ export default function App() {
       <Breadcrumb />
       <NetworkBar />
 
-      {page === 'sources' ? (
-        <main className="layout-page">
-          <SourcesPage />
-        </main>
+      {page === 'sources' || page === 'changes' ? (
+        <main className="layout-page">{page === 'changes' ? <ChangesPage /> : <SourcesPage />}</main>
       ) : (
       <main
         className={
@@ -361,6 +360,9 @@ export default function App() {
           serviceManualDate: model.topology.meta.serviceManual?.date ?? '',
           trademarks: t('site.trademarks'),
         })}{' '}
+        <button type="button" className="link-button" onClick={() => setPage('changes')}>
+          {t('changes.title')}
+        </button>{' '}
         <Credits />
       </footer>
     </div>

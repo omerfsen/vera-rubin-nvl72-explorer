@@ -39,7 +39,7 @@ longer holds: such a tool needs authentication, and stdio stays the default.
 | --- | --- | --- |
 | Every argument is an enum built from the data, a bounded integer or a string of at most 80 characters; unknown fields refused (`.strict()`) | `mcp/server.ts` | `tests/mcp.test.ts` "hostile arguments are refused" (path traversal, extra keys, empty, too long, out of range); `scripts/mcp-wire.mjs` on the bundle |
 | No file paths, shell, network calls or writes in any tool | `mcp/server.ts` | Code review; the only input file is bundled at build time |
-| Read and write separated; all ten tools carry `readOnlyHint: true`, `destructiveHint: false` | `mcp/server.ts` | `tests/mcp.test.ts` "lists ten read-only tools" |
+| Read and write separated; all eleven tools carry `readOnlyHint: true`, `destructiveHint: false` | `mcp/server.ts` | `tests/mcp.test.ts` "lists eleven read-only tools" |
 | Rate limit on tool calls, per caller (stdio: 30 then 5/s; HTTP: 30 then 1/s per IP) | `mcp/ratelimit.ts`, `createServer` | `tests/mcp.test.ts` "a tool call over the limit comes back as an error" |
 | Rate limit on HTTP requests per IP (60 then 2/s), 429 with `Retry-After` | `mcp/http.ts` | `tests/mcp.test.ts` "answers 429"; live burst in `results/` |
 | Host allowlist (the two domains, this project's Vercel URLs, localhost) | `mcp/http.ts` | `tests/mcp.test.ts` "refuses a foreign Host or Origin" |

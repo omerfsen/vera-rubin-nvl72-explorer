@@ -137,6 +137,11 @@ export function SourcesPage() {
           </li>
         )}
       </ul>
+      <p>
+        <button type="button" className="link-button" onClick={() => setPage('changes')}>
+          {t('sources.whatChanged')}
+        </button>
+      </p>
       <h3>{t('sources.conflicts', { count: questions.filter((q) => q.kind === 'conflict').length })}</h3>
       <ul className="plain">
         {questions

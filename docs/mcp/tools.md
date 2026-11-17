@@ -80,3 +80,11 @@ Returns terms and abbreviations (BMC, CRU, NVLink, TOR, ...) as NVIDIA's documen
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
 | `id` | one of 23 ids (see tools.json) | no | Only this term, e.g. "bmc". Leave out for all. |
+
+## `nvl72_changes`: What changed in the data
+
+Lists the changes to this dataset, newest first: the day, the NVIDIA document it followed ("app-data" when it follows no single document), the document dates it reflects, the sections touched and a short summary. Also returns the date of each NVIDIA document the data is built from. Use it to say how current the data is.
+
+| Argument | Type | Required | Description |
+| --- | --- | --- | --- |
+| `document` | `user-guide`, `service-manual`, `app-data` | no | Only changes that followed this document. Leave out for all. |

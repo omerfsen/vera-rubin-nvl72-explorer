@@ -26,7 +26,7 @@ Read `README.md` for what it does and `docs/DATA_MODEL.md` for the data.
 
 | Path | What |
 | --- | --- |
-| `data/nvl72-topology.json` | All facts: components, networks, rack/tray/rear layouts, connections, Table 2.4, service procedures, open questions, per-component document references |
+| `data/nvl72-topology.json` | All facts: components, networks, rack/tray/rear layouts, connections, Table 2.4, service procedures, open questions, per-component document references, and the `changelog` |
 | `data/nvl72-topology.schema.json` | JSON Schema for it (draft 2020-12) |
 | `data/display.json` | Colours, link names and rear styling only; no facts |
 | `data/site.json` | Page title, tagline, trademark line and the author links |
@@ -67,7 +67,18 @@ must place every part inside the tray or list it in `notPlaced` with a reason;
 `.github/workflows/doc-watch.yml` checks both PDFs every Monday against
 `data/doc-fingerprints.json` (`npm run docs:check` by hand) and opens an issue
 titled "NVIDIA documentation changed" when one differs. Read the new version,
-update the data and its sources, then update the fingerprints.
+update the data and its sources (and `meta.document.date` or
+`meta.serviceManual.date`), then update the fingerprints.
+
+Add a changelog entry: put a new item at the top of `changelog` in
+`data/nvl72-topology.json` with the day, the document, the date and SHA-256 of
+the version it now reflects, the sections touched (same source URL rule), a
+short summary of what changed in the data, and the issue or PR number. The
+What changed page (`page=changes`) and the `nvl72_changes` MCP tool show it.
+`tests/changelog.test.ts` fails when a fingerprint is newer than the newest
+entry for its document. The log is append-only: never edit the date or
+`reflects` of an existing entry, add a new one and list it in that test. Write only what the diff of the data proves, and add
+the summary's translation to `tr`, `zh`, `ru` and `es`.
 
 ## Licensing (strict)
 

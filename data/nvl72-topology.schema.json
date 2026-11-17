@@ -308,6 +308,13 @@
       "items": {
         "$ref": "#/$defs/glossaryTerm"
       }
+    },
+    "changelog": {
+      "description": "What changed in NVIDIA's documents and how this data followed, newest first. A new document date or fingerprint in data/doc-fingerprints.json needs an entry here; tests/changelog.test.ts checks it.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/changelogEntry"
+      }
     }
   },
   "$defs": {
@@ -1589,6 +1596,97 @@
         },
         "source": {
           "$ref": "#/$defs/source"
+        }
+      }
+    },
+    "changelogEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "date",
+        "document",
+        "reflects",
+        "sections",
+        "summary"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "date": {
+          "description": "The day the data changed.",
+          "type": "string",
+          "format": "date"
+        },
+        "document": {
+          "description": "The NVIDIA document the data followed, or \"app-data\" for a change to the data that follows no single document.",
+          "enum": [
+            "user-guide",
+            "service-manual",
+            "app-data"
+          ]
+        },
+        "reflects": {
+          "description": "The version of each NVIDIA document the data matched after this change: its date, and the SHA-256 of its PDF when known.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "document",
+              "date"
+            ],
+            "properties": {
+              "document": {
+                "enum": [
+                  "user-guide",
+                  "service-manual"
+                ]
+              },
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "note": {
+                "description": "How sure the date or the SHA-256 is, when it was not read directly from the PDF at the time.",
+                "type": "string",
+                "pattern": "\\S"
+              }
+            }
+          }
+        },
+        "sections": {
+          "description": "The sections of NVIDIA's documents this change touched. May be empty for an app-data entry.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "summary": {
+          "description": "What changed in this data.",
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "commit": {
+          "description": "Git commit of the change in this repository.",
+          "type": "string",
+          "pattern": "^[0-9a-f]{7,40}$"
+        },
+        "pr": {
+          "description": "Pull request number in this repository.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "issue": {
+          "description": "Issue number in this repository, e.g. the \"NVIDIA documentation changed\" issue.",
+          "type": "integer",
+          "minimum": 1
         }
       }
     }

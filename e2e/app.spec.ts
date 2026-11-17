@@ -382,6 +382,47 @@ test.describe('operator features', () => {
     await expect(page.getByRole('button', { name: 'Screenshot', exact: true })).toHaveCount(0);
   });
 
+  test('the What changed page opens from its URL and lists the changes with NVIDIA links', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto('/?page=changes');
+    await expect(page.getByRole('heading', { name: 'What changed' })).toBeVisible();
+    const entries = page.locator('.changes-list > li');
+    await expect(entries.first()).toBeVisible();
+    expect(await entries.count()).toBeGreaterThan(1);
+    // Newest first.
+    const dates = await entries.locator('time').evaluateAll((els) => els.map((e) => e.getAttribute('datetime') ?? ''));
+    expect([...dates].sort().reverse()).toEqual(dates);
+    // The first import of each document is there, with its date.
+    await expect(entries.filter({ hasText: 'First import of the User Guide dated 2026-11-05' })).toHaveCount(1);
+    await expect(entries.filter({ hasText: 'First import of the Service Manual dated 2026-10-07' })).toHaveCount(1);
+    await expect(entries.filter({ hasText: 'Detailed the fronts of the power shelf' })).toHaveCount(1);
+    await expect(page.getByText(/The SHA-256 is inferred/)).toHaveCount(2);
+    // Every section link goes to one of NVIDIA's two documents.
+    const hrefs = await page.locator('.changes-list details a').evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).href));
+    expect(hrefs.length).toBeGreaterThan(10);
+    for (const h of hrefs) expect(h).toMatch(/^https:\/\/docs\.nvidia\.com\/dgx\/dgxvr-(user-guide|service-manual)\/[a-z-]+\.html(#[a-z0-9-]+)?$/);
+    const guide = entries.filter({ hasText: 'First import of the User Guide' });
+    await guide.locator('summary').click();
+    await expect(guide.getByRole('link', { name: '1.1 Rack Configuration' })).toHaveAttribute(
+      'href',
+      'https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration',
+    );
+    // The fingerprints of both PDFs.
+    await expect(page.getByRole('link', { name: 'NVIDIA DGX VR NVL72 User Guide' })).toHaveAttribute('href', /dgxvr-user-guide\.pdf$/);
+    await expect(page.getByText(/PDF last modified on 2026-10-07/)).toBeVisible();
+    // It is reachable from the footer and from the Sources page, and the URL follows.
+    await page.getByRole('button', { name: 'Sources and open questions' }).click();
+    await expect.poll(() => param(page, 'page')).toBe('sources');
+    await page.getByRole('button', { name: 'What changed in these documents and in the data' }).click();
+    await expect.poll(() => param(page, 'page')).toBe('changes');
+    await page.getByRole('button', { name: '← Back to the rack' }).click();
+    await expect.poll(() => param(page, 'page')).toBe(null);
+    await page.locator('footer').getByRole('button', { name: 'What changed' }).click();
+    await expect(page.getByRole('heading', { name: 'What changed' })).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+
   test('camera presets move the view and Reset brings it back', async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', (e) => errors.push(e.message));

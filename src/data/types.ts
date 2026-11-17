@@ -280,6 +280,22 @@ export interface GlossaryTerm {
   source: Source;
 }
 
+/** One change to the data, and the version of NVIDIA's documents it followed. */
+export interface ChangelogEntry {
+  id: string;
+  /** The day the data changed. */
+  date: string;
+  /** The document the data followed, or "app-data" for a change that follows no single document. */
+  document: 'user-guide' | 'service-manual' | 'app-data';
+  /** The version of each document the data matched after this change. */
+  reflects: { document: 'user-guide' | 'service-manual'; date: string; sha256?: string; note?: string }[];
+  sections: Source[];
+  summary: string;
+  commit?: string;
+  pr?: number;
+  issue?: number;
+}
+
 export interface Topology {
   $schema?: string;
   schemaVersion: 1;
@@ -301,6 +317,8 @@ export interface Topology {
   commandNotes?: { usage: string; factoryReset: string; source: Source };
   safety?: SafetyNote[];
   glossary?: GlossaryTerm[];
+  /** What changed in the documents and how the data followed, newest first. */
+  changelog?: ChangelogEntry[];
   procedures?: Procedure[];
   /** Which two unit types the NVLink fabric joins, and through which rear part. */
   nvlinkFabric?: Provenance & { endpoints: [string, string]; through: string; description: string; textSources?: Source[] };

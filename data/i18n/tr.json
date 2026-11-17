@@ -329,7 +329,8 @@
       "trayNumbering": "Tepsi numaralandırması",
       "layoutOf": "{name} yerleşimi",
       "linkIn": "{name} içinde {kind} bağlantısı",
-      "rearLayout": "Arka yerleşim"
+      "rearLayout": "Arka yerleşim",
+      "whatChanged": "Bu belgelerde ve verilerde neler değişti"
     },
     "types": {
       "rack": "kabin",
@@ -413,7 +414,8 @@
       "startQuiz": "Bir test başlat",
       "stopProcedure": "Adım adım anlatımı durdur",
       "language": "Dil: {name}",
-      "theme": "Tema: {name}"
+      "theme": "Tema: {name}",
+      "openChanges": "Neler değişti sayfasını aç"
     },
     "quiz": {
       "start": "Test",
@@ -472,6 +474,20 @@
       "done": "tamam",
       "gotIt": "Anladım",
       "show": "İpuçlarını göster"
+    },
+    "changes": {
+      "title": "Neler değişti",
+      "intro": "NVIDIA belgelerini zaman zaman günceller. Bu sayfa, bu gezginin arkasındaki verilerde yapılan her değişikliği en yeniden eskiye doğru listeler: izlediği belge, yansıttığı belge sürümleri ve dokunduğu bölümler.",
+      "fingerprints": "Verilerin dayandığı belgeler",
+      "fingerprint": "PDF'in son değiştirilme tarihi: {date}. SHA-256 başlangıcı:",
+      "watch": "Haftalık bir denetim bu parmak izlerini docs.nvidia.com'daki PDF'lerle karşılaştırır ve biri farklıysa bir kayıt açar. Veriler denetimin en son ne zaman çalıştığını tutmaz.",
+      "entries": "Verilerdeki değişiklikler ({count})",
+      "appData": "Uygulama verisi",
+      "reflects": "Yansıttığı sürüm: {list}",
+      "sections": "NVIDIA bölümleri ({count})",
+      "pr": "Çekme isteği #{number}",
+      "issue": "Kayıt #{number}",
+      "commit": "Commit {hash}"
     }
   },
   "content": {
@@ -1604,6 +1620,41 @@
       "sbios": {
         "expansion": "Sistem BIOS'u",
         "definition": "Hesaplama tepsisinin sistem BIOS'u. Ayarları fabrika varsayılanlarına geri yüklenebilir."
+      }
+    },
+    "changelog": {
+      "glossary": {
+        "summary": "23 terim ve kısaltmadan oluşan bir sözlük eklendi; her biri, NVIDIA belgelerinde onu açan veya tanımlayan bölümle birlikte."
+      },
+      "numbering-and-inferred-facts": {
+        "summary": "CPU'lar ve GPU'lar, hesaplama tepsisi blok şemasındaki gibi 0'dan başlayarak numaralandırıldı. Kılavuzun belirtmediği bilgiler, örneğin hangi anahtar tepsisi portunun kabin üstü anahtarlara ulaştığı, varsayım olarak işaretlendi. PSU ve güç rafı yönetim modülünün LED'leri Servis Kılavuzu'nun söylediğine indirildi: arızada kehribar. Bara ile anahtar tepsileri arasındaki bağlantıdan varsayım işareti kaldırıldı; bunu 1.1 ve 1.4 bölümleri destekliyor."
+      },
+      "guide-software-commands-operations-safety": {
+        "summary": "Kullanım Kılavuzu'nun 4-8. bölümlerinden 15 yazılım girdisi, 30 BMC komutu, 8 güvenlik uyarısı ve 5 işletim prosedürü (devreye alma, soğuk ve sıcak yeniden başlatma, yeniden başlatma sonrası doğrulama ve sağlık kontrolü) eklendi."
+      },
+      "open-questions-and-references": {
+        "summary": "13 açık soru (NVIDIA belgelerindeki 6 çelişki ve 7 boşluk) kaydedildi ve her bileşene belge referansları listesi eklendi."
+      },
+      "service-procedures": {
+        "summary": "Servis Kılavuzu'ndaki beş değiştirme prosedürü adım adım eklendi: güç kaynağı, güç rafı yönetim modülü, E1.S önbellek sürücüsü, hesaplama tepsisi pili ve NVLink anahtar tepsisi pili."
+      },
+      "pcie-devices": {
+        "summary": "Bölüm 2.4'teki ağ arayüzü adı tablolarında yer alan 24 PCIe aygıtı ve bir bağlantı (ConnectX-9 G/Ç kartlarından computenet'e) eklendi; bağlantı sayısı 24'ten 25'e çıktı."
+      },
+      "power-shelf-and-tor-fronts": {
+        "summary": "Güç rafının ve kabin üstü anahtarın ön yüzleri ayrıntılandırıldı: 4 yeni parça (yönetim modülünün RJ45 portu ve üç tür ToR anahtar portu), ToR anahtarı için bir yerleşim ve bir bağlantı. Böylece veriler 52'den 56 bileşene, 23'ten 24 bağlantıya ve 3'ten 4 tepsi yerleşimine çıktı."
+      },
+      "service-manual-first-import": {
+        "summary": "2026-10-07 tarihli Servis Kılavuzu'nun ilk aktarımı: müşteri tarafından değiştirilebilen birimler; kaynakları kılavuzun her değiştirme bölümünde.",
+        "reflects": {
+          "service-manual": "SHA-256 çıkarımdır: parmak izleri bu aktarımdan yaklaşık 75 dakika sonra kaydedildi ve PDF her ikisinden de önce son kez değiştirilmişti."
+        }
+      },
+      "user-guide-first-import": {
+        "summary": "2026-11-05 tarihli Kullanım Kılavuzu'nun ilk aktarımı: 1. (Donanım), 2. (Ağ) ve 3. (Depolama) bölümlerden 52 bileşen, 7 ağ ve 23 bağlantı.",
+        "reflects": {
+          "user-guide": "SHA-256 çıkarımdır: parmak izleri bu aktarımdan yaklaşık 75 dakika sonra kaydedildi ve PDF her ikisinden de önce son kez değiştirilmişti."
+        }
       }
     }
   }
