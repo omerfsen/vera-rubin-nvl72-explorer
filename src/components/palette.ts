@@ -19,7 +19,7 @@ export interface PaletteItem {
 
 type ActionSpec = Omit<PaletteItem, 'kind' | 'keywords'>;
 
-/** Leave the Sources page, so whatever the action shows is on screen. */
+/** Leave the Sources or What changed page, so whatever the action shows is on screen. */
 const leavePage = (s: Explorer) => {
   if (s.page !== '') s.setPage('');
 };
@@ -64,10 +64,11 @@ function specs(model: Model, s: Explorer, i18n: I18n, webgl: boolean): ActionSpe
     out.push({ id: 'network:clear', label: t('palette.clearNetwork'), detail: t('networkBar.label'), run: (x) => x.setNetwork(x.network) });
   }
   out.push(
-    s.page === 'sources'
+    s.page !== ''
       ? { id: 'page:close', label: t('palette.closeSources'), detail: '', run: (x) => x.setPage('') }
       : { id: 'page:sources', label: t('palette.openSources'), detail: '', run: (x) => x.setPage('sources') },
   );
+  if (s.page !== 'changes') out.push({ id: 'page:changes', label: t('palette.openChanges'), detail: '', run: (x) => x.setPage('changes') });
   if (!s.embed) out.push({ id: 'quiz', label: t('palette.startQuiz'), detail: t('quiz.aria'), run: (x) => x.startQuiz() });
   if (s.compare !== '') {
     out.push({ id: 'compare:stop', label: t('compare.stop'), detail: t('compare.heading'), run: (x) => x.stopCompare() });

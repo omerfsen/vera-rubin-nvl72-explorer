@@ -323,7 +323,8 @@
       "trayNumbering": "Tray numbering",
       "layoutOf": "Layout of the {name}",
       "linkIn": "{kind} link in the {name}",
-      "rearLayout": "Rear layout"
+      "rearLayout": "Rear layout",
+      "whatChanged": "What changed in these documents and in the data"
     },
     "types": {
       "rack": "rack",
@@ -407,7 +408,8 @@
       "startQuiz": "Start a quiz",
       "stopProcedure": "Stop the walkthrough",
       "language": "Language: {name}",
-      "theme": "Theme: {name}"
+      "theme": "Theme: {name}",
+      "openChanges": "Open the What changed page"
     },
     "quiz": {
       "start": "Quiz",
@@ -466,6 +468,20 @@
       "done": "done",
       "gotIt": "Got it",
       "show": "Show tips"
+    },
+    "changes": {
+      "title": "What changed",
+      "intro": "NVIDIA updates its documents from time to time. This page lists each change to the data behind this explorer, newest first: the document it follows, the document versions it reflects and the sections it touched.",
+      "fingerprints": "The documents the data was built from",
+      "fingerprint": "PDF last modified on {date}. SHA-256 starts with",
+      "watch": "A weekly check compares these fingerprints with the PDFs on docs.nvidia.com and opens an issue when one differs. The data does not record when the check last ran.",
+      "entries": "Changes to the data ({count})",
+      "appData": "App data",
+      "reflects": "Reflects {list}",
+      "sections": "NVIDIA sections ({count})",
+      "pr": "Pull request #{number}",
+      "issue": "Issue #{number}",
+      "commit": "Commit {hash}"
     }
   },
   "content": {
@@ -1598,6 +1614,41 @@
       "sbios": {
         "expansion": "System BIOS",
         "definition": "The system BIOS of the compute tray. Its settings can be restored to their factory defaults."
+      }
+    },
+    "changelog": {
+      "glossary": {
+        "summary": "Added a glossary of 23 terms and abbreviations, each with the section of NVIDIA's documents that expands or defines it."
+      },
+      "numbering-and-inferred-facts": {
+        "summary": "Numbered the CPUs and GPUs from 0, as the compute tray block diagram does. Marked as assumed the facts the guide does not state, such as which switch tray port reaches the top-of-rack switches. Cut the LEDs of the PSU and the power shelf management module back to what the Service Manual says: amber on failure. Removed the assumed mark from the bus bar link to the switch trays, which sections 1.1 and 1.4 support."
+      },
+      "guide-software-commands-operations-safety": {
+        "summary": "Added 15 software entries, 30 BMC commands, 8 safety notices and 5 operating procedures (bring-up, cold and warm reboot, post-reboot verification and the health check) from chapters 4 to 8 of the User Guide."
+      },
+      "open-questions-and-references": {
+        "summary": "Recorded 13 open questions (6 conflicts in NVIDIA's documents and 7 gaps) and gave every component its list of document references."
+      },
+      "service-procedures": {
+        "summary": "Added the five replacement procedures of the Service Manual step by step: power supply, power shelf management module, E1.S cache drive, compute tray battery and NVLink switch tray battery."
+      },
+      "pcie-devices": {
+        "summary": "Added the 24 PCIe devices of the network interface name tables in section 2.4, and one connection, the ConnectX-9 I/O cards to computenet, which took the connections from 24 to 25."
+      },
+      "power-shelf-and-tor-fronts": {
+        "summary": "Detailed the fronts of the power shelf and the top-of-rack switch: 4 more parts (the management module's RJ45 port and three kinds of ToR switch port), a layout for the ToR switch and one connection. That took the data from 52 to 56 components, from 23 to 24 connections and from 3 to 4 tray layouts."
+      },
+      "service-manual-first-import": {
+        "summary": "First import of the Service Manual dated 2026-10-07: the customer-replaceable units, with sources in each of its replacement chapters.",
+        "reflects": {
+          "service-manual": "The SHA-256 is inferred: the fingerprints were recorded about 75 minutes after this import, and the PDF was last modified before both."
+        }
+      },
+      "user-guide-first-import": {
+        "summary": "First import of the User Guide dated 2026-11-05: 52 components, 7 networks and 23 connections from chapters 1 (Hardware), 2 (Networking) and 3 (Storage).",
+        "reflects": {
+          "user-guide": "The SHA-256 is inferred: the fingerprints were recorded about 75 minutes after this import, and the PDF was last modified before both."
+        }
       }
     }
   }

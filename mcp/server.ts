@@ -74,6 +74,18 @@ const GlossaryZ = z.object({
   definition: z.string(),
   source: SourceZ,
 });
+const DocumentZ = z.enum(['user-guide', 'service-manual']);
+const ChangeZ = z.object({
+  id: z.string(),
+  date: z.string(),
+  document: z.enum(['user-guide', 'service-manual', 'app-data']),
+  reflects: z.array(z.object({ document: DocumentZ, date: z.string(), sha256: z.string().optional(), note: z.string().optional() })),
+  sections: z.array(SourceZ),
+  summary: z.string(),
+  commit: z.string().optional(),
+  pr: z.number().optional(),
+  issue: z.number().optional(),
+});
 const SafetyZ =z.object({ id: z.string(), title: z.string(), text: z.string(), source: SourceZ });
 const QuestionZ = z.object({
   id: z.string(),
@@ -518,6 +530,37 @@ export function createServer(opts: ServerOptions = {}): McpServer {
       const stop = limited();
       if (stop) return stop;
       return ok({ terms: (topology.glossary ?? []).filter((g) => !id || g.id === id) });
+    },
+  );
+
+  server.registerTool(
+    'nvl72_changes',
+    {
+      title: 'What changed in the data',
+      description:
+        'Lists the changes to this dataset, newest first: the day, the NVIDIA document it followed ("app-data" when it follows no single document), the document dates it reflects, the sections touched and a short summary. Also returns the date of each NVIDIA document the data is built from. Use it to say how current the data is.',
+      inputSchema: z
+        .object({ document: z.enum(['user-guide', 'service-manual', 'app-data']).optional().describe('Only changes that followed this document. Leave out for all.') })
+        .strict(),
+      outputSchema: z.object({
+        documents: z.array(z.object({ document: DocumentZ, title: z.string(), date: z.string() })),
+        changes: z.array(ChangeZ),
+        page: z.string(),
+      }),
+      annotations: { title: 'What changed in the data', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async ({ document }) => {
+      const stop = limited();
+      if (stop) return stop;
+      const { document: guide, serviceManual } = topology.meta;
+      return ok({
+        documents: [
+          { document: 'user-guide', title: guide.title, date: guide.date },
+          ...(serviceManual ? [{ document: 'service-manual', title: serviceManual.title, date: serviceManual.date }] : []),
+        ],
+        changes: (topology.changelog ?? []).filter((e) => !document || e.document === document),
+        page: explorerLink({ page: 'changes' }),
+      });
     },
   );
 

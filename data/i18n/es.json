@@ -323,7 +323,8 @@
       "trayNumbering": "Numeración de las bandejas",
       "layoutOf": "Disposición de {name}",
       "linkIn": "Enlace {kind} en {name}",
-      "rearLayout": "Disposición trasera"
+      "rearLayout": "Disposición trasera",
+      "whatChanged": "Qué cambió en estos documentos y en los datos"
     },
     "types": {
       "rack": "rack",
@@ -407,7 +408,8 @@
       "startQuiz": "Empezar un cuestionario",
       "stopProcedure": "Detener el recorrido",
       "language": "Idioma: {name}",
-      "theme": "Tema: {name}"
+      "theme": "Tema: {name}",
+      "openChanges": "Abrir la página Qué cambió"
     },
     "quiz": {
       "start": "Cuestionario",
@@ -466,6 +468,20 @@
       "done": "hecho",
       "gotIt": "Entendido",
       "show": "Mostrar consejos"
+    },
+    "changes": {
+      "title": "Qué cambió",
+      "intro": "NVIDIA actualiza sus documentos de vez en cuando. Esta página enumera cada cambio en los datos de este explorador, del más reciente al más antiguo: el documento que sigue, las versiones de los documentos que refleja y las secciones afectadas.",
+      "fingerprints": "Los documentos de los que proceden los datos",
+      "fingerprint": "PDF modificado por última vez el {date}. El SHA-256 empieza por",
+      "watch": "Una comprobación semanal compara estas huellas con los PDF de docs.nvidia.com y abre una incidencia cuando alguna difiere. Los datos no registran cuándo se ejecutó la comprobación por última vez.",
+      "entries": "Cambios en los datos ({count})",
+      "appData": "Datos de la aplicación",
+      "reflects": "Refleja {list}",
+      "sections": "Secciones de NVIDIA ({count})",
+      "pr": "Pull request #{number}",
+      "issue": "Incidencia #{number}",
+      "commit": "Commit {hash}"
     }
   },
   "content": {
@@ -1598,6 +1614,41 @@
       "sbios": {
         "expansion": "BIOS del sistema",
         "definition": "El BIOS del sistema de la bandeja de cómputo. Su configuración puede restablecerse a los valores de fábrica."
+      }
+    },
+    "changelog": {
+      "glossary": {
+        "summary": "Se añadió un glosario de 23 términos y abreviaturas, cada uno con la sección de los documentos de NVIDIA que lo desarrolla o define."
+      },
+      "numbering-and-inferred-facts": {
+        "summary": "Las CPU y las GPU se numeran desde 0, como en el diagrama de bloques de la bandeja de cómputo. Se marcaron como supuestos los datos que la guía no indica, por ejemplo qué puerto de la bandeja de conmutación llega a los conmutadores de parte superior del rack. Los LED de la PSU y del módulo de gestión del estante de alimentación se redujeron a lo que dice el Service Manual: ámbar en caso de fallo. Se quitó la marca de supuesto del enlace de la barra colectora con las bandejas de conmutación, que las secciones 1.1 y 1.4 respaldan."
+      },
+      "guide-software-commands-operations-safety": {
+        "summary": "Se añadieron 15 entradas de software, 30 comandos de BMC, 8 avisos de seguridad y 5 procedimientos de operación (puesta en línea, reinicio en frío y en caliente, verificación tras el reinicio y comprobación de estado) de los capítulos 4 a 8 de la User Guide."
+      },
+      "open-questions-and-references": {
+        "summary": "Se registraron 13 preguntas abiertas (6 conflictos en los documentos de NVIDIA y 7 lagunas) y cada componente recibió su lista de referencias a los documentos."
+      },
+      "service-procedures": {
+        "summary": "Se añadieron paso a paso los cinco procedimientos de reemplazo del Service Manual: fuente de alimentación, módulo de gestión del estante de alimentación, unidad de caché E1.S, batería de la bandeja de cómputo y batería de la bandeja de conmutación NVLink."
+      },
+      "pcie-devices": {
+        "summary": "Se añadieron los 24 dispositivos PCIe de las tablas de nombres de interfaces de red de la sección 2.4 y una conexión (las tarjetas de E/S ConnectX-9 con computenet), con lo que las conexiones pasaron de 24 a 25."
+      },
+      "power-shelf-and-tor-fronts": {
+        "summary": "Se detallaron los frontales del estante de alimentación y del conmutador de parte superior del rack: 4 piezas más (el puerto RJ45 del módulo de gestión y tres tipos de puerto del conmutador ToR), un diseño para el conmutador ToR y una conexión. Los datos pasaron así de 52 a 56 componentes, de 23 a 24 conexiones y de 3 a 4 diseños de bandeja."
+      },
+      "service-manual-first-import": {
+        "summary": "Primera importación del Service Manual del 2026-10-07: las unidades reemplazables por el cliente, con fuentes en cada uno de sus capítulos de reemplazo.",
+        "reflects": {
+          "service-manual": "El SHA-256 es inferido: las huellas se registraron unos 75 minutos después de esta importación, y el PDF se modificó por última vez antes de ambas."
+        }
+      },
+      "user-guide-first-import": {
+        "summary": "Primera importación de la User Guide del 2026-11-05: 52 componentes, 7 redes y 23 conexiones de los capítulos 1 (Hardware), 2 (Networking) y 3 (Storage).",
+        "reflects": {
+          "user-guide": "El SHA-256 es inferido: las huellas se registraron unos 75 minutos después de esta importación, y el PDF se modificó por última vez antes de ambas."
+        }
       }
     }
   }

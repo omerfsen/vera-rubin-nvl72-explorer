@@ -9105,5 +9105,468 @@
         "section": "6.4.1.7.4 Reset SBIOS to Defaults"
       }
     }
+  ],
+  "changelog": [
+    {
+      "id": "glossary",
+      "date": "2026-11-16",
+      "document": "app-data",
+      "reflects": [
+        {
+          "document": "user-guide",
+          "date": "2026-11-05",
+          "sha256": "a80572227a6175d85a5f8209acfcf8b6ab573da3e5d50f9f29f946ec9627986e"
+        },
+        {
+          "document": "service-manual",
+          "date": "2026-10-07",
+          "sha256": "9e7cef3fa7ee2767f3dacc5350d393cdefe0f30045303bd23976ce380618bf50"
+        }
+      ],
+      "sections": [],
+      "summary": "Added a glossary of 23 terms and abbreviations, each with the section of NVIDIA's documents that expands or defines it.",
+      "commit": "b3b9e5a",
+      "pr": 39
+    },
+    {
+      "id": "numbering-and-inferred-facts",
+      "date": "2026-11-15",
+      "document": "app-data",
+      "reflects": [
+        {
+          "document": "user-guide",
+          "date": "2026-11-05",
+          "sha256": "a80572227a6175d85a5f8209acfcf8b6ab573da3e5d50f9f29f946ec9627986e"
+        },
+        {
+          "document": "service-manual",
+          "date": "2026-10-07",
+          "sha256": "9e7cef3fa7ee2767f3dacc5350d393cdefe0f30045303bd23976ce380618bf50"
+        }
+      ],
+      "sections": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+          "section": "1.1 Rack Configuration"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays, Fig. 4 (Compute Tray Block Diagram)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+          "section": "1.3 NVLink Switch Trays, Fig. 7 (NVLink Switch Tray)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+          "section": "1.4 Power Shelves"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+          "section": "1.5 Top-of-Rack Ethernet Switches"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+          "section": "Service Manual 2.2 Identify the Failed Power Supply"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#dgxvr-sm-pmm-identify",
+          "section": "Service Manual 3.2 Identify the Failed Power Shelf Management Module"
+        }
+      ],
+      "summary": "Numbered the CPUs and GPUs from 0, as the compute tray block diagram does. Marked as assumed the facts the guide does not state, such as which switch tray port reaches the top-of-rack switches. Cut the LEDs of the PSU and the power shelf management module back to what the Service Manual says: amber on failure. Removed the assumed mark from the bus bar link to the switch trays, which sections 1.1 and 1.4 support.",
+      "commit": "e1fe190"
+    },
+    {
+      "id": "guide-software-commands-operations-safety",
+      "date": "2026-11-15",
+      "document": "user-guide",
+      "reflects": [
+        {
+          "document": "user-guide",
+          "date": "2026-11-05",
+          "sha256": "a80572227a6175d85a5f8209acfcf8b6ab573da3e5d50f9f29f946ec9627986e"
+        }
+      ],
+      "sections": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#mission-control-software",
+          "section": "4.1 Mission Control Software"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#cuda-software-platform",
+          "section": "4.2 CUDA Software Platform"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#internode-memory-exchange-service",
+          "section": "4.3 Internode Memory Exchange Service"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-switch-os",
+          "section": "4.4.1 NVIDIA Switch OS"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nmx-controller",
+          "section": "4.4.2 NMX-Controller"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#fabric-manager",
+          "section": "4.4.3 Fabric Manager"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvlink-subnet-manager",
+          "section": "4.4.4 NVLink Subnet Manager"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nmx-telemetry",
+          "section": "4.4.5 NMX-Telemetry"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#doca-software-framework",
+          "section": "4.5 DOCA Software Framework"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-collective-communication-library",
+          "section": "4.6 NVIDIA Collective Communication Library"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#data-center-gpu-manager",
+          "section": "4.7 Data Center GPU Manager"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/software.html#nvidia-firmware-tools-mft",
+          "section": "4.8 NVIDIA Firmware Tools (MFT)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#equipment-handling-practices",
+          "section": "5.5 Equipment Handling Practices"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#power-and-electrical-warnings",
+          "section": "5.6.1 Power and Electrical Warnings"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#system-access-warnings",
+          "section": "5.7 System Access Warnings"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#rack-mount-warnings",
+          "section": "5.8 Rack Mount Warnings"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#electrostatic-discharge",
+          "section": "5.9 Electrostatic Discharge"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#battery-replacement",
+          "section": "5.10.3 Battery Replacement"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/safety.html#cooling-and-airflow",
+          "section": "5.10.4 Cooling and Airflow"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#system-operations",
+          "section": "6.1 System Operations"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/control-config.html#operating-system-updates",
+          "section": "6.2 Operating System Updates"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/compute-tray-redfish-commands.html",
+          "section": "6.4.1 Redfish Commands for Compute Tray"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#cold-reboot-sequence",
+          "section": "7.1 Cold Reboot Sequence"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#warm-reboot-sequence",
+          "section": "7.2 Warm Reboot Sequence"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/rack-reboot-sequence.html#post-reboot-verification",
+          "section": "7.3 Post-reboot Verification"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/health-check.html",
+          "section": "Chapter 8. System Health Check"
+        }
+      ],
+      "summary": "Added 15 software entries, 30 BMC commands, 8 safety notices and 5 operating procedures (bring-up, cold and warm reboot, post-reboot verification and the health check) from chapters 4 to 8 of the User Guide.",
+      "commit": "92a41fc"
+    },
+    {
+      "id": "open-questions-and-references",
+      "date": "2026-11-15",
+      "document": "app-data",
+      "reflects": [
+        {
+          "document": "user-guide",
+          "date": "2026-11-05",
+          "sha256": "a80572227a6175d85a5f8209acfcf8b6ab573da3e5d50f9f29f946ec9627986e"
+        },
+        {
+          "document": "service-manual",
+          "date": "2026-10-07",
+          "sha256": "9e7cef3fa7ee2767f3dacc5350d393cdefe0f30045303bd23976ce380618bf50"
+        }
+      ],
+      "sections": [],
+      "summary": "Recorded 13 open questions (6 conflicts in NVIDIA's documents and 7 gaps) and gave every component its list of document references.",
+      "commit": "d77b197"
+    },
+    {
+      "id": "service-procedures",
+      "date": "2026-11-15",
+      "document": "service-manual",
+      "reflects": [
+        {
+          "document": "service-manual",
+          "date": "2026-10-07",
+          "sha256": "9e7cef3fa7ee2767f3dacc5350d393cdefe0f30045303bd23976ce380618bf50"
+        }
+      ],
+      "sections": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#finalize-the-replacement-procedure",
+          "section": "Service Manual 2.4 Finalize the Replacement Procedure"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#finalize-the-replacement-procedure",
+          "section": "Service Manual 3.4 Finalize the Replacement Procedure"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#dgxvr-sm-cache-identify",
+          "section": "Service Manual 4.2 Identify the Failed Cache Drive"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#replace-the-failed-cache-drive",
+          "section": "Service Manual 4.3 Replace the Failed Cache Drive"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#remove-the-compute-tray",
+          "section": "Service Manual 5.2 Remove the Compute Tray"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#finalize-the-replacement-procedure",
+          "section": "Service Manual 5.5 Finalize the Replacement Procedure"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#remove-the-nvlink-switch-tray",
+          "section": "Service Manual 6.2 Remove the NVLink Switch Tray"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#remove-the-tray-lid",
+          "section": "Service Manual 6.3 Remove the Tray Lid"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#finalize-the-replacement-procedure",
+          "section": "Service Manual 6.5 Finalize the Replacement Procedure"
+        }
+      ],
+      "summary": "Added the five replacement procedures of the Service Manual step by step: power supply, power shelf management module, E1.S cache drive, compute tray battery and NVLink switch tray battery.",
+      "commit": "be59cda"
+    },
+    {
+      "id": "pcie-devices",
+      "date": "2026-11-15",
+      "document": "user-guide",
+      "reflects": [
+        {
+          "document": "user-guide",
+          "date": "2026-11-05",
+          "sha256": "a80572227a6175d85a5f8209acfcf8b6ab573da3e5d50f9f29f946ec9627986e"
+        }
+      ],
+      "sections": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+          "section": "2.3 Compute Tray Network Ports, port table"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+          "section": "2.4 Network Interface Names, front-view table"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+          "section": "2.4 Network Interface Names, top-view table"
+        }
+      ],
+      "summary": "Added the 24 PCIe devices of the network interface name tables in section 2.4, and one connection, the ConnectX-9 I/O cards to computenet, which took the connections from 24 to 25.",
+      "commit": "be59cda"
+    },
+    {
+      "id": "power-shelf-and-tor-fronts",
+      "date": "2026-11-15",
+      "document": "app-data",
+      "reflects": [
+        {
+          "document": "user-guide",
+          "date": "2026-11-05",
+          "sha256": "a80572227a6175d85a5f8209acfcf8b6ab573da3e5d50f9f29f946ec9627986e"
+        },
+        {
+          "document": "service-manual",
+          "date": "2026-10-07",
+          "sha256": "9e7cef3fa7ee2767f3dacc5350d393cdefe0f30045303bd23976ce380618bf50"
+        }
+      ],
+      "sections": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+          "section": "1.5 Top-of-Rack Ethernet Switches, Fig. 9"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+          "section": "2.2 Network Overview"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+          "section": "Service Manual 2.2 Identify the Failed Power Supply"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#replace-the-power-supply",
+          "section": "Service Manual 2.3 Replace the Power Supply"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+          "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+        }
+      ],
+      "summary": "Detailed the fronts of the power shelf and the top-of-rack switch: 4 more parts (the management module's RJ45 port and three kinds of ToR switch port), a layout for the ToR switch and one connection. That took the data from 52 to 56 components, from 23 to 24 connections and from 3 to 4 tray layouts.",
+      "commit": "d55938b"
+    },
+    {
+      "id": "service-manual-first-import",
+      "date": "2026-11-15",
+      "document": "service-manual",
+      "reflects": [
+        {
+          "document": "service-manual",
+          "date": "2026-10-07",
+          "sha256": "9e7cef3fa7ee2767f3dacc5350d393cdefe0f30045303bd23976ce380618bf50",
+          "note": "The SHA-256 is inferred: the fingerprints were recorded about 75 minutes after this import, and the PDF was last modified before both."
+        }
+      ],
+      "sections": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/introduction.html#customer-replaceable-units",
+          "section": "Service Manual 1.1 Customer-Replaceable Units"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/psu-replacement.html#dgxvr-sm-psu-identify",
+          "section": "Service Manual 2.2 Identify the Failed Power Supply (power shelf figure)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#dgxvr-sm-pmm-identify",
+          "section": "Service Manual 3.2 Identify the Failed Power Shelf Management Module"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/pmm-replacement.html#replace-the-power-shelf-management-module",
+          "section": "Service Manual 3.3 Replace the Power Shelf Management Module"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#dgxvr-sm-cache-identify",
+          "section": "Service Manual 4.2 Identify the Failed Cache Drive (cache drive figure)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/cache-replacement.html#finalize-the-replacement-procedure",
+          "section": "Service Manual 4.4 Finalize the Replacement Procedure"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#compute-tray-battery-replacement-overview",
+          "section": "Service Manual 5.1 Compute Tray Battery Replacement Overview"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/compute-battery-replacement.html#replace-the-battery",
+          "section": "Service Manual 5.4 Replace the Battery"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#nvlink-switch-tray-battery-replacement-overview",
+          "section": "Service Manual 6.1 NVLink Switch Tray Battery Replacement Overview"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-service-manual/switch-battery-replacement.html#replace-the-battery",
+          "section": "Service Manual 6.4 Replace the Battery"
+        }
+      ],
+      "summary": "First import of the Service Manual dated 2026-10-07: the customer-replaceable units, with sources in each of its replacement chapters.",
+      "commit": "8f9b2cc"
+    },
+    {
+      "id": "user-guide-first-import",
+      "date": "2026-11-15",
+      "document": "user-guide",
+      "reflects": [
+        {
+          "document": "user-guide",
+          "date": "2026-11-05",
+          "sha256": "a80572227a6175d85a5f8209acfcf8b6ab573da3e5d50f9f29f946ec9627986e",
+          "note": "The SHA-256 is inferred: the fingerprints were recorded about 75 minutes after this import, and the PDF was last modified before both."
+        }
+      ],
+      "sections": [
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html",
+          "section": "Chapter 1. Hardware (introduction)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#rack-configuration",
+          "section": "1.1 Rack Configuration"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays",
+          "section": "1.2 Compute Trays"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#nvlink-switch-trays",
+          "section": "1.3 NVLink Switch Trays"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#power-shelves",
+          "section": "1.4 Power Shelves"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#top-of-rack-ethernet-switches",
+          "section": "1.5 Top-of-Rack Ethernet Switches"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#console-access",
+          "section": "1.6 Console Access"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html",
+          "section": "Chapter 2. Networking (introduction)"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-networking",
+          "section": "2.1 NVLink Networking"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-overview",
+          "section": "2.2 Network Overview"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#compute-tray-network-ports",
+          "section": "2.3 Compute Tray Network Ports, port table"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#network-interface-names",
+          "section": "2.4 Network Interface Names, top-view table and Fig. 4"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/networking.html#nvlink-switch-network-ports",
+          "section": "2.5 NVLink Switch Network Ports, port table"
+        },
+        {
+          "url": "https://docs.nvidia.com/dgx/dgxvr-user-guide/storage.html#internal-storage",
+          "section": "3.1 Internal Storage"
+        }
+      ],
+      "summary": "First import of the User Guide dated 2026-11-05: 52 components, 7 networks and 23 connections from chapters 1 (Hardware), 2 (Networking) and 3 (Storage).",
+      "commit": "8f9b2cc"
+    }
   ]
 }

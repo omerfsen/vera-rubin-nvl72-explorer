@@ -43,6 +43,7 @@ side panel are all generated from this file.
 | `software` | The software stack of chapter 4 and where each piece runs. |
 | `commands`, `commandNotes` | The Redfish and IPMI commands of section 6.4.1, verbatim, and the notes around them. |
 | `safety` | Safety notices from the guide and manual, tied to parts and procedures. |
+| `changelog` | What changed in NVIDIA's documents and how the data followed, newest first: `date`, `document` (`user-guide`, `service-manual` or `app-data`), `reflects` (the date and PDF SHA-256 of each document version the data matched, with a `note` when one of them is inferred), `sections` (sources), `summary`, and optional `commit`, `pr` and `issue`. The What changed page (`page=changes`) lists it; a test fails when `data/doc-fingerprints.json` is newer than the newest entry for a document. |
 | `glossary` | Terms and abbreviations as the documents expand or define them (`term`, optional `aliases` and `expansion`, `definition`, `source`). A term the documents do not define is left out. The details panel marks the first whole-word, case-sensitive match of each term in a block of text and opens its definition in a popover; the Sources page lists them all. |
 
 ## Component

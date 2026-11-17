@@ -96,6 +96,10 @@ export function createI18n(lang: Lang) {
     pointLabel: (trayId: string, pointId: string, fallback: string) => c(['trayLayouts', trayId, 'points', pointId], fallback),
     rearNote: <T extends string | undefined>(fallback: T) => c(['rearLayout', 'note'], fallback),
     glossary: <T extends string | undefined>(id: string, field: 'expansion' | 'definition', fallback: T) => c(['glossary', id, field], fallback),
+    /** Translated summary of a changelog entry. */
+    change: (id: string, fallback: string) => c(['changelog', id, 'summary'], fallback),
+    /** Translated note on the document version a changelog entry reflects. */
+    changeNote: (id: string, document: string, fallback: string) => c(['changelog', id, 'reflects', document], fallback),
     /** "Compute tray 7", translated. */
     segmentLabel,
     /** Kind shown above the panel title: "compute tray", "gpu", ... */

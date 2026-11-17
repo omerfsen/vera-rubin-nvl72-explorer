@@ -323,7 +323,8 @@
       "trayNumbering": "托盘编号",
       "layoutOf": "{name} 的布局",
       "linkIn": "{name} 中的 {kind} 连接",
-      "rearLayout": "后部布局"
+      "rearLayout": "后部布局",
+      "whatChanged": "这些文档和数据有哪些更改"
     },
     "types": {
       "rack": "机柜",
@@ -407,7 +408,8 @@
       "startQuiz": "开始测验",
       "stopProcedure": "停止分步演示",
       "language": "语言：{name}",
-      "theme": "主题：{name}"
+      "theme": "主题：{name}",
+      "openChanges": "打开更新记录页面"
     },
     "quiz": {
       "start": "测验",
@@ -466,6 +468,20 @@
       "done": "已完成",
       "gotIt": "知道了",
       "show": "显示提示"
+    },
+    "changes": {
+      "title": "更新记录",
+      "intro": "NVIDIA 会不时更新其文档。本页按从新到旧的顺序列出本浏览器所用数据的每一次更改：所依据的文档、所对应的文档版本以及涉及的章节。",
+      "fingerprints": "数据所依据的文档",
+      "fingerprint": "PDF 最后修改于 {date}。SHA-256 开头为",
+      "watch": "每周检查一次，将这些指纹与 docs.nvidia.com 上的 PDF 进行比较，如有不同则创建一个 issue。数据中不记录上次检查的时间。",
+      "entries": "数据更改（{count}）",
+      "appData": "应用数据",
+      "reflects": "对应 {list}",
+      "sections": "NVIDIA 章节（{count}）",
+      "pr": "拉取请求 #{number}",
+      "issue": "Issue #{number}",
+      "commit": "提交 {hash}"
     }
   },
   "content": {
@@ -1598,6 +1614,41 @@
       "sbios": {
         "expansion": "系统 BIOS",
         "definition": "计算托盘的系统 BIOS。其设置可恢复为出厂默认值。"
+      }
+    },
+    "changelog": {
+      "glossary": {
+        "summary": "新增包含 23 个术语和缩写的术语表，每一项都附有 NVIDIA 文档中展开或定义它的章节。"
+      },
+      "numbering-and-inferred-facts": {
+        "summary": "CPU 和 GPU 改为从 0 开始编号，与计算托盘框图一致。指南未说明的内容（例如交换托盘的哪个端口连接到机柜顶部交换机）标记为假定。PSU 和电源架管理模块的 LED 精简为维修手册所述：故障时为琥珀色。母线到交换托盘的连接不再标记为假定，第 1.1 和 1.4 节支持这一点。"
+      },
+      "guide-software-commands-operations-safety": {
+        "summary": "根据用户指南第 4 至 8 章，新增 15 个软件条目、30 条 BMC 命令、8 条安全须知和 5 个操作流程（上线、冷重启和热重启、重启后验证以及健康检查）。"
+      },
+      "open-questions-and-references": {
+        "summary": "记录了 13 个未决问题（NVIDIA 文档中的 6 处冲突和 7 处空白），并为每个组件添加了文档引用列表。"
+      },
+      "service-procedures": {
+        "summary": "按步骤新增维修手册中的五个更换流程：电源模块、电源架管理模块、E1.S 缓存驱动器、计算托盘电池和 NVLink 交换托盘电池。"
+      },
+      "pcie-devices": {
+        "summary": "新增第 2.4 节网络接口名称表中的 24 个 PCIe 设备，以及一条连接（ConnectX-9 I/O 卡到 computenet），连接数由 24 增至 25。"
+      },
+      "power-shelf-and-tor-fronts": {
+        "summary": "细化了电源架和机柜顶部交换机的正面：新增 4 个部件（管理模块的 RJ45 端口和三种 ToR 交换机端口）、ToR 交换机的布局和一条连接。数据由此从 52 个组件增至 56 个，从 23 条连接增至 24 条，从 3 个托盘布局增至 4 个。"
+      },
+      "service-manual-first-import": {
+        "summary": "首次导入日期为 2026-10-07 的维修手册：客户可更换部件，来源涵盖手册的每个更换章节。",
+        "reflects": {
+          "service-manual": "SHA-256 为推断值：指纹是在这次导入约 75 分钟后记录的，而 PDF 的最后修改时间早于两者。"
+        }
+      },
+      "user-guide-first-import": {
+        "summary": "首次导入日期为 2026-11-05 的用户指南：来自第 1 章（硬件）、第 2 章（网络）和第 3 章（存储）的 52 个组件、7 个网络和 23 条连接。",
+        "reflects": {
+          "user-guide": "SHA-256 为推断值：指纹是在这次导入约 75 分钟后记录的，而 PDF 的最后修改时间早于两者。"
+        }
       }
     }
   }

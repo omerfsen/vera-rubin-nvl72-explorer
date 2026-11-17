@@ -138,6 +138,18 @@ export function computeContent(topology) {
       }),
     ),
   );
+  // Section titles and document dates stay as they are; only the summary is translated.
+  put(
+    out,
+    'changelog',
+    Object.fromEntries(
+      (t.changelog ?? []).map((e) => {
+        const entry = { summary: e.summary };
+        put(entry, 'reflects', Object.fromEntries(e.reflects.filter((r) => r.note).map((r) => [r.document, r.note])));
+        return [e.id, entry];
+      }),
+    ),
+  );
   return out;
 }
 

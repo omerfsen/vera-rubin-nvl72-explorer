@@ -50,7 +50,7 @@ assert.equal(d._meta['io.modelcontextprotocol/serverInfo'].name, NAME);
 const l = byId[2].result;
 assert.equal(l.ttlMs, 3600000);
 assert.equal(l.cacheScope, 'public');
-assert.equal(l.tools.length, 10);
+assert.equal(l.tools.length, 11);
 assert.ok(l.tools.every((t) => t.annotations.readOnlyHint === true));
 
 const g = byId[3].result;

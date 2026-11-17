@@ -36,7 +36,7 @@ const call = async (client: Client, name: string, args: Record<string, unknown> 
   (await client.callTool({ name, arguments: args })) as { isError?: boolean; structuredContent?: any; content: { type: string; text: string }[] };
 
 describe('MCP tool surface', () => {
-  it('lists ten read-only tools in a fixed order with full metadata', async () => {
+  it('lists eleven read-only tools in a fixed order with full metadata', async () => {
     const client = await connect();
     const { tools } = await client.listTools();
     expect(tools.map((t) => t.name)).toEqual([
@@ -50,6 +50,7 @@ describe('MCP tool surface', () => {
       'nvl72_pcie_devices',
       'nvl72_open_questions',
       'nvl72_glossary',
+      'nvl72_changes',
     ]);
     for (const t of tools) {
       expect(t.name.length).toBeLessThanOrEqual(64);
@@ -134,6 +135,21 @@ describe('MCP tool surface', () => {
   });
 });
 
+describe('nvl72_changes', () => {
+  it('lists the changelog newest first with NVIDIA sections, or one document', async () => {
+    const client = await connect();
+    const all = await call(client, 'nvl72_changes');
+    expect(all.structuredContent.changes).toEqual(topology.changelog);
+    expect(all.structuredContent.page).toContain('page=changes');
+    for (const e of all.structuredContent.changes)
+      for (const s of e.sections) expect(s.url).toMatch(/^https:\/\/docs\.nvidia\.com\/dgx\/dgxvr-/);
+    const sm = await call(client, 'nvl72_changes', { document: 'service-manual' });
+    expect(sm.structuredContent.changes.length).toBeGreaterThan(0);
+    expect(sm.structuredContent.changes.every((e: { document: string }) => e.document === 'service-manual')).toBe(true);
+    expect(sm.structuredContent.documents.map((d: { document: string }) => d.document)).toEqual(['user-guide', 'service-manual']);
+  });
+});
+
 describe('hostile arguments are refused before any handler runs', () => {
   it.each([
     ['nvl72_get_component', { component: '../../etc/passwd' }],
@@ -147,6 +163,8 @@ describe('hostile arguments are refused before any handler runs', () => {
     ['nvl72_overview', { anything: true }],
     ['nvl72_glossary', { id: 'not-a-term' }],
     ['nvl72_glossary', { id: 'bmc', definition: 'x' }],
+    ['nvl72_changes', { document: 'release-notes' }],
+    ['nvl72_changes', { document: 'user-guide', since: '2026' }],
   ])('%s %j', async (name, args) => {
     const client = await connect();
     const r = await call(client, name, args);

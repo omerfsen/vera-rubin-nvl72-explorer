@@ -18,7 +18,7 @@ export interface UrlState {
   /** Service procedure in progress and its 0-based step, or "" for none. */
   proc?: string;
   step?: number;
-  /** "sources" shows the sources page. */
+  /** "sources" shows the sources page, "changes" the What changed page. */
   page?: string;
   /** Embedded in another page: no header, network bar or footer. */
   embed?: boolean;
@@ -34,6 +34,9 @@ export interface UrlState {
   ft?: string[];
   fn?: string[];
 }
+
+/** The pages that replace the rack view. */
+export const PAGES: readonly string[] = ['sources', 'changes'];
 
 export const DEFAULT_URL_STATE: UrlState = { view: 'rack', select: '', list: false };
 
@@ -65,7 +68,7 @@ export function readUrlState(search: string, model: Model): UrlState {
     list: params.get('list') === '1',
     net: model.getNetwork(params.get('net') ?? '') ? (params.get('net') as string) : '',
     ...procState(params, model),
-    page: params.get('page') === 'sources' ? 'sources' : '',
+    page: PAGES.includes(params.get('page') ?? '') ? (params.get('page') as string) : '',
     embed: params.get('embed') === '1',
     // Only a language named in the URL; the store falls back to the saved one.
     ...(isLang(params.get('lang')) ? { lang: params.get('lang') as Lang } : {}),

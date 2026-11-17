@@ -537,6 +537,13 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .sources-page h2 { margin: 14px 0 8px; }
 .sources-page h3 { margin: 22px 0 6px; font-size: 1rem; }
 .sources-page li { margin-bottom: 8px; }
+.changes-list > li { margin-bottom: 18px; padding-left: 10px; border-left: 3px solid var(--border); }
+.changes-list .change-head { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; }
+.changes-list p { margin: 4px 0; }
+.changes-list details ul { margin: 4px 0 0; padding-left: 18px; }
+.changes-list summary { cursor: pointer; }
+.changes-page code { overflow-wrap: anywhere; }
+.footer .link-button { font-size: inherit; }
 
 .doc-list li { font-size: 0.85rem; }
 .open-questions { border-left: 3px solid var(--warn); padding-left: 10px; }
