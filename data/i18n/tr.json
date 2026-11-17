@@ -222,7 +222,10 @@
       "pdfPage": "PDF s. {page}",
       "figure": "şekil",
       "openQuestion": "NVIDIA belgelerinde açık soru",
-      "openQuestions": "NVIDIA belgelerinde açık sorular"
+      "openQuestions": "NVIDIA belgelerinde açık sorular",
+      "pinnedConnection": "Sabitlenen bağlantı",
+      "unpin": "Sabitlemeyi kaldır",
+      "showLink": "3B görünümde göster"
     },
     "docs": {
       "user-guide": "Kullanım Kılavuzu",

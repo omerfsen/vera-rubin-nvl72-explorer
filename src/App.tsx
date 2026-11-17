@@ -49,6 +49,9 @@ function useKeyboard() {
       } else if (onStage && e.key === 'Enter' && s.view === 'rack') {
         e.preventDefault();
         s.openTray();
+      } else if (e.key === 'Escape' && s.pinnedLink) {
+        // The first Escape lets go of a pinned connection; the next goes up a level.
+        s.pinLink(null);
       } else if (e.key === 'Escape' && (s.selected !== '' || s.view !== 'rack')) {
         s.goUp();
       } else if (e.key === 'Escape' && s.hintOpen) {

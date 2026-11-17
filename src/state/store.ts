@@ -62,6 +62,9 @@ interface ExplorerState {
   toggleLinkKind: (kind: string) => void;
   /** Show every connection kind again. */
   showAllLinkKinds: () => void;
+  /** Connection pinned in the tray view (its tray key and index in the layout), or null. Not in the URL. */
+  pinnedLink: { tray: string; index: number } | null;
+  pinLink: (link: { tray: string; index: number } | null) => void;
   /** Tray view: parts spread apart by layer so each can be seen and clicked. */
   exploded: boolean;
   toggleExploded: () => void;
@@ -160,7 +163,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     if (TOUR_STEPS.length === 0) return;
     const { view, selected, network, page, procedure, step, compare } = get();
     const restore = restoreTo ?? get().tour?.restore ?? { view, selected, network, page, procedure, step, compare };
-    set({ tour: { index: 0, restore }, quiz: null, procedure: '', step: 0, compare: '', panelOpen: true, hintOpen: false });
+    set({ tour: { index: 0, restore }, pinnedLink: null, quiz: null, procedure: '', step: 0, compare: '', panelOpen: true, hintOpen: false });
     get().goToTourStep(index);
   },
   goToTourStep: (index) => {
@@ -235,9 +238,11 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
   toggleLinkKind: (kind) => {
     const all = trayLinkKinds(model);
     if (!all.includes(kind)) return;
-    set({ hiddenLinkKinds: toggleIn(get().hiddenLinkKinds, kind, all) });
+    set({ hiddenLinkKinds: toggleIn(get().hiddenLinkKinds, kind, all), pinnedLink: null });
   },
   showAllLinkKinds: () => set({ hiddenLinkKinds: [] }),
+  pinnedLink: null,
+  pinLink: (link) => set({ pinnedLink: link }),
   exploded: false,
   toggleExploded: () => set({ exploded: !get().exploded }),
   network: initial.net ?? '',
@@ -279,7 +284,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     if (view === 'tray' && trayKeyOf(selected, model) === null) view = 'rack';
     const first = segments?.[0];
     if (first && model.getComponent(first.id)?.rearSide) view = 'rear';
-    set({ selected, view });
+    set({ selected, view, pinnedLink: null });
     // While a quiz asks for a part, picking one answers it.
     const quiz = get().quiz;
     const q = quiz && !quiz.done && !quiz.answer ? quiz.questions[quiz.index] : undefined;
@@ -288,20 +293,20 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
       if (given !== null) get().answerQuiz(given);
     }
   },
-  setSide: (side) => set({ view: side, hovered: null }),
+  setSide: (side) => set({ view: side, hovered: null, pinnedLink: null }),
   openTray: () => {
     const key = trayKeyOf(get().selected, model);
-    if (key) set({ view: 'tray', hovered: null });
+    if (key) set({ view: 'tray', hovered: null, pinnedLink: null });
   },
   closeTray: () => {
     const key = trayKeyOf(get().selected, model);
-    set({ view: 'rack', hovered: null, selected: key ?? get().selected });
+    set({ view: 'rack', hovered: null, selected: key ?? get().selected, pinnedLink: null });
   },
   goUp: () => {
     const { selected, view } = get();
     const key = trayKeyOf(selected, model);
     if (view === 'tray' && selected === key) {
-      set({ view: 'rack', hovered: null });
+      set({ view: 'rack', hovered: null, pinnedLink: null });
       return;
     }
     if (selected === '') return;
@@ -317,7 +322,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     if (paths.length === 0) return;
     const current = paths.indexOf(get().selected);
     const next = current === -1 ? (step > 0 ? 0 : paths.length - 1) : Math.min(paths.length - 1, Math.max(0, current + step));
-    set({ selected: paths[next]! });
+    set({ selected: paths[next]!, pinnedLink: null });
   },
   compare: initial.cmp ?? '',
   startCompare: (path) => {

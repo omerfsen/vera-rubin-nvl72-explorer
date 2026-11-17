@@ -68,3 +68,25 @@ describe('connection kind filter', () => {
     expect(useExplorer.getState().hiddenLinkKinds).toEqual([]);
   });
 });
+
+describe('pinned connection', () => {
+  const pin = { tray: 'compute-tray.3', index: 4 };
+  beforeEach(() => useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray', pinnedLink: pin }));
+
+  it('is let go by select, goUp, setSide, openTray, stepping parts and the kind filter', () => {
+    useExplorer.getState().select('compute-tray.3/rubin-gpu.1');
+    expect(useExplorer.getState().pinnedLink).toBeNull();
+    for (const act of [
+      () => useExplorer.getState().goUp(),
+      () => useExplorer.getState().setSide('rear'),
+      () => useExplorer.getState().openTray(),
+      () => useExplorer.getState().stepTrayPart(1),
+      () => useExplorer.getState().toggleLinkKind('pcie'),
+    ]) {
+      useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray', pinnedLink: pin, hiddenLinkKinds: [] });
+      act();
+      expect(useExplorer.getState().pinnedLink).toBeNull();
+    }
+    useExplorer.setState({ hiddenLinkKinds: [] });
+  });
+});

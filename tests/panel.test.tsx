@@ -4,6 +4,8 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { SidePanel } from '../src/components/SidePanel';
 import { Breadcrumb } from '../src/components/Breadcrumb';
 import { useExplorer } from '../src/state/store';
+import { model } from '../src/data';
+import { i18nFor } from '../src/i18n';
 
 afterEach(() => {
   cleanup();
@@ -93,5 +95,45 @@ describe('focus on page load', () => {
     (document.activeElement as HTMLElement | null)?.blur();
     render(<SidePanel />);
     expect(document.activeElement).toBe(document.body);
+  });
+});
+
+describe('pinned connection', () => {
+  afterEach(() => useExplorer.setState({ pinnedLink: null, view: 'rack' }));
+  const layout = model.trayLayout('compute-tray')!;
+  const i18n = i18nFor('en');
+
+  it('shows the pinned link: kind, both ends, note and source, and Unpin lets go', () => {
+    useExplorer.setState({ selected: 'compute-tray.3', view: 'tray', pinnedLink: { tray: 'compute-tray.3', index: 7 } });
+    const { container } = render(<SidePanel />);
+    const link = layout.links![7]!;
+    const section = container.querySelector('.pinned-connection')!;
+    expect(section.querySelector('h3')!.textContent).toBe('Pinned connection');
+    expect(section.textContent).toContain('PCIe');
+    expect(section.textContent).toContain(`${i18n.linkEndLabel('compute-tray', link.from)} → ${i18n.linkEndLabel('compute-tray', link.to)}`);
+    expect(section.textContent).toContain(link.note!);
+    expect(section.querySelector('a')!.getAttribute('href')).toBe(link.source.url);
+    fireEvent.click(screen.getByRole('button', { name: 'Unpin' }));
+    expect(useExplorer.getState().pinnedLink).toBeNull();
+    expect(container.querySelector('.pinned-connection')).toBeNull();
+  });
+
+  it('shows nothing for a pin in another tray', () => {
+    useExplorer.setState({ selected: 'compute-tray.3', view: 'tray', pinnedLink: { tray: 'compute-tray.4', index: 7 } });
+    const { container } = render(<SidePanel />);
+    expect(container.querySelector('.pinned-connection')).toBeNull();
+  });
+
+  it('pins a row from "Inside the tray" with Show in 3D, only with WebGL', () => {
+    useExplorer.setState({ selected: 'compute-tray.3/vera-cpu.1', view: 'tray' });
+    const { unmount } = render(<SidePanel />);
+    const buttons = screen.getAllByRole('button', { name: 'Show in 3D' });
+    expect(buttons[0]!.getAttribute('aria-pressed')).toBe('false');
+    fireEvent.click(buttons[0]!);
+    expect(useExplorer.getState().pinnedLink).toEqual({ tray: 'compute-tray.3', index: 0 });
+    expect(screen.getAllByRole('button', { name: 'Show in 3D' })[0]!.getAttribute('aria-pressed')).toBe('true');
+    unmount();
+    render(<SidePanel webgl={false} />);
+    expect(screen.queryAllByRole('button', { name: 'Show in 3D' })).toHaveLength(0);
   });
 });

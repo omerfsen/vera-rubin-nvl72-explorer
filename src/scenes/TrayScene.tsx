@@ -360,6 +360,8 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
   const hiddenKinds = useExplorer((s) => s.hiddenLinkKinds);
+  const pinnedLink = useExplorer((s) => s.pinnedLink);
+  const pinLink = useExplorer((s) => s.pinLink);
   const invalidate = useThree((s) => s.invalidate);
   const connected = useThree((s) => s.events.connected);
   const i18n = useI18n();
@@ -378,7 +380,8 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
     [links, layout, offsets, amount],
   );
   const visible = useMemo(() => visibleLinks(links, hiddenKinds), [links, hiddenKinds]);
-  useEffect(() => invalidate(), [active, hover, visible, invalidate]);
+  const pinned = pinnedLink && pinnedLink.tray === trayKey && visible.some((v) => v.index === pinnedLink.index) ? pinnedLink.index : null;
+  useEffect(() => invalidate(), [active, hover, visible, pinned, invalidate]);
   useEffect(() => setHover(null), [trayKey, hiddenKinds]);
   useEffect(
     () => () => {
@@ -386,15 +389,19 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
     },
     [],
   );
-  const shown = hover !== null ? links[hover] : undefined;
-  const shownCurve = hover !== null ? curves[hover] : null;
+  // The card shows the tube under the pointer, or else the pinned one.
+  const shownIndex = hover ?? pinned;
+  const shown = shownIndex !== null ? links[shownIndex] : undefined;
+  const shownCurve = shownIndex !== null ? curves[shownIndex] : null;
   return (
     <group>
       {visible.map(({ link, index: i }) => {
         const curve = curves[i];
         if (!curve) return null;
         const on = active.has(link);
-        const dim = hover !== null ? hover !== i : (within !== null && !on) || network !== '';
+        const lit = hover === i || pinned === i;
+        const focus = hover ?? pinned;
+        const dim = focus !== null ? focus !== i : (within !== null && !on) || network !== '';
         return (
           <LinkTube
             key={i}
@@ -404,23 +411,29 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
             haloOpacity={theme === 'dark' ? 0.4 : 0.85}
             shape={linkShape(link.kind)}
             assumed={link.assumed === true}
-            radius={on || hover === i ? 0.009 : 0.0055}
+            radius={on || lit ? 0.009 : 0.0055}
             opacity={dim ? 0.15 : 0.95}
-            glow={hover === i}
+            glow={lit}
             onOver={(e) => {
               e.stopPropagation();
               setHover(i);
-              document.body.style.cursor = 'help';
+              document.body.style.cursor = 'pointer';
             }}
             onOut={() => {
               setHover((h) => (h === i ? null : h));
               document.body.style.cursor = '';
             }}
+            onClick={(e) => {
+              // A tap pins the card (touch has no hover); a second tap, Escape or a click on empty space lets go.
+              e.stopPropagation();
+              if (e.delta > DRAG_THRESHOLD) return;
+              pinLink(pinned === i ? null : { tray: trayKey, index: i });
+            }}
           />
         );
       })}
       {connected && shown && shownCurve && (
-        <Html position={shownCurve.getPoint(0.5).toArray()} center className="link-card" style={{ pointerEvents: 'none' }} zIndexRange={[36, 31]}>
+        <Html position={shownCurve.getPoint(0.5).toArray()} center className={hover === null ? 'link-card pinned' : 'link-card'} style={{ pointerEvents: 'none' }} zIndexRange={[36, 31]}>
           <div data-label data-label-pinned role="tooltip">
             <strong>
               <span className="link-swatch" style={{ background: colors[shown.kind] ?? '#ffffff' }} aria-hidden="true" />
@@ -430,7 +443,7 @@ function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layo
             <span>
               {linkEndLabel(layout, trayId, shown.from, i18n)} → {linkEndLabel(layout, trayId, shown.to, i18n)}
             </span>
-            {shown.note && <span className="link-note">{i18n.linkNote(trayId, hover!, shown.note)}</span>}
+            {shown.note && <span className="link-note">{i18n.linkNote(trayId, shownIndex!, shown.note)}</span>}
             <span className="link-source">
               {i18n.t('panel.sourceLabel')} {shown.source.section}
             </span>

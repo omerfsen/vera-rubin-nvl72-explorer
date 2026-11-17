@@ -222,7 +222,10 @@
       "pdfPage": "PDF с. {page}",
       "figure": "рисунок",
       "openQuestion": "Открытый вопрос в документах NVIDIA",
-      "openQuestions": "Открытые вопросы в документах NVIDIA"
+      "openQuestions": "Открытые вопросы в документах NVIDIA",
+      "pinnedConnection": "Закреплённое соединение",
+      "unpin": "Открепить",
+      "showLink": "Показать в 3D"
     },
     "docs": {
       "user-guide": "User Guide",

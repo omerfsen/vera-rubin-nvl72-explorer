@@ -963,3 +963,12 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .read-aloud[aria-pressed='true'] { border-color: var(--accent); }
 /* Wraps panel parts that Read aloud skips; takes no space of its own. */
 .no-read { display: contents; }
+.pinned-connection { border-inline-start: 3px solid var(--accent); padding-inline-start: 10px; }
+.pinned-connection p { margin: 4px 0; }
+/* Controls, not words: plain buttons that read aloud skips. */
+.show-link, .pinned-connection .unpin {
+  background: none; border: 1px solid var(--border); border-radius: 4px; color: var(--accent);
+  font: inherit; font-size: 0.85em; padding: 1px 6px; cursor: pointer;
+}
+.show-link { margin-inline-start: 6px; }
+.show-link[aria-pressed="true"] { font-weight: 600; }
