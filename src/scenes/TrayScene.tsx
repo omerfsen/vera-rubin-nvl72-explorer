@@ -1,8 +1,20 @@
 import { useSceneTheme } from './useSceneTheme';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
-import { Html, QuadraticBezierLine } from '@react-three/drei';
-import { Color, Group, InstancedMesh, Object3D } from 'three';
+import { Html } from '@react-three/drei';
+import {
+  Color,
+  DataTexture,
+  Group,
+  InstancedMesh,
+  NearestFilter,
+  Object3D,
+  QuadraticBezierCurve3,
+  RepeatWrapping,
+  RGBAFormat,
+  TubeGeometry,
+  Vector3,
+} from 'three';
 import { model } from '../data';
 import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
 import { useExplorer } from '../state/store';
@@ -229,46 +241,164 @@ function endPosition(layout: TrayLayout, end: LinkEnd, offsets: Vec[], amount: n
   return [box.position[0] + dx, box.position[1] + box.size[1] / 2 + 0.005 + dy, box.position[2] + dz];
 }
 
+/** Stripes along an assumed link's tube: an alpha map of two lit and two dark texels, repeated along its length. */
+const STRIPES = (() => {
+  const t = new DataTexture(new Uint8Array([255, 255, 255, 255, 255, 255, 255, 255, 40, 40, 40, 255, 40, 40, 40, 255]), 4, 1, RGBAFormat);
+  t.wrapS = RepeatWrapping;
+  t.magFilter = NearestFilter;
+  t.minFilter = NearestFilter;
+  t.needsUpdate = true;
+  return t;
+})();
+/** Length of one stripe period along an assumed tube. */
+const STRIPE_PERIOD = 0.05;
+
+/** The curve a link follows: up from both ends and over, higher for longer links. */
+export function linkCurve(a: Vec, b: Vec): QuadraticBezierCurve3 {
+  const lift = 0.06 + Math.hypot(a[0] - b[0], a[2] - b[2]) * 0.12;
+  const mid = new Vector3((a[0] + b[0]) / 2, Math.max(a[1], b[1]) + lift, (a[2] + b[2]) / 2);
+  return new QuadraticBezierCurve3(new Vector3(...a), mid, new Vector3(...b));
+}
+
+/** Name of one end of a link: the part's label, or the named point on the tray. */
+export function linkEndLabel(layout: TrayLayout, trayId: string, end: LinkEnd, i18n: I18n): string {
+  if (end.point !== undefined) {
+    const p = layout.points?.find((pt) => pt.id === end.point);
+    return i18n.pointLabel(trayId, end.point, p?.label ?? end.point);
+  }
+  const slot = layout.slots.find((s) => s.component === end.component && s.index === end.index);
+  if (slot?.label) return slot.label;
+  return i18n.segmentLabel({ id: end.component, index: end.index });
+}
+
+function LinkTube({
+  curve,
+  color,
+  assumed,
+  radius,
+  opacity,
+  glow,
+  onOver,
+  onOut,
+}: {
+  curve: QuadraticBezierCurve3;
+  color: string;
+  assumed: boolean;
+  radius: number;
+  opacity: number;
+  glow: boolean;
+  onOver: (e: ThreeEvent<PointerEvent>) => void;
+  onOut: () => void;
+}) {
+  const geometry = useMemo(() => new TubeGeometry(curve, 48, radius, 8, false), [curve, radius]);
+  const stripes = useMemo(() => {
+    if (!assumed) return null;
+    const t = STRIPES.clone();
+    t.repeat.set(Math.max(1, curve.getLength() / STRIPE_PERIOD), 1);
+    t.needsUpdate = true;
+    return t;
+  }, [assumed, curve]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  useEffect(() => () => stripes?.dispose(), [stripes]);
+  return (
+    <mesh geometry={geometry} onPointerOver={onOver} onPointerOut={onOut}>
+      <meshStandardMaterial
+        color={color}
+        emissive={color}
+        emissiveIntensity={glow ? 0.9 : 0.25}
+        roughness={0.4}
+        metalness={0.1}
+        transparent
+        opacity={assumed ? opacity * 0.75 : opacity}
+        alphaMap={stripes}
+        depthWrite={!assumed && opacity > 0.5}
+      />
+    </mesh>
+  );
+}
+
 /**
- * The connections layer: one curve per link, coloured by kind. Links of the
- * selected part are drawn bright and thick; the rest fade while something
- * inside the tray is selected.
+ * The connections layer: one tube per link, coloured by kind; an assumed
+ * link is striped and see-through. Links of the selected part are drawn
+ * thicker; the rest fade while something inside the tray is selected.
+ * Hovering a tube shows what it is, its two ends and where NVIDIA states it.
  */
 function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layout: TrayLayout; offsets: Vec[]; amount: number }) {
   const trayId = trayKey.split('.')[0]!;
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
   const invalidate = useThree((s) => s.invalidate);
+  const connected = useThree((s) => s.events.connected);
+  const i18n = useI18n();
+  const [hover, setHover] = useState<number | null>(null);
   const within = selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
   const active = useMemo(() => new Set(within ? model.linksAt(trayId, within) : []), [trayId, within]);
-  useEffect(() => invalidate(), [active, invalidate]);
-  return (
-    <group>
-      {(layout.links ?? []).map((link, i) => {
+  const links = layout.links ?? [];
+  const curves = useMemo(
+    () =>
+      links.map((link) => {
         const a = endPosition(layout, link.from, offsets, amount);
         const b = endPosition(layout, link.to, offsets, amount);
-        if (!a || !b) return null;
-        const lift = 0.06 + Math.hypot(a[0] - b[0], a[2] - b[2]) * 0.12;
-        const mid: Vec = [(a[0] + b[0]) / 2, Math.max(a[1], b[1]) + lift, (a[2] + b[2]) / 2];
+        return a && b ? linkCurve(a, b) : null;
+      }),
+    [links, layout, offsets, amount],
+  );
+  useEffect(() => invalidate(), [active, hover, invalidate]);
+  useEffect(() => setHover(null), [trayKey]);
+  useEffect(
+    () => () => {
+      document.body.style.cursor = '';
+    },
+    [],
+  );
+  const shown = hover !== null ? links[hover] : undefined;
+  const shownCurve = hover !== null ? curves[hover] : null;
+  return (
+    <group>
+      {links.map((link, i) => {
+        const curve = curves[i];
+        if (!curve) return null;
         const on = active.has(link);
-        const dim = (within !== null && !on) || network !== '';
+        const dim = hover !== null ? hover !== i : (within !== null && !on) || network !== '';
         return (
-          <QuadraticBezierLine
+          <LinkTube
             key={i}
-            start={a}
-            end={b}
-            mid={mid}
+            curve={curve}
             color={LINK_COLORS[link.kind] ?? '#ffffff'}
-            lineWidth={on ? 4 : 2}
-            dashed={link.assumed === true}
-            dashSize={0.03}
-            gapSize={0.02}
-            transparent
-            opacity={dim ? 0.2 : 0.95}
-            raycast={() => null}
+            assumed={link.assumed === true}
+            radius={on || hover === i ? 0.009 : 0.0055}
+            opacity={dim ? 0.15 : 0.95}
+            glow={hover === i}
+            onOver={(e) => {
+              e.stopPropagation();
+              setHover(i);
+              document.body.style.cursor = 'help';
+            }}
+            onOut={() => {
+              setHover((h) => (h === i ? null : h));
+              document.body.style.cursor = '';
+            }}
           />
         );
       })}
+      {connected && shown && shownCurve && (
+        <Html position={shownCurve.getPoint(0.5).toArray()} center className="link-card" style={{ pointerEvents: 'none' }} zIndexRange={[30, 20]}>
+          <div data-label data-label-pinned role="tooltip">
+            <strong>
+              <span className="link-swatch" style={{ background: LINK_COLORS[shown.kind] ?? '#ffffff' }} aria-hidden="true" />
+              {i18n.linkName(shown.kind)}
+              {shown.assumed && <span className="assumed">{i18n.t('panel.assumed')}</span>}
+            </strong>
+            <span>
+              {linkEndLabel(layout, trayId, shown.from, i18n)} → {linkEndLabel(layout, trayId, shown.to, i18n)}
+            </span>
+            {shown.note && <span className="link-note">{i18n.linkNote(trayId, hover!, shown.note)}</span>}
+            <span className="link-source">
+              {i18n.t('panel.sourceLabel')} {shown.source.section}
+            </span>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
