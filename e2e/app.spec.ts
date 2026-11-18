@@ -7,6 +7,33 @@ async function rackReady(page: Page) {
 
 const param = (page: Page, key: string) => new URL(page.url()).searchParams.get(key);
 
+/**
+ * Sweep the pointer over the canvas until the rack's hover tag names a part
+ * on a unit's front face (optionally one of the given unit). Returns where.
+ */
+async function findFacePart(
+  page: Page,
+  box: { x: number; y: number; width: number; height: number },
+  unit?: string,
+  area = { x0: 0.4, x1: 0.6, y0: 0.3, y1: 0.7, step: 0.01 },
+): Promise<{ x: number; y: number } | null> {
+  const part = page.locator('.unit-hover-label .hover-tag-part');
+  const unitLine = page.locator('.unit-hover-label .hover-tag-unit');
+  for (let fy = area.y0; fy <= area.y1; fy += area.step) {
+    for (let fx = area.x0; fx <= area.x1; fx += area.step) {
+      // Whole pixels into the canvas: a click reports whole-pixel offsets, so a point between pixels can miss a small part.
+      const at = { x: box.x + Math.round(box.width * fx), y: box.y + Math.round(box.height * fy) };
+      await page.mouse.move(at.x, at.y);
+      if (!(await part.waitFor({ state: 'attached', timeout: 120 }).then(() => true, () => false))) continue;
+      // The tag can lag a frame behind the pointer: check it again once the scene has settled.
+      await page.waitForTimeout(250);
+      if (!(await part.count())) continue;
+      if (!unit || (await unitLine.textContent()) === unit) return at;
+    }
+  }
+  return null;
+}
+
 test.describe('rack', () => {
   test('loads the 3D rack without errors', async ({ page }) => {
     const errors: string[] = [];
@@ -63,13 +90,14 @@ test.describe('rack', () => {
       await rackReady(page);
       if (side === 'rear') await page.getByRole('button', { name: 'Rear', exact: true }).click();
       const box = (await page.locator('canvas').boundingBox())!;
-      const label = page.locator('.unit-hover-label span');
+      const label = page.locator('.unit-hover-label .hover-tag-unit');
       // From the rear, rear parts stand in front of some trays: sweep across until the pointer is on a unit.
       for (const f of [0.5, 0.55, 0.6, 0.45, 0.65]) {
         await page.mouse.move(box.x + box.width * f, box.y + box.height / 2);
         // The tag mounts a frame or two after the move, so wait briefly at each position.
         if (await label.waitFor({ state: 'attached', timeout: 1500 }).then(() => true, () => false)) break;
       }
+      // The pointer may land on a port of the unit's front face, which names the port on a line above.
       await expect(label).toHaveText(/^(Compute tray|NVLink 6 switch tray|Power shelf|Top-of-rack Ethernet switch) \d+$/);
       await page.mouse.move(box.x + 5, box.y + 5);
       await expect(page.locator('.unit-hover-label')).toHaveCount(0);
@@ -268,6 +296,53 @@ test.describe('rack', () => {
     const onTop = await page.evaluate(([x, y]) => document.elementFromPoint(x!, y!)?.closest('button')?.textContent ?? '', [b.x + b.width / 2, b.y + b.height / 2]);
     expect(onTop).toContain('Back to rack');
     await expect(page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true })).toBeVisible();
+  });
+
+  test('hovering a part on a unit front names the part and its unit', async ({ page }) => {
+    await page.goto('/');
+    await rackReady(page);
+    const box = (await page.locator('canvas').boundingBox())!;
+    expect(await findFacePart(page, box)).not.toBeNull();
+    await expect(page.locator('.unit-hover-label .hover-tag-part')).toHaveText(/\S/);
+    await expect(page.locator('.unit-hover-label .hover-tag-unit')).toHaveText(
+      /^(Compute tray|NVLink 6 switch tray|Power shelf|Top-of-rack Ethernet switch) \d+$/,
+    );
+    // Moving off the rack clears the tag.
+    await page.mouse.move(box.x + 5, box.y + 5);
+    await expect(page.locator('.unit-hover-label')).toHaveCount(0);
+  });
+
+  test('at phone width a front part tag fits the canvas, and tapping a part twice opens its unit', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 320, height: 700 }, hasTouch: true });
+    const page = await context.newPage();
+    await page.goto('/?lang=ru');
+    await rackReady(page);
+    await page.locator('.first-visit').getByRole('button').last().click();
+    const canvas = page.locator('canvas');
+    await canvas.scrollIntoViewIfNeeded();
+    const box = (await canvas.boundingBox())!;
+    // Zoom in so the ports and drives are big enough to hit.
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height * 0.4);
+    for (let i = 0; i < 6; i++) await page.mouse.wheel(0, -300);
+    const area = { x0: 0.1, x1: 0.9, y0: 0.15, y1: 0.65, step: 0.025 };
+    const at = await findFacePart(page, box, undefined, area);
+    expect(at).not.toBeNull();
+    // The Russian part and unit names wrap onto lines that stay inside the canvas.
+    const tag = (await page.locator('.unit-hover-label [data-label]').boundingBox())!;
+    expect(tag.x).toBeGreaterThanOrEqual(box.x);
+    expect(tag.x + tag.width).toBeLessThanOrEqual(box.x + box.width);
+    const unit = (await page.locator('.unit-hover-label .hover-tag-unit').textContent())!;
+    // Tap a unit, tap again to open: the first tap on a part selects its unit...
+    await page.touchscreen.tap(at!.x, at!.y);
+    await expect.poll(() => param(page, 'select')).toMatch(/^[a-z-]+\.\d+$/);
+    const key = param(page, 'select')!;
+    // ...and the second, on a part of the slid-out unit, opens it with that part selected.
+    const again = await findFacePart(page, box, unit, area);
+    expect(again).not.toBeNull();
+    await page.touchscreen.tap(again!.x, again!.y);
+    await expect.poll(() => param(page, 'view')).toBe('tray');
+    expect(param(page, 'select')!.startsWith(`${key}/`)).toBe(true);
+    await context.close();
   });
 
   test('keyboard steps through the rack and opens a compute tray', async ({ page }) => {

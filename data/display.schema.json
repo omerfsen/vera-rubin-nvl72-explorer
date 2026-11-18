@@ -22,6 +22,8 @@
       "required": [
         "selected",
         "hover",
+        "partSelected",
+        "partHover",
         "dim",
         "linkHalo",
         "conflict",
@@ -39,6 +41,16 @@
           "pattern": "^#[0-9a-f]{6}$"
         },
         "hover": {
+          "type": "string",
+          "pattern": "^#[0-9a-f]{6}$"
+        },
+        "partSelected": {
+          "description": "A selected part on a unit's front face; darker so it stands out on its lit unit.",
+          "type": "string",
+          "pattern": "^#[0-9a-f]{6}$"
+        },
+        "partHover": {
+          "description": "A hovered part on a unit's front face; darker so it stands out on its lit unit.",
           "type": "string",
           "pattern": "^#[0-9a-f]{6}$"
         },

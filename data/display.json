@@ -4,6 +4,8 @@
   "colors": {
     "selected": "#38bdf8",
     "hover": "#d6c89a",
+    "partSelected": "#075985",
+    "partHover": "#5c4f2a",
     "dim": {
       "dark": "#434a55",
       "light": "#a7b0bb"

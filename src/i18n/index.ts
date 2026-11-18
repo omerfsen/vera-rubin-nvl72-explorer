@@ -66,6 +66,10 @@ export function createI18n(lang: Lang) {
     return segment.index === undefined ? name : `${name} ${model.displayIndex(segment.id, segment.index)}`;
   }
 
+  function slotLabel(slot: { component: string; index?: number; label?: string }): string {
+    return slot.label || segmentLabel({ id: slot.component, index: slot.index });
+  }
+
   return {
     lang,
     t,
@@ -114,9 +118,10 @@ export function createI18n(lang: Lang) {
         return point ? c(['trayLayouts', trayId, 'points', point.id], point.label) : end.point;
       }
       const slot = layout?.slots.find((s) => s.component === end.component && s.index === end.index);
-      if (slot?.label) return slot.label;
-      return segmentLabel({ id: end.component, index: end.index });
+      return slotLabel(slot ?? { component: end.component, index: end.index });
     },
+    /** Name of a drawn part: NVIDIA's slot label when the layout has one, else the part name and number. */
+    slotLabel,
   };
 }
 
