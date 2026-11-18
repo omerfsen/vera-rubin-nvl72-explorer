@@ -100,7 +100,9 @@
       "connectionTypes": "Типы соединений",
       "dashed": "Пунктир: предположение, см. панель",
       "explodedView": "Разнесённый вид",
-      "explodedViewHint": "Раздвинуть детали по слоям"
+      "explodedViewHint": "Раздвинуть детали по слоям",
+      "linkKindHint": "Показать или скрыть соединения {kind}",
+      "showAllKinds": "Показать все"
     },
     "cameraView": {
       "group": "Ракурс камеры",
@@ -220,7 +222,12 @@
       "pdfPage": "PDF с. {page}",
       "figure": "рисунок",
       "openQuestion": "Открытый вопрос в документах NVIDIA",
-      "openQuestions": "Открытые вопросы в документах NVIDIA"
+      "openQuestions": "Открытые вопросы в документах NVIDIA",
+      "pinnedConnection": "Закреплённое соединение",
+      "unpin": "Открепить",
+      "showLink": "Показать в 3D",
+      "showLinkFor": "Показать в 3D: {kind} к {end}",
+      "pinnedAnnounce": "Закреплённое соединение: {kind}, {from} → {to}"
     },
     "docs": {
       "user-guide": "User Guide",

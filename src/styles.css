@@ -404,6 +404,29 @@ button { font: inherit; color: inherit; }
   padding: 2px 8px;
 }
 .tray-label, .part-tooltip { pointer-events: none; }
+.link-card { pointer-events: none; }
+.link-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: max-content;
+  max-width: min(280px, 70vw);
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text);
+  background: var(--overlay-strong);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.18);
+  user-select: none;
+  /* Above the tube's midpoint, so the card does not cover the link it describes. */
+  transform: translateY(calc(-50% - 16px));
+}
+.link-card strong { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.link-card .link-swatch { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.link-card .assumed { font-weight: normal; font-size: 11px; color: var(--muted); border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; }
+.link-card .link-note, .link-card .link-source { color: var(--muted); }
 @media (max-width: 760px) {
   .stage-actions { top: auto; bottom: 8px; left: 8px; }
   /* The stage buttons take up to 60% from the left and the camera buttons and hint sit along the top.
@@ -428,7 +451,18 @@ button { font: inherit; color: inherit; }
   border-radius: var(--radius);
 }
 .link-legend li { display: flex; align-items: center; gap: 6px; }
+.link-legend .link-kind {
+  display: flex; align-items: center; gap: 6px; width: 100%;
+  background: none; border: 0; padding: 2px 0; font: inherit; color: inherit; cursor: pointer; text-align: start;
+}
+.link-legend .link-kind[aria-pressed="false"] { color: var(--muted); text-decoration: line-through; }
+/* Only the swatch fades for a hidden kind: the label must stay readable to turn it back on. */
+.link-legend .link-kind[aria-pressed="false"] .line-swatch { opacity: 0.35; }
+.link-legend .link-kind:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .line-swatch { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
+/* Same shapes as the tubes: coolant is a thick pipe, power a flat ribbon. */
+.line-swatch.shape-pipe { height: 5px; border-radius: 3px; }
+.line-swatch.shape-ribbon { height: 4px; border-radius: 0; }
 .link-button {
   background: none;
   border: 0;
@@ -931,3 +965,17 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .read-aloud[aria-pressed='true'] { border-color: var(--accent); }
 /* Wraps panel parts that Read aloud skips; takes no space of its own. */
 .no-read { display: contents; }
+.pinned-connection { border-inline-start: 3px solid var(--accent); padding-inline-start: 10px; }
+.pinned-connection p { margin: 4px 0; }
+/* Controls, not words: plain buttons that read aloud skips. */
+.show-link, .pinned-connection .unpin {
+  background: none; border: 1px solid var(--border); border-radius: 4px; color: var(--accent);
+  font: inherit; font-size: 0.85em; padding: 1px 6px; cursor: pointer;
+}
+.show-link { margin-inline-start: 6px; }
+/* Touch targets of at least 24 by 24 px on phones and touch screens. */
+@media (max-width: 760px), (pointer: coarse) {
+  .link-legend .link-kind { min-height: 28px; padding-block: 4px; }
+  .show-link, .pinned-connection .unpin { min-height: 28px; min-width: 28px; padding: 4px 8px; }
+}
+.show-link[aria-pressed="true"] { font-weight: 600; }

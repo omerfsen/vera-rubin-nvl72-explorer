@@ -100,7 +100,9 @@
       "connectionTypes": "Connection types",
       "dashed": "Dashed: assumed, see the panel",
       "explodedView": "Exploded view",
-      "explodedViewHint": "Spread the parts apart by layer"
+      "explodedViewHint": "Spread the parts apart by layer",
+      "linkKindHint": "Show or hide {kind} connections",
+      "showAllKinds": "Show all"
     },
     "cameraView": {
       "group": "Camera angle",
@@ -220,7 +222,12 @@
       "pdfPage": "PDF p. {page}",
       "figure": "figure",
       "openQuestion": "Open question in NVIDIA's documents",
-      "openQuestions": "Open questions in NVIDIA's documents"
+      "openQuestions": "Open questions in NVIDIA's documents",
+      "pinnedConnection": "Pinned connection",
+      "unpin": "Unpin",
+      "showLink": "Show in 3D",
+      "showLinkFor": "Show in 3D: {kind} to {end}",
+      "pinnedAnnounce": "Pinned connection: {kind}, {from} to {to}"
     },
     "docs": {
       "user-guide": "User Guide",

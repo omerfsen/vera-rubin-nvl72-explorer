@@ -22,11 +22,16 @@ function snapshot(): string {
   return `${reduced ? 1 : 0}${document.hidden ? 1 : 0}`;
 }
 
+/** Live reduced-motion and hidden-tab state; re-renders when either changes. */
+export function useMotionState(): { reducedMotion: boolean; hidden: boolean } {
+  const state = useSyncExternalStore(subscribe, snapshot, () => '10');
+  return { reducedMotion: state[0] === '1', hidden: state[1] === '1' };
+}
+
 /** True while the network flow should move: a network is shown, the tab is visible, and motion is not reduced. */
 export function useFlowRunning(): boolean {
   const network = useExplorer((s) => s.network);
-  const state = useSyncExternalStore(subscribe, snapshot, () => '10');
-  return flowShouldAnimate({ network, reducedMotion: state[0] === '1', hidden: state[1] === '1' });
+  return flowShouldAnimate({ network, ...useMotionState() });
 }
 
 // Pulses travel along each rod's local z axis (from `from` to `to`). The rod's

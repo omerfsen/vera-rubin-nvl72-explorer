@@ -2,6 +2,7 @@ import type { Model } from '../data/model';
 import { isValidSeed } from '../data/quiz';
 import { TOUR_STEPS } from '../data/tour';
 import { filterNetworks, filterTypes, parseFilterList } from '../data/listFilter';
+import { trayLinkKinds } from '../data/linkFilter';
 import { DEFAULT_LANG, isLang, type Lang } from '../i18n/lang';
 
 export type View = 'rack' | 'rear' | 'tray';
@@ -33,6 +34,8 @@ export interface UrlState {
   /** List filter: rack unit types and networks; left out when empty. */
   ft?: string[];
   fn?: string[];
+  /** Connection kinds hidden in the tray view; left out when every kind is shown. */
+  lk?: string[];
 }
 
 /** The pages that replace the rack view. */
@@ -41,7 +44,7 @@ export const PAGES: readonly string[] = ['sources', 'changes'];
 export const DEFAULT_URL_STATE: UrlState = { view: 'rack', select: '', list: false };
 
 /** The query keys this app owns. Everything else in the query is left alone. */
-const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang', 'cmp', 'quiz', 'tour', 'ft', 'fn']);
+const OWN_KEYS = new Set(['view', 'select', 'list', 'net', 'proc', 'step', 'page', 'embed', 'lang', 'cmp', 'quiz', 'tour', 'ft', 'fn', 'lk']);
 
 /**
  * The rack unit whose interior can be opened for this selection, e.g.
@@ -77,6 +80,7 @@ export function readUrlState(search: string, model: Model): UrlState {
     // The tour card is not shown in an embed, so a tour link does nothing there.
     ...(params.get('embed') === '1' ? {} : tourState(params)),
     ...filterState(params, model),
+    ...lkState(params, model),
   };
 }
 
@@ -90,6 +94,12 @@ function filterState(params: URLSearchParams, model: Model): { ft?: string[]; fn
   const ft = parseFilterList(params.get('ft'), filterTypes(model));
   const fn = parseFilterList(params.get('fn'), filterNetworks(model));
   return { ...(ft.length ? { ft } : {}), ...(fn.length ? { fn } : {}) };
+}
+
+/** Hidden connection kinds: only kinds a tray draws, once each; unknown kinds are dropped. */
+function lkState(params: URLSearchParams, model: Model): { lk?: string[] } {
+  const lk = parseFilterList(params.get('lk'), trayLinkKinds(model));
+  return lk.length ? { lk } : {};
 }
 
 function quizState(params: URLSearchParams): { quiz?: number } {
@@ -143,6 +153,7 @@ export function writeUrlState(search: string, state: UrlState): string {
   if (state.tour !== undefined && Number.isInteger(state.tour) && state.tour >= 0 && state.tour < TOUR_STEPS.length) kept.push(`tour=${state.tour + 1}`);
   if (state.ft?.length) kept.push(`ft=${state.ft.map(encodeURIComponent).join(',')}`);
   if (state.fn?.length) kept.push(`fn=${state.fn.map(encodeURIComponent).join(',')}`);
+  if (state.lk?.length) kept.push(`lk=${state.lk.map(encodeURIComponent).join(',')}`);
   return kept.length === 0 ? '' : `?${kept.join('&')}`;
 }
 

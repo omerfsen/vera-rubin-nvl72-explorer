@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { model } from '../data';
 import type { Component, Connection, Source, Spec } from '../data/types';
 import { SHOW_OFFICIAL_FIGURES, SHOW_READ_ALOUD, officialFigureUrl } from '../config/flags';
-import { useExplorer } from '../state/store';
+import { shownPin, useExplorer } from '../state/store';
 import { ROOT_ID } from '../data/model';
 import { trayKeyOf } from '../state/url';
 import { NetworkInfo } from './NetworkInfo';
@@ -15,7 +15,7 @@ import { CompareBox, CompareStart } from './Compare';
 import { CopyPartLink } from './CopyPartLink';
 import { ReadAloud } from './ReadAloud';
 import { CommandsSection, SafetySection, SoftwareSection } from './Operations';
-import { LINK_COLORS } from '../scenes/geometry';
+import { LINK_THEME_COLORS } from '../scenes/geometry';
 import { useI18n, type I18n } from '../i18n';
 import { GlossaryText } from './Glossary';
 import { EmptyPrompt } from './EmptyPrompt';
@@ -150,6 +150,59 @@ function countText(c: Component, index: number | undefined, i18n: I18n): string[
 }
 
 /**
+ * The connection pinned in the tray view (by a click or tap on its tube, or
+ * from a row below): kind, both ends, note and source, all from the data.
+ * Read aloud, since it is what the viewer is looking at. Shown only while the
+ * scene draws the link (the same test the scene and Escape use).
+ */
+function PinnedConnection({ trayKey }: { trayKey: string }) {
+  const pinnedLink = useExplorer(shownPin);
+  const pinLink = useExplorer((s) => s.pinLink);
+  const theme = useExplorer((s) => s.theme);
+  const i18n = useI18n();
+  const { t } = i18n;
+  if (!pinnedLink || pinnedLink.tray !== trayKey) return null;
+  const trayId = trayKey.split('.')[0]!;
+  const link = model.trayLayout(trayId)?.links?.[pinnedLink.index];
+  if (!link) return null;
+  const note = i18n.linkNote(trayId, pinnedLink.index, link.note);
+  return (
+    <section className="pinned-connection">
+      <h3>{t('panel.pinnedConnection')}</h3>
+      <p>
+        <span className="conn-kind" style={{ borderColor: LINK_THEME_COLORS[theme][link.kind] }}>
+          {i18n.linkName(link.kind)}
+        </span>{' '}
+        {link.assumed && <Assumed note={note} />}
+      </p>
+      <p>
+        {i18n.linkEndLabel(trayId, link.from)} → {i18n.linkEndLabel(trayId, link.to)}
+      </p>
+      {note && <p className="note">{note}</p>}
+      <div className="spec-source">
+        {t('panel.sourceLabel')} <SourceLink source={link.source} />
+      </div>
+      <button
+        type="button"
+        className="unpin"
+        onClick={(e) => {
+          // This section goes away with the pin: keep focus in the panel, on the row's
+          // Show in 3D button when there is one, else on the panel heading.
+          const panel = e.currentTarget.closest('article');
+          const next =
+            panel?.querySelector<HTMLElement>(`.show-link[data-link-index="${pinnedLink.index}"]`) ??
+            panel?.querySelector<HTMLElement>('#panel-title');
+          next?.focus({ preventScroll: true });
+          pinLink(null);
+        }}
+      >
+        {t('panel.unpin')}
+      </button>
+    </section>
+  );
+}
+
+/**
  * `totals`: show the rack totals chart when the rack is selected (the list shows it instead without WebGL).
  * `webgl`: false in the list-only fallback, so the prompt does not mention the 3D rack.
  */
@@ -171,6 +224,9 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
   const isNumberedUnit = last?.index !== undefined && segments.length === 1 && model.isRackUnitType(component.id);
   const height = model.isRackUnitType(component.id) ? model.topology.rackLayout.heightsRU?.[component.id] : undefined;
   const view = useExplorer((s) => s.view);
+  const theme = useExplorer((s) => s.theme);
+  const pinnedLink = useExplorer(shownPin);
+  const pinLink = useExplorer((s) => s.pinLink);
   const openTray = useExplorer((s) => s.openTray);
   const trayKey = trayKeyOf(selected, model);
   const trayId = trayKey?.split('.')[0] ?? null;
@@ -179,6 +235,16 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
   const slot = trayId && within ? model.slotFor(trayId, within) : undefined;
   const notPlaced = layout?.notPlaced?.find((n) => n.component === component.id);
   const trayLinks = trayId && within ? model.linksAt(trayId, within) : [];
+  // Said once per pin by an always-present live region (one inserted with its text is not read).
+  const pinned = trayId && view === 'tray' && pinnedLink?.tray === trayKey ? layout?.links?.[pinnedLink.index] : undefined;
+  const pinAnnouncement =
+    pinned && trayId
+      ? t('panel.pinnedAnnounce', {
+          kind: i18n.linkName(pinned.kind),
+          from: i18n.linkEndLabel(trayId, pinned.from),
+          to: i18n.linkEndLabel(trayId, pinned.to),
+        })
+      : '';
   const headingRef = useRef<HTMLHeadingElement>(null);
   const articleRef = useRef<HTMLElement>(null);
   const firstRender = useRef(true);
@@ -200,6 +266,9 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
     <article className="panel-body" aria-labelledby="panel-title" ref={articleRef}>
       <p className="sr-only" aria-live="polite">
         {t('panel.selected', { title })}
+      </p>
+      <p className="sr-only" aria-live="polite">
+        {pinAnnouncement}
       </p>
       {i18n.lang !== 'en' && (
         <p className="note translated-notice" lang={i18n.lang}>
@@ -232,6 +301,8 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
       )}
 
       <OpenQuestions component={component} />
+
+      {trayKey && view === 'tray' && <PinnedConnection trayKey={trayKey} />}
 
       <section>
         <h3>{t('panel.whatItIs')}</h3>
@@ -381,7 +452,7 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
               const otherPath = model.linkEndPath(trayId, other);
               return (
                 <li key={i}>
-                  <span className="conn-kind" style={{ borderColor: LINK_COLORS[l.kind] }}>
+                  <span className="conn-kind" style={{ borderColor: LINK_THEME_COLORS[theme][l.kind] }}>
                     {i18n.linkName(l.kind)}
                   </span>{' '}
                   {otherPath ? (
@@ -392,6 +463,20 @@ export function SidePanel({ totals = true, webgl = true }: { totals?: boolean; w
                     i18n.linkEndLabel(trayId, other)
                   )}{' '}
                   {l.assumed && <Assumed note={linkNote} />}
+                  {webgl && view === 'tray' && trayKey && linkIndex >= 0 && (
+                    <button
+                      type="button"
+                      className="show-link"
+                      data-link-index={linkIndex}
+                      aria-label={t('panel.showLinkFor', { kind: i18n.linkName(l.kind), end: i18n.linkEndLabel(trayId, other) })}
+                      aria-pressed={pinnedLink?.tray === trayKey && pinnedLink.index === linkIndex}
+                      onClick={() =>
+                        pinLink(pinnedLink?.tray === trayKey && pinnedLink.index === linkIndex ? null : { tray: trayKey, index: linkIndex })
+                      }
+                    >
+                      {t('panel.showLink')}
+                    </button>
+                  )}
                   {linkNote && <div className="note">{linkNote}</div>}
                   <div className="spec-source">
                     {t('panel.sourceLabel')} <SourceLink source={l.source} />

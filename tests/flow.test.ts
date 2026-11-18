@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { model } from '../src/data';
-import { flowShouldAnimate, isFlowMember, STUB_LENGTH, stubFrom } from '../src/scenes/flow';
+import { dotFraction, flowShouldAnimate, isFlowMember, linkFlowShouldRun, STUB_LENGTH, stubFrom } from '../src/scenes/flow';
+import { flowDotPositions } from '../src/scenes/LinkFlow';
 import { managementLinks, managementNetwork, networkFlowSegments } from '../src/scenes/FrontScene';
-import { trayFlowSegments } from '../src/scenes/TrayScene';
+import { linkCurve, trayFlowSegments } from '../src/scenes/TrayScene';
 
 const networks = model.topology.networks.map((n) => n.id);
 const count = (componentId: string) => model.rackUnits.filter((u) => u.componentId === componentId).length;
@@ -82,5 +83,41 @@ describe('network flow', () => {
       }
       expect(trayFlowSegments(model.trayLayout(model.rackUnits[0]!.componentId)!, '')).toHaveLength(0);
     }
+  });
+});
+
+describe('dots along tray connections', () => {
+  it('run only with the connections layer on, parts at rest, the tab visible and motion allowed', () => {
+    const on = { links: true, settled: 0, target: 0, reducedMotion: false, hidden: false };
+    expect(linkFlowShouldRun(on)).toBe(true);
+    expect(linkFlowShouldRun({ ...on, links: false })).toBe(false);
+    expect(linkFlowShouldRun({ ...on, target: 1 })).toBe(false);
+    expect(linkFlowShouldRun({ ...on, reducedMotion: true })).toBe(false);
+    expect(linkFlowShouldRun({ ...on, hidden: true })).toBe(false);
+  });
+
+  it('start at the ends at t=0, move evenly, wrap around, and run both ways', () => {
+    expect(dotFraction(0, 0, 4, 1, 1)).toBe(0);
+    expect(dotFraction(0, 1, 4, 1, 1)).toBe(0.75);
+    expect(dotFraction(0, 2, 4, 1, 1)).toBe(0.5);
+    // Forward dots grow with time, backward ones shrink, until they wrap.
+    expect(dotFraction(0.1, 0, 4, 1, 1)).toBeGreaterThan(dotFraction(0.05, 0, 4, 1, 1));
+    expect(dotFraction(0.1, 1, 4, 1, 1)).toBeLessThan(dotFraction(0.05, 1, 4, 1, 1));
+    expect(dotFraction(1.25, 0, 4, 1, 1)).toBeCloseTo(0.25);
+    for (const t of [0, 0.3, 7.9, 1e6]) for (let k = 0; k < 4; k++) {
+      const f = dotFraction(t, k, 4, 0.06, 0.3);
+      expect(f).toBeGreaterThanOrEqual(0);
+      expect(f).toBeLessThan(1.0000001);
+    }
+  });
+
+  it('places the dots on the link curve, starting at its first end', () => {
+    const curve = linkCurve([0, 0, 0], [0.3, 0, 0]);
+    const [first, second] = flowDotPositions([curve], 0, 4);
+    expect(first!.distanceTo(curve.getPoint(0))).toBeLessThan(1e-9);
+    expect(flowDotPositions([curve, curve], 0.5, 4)).toHaveLength(8);
+    expect(second!.distanceTo(curve.getPointAt(0.75))).toBeLessThan(1e-9);
+    const moved = flowDotPositions([curve], 1, 4)[0]!;
+    expect(moved.x).toBeGreaterThan(first!.x);
   });
 });

@@ -204,4 +204,14 @@ describe('speech helpers', () => {
       '<section><h3>What it is</h3><p>A thing<span aria-hidden="true">✓</span></p></section><p role="status">Saved</p>';
     expect(panelText(el)).toBe('Tray. Name. What it is. A thing.');
   });
+
+  it('reads a pinned connection but not its Unpin button', () => {
+    useExplorer.setState({ selected: 'compute-tray.3', view: 'tray', pinnedLink: { tray: 'compute-tray.3', index: 0 } });
+    const { container } = render(<SidePanel />);
+    const text = panelText(container.querySelector('article')!);
+    expect(text).toContain('Pinned connection');
+    expect(text).toContain('Clink (CPU to CPU)');
+    expect(text).not.toContain('Unpin');
+    useExplorer.setState({ selected: '', view: 'rack', pinnedLink: null });
+  });
 });

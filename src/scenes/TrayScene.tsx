@@ -1,23 +1,39 @@
 import { useSceneTheme } from './useSceneTheme';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
-import { Html, QuadraticBezierLine } from '@react-three/drei';
-import { Color, Group, InstancedMesh, Object3D } from 'three';
+import { Html } from '@react-three/drei';
+import {
+  BackSide,
+  Color,
+  DataTexture,
+  Group,
+  InstancedMesh,
+  NearestFilter,
+  Object3D,
+  QuadraticBezierCurve3,
+  RepeatWrapping,
+  RGBAFormat,
+  TubeGeometry,
+  Vector3,
+} from 'three';
 import { model } from '../data';
 import type { LinkEnd, TrayLayout, TraySlot } from '../data/types';
-import { useExplorer } from '../state/store';
+import { shownPin, useExplorer } from '../state/store';
+import { visibleLinks } from '../data/linkFilter';
 import { i18nFor, useI18n, type I18n } from '../i18n';
 import { isPartSelected, partColor } from './colors';
 import { Rods, type Segment } from './Rods';
-import { FlowRods } from './FlowRods';
-import { isFlowMember, stubFrom } from './flow';
+import { FlowRods, useMotionState } from './FlowRods';
+import { isFlowMember, linkFlowShouldRun, stubFrom } from './flow';
+import { LinkFlow, type FlowLink } from './LinkFlow';
 import {
   CONFLICT_COLOR,
   HOVER_COLOR,
   ledColor,
   NETWORK_COLORS,
-  LINK_COLORS,
   SELECTED_COLOR,
+  linkShape,
+  type LinkShape,
   TYPE_COLORS,
   TRAY_DEPTH,
   TRAY_HEIGHT,
@@ -108,11 +124,15 @@ function PartInstances({ trayKey, items, heightRU, amount }: { trayKey: string; 
     invalidate();
   }, [items, selected, hovered, base, invalidate, trayKey, overlay, place, amount]);
 
+  // Unmounted under the pointer (the Parts layer turned off by keyboard), the mesh gets no
+  // pointerout, so let go of the hover here too or its name tag would stay on screen.
   useEffect(
     () => () => {
       document.body.style.cursor = '';
+      const hovered = useExplorer.getState().hovered;
+      if (hovered !== null && items.some((it) => it.path === hovered)) useExplorer.getState().setHovered(null);
     },
-    [],
+    [items],
   );
 
   const pathOf = (e: ThreeEvent<PointerEvent | MouseEvent>) =>
@@ -229,46 +249,246 @@ function endPosition(layout: TrayLayout, end: LinkEnd, offsets: Vec[], amount: n
   return [box.position[0] + dx, box.position[1] + box.size[1] / 2 + 0.005 + dy, box.position[2] + dz];
 }
 
+/** Stripes along an assumed link's tube: an alpha map of two lit and two dark texels, repeated along its length. */
+const STRIPES = (() => {
+  const t = new DataTexture(new Uint8Array([255, 255, 255, 255, 255, 255, 255, 255, 40, 40, 40, 255, 40, 40, 40, 255]), 4, 1, RGBAFormat);
+  t.wrapS = RepeatWrapping;
+  t.magFilter = NearestFilter;
+  t.minFilter = NearestFilter;
+  t.needsUpdate = true;
+  return t;
+})();
+/** Length of one stripe period along an assumed tube. */
+const STRIPE_PERIOD = 0.05;
+
+/** The curve a link follows: up from both ends and over, higher for longer links. */
+export function linkCurve(a: Vec, b: Vec): QuadraticBezierCurve3 {
+  const lift = 0.06 + Math.hypot(a[0] - b[0], a[2] - b[2]) * 0.12;
+  const mid = new Vector3((a[0] + b[0]) / 2, Math.max(a[1], b[1]) + lift, (a[2] + b[2]) / 2);
+  return new QuadraticBezierCurve3(new Vector3(...a), mid, new Vector3(...b));
+}
+
+/** Name of one end of a link: the part's label, or the named point on the tray. */
+export function linkEndLabel(layout: TrayLayout, trayId: string, end: LinkEnd, i18n: I18n): string {
+  if (end.point !== undefined) {
+    const p = layout.points?.find((pt) => pt.id === end.point);
+    return i18n.pointLabel(trayId, end.point, p?.label ?? end.point);
+  }
+  const slot = layout.slots.find((s) => s.component === end.component && s.index === end.index);
+  if (slot?.label) return slot.label;
+  return i18n.segmentLabel({ id: end.component, index: end.index });
+}
+
+/** Tube radius for a link: coolant pipes are thicker than signal links. */
+export function linkRadius(shape: LinkShape, base: number): number {
+  return shape === 'pipe' ? base * 1.6 : base;
+}
+
+/** Extra radius of the outline drawn behind every tube. */
+const HALO = 0.0012;
+
+function LinkTube({
+  curve,
+  color,
+  halo,
+  haloOpacity,
+  shape,
+  assumed,
+  radius,
+  opacity,
+  glow,
+  onOver,
+  onOut,
+  onClick,
+}: {
+  curve: QuadraticBezierCurve3;
+  color: string;
+  halo: string;
+  haloOpacity: number;
+  shape: LinkShape;
+  assumed: boolean;
+  radius: number;
+  opacity: number;
+  glow: boolean;
+  onOver: (e: ThreeEvent<PointerEvent>) => void;
+  onOut: () => void;
+  onClick?: (e: ThreeEvent<MouseEvent>) => void;
+}) {
+  // Power is a square ribbon, so the shape says what a link carries even without its colour.
+  const sides = shape === 'ribbon' ? 4 : 8;
+  const r = linkRadius(shape, radius);
+  const geometry = useMemo(() => new TubeGeometry(curve, 48, r, sides, false), [curve, r, sides]);
+  const outline = useMemo(() => new TubeGeometry(curve, 48, r + HALO, sides, false), [curve, r, sides]);
+  const stripes = useMemo(() => {
+    if (!assumed) return null;
+    const t = STRIPES.clone();
+    t.repeat.set(Math.max(1, curve.getLength() / STRIPE_PERIOD), 1);
+    t.needsUpdate = true;
+    return t;
+  }, [assumed, curve]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  useEffect(() => () => outline.dispose(), [outline]);
+  useEffect(() => () => stripes?.dispose(), [stripes]);
+  const pipe = shape === 'pipe';
+  // Hover only brightens the link's own colour; it never takes the hover or selection colour.
+  const emissive = pipe ? (glow ? 0.35 : 0) : glow ? 0.9 : 0.25;
+  return (
+    <group>
+      <mesh geometry={outline} raycast={() => null} visible={haloOpacity > 0}>
+        <meshBasicMaterial color={halo} side={BackSide} transparent opacity={haloOpacity * opacity} depthWrite={false} />
+      </mesh>
+      <mesh geometry={geometry} onPointerOver={onOver} onPointerOut={onOut} onClick={onClick}>
+        <meshStandardMaterial
+          color={color}
+          emissive={color}
+          emissiveIntensity={emissive}
+          roughness={pipe ? 0.8 : 0.4}
+          metalness={pipe ? 0 : 0.1}
+          transparent
+          opacity={assumed ? opacity * 0.75 : opacity}
+          alphaMap={stripes}
+          depthWrite={!assumed && opacity > 0.5}
+        />
+      </mesh>
+    </group>
+  );
+}
+
 /**
- * The connections layer: one curve per link, coloured by kind. Links of the
- * selected part are drawn bright and thick; the rest fade while something
- * inside the tray is selected.
+ * The connections layer: one tube per link, coloured by kind; an assumed
+ * link is striped and see-through. Links of the selected part are drawn
+ * thicker; the rest fade while something inside the tray is selected.
+ * Hovering a tube shows what it is, its two ends and where NVIDIA states it.
  */
-function TrayLinks({ trayKey, layout, offsets, amount }: { trayKey: string; layout: TrayLayout; offsets: Vec[]; amount: number }) {
+function TrayLinks({
+  trayKey,
+  layout,
+  offsets,
+  amount,
+  flow,
+}: {
+  trayKey: string;
+  layout: TrayLayout;
+  offsets: Vec[];
+  amount: number;
+  /** Move dots along the links that are not faded. */
+  flow: boolean;
+}) {
   const trayId = trayKey.split('.')[0]!;
   const selected = useExplorer((s) => s.selected);
   const network = useExplorer((s) => s.network);
+  const hiddenKinds = useExplorer((s) => s.hiddenLinkKinds);
+  const pin = useExplorer(shownPin);
+  const pinLink = useExplorer((s) => s.pinLink);
   const invalidate = useThree((s) => s.invalidate);
+  const connected = useThree((s) => s.events.connected);
+  const i18n = useI18n();
+  const { links: colors, halo, theme } = useSceneTheme();
+  const [hover, setHover] = useState<number | null>(null);
   const within = selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
   const active = useMemo(() => new Set(within ? model.linksAt(trayId, within) : []), [trayId, within]);
-  useEffect(() => invalidate(), [active, invalidate]);
-  return (
-    <group>
-      {(layout.links ?? []).map((link, i) => {
+  const links = layout.links ?? [];
+  const curves = useMemo(
+    () =>
+      links.map((link) => {
         const a = endPosition(layout, link.from, offsets, amount);
         const b = endPosition(layout, link.to, offsets, amount);
-        if (!a || !b) return null;
-        const lift = 0.06 + Math.hypot(a[0] - b[0], a[2] - b[2]) * 0.12;
-        const mid: Vec = [(a[0] + b[0]) / 2, Math.max(a[1], b[1]) + lift, (a[2] + b[2]) / 2];
+        return a && b ? linkCurve(a, b) : null;
+      }),
+    [links, layout, offsets, amount],
+  );
+  const visible = useMemo(() => visibleLinks(links, hiddenKinds), [links, hiddenKinds]);
+  const pinned = pin && pin.tray === trayKey ? pin.index : null;
+  useEffect(() => invalidate(), [active, hover, visible, pinned, invalidate]);
+  // A hovered tube that goes away (another tray, or its kind hidden from the legend by keyboard) never
+  // gets a pointerout, so drop the hover and its pointer cursor here.
+  const hoverRef = useRef(hover);
+  hoverRef.current = hover;
+  useEffect(() => {
+    if (hoverRef.current === null) return;
+    setHover(null);
+    document.body.style.cursor = '';
+  }, [trayKey, hiddenKinds]);
+  useEffect(
+    () => () => {
+      document.body.style.cursor = '';
+    },
+    [],
+  );
+  // The card shows the tube under the pointer, or else the pinned one.
+  const shownIndex = hover ?? pinned;
+  const focus = shownIndex;
+  const isDim = (i: number) => (focus !== null ? focus !== i : (within !== null && !active.has(links[i]!)) || network !== '');
+  const flowLinks = useMemo<FlowLink[]>(
+    () =>
+      flow
+        ? visible.flatMap(({ link, index }) => {
+            const curve = curves[index];
+            return curve && !isDim(index) ? [{ curve, color: colors[link.kind] ?? '#ffffff' }] : [];
+          })
+        : [],
+    // isDim reads focus, within, active, links and network.
+    [flow, visible, curves, colors, focus, within, active, network],
+  );
+  const shown = shownIndex !== null ? links[shownIndex] : undefined;
+  const shownCurve = shownIndex !== null ? curves[shownIndex] : null;
+  return (
+    <group>
+      {visible.map(({ link, index: i }) => {
+        const curve = curves[i];
+        if (!curve) return null;
         const on = active.has(link);
-        const dim = (within !== null && !on) || network !== '';
+        const lit = hover === i || pinned === i;
+        const dim = isDim(i);
         return (
-          <QuadraticBezierLine
+          <LinkTube
             key={i}
-            start={a}
-            end={b}
-            mid={mid}
-            color={LINK_COLORS[link.kind] ?? '#ffffff'}
-            lineWidth={on ? 4 : 2}
-            dashed={link.assumed === true}
-            dashSize={0.03}
-            gapSize={0.02}
-            transparent
-            opacity={dim ? 0.2 : 0.95}
-            raycast={() => null}
+            curve={curve}
+            color={colors[link.kind] ?? '#ffffff'}
+            halo={halo}
+            haloOpacity={dim ? 0 : theme === 'dark' ? 0.3 : 0.45}
+            shape={linkShape(link.kind)}
+            assumed={link.assumed === true}
+            radius={on || lit ? 0.009 : 0.0055}
+            opacity={dim ? 0.15 : 0.95}
+            glow={lit}
+            onOver={(e) => {
+              e.stopPropagation();
+              setHover(i);
+              document.body.style.cursor = 'pointer';
+            }}
+            onOut={() => {
+              setHover((h) => (h === i ? null : h));
+              document.body.style.cursor = '';
+            }}
+            onClick={(e) => {
+              // A tap pins the card (touch has no hover); a second tap, Escape or a click on empty space lets go.
+              e.stopPropagation();
+              if (e.delta > DRAG_THRESHOLD) return;
+              pinLink(pinned === i ? null : { tray: trayKey, index: i });
+            }}
           />
         );
       })}
+      <LinkFlow links={flowLinks} />
+      {connected && shown && shownCurve && (
+        <Html position={shownCurve.getPoint(0.5).toArray()} center className={hover === null ? 'link-card pinned' : 'link-card'} style={{ pointerEvents: 'none' }} zIndexRange={[36, 31]}>
+          <div data-label data-label-pinned role="tooltip">
+            <strong>
+              <span className="link-swatch" style={{ background: colors[shown.kind] ?? '#ffffff' }} aria-hidden="true" />
+              {i18n.linkName(shown.kind)}
+              {shown.assumed && <span className="assumed">{i18n.t('panel.assumed')}</span>}
+            </strong>
+            <span>
+              {linkEndLabel(layout, trayId, shown.from, i18n)} → {linkEndLabel(layout, trayId, shown.to, i18n)}
+            </span>
+            {shown.note && <span className="link-note">{i18n.linkNote(trayId, shownIndex!, shown.note)}</span>}
+            <span className="link-source">
+              {i18n.t('panel.sourceLabel')} {shown.source.section}
+            </span>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
@@ -311,9 +531,11 @@ export function partLabel(item: Placed, i18n: I18n = i18nFor('en')): string {
 function Labels({ placed, heightRU, amount }: { placed: Placed[]; heightRU: number; amount: number }) {
   const connected = useThree((s) => s.events.connected);
   const hovered = useExplorer((s) => s.hovered);
+  const partsShown = useExplorer((s) => s.layers.parts);
   const i18n = useI18n();
   if (!connected) return null;
-  const hoveredItem = placed.find((p) => p.path === hovered);
+  // Only name a part that is drawn.
+  const hoveredItem = partsShown ? placed.find((p) => p.path === hovered) : undefined;
   const box = hoveredItem ? slotBox(hoveredItem.slot, heightRU) : null;
   const [dx, dy, dz] = scaleOffset(hoveredItem?.offset, amount);
   return (
@@ -330,6 +552,7 @@ function Labels({ placed, heightRU, amount }: { placed: Placed[]; heightRU: numb
           center
           className="part-tooltip"
           style={{ pointerEvents: 'none' }}
+          zIndexRange={[20, 10]}
         >
           <span data-label data-label-pinned>
             {partLabel(hoveredItem, i18n)}
@@ -373,6 +596,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
   // The amount links and labels are drawn at; links hide while parts move.
   const [settled, setSettled] = useState(target);
   useEffect(() => invalidate(), [target, invalidate]);
+  const flow = linkFlowShouldRun({ links: layers.links, settled, target, ...useMotionState() });
   const animating = useRef(false);
   useFrame((_, delta) => {
     if (amount.current === target) {
@@ -400,7 +624,7 @@ export function TrayScene({ trayKey }: { trayKey: string }) {
         ))}
       {layers.parts && <Indicators layout={layout} offsets={offsets} amount={amount} />}
       {layers.links && settled === target && (
-        <TrayLinks trayKey={trayKey} layout={layout} offsets={offsets} amount={settled} />
+        <TrayLinks trayKey={trayKey} layout={layout} offsets={offsets} amount={settled} flow={flow} />
       )}
       {/* The flow stubs sit at the parts' normal places, so they only show when the tray is not exploded. */}
       {layers.links && settled === 0 && target === 0 && <TrayFlow layout={layout} />}

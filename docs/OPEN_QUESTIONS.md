@@ -148,3 +148,21 @@ Labelled in the guide's figures:
 
 Not explained anywhere: what "HPM" and "ERoT" stand for. HPM_L and HPM_R are
 "HPM Left" and "HPM Right" (2.4 Fig. 4).
+
+## 14. Direction along tray connections
+
+The data lists each tray connection with a `from` and a `to` end, but that is
+only the order the ends are written in. The guide does not state a signal or
+flow direction for PCIe, C2C, Clink, NVLink or power inside a tray.
+
+For coolant it gives part of the path. Guide 1.2 (Compute Trays,
+https://docs.nvidia.com/dgx/dgxvr-user-guide/hardware.html#compute-trays) says
+the liquid "runs up and down the rack through the inner manifold, then through
+the cold plates", and Fig. 5 in the same section labels the tray's cold water
+inlet and hot water outlet. That orders manifold before cold plates, but it
+does not settle which tray coolant link carries supply and which carries
+return, the order across the individual cold plates, or whether "inner
+manifold" is the tray's Internal Manifold (item 12).
+
+The moving dots in the tray view therefore run both ways along every
+connection: they show that a link carries something, not which way.

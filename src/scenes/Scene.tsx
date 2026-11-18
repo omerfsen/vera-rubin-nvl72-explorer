@@ -177,7 +177,12 @@ export default function Scene() {
             ? t('scene.trayOpened', { name: segmentLabel(model.parsePath(trayKey)![0]!) })
             : t('scene.rack')
         }
-        onPointerMissed={() => useExplorer.getState().setHovered(null)}
+        onPointerMissed={(e) => {
+          const s = useExplorer.getState();
+          s.setHovered(null);
+          // A click on empty space lets go of a pinned connection (R3F only reports clicks, not drags, here).
+          if (e.type === 'click' && s.pinnedLink) s.pinLink(null);
+        }}
         onCreated={({ gl, invalidate }) => {
           // three.js handles context loss itself; with frameloop="demand" nothing
           // redraws after a restore unless we ask for a frame.

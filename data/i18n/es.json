@@ -100,7 +100,9 @@
       "connectionTypes": "Tipos de conexión",
       "dashed": "Discontinua: supuesto, ver el panel",
       "explodedView": "Vista explosionada",
-      "explodedViewHint": "Separa las piezas por capas"
+      "explodedViewHint": "Separa las piezas por capas",
+      "linkKindHint": "Mostrar u ocultar las conexiones {kind}",
+      "showAllKinds": "Mostrar todas"
     },
     "cameraView": {
       "group": "Ángulo de cámara",
@@ -220,7 +222,12 @@
       "pdfPage": "PDF p. {page}",
       "figure": "figura",
       "openQuestion": "Pregunta abierta en los documentos de NVIDIA",
-      "openQuestions": "Preguntas abiertas en los documentos de NVIDIA"
+      "openQuestions": "Preguntas abiertas en los documentos de NVIDIA",
+      "pinnedConnection": "Conexión fijada",
+      "unpin": "Soltar",
+      "showLink": "Mostrar en 3D",
+      "showLinkFor": "Mostrar en 3D: {kind} hacia {end}",
+      "pinnedAnnounce": "Conexión fijada: {kind}, de {from} a {to}"
     },
     "docs": {
       "user-guide": "User Guide",

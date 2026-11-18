@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { model } from '../data';
 import { DEFAULT_URL_STATE, canonicalPath, readUrlState, trayKeyOf, writeUrlState, type View } from './url';
+import { trayLinkKinds } from '../data/linkFilter';
 import { NO_FILTER, filterNetworks, filterTypes, toggleIn, type ListFilter } from '../data/listFilter';
 import { answerFromSelection, generateQuiz, isValidSeed, newSeed, type QuizQuestion } from '../data/quiz';
 import { TOUR_STEPS, showsTourStep } from '../data/tour';
@@ -55,6 +56,15 @@ interface ExplorerState {
   listOpen: boolean;
   /** Tray view layers: structure (bones), parts (muscles), connections (veins). */
   layers: { structure: boolean; parts: boolean; links: boolean };
+  /** Connection kinds hidden in the tray view; empty shows every kind. */
+  hiddenLinkKinds: string[];
+  /** Hide a connection kind, or show it again. */
+  toggleLinkKind: (kind: string) => void;
+  /** Show every connection kind again. */
+  showAllLinkKinds: () => void;
+  /** Connection pinned in the tray view (its tray key and index in the layout), or null. Not in the URL. */
+  pinnedLink: { tray: string; index: number } | null;
+  pinLink: (link: { tray: string; index: number } | null) => void;
   /** Tray view: parts spread apart by layer so each can be seen and clicked. */
   exploded: boolean;
   toggleExploded: () => void;
@@ -153,7 +163,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     if (TOUR_STEPS.length === 0) return;
     const { view, selected, network, page, procedure, step, compare } = get();
     const restore = restoreTo ?? get().tour?.restore ?? { view, selected, network, page, procedure, step, compare };
-    set({ tour: { index: 0, restore }, quiz: null, procedure: '', step: 0, compare: '', panelOpen: true, hintOpen: false });
+    set({ tour: { index: 0, restore }, pinnedLink: null, quiz: null, procedure: '', step: 0, compare: '', panelOpen: true, hintOpen: false });
     get().goToTourStep(index);
   },
   goToTourStep: (index) => {
@@ -191,6 +201,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
       selected: '',
       view: 'rack',
       hovered: null,
+      pinnedLink: null,
       panelOpen: true,
     });
   },
@@ -224,6 +235,32 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     set({ panelOpen: open });
   },
   layers: { structure: true, parts: true, links: true },
+  hiddenLinkKinds: initial.lk ?? [],
+  toggleLinkKind: (kind) => {
+    const all = trayLinkKinds(model);
+    if (!all.includes(kind)) return;
+    const hiddenLinkKinds = toggleIn(get().hiddenLinkKinds, kind, all);
+    // Hiding the pinned connection's kind lets go of it; any other toggle keeps it.
+    const pinned = get().pinnedLink;
+    const pinnedKind = pinned ? pinnedLinkOf(pinned)?.kind : undefined;
+    set({ hiddenLinkKinds, pinnedLink: pinnedKind && hiddenLinkKinds.includes(pinnedKind) ? null : pinned });
+  },
+  showAllLinkKinds: () => set({ hiddenLinkKinds: [] }),
+  pinnedLink: null,
+  pinLink: (pin) => {
+    if (!pin) {
+      set({ pinnedLink: null });
+      return;
+    }
+    const link = pinnedLinkOf(pin);
+    if (!link) return;
+    // A pin is always drawn: show its kind and the connections layer again if they were off.
+    set({
+      pinnedLink: pin,
+      hiddenLinkKinds: get().hiddenLinkKinds.filter((k) => k !== link.kind),
+      layers: { ...get().layers, links: true },
+    });
+  },
   exploded: false,
   toggleExploded: () => set({ exploded: !get().exploded }),
   network: initial.net ?? '',
@@ -255,7 +292,14 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     storeLang(lang);
     set({ lang });
   },
-  toggleLayer: (layer) => set({ layers: { ...get().layers, [layer]: !get().layers[layer] } }),
+  toggleLayer: (layer) => {
+    const on = !get().layers[layer];
+    const layers = { ...get().layers, [layer]: on };
+    // Turning a layer off removes what it drew: the pinned connection, or the hovered part's name tag.
+    if (!on && layer === 'links') set({ layers, pinnedLink: null });
+    else if (!on && layer === 'parts' && get().view === 'tray') set({ layers, hovered: null });
+    else set({ layers });
+  },
   select: (path) => {
     const segments = model.parsePath(path);
     const selected = segments === null ? '' : model.formatPath(segments);
@@ -265,7 +309,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     if (view === 'tray' && trayKeyOf(selected, model) === null) view = 'rack';
     const first = segments?.[0];
     if (first && model.getComponent(first.id)?.rearSide) view = 'rear';
-    set({ selected, view });
+    set({ selected, view, pinnedLink: null });
     // While a quiz asks for a part, picking one answers it.
     const quiz = get().quiz;
     const q = quiz && !quiz.done && !quiz.answer ? quiz.questions[quiz.index] : undefined;
@@ -274,20 +318,20 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
       if (given !== null) get().answerQuiz(given);
     }
   },
-  setSide: (side) => set({ view: side, hovered: null }),
+  setSide: (side) => set({ view: side, hovered: null, pinnedLink: null }),
   openTray: () => {
     const key = trayKeyOf(get().selected, model);
-    if (key) set({ view: 'tray', hovered: null });
+    if (key) set({ view: 'tray', hovered: null, pinnedLink: null });
   },
   closeTray: () => {
     const key = trayKeyOf(get().selected, model);
-    set({ view: 'rack', hovered: null, selected: key ?? get().selected });
+    set({ view: 'rack', hovered: null, selected: key ?? get().selected, pinnedLink: null });
   },
   goUp: () => {
     const { selected, view } = get();
     const key = trayKeyOf(selected, model);
     if (view === 'tray' && selected === key) {
-      set({ view: 'rack', hovered: null });
+      set({ view: 'rack', hovered: null, pinnedLink: null });
       return;
     }
     if (selected === '') return;
@@ -303,7 +347,7 @@ export const useExplorer = create<ExplorerState>((set, get) => ({
     if (paths.length === 0) return;
     const current = paths.indexOf(get().selected);
     const next = current === -1 ? (step > 0 ? 0 : paths.length - 1) : Math.min(paths.length - 1, Math.max(0, current + step));
-    set({ selected: paths[next]! });
+    set({ selected: paths[next]!, pinnedLink: null });
   },
   compare: initial.cmp ?? '',
   startCompare: (path) => {
@@ -374,6 +418,22 @@ if (initial.quiz !== undefined) useExplorer.getState().startQuiz(initial.quiz);
 if (initial.tour !== undefined) useExplorer.getState().startTour(initial.tour, TOUR_HOME);
 
 /** Keep the address bar in step with the store. */
+/** The tray link a pin points at, or undefined when the pin names no link. */
+function pinnedLinkOf(pin: { tray: string; index: number }) {
+  return model.trayLayout(pin.tray.split('.')[0]!)?.links?.[pin.index];
+}
+
+/**
+ * The pinned connection when the tray view draws it (its kind shown and the
+ * connections layer on), else null. The scene, the panel and Escape all use it.
+ */
+export function shownPin(s: Pick<ExplorerState, 'pinnedLink' | 'hiddenLinkKinds' | 'layers'>): { tray: string; index: number } | null {
+  const pin = s.pinnedLink;
+  if (!pin || !s.layers.links) return null;
+  const link = pinnedLinkOf(pin);
+  return link && !s.hiddenLinkKinds.includes(link.kind) ? pin : null;
+}
+
 export function syncUrl(): () => void {
   const write = (s: ExplorerState) => {
     const search = writeUrlState(window.location.search, {
@@ -393,6 +453,7 @@ export function syncUrl(): () => void {
       tour: s.tour && showsTourStep(TOUR_STEPS[s.tour.index]!, s, model) ? s.tour.index : undefined,
       ft: s.listFilter.types,
       fn: s.listFilter.nets,
+      lk: s.hiddenLinkKinds,
     });
     if (document.documentElement.lang !== s.lang) document.documentElement.lang = s.lang;
     if (search === window.location.search) return;

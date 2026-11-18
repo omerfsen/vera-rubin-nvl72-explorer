@@ -76,6 +76,200 @@ test.describe('rack', () => {
     });
   }
 
+  test('hovering a tray part names it', async ({ page }) => {
+    // No moving dots: the software renderer in CI then answers each pointer move quickly.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/?select=compute-tray.3&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    // Connections sit over some parts and show their own card, so hide them for this sweep.
+    await page.getByRole('button', { name: 'Connections', exact: true }).click();
+    const box = (await page.locator('canvas').boundingBox())!;
+    const label = page.locator('.part-tooltip span');
+    let found = false;
+    for (const fy of [0.5, 0.45, 0.55, 0.4, 0.6]) {
+      for (const fx of [0.5, 0.4, 0.6, 0.3, 0.7]) {
+        await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+        if (await label.waitFor({ state: 'attached', timeout: 800 }).then(() => true, () => false)) {
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+    await expect(label).toHaveText(/\S/);
+    await page.mouse.move(box.x + 5, box.y + 5);
+    await expect(page.locator('.part-tooltip')).toHaveCount(0);
+  });
+
+  test('a part name tag goes when the Parts layer is turned off by keyboard under the pointer', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/?select=compute-tray.3&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    await page.getByRole('button', { name: 'Connections', exact: true }).click();
+    const box = (await page.locator('canvas').boundingBox())!;
+    const label = page.locator('.part-tooltip span');
+    let found = false;
+    for (const fy of [0.5, 0.45, 0.55, 0.4, 0.6]) {
+      for (const fx of [0.5, 0.4, 0.6, 0.3, 0.7]) {
+        await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+        if (await label.waitFor({ state: 'attached', timeout: 800 }).then(() => true, () => false)) {
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+    expect(found).toBe(true);
+    // The pointer stays where it is; only the keyboard turns the layer off.
+    await page.getByRole('button', { name: 'Parts', exact: true }).focus();
+    await page.keyboard.press('Space');
+    await expect(page.getByRole('button', { name: 'Parts', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('.part-tooltip')).toHaveCount(0);
+  });
+
+  test('Show in 3D on a hidden kind shows that kind again and draws the pin', async ({ page }) => {
+    await page.goto('/?select=compute-tray.3/vera-cpu.1&view=tray&lk=clink');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    const clink = page.locator('.link-legend').getByRole('button', { name: 'Clink (CPU to CPU)', exact: true });
+    await expect(clink).toHaveAttribute('aria-pressed', 'false');
+    const show = page.getByRole('button', { name: /^Show in 3D: Clink/ }).first();
+    await show.click();
+    await expect(show).toHaveAttribute('aria-pressed', 'true');
+    await expect(clink).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.link-card.pinned')).toBeVisible();
+    await expect.poll(() => param(page, 'lk')).toBeNull();
+  });
+
+  test('the legend hides and shows connection kinds and keeps it in the URL', async ({ page }) => {
+    await page.goto('/?select=compute-tray.3&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    const pcie = page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true });
+    await expect(pcie).toHaveAttribute('aria-pressed', 'true');
+    await pcie.click();
+    await expect(pcie).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(() => param(page, 'lk')).toBe('pcie');
+    await page.reload();
+    await expect(page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    await page.locator('.link-legend').getByRole('button', { name: 'Show all' }).click();
+    await expect.poll(() => param(page, 'lk')).toBeNull();
+    await expect(page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('hovering a connection shows its card, and a click pins it in the panel', async ({ page }) => {
+    // No moving dots: the software renderer in CI then answers each pointer move quickly.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/?select=compute-tray.3&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    // Only coolant left, drawn as thick pipes, so the sweep finds one quickly.
+    for (const k of ['PCIe', 'C2C (CPU to GPU)', 'Clink (CPU to CPU)', 'NVLink (to the cable cartridge)', 'Power'])
+      await page.locator('.link-legend').getByRole('button', { name: k, exact: true }).click();
+    const box = (await page.locator('canvas').boundingBox())!;
+    const card = page.locator('.link-card');
+    let at: { x: number; y: number } | null = null;
+    for (let fy = 0.3; fy <= 0.75 && !at; fy += 0.03)
+      for (let fx = 0.3; fx <= 0.7; fx += 0.02) {
+        const p = { x: box.x + box.width * fx, y: box.y + box.height * fy };
+        await page.mouse.move(p.x, p.y);
+        if (await card.waitFor({ state: 'attached', timeout: 150 }).then(() => true, () => false)) {
+          at = p;
+          break;
+        }
+      }
+    expect(at).not.toBeNull();
+    await expect(card).toContainText('Coolant');
+    await expect(card).toContainText('→');
+    await expect(card).toContainText('Source:');
+    await page.mouse.click(at!.x, at!.y);
+    await expect(page.locator('.pinned-connection')).toContainText('Coolant');
+    await expect.poll(() => param(page, 'select')).toBe('compute-tray.3');
+    // Moving away keeps a pinned card on screen.
+    await page.mouse.move(box.x + 5, box.y + 5);
+    await expect(card).toHaveClass(/pinned/);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.pinned-connection')).toHaveCount(0);
+    await expect(card).toHaveCount(0);
+    await expect.poll(() => param(page, 'view')).toBe('tray');
+  });
+
+  test('a connection pinned from the panel shows in 3D; Escape lets go, then goes up', async ({ page }) => {
+    await page.goto('/?select=compute-tray.3/vera-cpu.1&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    const show = page.getByRole('button', { name: 'Show in 3D' }).first();
+    await show.click();
+    await expect(show).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.pinned-connection h3')).toHaveText('Pinned connection');
+    await expect(page.locator('.pinned-connection a')).toHaveAttribute('href', /docs\.nvidia\.com/);
+    await expect(page.locator('.link-card.pinned')).toBeVisible();
+    await page.locator('#rack-stage').focus();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.pinned-connection')).toHaveCount(0);
+    await expect(page.locator('.link-card')).toHaveCount(0);
+    await expect.poll(() => param(page, 'select')).toBe('compute-tray.3/vera-cpu.1');
+    await page.keyboard.press('Escape');
+    await expect.poll(() => param(page, 'select')).toBe('compute-tray.3');
+  });
+
+  for (const reduced of [false, true]) {
+    test(`dots move along the tray connections ${reduced ? 'not at all with reduced motion' : 'while idle'}`, async ({ page }) => {
+      const errors: string[] = [];
+      page.on('pageerror', (e) => errors.push(e.message));
+      // Count draw calls: the canvas only redraws while something animates (frameloop="demand").
+      await page.addInitScript(() => {
+        const w = window as unknown as { __draws: number };
+        w.__draws = 0;
+        for (const proto of [WebGL2RenderingContext.prototype, WebGLRenderingContext.prototype]) {
+          for (const name of ['drawElements', 'drawArrays', 'drawElementsInstanced', 'drawArraysInstanced'] as const) {
+            const original = (proto as unknown as Record<string, (...a: unknown[]) => unknown>)[name];
+            if (!original) continue;
+            (proto as unknown as Record<string, unknown>)[name] = function (this: unknown, ...a: unknown[]) {
+              w.__draws++;
+              return original.apply(this, a);
+            };
+          }
+        }
+      });
+      if (reduced) await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.goto('/?select=compute-tray.3&view=tray');
+      await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+      await page.waitForTimeout(1500);
+      const draws = () => page.evaluate(() => (window as unknown as { __draws: number }).__draws);
+      const before = await draws();
+      await page.waitForTimeout(1000);
+      const grew = (await draws()) - before;
+      if (reduced) expect(grew).toBe(0);
+      else expect(grew).toBeGreaterThan(0);
+      // Turning the connections off stops the dots too.
+      if (!reduced) {
+        await page.getByRole('button', { name: 'Connections', exact: true }).click();
+        await page.waitForTimeout(500);
+        const off = await draws();
+        await page.waitForTimeout(1000);
+        expect((await draws()) - off).toBe(0);
+      }
+      expect(errors).toEqual([]);
+    });
+  }
+
+  test('at 390px a tray with a pinned connection does not scroll sideways and the stage buttons stay usable', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/?select=compute-tray.3/vera-cpu.1&view=tray');
+    await expect(page.locator('.tray-label')).toHaveCount(2, { timeout: 60_000 });
+    await page.getByRole('button', { name: 'Show in 3D' }).first().click();
+    await expect(page.locator('.pinned-connection')).toBeVisible();
+    const card = page.locator('.link-card.pinned');
+    await expect(card).toBeVisible();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+    // The card lets pointer events through, so the stage buttons stay clickable wherever the two meet.
+    const back = page.getByRole('button', { name: '← Back to rack' });
+    await back.scrollIntoViewIfNeeded();
+    const b = (await back.boundingBox())!;
+    const onTop = await page.evaluate(([x, y]) => document.elementFromPoint(x!, y!)?.closest('button')?.textContent ?? '', [b.x + b.width / 2, b.y + b.height / 2]);
+    expect(onTop).toContain('Back to rack');
+    await expect(page.locator('.link-legend').getByRole('button', { name: 'PCIe', exact: true })).toBeVisible();
+  });
+
   test('keyboard steps through the rack and opens a compute tray', async ({ page }) => {
     await page.goto('/?select=compute-tray.3');
     await rackReady(page);

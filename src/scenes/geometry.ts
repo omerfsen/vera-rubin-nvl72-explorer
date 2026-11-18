@@ -84,8 +84,28 @@ export function slotBox(
   };
 }
 
-/** Colour per link kind in the tray's connections layer. */
-export const LINK_COLORS: Record<string, string> = Object.fromEntries(Object.entries(display.links).map(([k, v]) => [k, v.color]));
+type ThemeName = 'light' | 'dark';
+
+/** Colour per link kind and theme, for the tray's connections layer, the rear and the legend. */
+export const LINK_THEME_COLORS: Record<ThemeName, Record<string, string>> = {
+  dark: Object.fromEntries(Object.entries(display.links).map(([k, v]) => [k, v.color.dark])),
+  light: Object.fromEntries(Object.entries(display.links).map(([k, v]) => [k, v.color.light])),
+};
+
+/** A link kind's colour in a theme; white for a kind with no colour. */
+export function linkColor(kind: string, theme: ThemeName): string {
+  return LINK_THEME_COLORS[theme][kind] ?? '#ffffff';
+}
+
+export type LinkShape = 'signal' | 'pipe' | 'ribbon';
+
+/** How a link kind is drawn: thin glowing tube (signals), thick matte pipe (coolant) or square ribbon (power). */
+export function linkShape(kind: string): LinkShape {
+  return ((display.links as Record<string, { shape?: string }>)[kind]?.shape as LinkShape | undefined) ?? 'signal';
+}
+
+/** Outline behind every connection tube, per theme. */
+export const LINK_HALO: Record<ThemeName, string> = display.colors.linkHalo;
 
 export const LINK_NAMES: Record<string, string> = Object.fromEntries(Object.entries(display.links).map(([k, v]) => [k, v.name]));
 

@@ -100,7 +100,9 @@
       "connectionTypes": "Bağlantı türleri",
       "dashed": "Kesikli: varsayım, panele bakın",
       "explodedView": "Patlatılmış görünüm",
-      "explodedViewHint": "Parçaları katmanlara göre birbirinden ayırır"
+      "explodedViewHint": "Parçaları katmanlara göre birbirinden ayırır",
+      "linkKindHint": "{kind} bağlantılarını göster veya gizle",
+      "showAllKinds": "Tümünü göster"
     },
     "cameraView": {
       "group": "Kamera açısı",
@@ -220,7 +222,12 @@
       "pdfPage": "PDF s. {page}",
       "figure": "şekil",
       "openQuestion": "NVIDIA belgelerinde açık soru",
-      "openQuestions": "NVIDIA belgelerinde açık sorular"
+      "openQuestions": "NVIDIA belgelerinde açık sorular",
+      "pinnedConnection": "Sabitlenen bağlantı",
+      "unpin": "Sabitlemeyi kaldır",
+      "showLink": "3B görünümde göster",
+      "showLinkFor": "3B görünümde göster: {end} ile {kind}",
+      "pinnedAnnounce": "Sabitlenen bağlantı: {kind}, {from} → {to}"
     },
     "docs": {
       "user-guide": "Kullanım Kılavuzu",
