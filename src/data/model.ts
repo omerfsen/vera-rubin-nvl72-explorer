@@ -219,6 +219,18 @@ export function createModel(topology: Topology) {
     return (trayLayout(trayId)?.links ?? []).filter((l) => matches(l.from) || matches(l.to));
   }
 
+  /**
+   * Links to light for a selection inside a tray: the part's own, or else its
+   * nearest parent's (a port's card). Empty when no level has any, so nothing fades.
+   */
+  function linksNear(trayId: string, within: string): TrayLink[] {
+    for (let w: string | null = within; w; w = w.includes('/') ? w.slice(0, w.lastIndexOf('/')) : null) {
+      const found = linksAt(trayId, w);
+      if (found.length > 0) return found;
+    }
+    return [];
+  }
+
   /** Display name of a link end: NVIDIA's slot label, the part name and number, or the point label. */
   function linkEndLabel(trayId: string, end: LinkEnd): string {
     const layout = trayLayout(trayId);
@@ -265,6 +277,7 @@ export function createModel(topology: Topology) {
     trayLayout,
     linkEndPath,
     linksAt,
+    linksNear,
     linkEndLabel,
     slotPathWithin,
     slotFor,

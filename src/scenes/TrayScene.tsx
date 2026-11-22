@@ -386,7 +386,7 @@ function TrayLinks({
   const { links: colors, halo, theme } = useSceneTheme();
   const [hover, setHover] = useState<number | null>(null);
   const within = selected.startsWith(`${trayKey}/`) ? selected.slice(trayKey.length + 1) : null;
-  const active = useMemo(() => new Set(within ? model.linksAt(trayId, within) : []), [trayId, within]);
+  const active = useMemo(() => new Set(within ? model.linksNear(trayId, within) : []), [trayId, within]);
   const links = layout.links ?? [];
   const curves = useMemo(
     () =>
@@ -418,7 +418,7 @@ function TrayLinks({
   // The card shows the tube under the pointer, or else the pinned one.
   const shownIndex = hover ?? pinned;
   const focus = shownIndex;
-  const isDim = (i: number) => (focus !== null ? focus !== i : (within !== null && !active.has(links[i]!)) || network !== '');
+  const isDim = (i: number) => (focus !== null ? focus !== i : (active.size > 0 && !active.has(links[i]!)) || network !== '');
   const flowLinks = useMemo<FlowLink[]>(
     () =>
       flow
