@@ -174,6 +174,15 @@ describe('connections inside the compute tray', () => {
     expect(model.linkEndLabel('compute-tray', { component: 'vera-cpu', index: 1 })).toBe('CPU0 (HPM_L)');
     expect(model.linkEndLabel('compute-tray', { point: 'nvlink-connectors' })).toMatch(/cable cartridge/);
   });
+
+  it('falls back to the nearest parent with links, or none', () => {
+    expect(model.linksAt('compute-tray', 'ct-port-cx9-osfp.5')).toHaveLength(0);
+    expect(model.linksNear('compute-tray', 'ct-port-cx9-osfp.5')).toHaveLength(0);
+    const bf = model.linksAt('compute-tray', 'bluefield-4');
+    expect(bf.length).toBeGreaterThan(0);
+    expect(model.linksNear('compute-tray', 'bluefield-4/ct-port-bf4-right.1')).toEqual(bf);
+    expect(model.linksNear('compute-tray', 'vera-cpu.1')).toEqual(model.linksAt('compute-tray', 'vera-cpu.1'));
+  });
 });
 
 describe('tray layers', () => {
